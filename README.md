@@ -20,7 +20,8 @@ lerne-deutsch/
 │   └── js/
 │       ├── common.js         helpers + per-level browser storage
 │       ├── layout.js         page header and level menu (reads window.LEVEL)
-│       └── quiz.js           test engine (reads TESTS and GROUPS)
+│       ├── quiz.js           test engine (reads TESTS and GROUPS)
+│       └── speech.js         reads German aloud (🔊 buttons, listening tests, voice picker)
 └── a1/
     ├── index.html            overview of all A1 lessons
     ├── grammatik.html        Teil A · lessons 1–7 and 7+ (longer sentences)
@@ -32,15 +33,18 @@ lerne-deutsch/
     └── js/
         ├── level.js          A1 menu + storage prefix
         ├── data.js           word lists, sentences, number and time helpers
-        ├── tests.js          A1 test definitions (TESTS, GROUPS)
+        ├── data2.js          vocabulary with articles, calendar, food, family, countries, exam texts
+        ├── tests.js          A1 test definitions (TESTS)
+        ├── tests2.js         more tests (listening, vocabulary, calendar …) and GROUPS (test page order)
         └── lessons.js        interactive parts of the lessons
 ```
 
 ## Where to change things
 
 - **Lesson text:** edit the page for that part (`a1/grammatik.html`, …). Each lesson is one `<section class="lesson" id="l-…">`.
+- **Audio:** every `.train`, every element with `data-say="German text"`, and table columns headed Beispiel / Deutsch / Satz / Wort … get a 🔊 button automatically.
 - **Test questions:** add items to the lists in `a1/js/data.js` (for example `NOUNS`, `WQ`, `ORDER`).
-- **A new test:** add an entry to `TESTS` in `a1/js/tests.js` and its key to `GROUPS`. Link to it from a lesson with `<a class="go" href="tests.html#key">`.
+- **A new test:** add an entry to `TESTS` in `a1/js/tests.js` or `tests2.js` and its key to `GROUPS` (in `tests2.js`). A question with `say: "…"` is read aloud (listening test). Link to it from a lesson with `<a class="go" href="tests.html#key">`.
 - **Colours and fonts:** `assets/css/style.css`.
 
 ## Add a new level (for example A2)

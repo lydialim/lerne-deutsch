@@ -40,7 +40,7 @@ const TESTS={
   gen(){const s=pick(SENTS);const i=rnd(0,s.length-1);const [w,t,e]=s[i];
    const opts=shuffle([t,...shuffle(TYPES.filter(x=>x!==t)).slice(0,3)]);
    return{prompt:`<span class="big" style="font-size:clamp(22px,5vw,32px)">${s.map((x,j)=>j===i?`<span class="hl">${x[0]}</span>`:x[0]).join(" ")}.</span><span class="en">${s.map(x=>x[2]).join(" · ")}</span>`,
-   options:opts,label:o=>`${o} <span class="en" style="font-weight:400">(${TEN[o]})</span>`,answer:t,explain:`<b>${w}</b> (${e}) is a <b>${t}</b> (${TEN[t]}).`}}},
+   options:opts,label:o=>`${o} <span class="en" style="font-weight:400">(${TEN[o]})</span><br><span class="en" style="font-weight:400;font-size:13px">${TEXPL[o]}</span>`,answer:t,explain:`<b>${w}</b> (${e}) is a <b>${t}</b> (${TEN[t]}) = ${TEXPL[t]}.`}}},
  wfrage:{tag:"W-Fragen",title:"Welches Fragewort?",en:"which question word fits the answer?",kind:"choice",
   gen(){const x=pick(WQ);const opts=shuffle([x[1],...shuffle(WWORDS.filter(w=>w!==x[1])).slice(0,3)]);
    return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">___ ${x[2]}?</span><span class="en">Antwort <span class="pron">(answer)</span>: <b>${x[0]}</b> · ${x[3]}</span>`,options:opts,answer:x[1],

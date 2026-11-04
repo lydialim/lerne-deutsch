@@ -68,7 +68,7 @@ function num(n){
 /* alphabet */
 const ABC=[["A","ah"],["B","bay"],["C","tsay"],["D","day"],["E","ay",1],["F","eff"],["G","gay",1],["H","hah"],["I","ee",1],["J","yot",1],["K","kah"],["L","ell"],["M","emm"],["N","enn"],["O","oh"],["P","pay"],["Q","koo"],["R","err"],["S","ess"],["T","tay"],["U","oo"],["V","fow",1],["W","vay",1],["X","iks"],["Y","UEP-see-lon",1],["Z","tset",1],["Ä","eh"],["Ö","oe"],["Ü","ue"],["ß","ESS-tset"]];
 const SAY={A:"Ah",B:"Beh",C:"Zeh",D:"Deh",E:"Eh",F:"Eff",G:"Geh",H:"Hah",I:"Ih",J:"Jott",K:"Kah",L:"Ell",M:"Emm",N:"Enn",O:"Oh",P:"Peh",Q:"Kuh",R:"Err",S:"Ess",T:"Teh",U:"Uh",V:"Fau",W:"Weh",X:"Ix",Y:"Üpsilon",Z:"Zett","Ä":"Äh","Ö":"Öh","Ü":"Üh","ß":"Eszett"};
-const CONFUSE=[["E","I","A","Ä"],["G","J","K","Y"],["V","W","F","B"],["Z","C","S","T"],["I","E","Y","Ü"],["J","G","Y","I"],["W","V","U","B"],["H","A","K","R"],["Ü","U","I","Ö"],["Ö","O","E","Ä"],["Q","K","U","C"],["R","A","H","E"],["B","P","D","T"],["D","T","B","E"],["X","S","Z","C"],["F","V","W","H"],["L","R","N","M"],["Ä","E","A","Ö"],["ß","S","Z","B"]];
+const CONFUSE=[["E","I","A","Ä"],["G","J","K","Y"],["V","W","F","B"],["Z","C","S","T"],["I","E","Y","Ü"],["J","G","Y","I"],["W","V","U","B"],["H","A","K","R"],["Ü","U","I","Ö"],["Ö","O","E","Ä"],["Q","K","U","C"],["R","A","H","E"],["B","P","D","T"],["D","T","B","E"],["X","S","Z","C"],["F","V","W","H"],["L","R","N","M"],["Ä","E","A","Ö"],["ß","S","Z","B"],["N","M","L","U"]];
 const SPELL=["Maria","Müller","Schmidt","Weber","Becker","Koch","Wagner","Hoffmann","Bauer","Jung","Vogel","Zimmer","Schulz","Keller","Hilde","Yvonne","Goethe","Straße","Weg","Platz","Jasmin","Viktor","Krüger","Schäfer","Jäger","Fischer","Meyer","Wolf","Lehmann","Neumann","Ziegler","Hamburg","Bahnhof","Kaffee","Quelle","Xaver"];
 
 /* word types */

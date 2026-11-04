@@ -255,3 +255,23 @@ a.tcard:hover{border-color:var(--ink)}
 .levels a:hover{border-color:var(--ink)}
 .levels b{font-family:var(--display);font-size:40px;line-height:1}
 .levels .soon{opacity:.6}
+
+/* audio */
+.train > .spk{align-self:center;margin-left:4px}
+td .spk,[data-say] > .spk{margin-left:6px;padding:1px 7px;font-size:12px;vertical-align:middle}
+#voiceBox{margin-top:10px;padding:8px 12px;border-radius:10px;background:var(--soft)}
+#voiceBox label{display:flex;gap:4px;align-items:center}
+.numcell,.abcc,[data-tap-say]{cursor:pointer}
+/* small layout helpers for new lessons */
+.cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}
+.dialog{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.dialog p{display:flex;flex-direction:column;gap:1px}
+.dialog p b.who{font-family:var(--display);font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.wordgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.wordgrid > span{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;display:flex;flex-direction:column;gap:0;font-size:16px}
+.wordgrid > span .en{font-size:13px}
+.tree{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
+.tree > div{border-radius:10px;padding:8px 6px;display:flex;flex-direction:column;gap:0}
+.tree .gen{grid-column:1/-1;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;padding:2px}
+.swatch{display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid var(--line);vertical-align:-2px;margin-right:6px}
+.readtext{background:var(--paper);border:1.5px dashed var(--line);border-radius:10px;padding:10px 14px;font-size:18px;line-height:1.5;width:100%;white-space:pre-line}

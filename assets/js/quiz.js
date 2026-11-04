@@ -2,7 +2,8 @@
    Needs TESTS and GROUPS from <level>/js/tests.js.
    Each test: {tag, title, en, kind: "choice" | "input" | "order" | "mixed", ranges?, gen(range) -> question}
    Each question: {prompt, answer, explain, kind? (overrides the test's kind), options? (choice), inputmode?, umlauts?,
-     tokens + end? (order: shuffled word chips the learner taps into place; answer = tokens in order joined by spaces + end)}
+     tokens + end? (order: shuffled word chips the learner taps into place; answer = tokens in order joined by spaces + end),
+     say? (listening: German text read aloud with assets/js/speech.js, plays automatically), sayAfter? (read aloud from the feedback)}
    Open a test directly with tests.html#<key>, e.g. tests.html#artikel or tests.html#mix. */
 let current = null, q = null, stats = { ok: 0, n: 0, miss: [] }, rangeIdx = {};
 const best = lstore.get("best", {});
@@ -35,6 +36,7 @@ function draw() {
   let h = `<div class="panelhead"><div><h2>${t.title}</h2><span class="en">${current === "mix" ? `Frage ${stats.n + 1} von ${MIX_LEN} · ${q.from}` : t.en}</span></div><span class="score">Richtig (correct): ${stats.ok}/${stats.n}</span></div>`;
   if (t.ranges) h += `<div class="seg" role="group" aria-label="Range">${t.ranges.map((r, i) => `<button data-r="${i}" aria-pressed="${(rangeIdx[current] || 0) === i}">${r[0]}</button>`).join("")}</div>`;
   h += `<div class="q">${q.prompt}</div>`;
+  if (q.say) h += `<div class="controls"><button class="btn ghost" type="button" id="again">▶ Anhören <span class="en">(listen)</span></button><button class="btn ghost" type="button" id="slow">🐢 Langsam <span class="en">(slow)</span></button>${typeof TTS !== "undefined" && TTS.ok ? "" : `<span class="warn">Audio doesn't work in this browser. Try Chrome, Edge or Safari.</span>`}</div>`;
   if (kind === "order") {
     h += `<div class="ordline" id="built" aria-label="Dein Satz (your sentence)"></div><div class="pool" id="pool"></div>
       <div class="controls"><button class="btn" type="button" id="chk">Prüfen <span style="font-weight:400">(check)</span></button><button class="btn ghost" type="button" id="undo">↺ Neu <span class="en">(reset)</span></button></div>`;
@@ -48,6 +50,7 @@ function draw() {
   h += `<div id="fb"></div>`;
   $("#panel").innerHTML = h;
   $("#panel").querySelectorAll("[data-r]").forEach(b => b.onclick = () => { rangeIdx[current] = +b.dataset.r; nextQ(); });
+  if (q.say) { $("#again").onclick = () => speak(q.say); $("#slow").onclick = () => speak(q.say, 0.6); setTimeout(() => speak(q.say), 250); }
   if (kind === "order") drawOrder();
   else if (kind === "choice") {
     $("#panel").querySelectorAll(".opt").forEach(b => b.onclick = () => answer(q.options[+b.dataset.i], b));
@@ -97,8 +100,10 @@ function answer(v, btn) {
   $("#panel .score").textContent = `Richtig (correct): ${stats.ok}/${stats.n}`;
   const last = current === "mix" && stats.n >= MIX_LEN;
   $("#fb").innerHTML = `<div class="feedback ${ok ? "ok" : "no"}"><span class="verdict">${ok ? pick(["Richtig! (correct)", "Super! (great)", "Sehr gut! (very good)", "Genau! (exactly)"]) : `Leider falsch. (Sadly wrong.) Answer: ${esc(q.answer)}`}</span><span>${q.explain}</span></div>
-   <div class="controls" style="margin-top:10px"><button class="btn" id="next">${last ? 'Ergebnis <span style="font-weight:400">(result)</span> →' : 'Weiter <span style="font-weight:400">(next)</span> →'}</button></div>`;
+   <div class="controls" style="margin-top:10px">${(q.say || q.sayAfter) && typeof TTS !== "undefined" && TTS.ok ? `<button class="btn ghost" type="button" id="hearAns">🔊 <span class="en">(listen again)</span></button>` : ""}<button class="btn" id="next">${last ? 'Ergebnis <span style="font-weight:400">(result)</span> →' : 'Weiter <span style="font-weight:400">(next)</span> →'}</button></div>`;
   $("#next").onclick = nextQ; $("#next").focus({ preventScroll: true });
+  if ($("#hearAns")) $("#hearAns").onclick = () => speak(q.sayAfter || q.say);
+  if (typeof addSpeakers === "function") addSpeakers($("#fb"));
   renderGrid();
 }
 

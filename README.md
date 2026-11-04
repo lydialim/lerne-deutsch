@@ -29,6 +29,7 @@ lerne-deutsch/
     ├── themen.html           Teil C · lessons 10–17 (incl. food, family, flat, countries)
     ├── pruefung.html         Teil D · lessons 18, 18+ (listening and reading) + study tips
     ├── spickzettel.html      cheat sheet
+    ├── karten.html           picture flashcards (emoji + article colour, guess der/die/das)
     ├── tests.html            all tests (open one directly: tests.html#artikel)
     └── js/
         ├── level.js          A1 menu, lesson list for the phone lesson menu (keep in step with the lessons) + storage prefix
@@ -36,7 +37,8 @@ lerne-deutsch/
         ├── data2.js          vocabulary with articles, calendar, food, family, countries, exam texts
         ├── tests.js          A1 test definitions (TESTS) + RULES (rule of the day on the tests page)
         ├── tests2.js         more tests (listening, vocabulary, calendar …) and GROUPS (one tab per group on the tests page: [title, English, keys, tab label, tab English])
-        └── lessons.js        interactive parts of the lessons
+        ├── karten.js         data and logic for the picture cards
+        └── lessons.js        interactive parts of the lessons (clock, conjugation chips, word-order builder, floor plan / shop / family-tree scenes, Sprechen simulator)
 ```
 
 ## Where to change things

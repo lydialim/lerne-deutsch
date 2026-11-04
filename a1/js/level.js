@@ -10,6 +10,7 @@ window.LEVEL = {
     ["themen.html", "C · Themen", ""],
     ["pruefung.html", "D · Prüfung", ""],
     ["spickzettel.html", "Spickzettel", "cheat sheet"],
+    ["karten.html", "Bildkarten", "picture cards"],
     ["tests.html", "Tests", ""]
   ],
   mix: "tests.html#mix",

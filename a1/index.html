@@ -1,0 +1,1570 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Deutsch A1 Trainer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+/* Layout: a workbook. Top tabs Learn / Test; article genders (der blue, die red, das green, as in Netzwerk neu) are the colour system. */
+:root{
+  --paper:#f4f6fa; --card:#ffffff; --ink:#1b2130; --muted:#5a6375; --line:#d8dde7; --soft:#eaeef5;
+  --der:#2253c4; --die:#c42f3c; --das:#17834a; --pl:#7a4bc0;
+  --der-bg:#e6edfc; --die-bg:#fbe8ea; --das-bg:#e3f4ea; --pl-bg:#f0e9fa;
+  --ok:#17834a; --bad:#c42f3c; --focus:#2253c4;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#11141b; --card:#191e28; --ink:#e7eaf1; --muted:#9aa3b5; --line:#2b3240; --soft:#202634;
+  --der:#86a8ff; --die:#ff8590; --das:#62d394; --pl:#c4a2ff;
+  --der-bg:#1b2645; --die-bg:#3a1c22; --das-bg:#16301f; --pl-bg:#2a2140;
+  --ok:#62d394; --bad:#ff8590; --focus:#86a8ff; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#11141b; --card:#191e28; --ink:#e7eaf1; --muted:#9aa3b5; --line:#2b3240; --soft:#202634;
+  --der:#86a8ff; --die:#ff8590; --das:#62d394; --pl:#c4a2ff;
+  --der-bg:#1b2645; --die-bg:#3a1c22; --das-bg:#16301f; --pl-bg:#2a2140;
+  --ok:#62d394; --bad:#ff8590; --focus:#86a8ff; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--body);
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 48px}
+.wrap{max-width:900px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(28px,6vw,42px);font-weight:800;letter-spacing:-.02em}
+h2{font-size:26px;font-weight:700}
+h3{font-size:19px;font-weight:700}
+p{margin:0}
+.en{color:var(--muted);font-size:.92em}
+.mono,.pron{font-family:var(--mono);font-size:.86em}
+.pron{color:var(--muted)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+header{padding-block:28px 8px;display:flex;flex-direction:column;gap:6px}
+.flagline{display:flex;gap:4px;margin-bottom:6px}
+.flagline span{height:6px;width:36px;border-radius:3px}
+.tabs{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.tab{border:1.5px solid var(--line);background:var(--card);padding:10px 18px;border-radius:999px;font-weight:700}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tab small{font-weight:400;opacity:.75}
+
+.subnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);padding-block:12px;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:8px}
+.subnav a{white-space:nowrap;text-decoration:none;color:var(--ink);font-weight:600;font-size:15px;padding:6px 12px;border-radius:999px;background:var(--soft)}
+section.lesson{padding-block:28px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:14px;scroll-margin-top:70px}
+.lead{max-width:65ch}
+.rule{background:var(--soft);border-left:4px solid var(--ink);padding:12px 16px;border-radius:0 8px 8px 0;max-width:70ch}
+.rule b{font-family:var(--display)}
+.tablebox{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:420px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.der{color:var(--der);font-weight:700}.die{color:var(--die);font-weight:700}.das{color:var(--das);font-weight:700}.plc{color:var(--pl);font-weight:700}
+.trio{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.gcard{border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.gcard.m{background:var(--der-bg)}.gcard.f{background:var(--die-bg)}.gcard.n{background:var(--das-bg)}.gcard.p{background:var(--pl-bg)}
+.gcard .big{font-family:var(--display);font-size:30px;font-weight:800}
+.gcard ul{margin:0;padding-left:18px}
+
+.types{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.type{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.type h3 small{font-family:var(--body);font-weight:400;color:var(--muted);font-size:14px}
+.sent{display:flex;flex-wrap:wrap;gap:8px 6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.tok{display:flex;flex-direction:column;align-items:center;padding:4px 8px;border-radius:8px;background:var(--soft)}
+.tok b{font-size:19px}.tok i{font-style:normal;font-size:13px;color:var(--muted)}.tok s{text-decoration:none;font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+
+.numgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.numcell{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;text-align:left;display:flex;flex-direction:column;gap:1px}
+.numcell .d{font-family:var(--display);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.numcell .w{font-weight:600}
+
+.explorer{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.explorer input{width:110px}
+.explorer .out{flex:1 1 240px;min-width:0}
+.explorer .out b{font-size:20px;word-break:break-word}
+.abc{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:6px}
+.abc .abcc{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:0}
+.abc .abcc b{font-family:var(--display);font-size:24px}
+.abc .abcc.trap{border-color:var(--die);border-width:2px}
+
+input[type=text],input[type=number]{font:inherit;font-size:20px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);min-width:0}
+.btn{border:none;background:var(--ink);color:var(--paper);font-weight:700;padding:10px 18px;border-radius:10px}
+.btn.ghost{background:var(--soft);color:var(--ink)}
+.spk{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 10px;font-size:14px;font-weight:600}
+
+/* Tests */
+.testgrid{display:flex;flex-direction:column;gap:20px;padding-block:20px}
+.tgroup{display:flex;flex-direction:column;gap:8px}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.part{padding-block:44px 0;display:flex;flex-direction:column;gap:4px;border-bottom:3px solid var(--ink);padding-bottom:12px}
+.part .kick{font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:var(--muted)}
+.part h2{font-size:clamp(28px,5vw,38px);font-weight:800;letter-spacing:-.01em}
+.navgrp{font-family:var(--display);font-weight:800;font-size:13px;color:var(--paper);background:var(--ink);border-radius:6px;padding:2px 8px;align-self:center;margin-left:6px}
+.navgrp:first-child{margin-left:0}
+.practice{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding-top:6px}
+.practice > span{font-weight:700;margin-right:4px}
+.go{border:1.5px solid var(--ink);background:var(--card);border-radius:999px;padding:6px 14px;font-weight:700;font-size:15px}
+.go:hover{background:var(--ink);color:var(--paper)}
+.lesson > .dia{max-width:680px}
+.dirs{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.dirs div{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.dirs .ar{font-size:36px;line-height:1;color:var(--die);font-weight:800}
+.dirs b{font-size:18px}
+.steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
+.dia svg .road{fill:var(--soft);stroke:var(--line);stroke-width:1}
+.dia svg .route{stroke:var(--die);stroke-width:4;fill:none;stroke-dasharray:10 6;stroke-linecap:round}
+.dia svg .dot{fill:var(--die)}
+.dia svg .dotT{fill:var(--card);font-weight:800}
+.dia svg .bldg{fill:var(--der-bg);stroke:var(--der);stroke-width:1.5}
+.dia svg .line{stroke:var(--ink);stroke-width:3}
+.dia svg .fillder{fill:var(--der)}.dia svg .filldie{fill:var(--die)}.dia svg .fillpl{fill:var(--pl)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:15px}
+.tabs .go{margin-left:auto;align-self:center}
+/* cheat sheet */
+.cheat{columns:3 270px;column-gap:12px;padding-block:20px}
+.ccard{break-inside:avoid;margin:0 0 12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.45}
+.ccard h3{font-size:17px;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.ccard h3 a{font-family:var(--body);font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+.ccard table{min-width:0;font-size:14px}
+.ccard th,.ccard td{padding:3px 6px}
+.ccard ul{margin:0;padding-left:18px}
+.ccard .k{font-family:var(--mono);font-size:13px}
+.cheathead{padding-top:20px;display:flex;flex-direction:column;gap:4px}
+.dia svg{max-width:560px}
+.tcard{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;text-align:left;display:flex;flex-direction:column;gap:4px}
+.tcard[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset}
+.tcard .tag{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.tcard .best{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.panelhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.score{font-family:var(--mono);font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.q{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.q .big{font-family:var(--display);font-size:clamp(30px,8vw,48px);font-weight:800;line-height:1.1;word-break:break-word}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;width:100%}
+.opt{border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:14px 12px;font-size:20px;font-weight:700;text-align:center}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt.o-der{color:var(--der)}.opt.o-die{color:var(--die)}.opt.o-das{color:var(--das)}
+.opt.right{background:var(--das-bg);border-color:var(--ok)}
+.opt.wrong{background:var(--die-bg);border-color:var(--bad)}
+.opt:disabled{cursor:default}
+.answerrow{display:flex;gap:8px;flex-wrap:wrap;width:100%}
+.answerrow input{flex:1 1 180px}
+.umlauts{display:flex;gap:6px}
+.umlauts button{border:1px solid var(--line);background:var(--paper);border-radius:8px;width:42px;height:42px;font-size:18px;font-weight:700}
+.feedback{border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:4px}
+.feedback.ok{background:var(--das-bg)}.feedback.no{background:var(--die-bg)}
+.feedback .verdict{font-weight:700}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg{display:flex;gap:4px;flex-wrap:wrap}
+.seg button{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 12px;font-size:14px;font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.hl{background:var(--pl-bg);color:var(--pl);padding:0 4px;border-radius:4px;font-weight:700}
+.warn{font-size:14px;color:var(--bad)}
+.voice{font-size:14px;color:var(--muted)}
+.voicepick{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px}
+.voicepick select{font:inherit;font-size:15px;padding:6px 8px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);max-width:100%;min-width:0}
+.tipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:12px}
+.dia{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.dia .cap{font-family:var(--display);font-weight:800;font-size:20px;line-height:1.2}
+.dia .cap small{display:block;font-family:var(--body);font-weight:400;font-size:14px;color:var(--muted)}
+.dia svg{width:100%;height:auto;display:block}
+.dia svg text{font-family:var(--body);fill:var(--ink)}
+.dia svg .mut{fill:var(--muted)}
+.dia svg .arr{stroke:var(--muted);stroke-width:2;fill:none}
+.dia svg .head{fill:var(--muted)}
+.dia svg .bder{fill:var(--der-bg);stroke:var(--der);stroke-width:1.5}
+.dia svg .bdie{fill:var(--die-bg);stroke:var(--die);stroke-width:1.5}
+.dia svg .bdas{fill:var(--das-bg);stroke:var(--das);stroke-width:1.5}
+.dia svg .bpl{fill:var(--pl-bg);stroke:var(--pl);stroke-width:1.5}
+.dia svg .bsoft{fill:var(--soft);stroke:var(--line);stroke-width:1.5}
+.dia svg .tder{fill:var(--der);font-weight:800}.dia svg .tdie{fill:var(--die);font-weight:800}.dia svg .tdas{fill:var(--das);font-weight:800}.dia svg .tpl{fill:var(--pl);font-weight:800}
+.dia svg .xder{stroke:var(--der)}.dia svg .xdie{stroke:var(--die)}
+.trick{font-size:15px;background:var(--soft);border-radius:8px;padding:8px 12px}
+.trick b{font-family:var(--display)}
+.sortcols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sortcols > div{border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.sortcols h4{margin:0;font-family:var(--display);font-size:24px}
+.chip{display:inline-block;border-radius:6px;padding:2px 8px;font-family:var(--mono);font-size:13px;background:var(--card);margin:0 4px 4px 0}
+.chip.always{outline:2px solid currentColor}
+.trainrow{display:flex;flex-direction:column;gap:4px}
+.trainrow .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.train{display:flex;flex-wrap:wrap;gap:4px;align-items:stretch}
+.car{display:flex;flex-direction:column;align-items:center;border:1.5px solid var(--line);border-radius:8px;padding:3px 10px;background:var(--paper);font-weight:600}
+.car small{font-size:11px;color:var(--muted);font-family:var(--mono);font-weight:400}
+.car.v{background:var(--die-bg);border-color:var(--die);color:var(--die);font-weight:800}
+.car.v small{color:var(--die)}
+.car.g{background:var(--das-bg);border-color:var(--das);color:var(--das);font-weight:800}
+.endgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.endgrid div{border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;gap:8px;font-size:17px;border:1.5px solid var(--line);background:var(--paper)}
+.endgrid b{font-family:var(--mono)}
+.endgrid .e-t{border-color:var(--der);background:var(--der-bg)}
+.endgrid .e-en{border-color:var(--das);background:var(--das-bg)}
+.endgrid .e-st{border-color:var(--die);background:var(--die-bg)}
+.sound{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px}
+.sound div{border:1.5px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--paper);display:flex;flex-direction:column;gap:2px}
+.sound .big2{font-family:var(--display);font-weight:800;font-size:22px}
+.habits{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:70ch}
+.voice.warn b{color:var(--ink)}
+.kwcard{font-family:var(--display);font-weight:700;font-size:18px;background:var(--card);border:2px dashed var(--line);border-radius:12px;padding:14px 16px;text-align:center}
+.builder{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.builder label{display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:14px;min-width:0}
+.builder label span{font-weight:400;color:var(--muted)}
+.builder input[type=text]{font-size:17px;padding:8px 10px;width:100%}
+.introOut{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px 16px;display:flex;flex-direction:column}
+.iline{display:flex;gap:10px;align-items:flex-start;padding-block:10px;border-bottom:1px solid var(--line)}
+.iline:last-child{border-bottom:none}
+.iline > div{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}
+.iline .de{font-size:19px;font-weight:600;word-break:break-word}
+.iline .kw{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.examhead{display:flex;flex-direction:column;gap:6px;padding-top:10px}
+.examhead .tag{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+@media (prefers-reduced-motion: no-preference){.feedback{animation:pop .18s ease-out}@keyframes pop{from{transform:translateY(4px);opacity:.6}to{transform:none;opacity:1}}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="flagline" aria-hidden="true"><span style="background:var(--der)"></span><span style="background:var(--die)"></span><span style="background:var(--das)"></span></div>
+  <h1>Deutsch A1 Trainer</h1>
+  <p class="en">Lernen und testen. <span class="pron">(Learn and test.)</span> Four parts: A grammar, B letters and numbers, C topics, D the exam. Every lesson ends with a matching test.</p>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-learn" aria-selected="true" data-view="learn">Lernen <small>(learn)</small></button>
+    <button class="tab" role="tab" id="tab-test" aria-selected="false" data-view="test">Testen <small>(test)</small></button>
+    <button class="tab" role="tab" id="tab-cheat" aria-selected="false" data-view="cheat">Spickzettel <small>(cheat sheet)</small></button>
+    <button class="go" type="button" data-go="mix">Gemischter Test · 10 Fragen</button>
+  </div>
+</header>
+
+<!-- ============ LEARN ============ -->
+<main id="view-learn">
+<nav class="subnav" aria-label="Lessons">
+  <span class="navgrp">A</span><a href="#l-types">1 Wortarten</a><a href="#l-articles">2 der/die/das</a><a href="#l-ein">3 ein/eine</a><a href="#l-plural">4 Plural</a><a href="#l-verbs">5 Verben</a><a href="#l-w">6 Satzbau</a><a href="#l-qa">7 Fragen &amp; Antworten</a>
+  <span class="navgrp">B</span><a href="#l-abc">8 Alphabet</a><a href="#l-numbers">9 Zahlen &amp; Uhrzeit</a>
+  <span class="navgrp">C</span><a href="#l-me">10 Über mich</a><a href="#l-work">11 Arbeit</a><a href="#l-act">12 Aktivitäten</a><a href="#l-weg">13 Wegbeschreibung</a>
+  <span class="navgrp">D</span><a href="#l-exam">14 Prüfung</a><a href="#l-tips">Lerntipps</a>
+</nav>
+
+<div class="part"><span class="kick">Teil A</span><h2>Grammatik-Basis <span class="en">(grammar basics)</span></h2><p class="lead">How German sentences are built: word types, der/die/das, plural, verbs, word order, and how to ask and answer.</p></div>
+
+<section class="lesson" id="l-types">
+  <h2>1 · Wortarten <span class="en">(word types)</span></h2>
+  <p class="lead">Every sentence is built from a few kinds of words. Knowing the type tells you what rules apply: nouns need an article, verbs change their ending, adjectives describe.</p>
+  <div class="types">
+    <div class="type"><h3>Nomen <small>noun</small></h3><p>A thing, person, place or idea. <b>Always starts with a capital letter</b> in German.</p><p class="mono">Buch, Frau, Hamburg, Kaffee</p></div>
+    <div class="type"><h3>Artikel <small>article</small></h3><p>The little word before a noun. Shows the gender.</p><p class="mono">der, die, das · ein, eine</p></div>
+    <div class="type"><h3>Verb <small>verb</small></h3><p>An action or state. The ending changes with the person (ich, du, er …).</p><p class="mono">heißen, wohnen, sein, trinken</p></div>
+    <div class="type"><h3>Pronomen <small>pronoun</small></h3><p>Replaces a noun or a person.</p><p class="mono">ich, du, er, sie, es, wir, ihr, Sie</p></div>
+    <div class="type"><h3>Adjektiv <small>adjective</small></h3><p>Describes a noun: how it is.</p><p class="mono">gut, neu, schön, klein</p></div>
+    <div class="type"><h3>Adverb <small>adverb</small></h3><p>Says when, where, how much. Never changes its form.</p><p class="mono">heute, hier, sehr, auch</p></div>
+    <div class="type"><h3>Präposition <small>preposition</small></h3><p>Shows place, origin, direction.</p><p class="mono">in, aus, mit, bei</p></div>
+    <div class="type"><h3>Konjunktion <small>conjunction</small></h3><p>Joins words or sentences.</p><p class="mono">und, oder, aber</p></div>
+  </div>
+  <h3>Beispiel <span class="en">(example)</span>, word by word</h3>
+  <div class="sent" id="demoSent"></div>
+  <div class="rule"><b>Reminder · Nouns have a capital letter.</b> If a word in the middle of a sentence starts with a capital, it is a noun (or a name, or Sie = formal you). That is your first clue for der/die/das.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="wortart">Welche Wortart?</button></div>
+</section>
+
+<section class="lesson" id="l-articles">
+  <h2>2 · der, die, das <span class="en">(the)</span></h2>
+  <p class="lead">Every German noun has a grammatical gender. English has one word "the"; German has three. The gender is often <b>not logical</b> (das Mädchen = the girl is neuter), so learn every noun <b>together with its article</b>, like one word: <i>die Lampe</i>, never just <i>Lampe</i>.</p>
+  <div class="trio">
+    <div class="gcard m"><span class="big der">der</span><b>maskulin (masculine)</b><ul><li>male people: der Mann, der Vater</li><li>days, months, seasons: der Montag</li><li>often ending -er (tools/jobs): der Computer, der Lehrer</li></ul></div>
+    <div class="gcard f"><span class="big die">die</span><b>feminin (feminine)</b><ul><li>female people: die Frau, die Mutter</li><li>most nouns ending <b>-e</b>: die Lampe, die Tasche</li><li><b>-ung, -heit, -keit, -ion, -in</b>: die Wohnung, die Freundin</li></ul></div>
+    <div class="gcard n"><span class="big das">das</span><b>neutral (neuter)</b><ul><li><b>-chen, -lein</b>: das Mädchen</li><li>many short words: das Buch, das Kind, das Haus</li><li>English loan words: das Handy, das Auto</li></ul></div>
+  </div>
+  <div class="dia">
+      <div class="cap">Endings tell the gender<small>Look at the end of the noun first. Outlined = always, the rest = usually</small></div>
+      <div class="sortcols">
+        <div style="background:var(--der-bg);color:var(--der)"><h4>der</h4>
+          <div><span class="chip">-er</span><span class="chip">-ling</span><span class="chip always">days</span><span class="chip always">months</span><span class="chip always">seasons</span><span class="chip always">men</span></div>
+          <span class="en">der Computer, der Montag, der Juli, der Sommer, der Mann</span></div>
+        <div style="background:var(--die-bg);color:var(--die)"><h4>die</h4>
+          <div><span class="chip">-e</span><span class="chip always">-ung</span><span class="chip always">-heit</span><span class="chip always">-keit</span><span class="chip always">-ion</span><span class="chip always">-schaft</span><span class="chip">-in</span></div>
+          <span class="en">die Lampe, die Wohnung, die Information, die Freundin</span></div>
+        <div style="background:var(--das-bg);color:var(--das)"><h4>das</h4>
+          <div><span class="chip always">-chen</span><span class="chip always">-lein</span><span class="chip">-um</span><span class="chip">-ment</span><span class="chip always">verb → noun</span></div>
+          <span class="en">das Mädchen, das Zentrum, das Radfahren</span></div>
+      </div>
+      <p class="trick"><b>Trick:</b> -chen makes things small and cute, and "small = neutral": das Mädchen (girl), das Brötchen (bread roll). A verb used as a noun is always das: <i>das Essen, das Radfahren</i>.</p>
+    </div>
+  <div class="rule"><b>Reminder · Colour your notes.</b> Write nouns in your notebook in colour: <span class="der">blue = der</span>, <span class="die">red = die</span>, <span class="das">green = das</span>. Netzwerk neu uses the same colours.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="artikel">der, die oder das?</button></div>
+</section>
+
+<section class="lesson" id="l-ein">
+  <h2>3 · ein, eine <span class="en">(a / an)</span> and kein, keine <span class="en">(no / not a)</span></h2>
+  <p class="lead"><b>der/die/das</b> = a specific thing (the). <b>ein/eine</b> = any one thing (a). <i>Das ist <u>eine</u> Lampe. <u>Die</u> Lampe ist schön.</i> <span class="en">(That is <u>a</u> lamp. <u>The</u> lamp is beautiful.)</span></p>
+  <div class="tablebox"><table>
+    <thead><tr><th></th><th>the (definite)</th><th>a (indefinite)</th><th>not a / no (negative)</th></tr></thead>
+    <tbody>
+      <tr><td class="der">maskulin</td><td><b class="der">der</b> Tisch</td><td><b class="der">ein</b> Tisch</td><td><b class="der">kein</b> Tisch</td></tr>
+      <tr><td class="das">neutral</td><td><b class="das">das</b> Buch</td><td><b class="das">ein</b> Buch</td><td><b class="das">kein</b> Buch</td></tr>
+      <tr><td class="die">feminin</td><td><b class="die">die</b> Lampe</td><td><b class="die">eine</b> Lampe</td><td><b class="die">keine</b> Lampe</td></tr>
+      <tr><td class="plc">Plural</td><td><b class="plc">die</b> Bücher</td><td><b class="plc">—</b> Bücher <span class="en">(nothing)</span></td><td><b class="plc">keine</b> Bücher</td></tr>
+    </tbody>
+  </table></div>
+  <div class="dia">
+      <div class="cap">der + das = ein · die = eine<small>Only the feminine "die" adds an -e</small></div>
+      <svg viewBox="0 0 520 220" role="img" aria-label="der and das become ein, die becomes eine, plural has no ein">
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M0,0L10,5L0,10z"/></marker></defs>
+        <rect class="bder" x="8" y="8" width="130" height="42" rx="8"/><text class="tder" x="73" y="36" font-size="22" text-anchor="middle">der</text>
+        <rect class="bdas" x="8" y="60" width="130" height="42" rx="8"/><text class="tdas" x="73" y="88" font-size="22" text-anchor="middle">das</text>
+        <rect class="bdie" x="8" y="118" width="130" height="42" rx="8"/><text class="tdie" x="73" y="146" font-size="22" text-anchor="middle">die</text>
+        <rect class="bpl" x="8" y="172" width="130" height="42" rx="8"/><text class="tpl" x="73" y="199" font-size="18" text-anchor="middle">die (Plural)</text>
+        <path class="arr" d="M140,29 C230,29 250,45 326,50" marker-end="url(#ah2)"/>
+        <path class="arr" d="M140,81 C230,81 250,64 326,60" marker-end="url(#ah2)"/>
+        <path class="arr" d="M140,139 L326,139" marker-end="url(#ah2)"/>
+        <path class="arr" d="M140,193 L326,193" marker-end="url(#ah2)"/>
+        <rect class="bsoft" x="330" y="12" width="182" height="88" rx="12"/>
+        <text x="421" y="58" font-size="36" font-weight="800" text-anchor="middle">ein</text>
+        <text class="mut" x="421" y="84" font-size="13" text-anchor="middle">ein Tisch · ein Buch</text>
+        <rect class="bdie" x="330" y="118" width="182" height="42" rx="8"/>
+        <text x="421" y="147" font-size="22" text-anchor="middle"><tspan font-weight="800">ein</tspan><tspan class="tdie">e</tspan> Lampe</text>
+        <rect class="bpl" x="330" y="172" width="182" height="42" rx="8"/>
+        <text x="421" y="199" font-size="17" text-anchor="middle">— Bücher / keine</text>
+      </svg>
+      <p class="trick"><b>Trick:</b> "di<b>e</b>" ends with <b>e</b>, so "ein<b>e</b>" gets an <b>e</b> too. Same for kein → kein<b>e</b>. der and das are twins: they share "ein".</p>
+    </div>
+  <h3>Next step: Akkusativ <span class="en">(the object form)</span></h3>
+  <p class="lead">When a noun is the thing you have, want or buy (after haben, möchten, brauchen, kaufen), only the <span class="der">der</span> words change. You need this in Sprechen Teil 3.</p>
+  <div class="dia">
+      <div class="cap">Akkusativ: only der changes<small>After haben, möchten, brauchen, kaufen</small></div>
+      <svg viewBox="0 0 520 176" role="img" aria-label="In accusative der becomes den and ein becomes einen. die, das and plural stay the same">
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M0,0L10,5L0,10z"/></marker></defs>
+        <rect class="bder" x="8" y="8" width="170" height="40" rx="8"/><text x="93" y="34" font-size="18" text-anchor="middle"><tspan class="tder">der / ein</tspan> Kaffee</text>
+        <path class="arr xder" d="M182,28 L320,28" marker-end="url(#ah4)"/><text class="tder" x="251" y="20" font-size="13" text-anchor="middle">changes!</text>
+        <rect class="bder" x="326" y="8" width="186" height="40" rx="8"/><text x="419" y="34" font-size="18" text-anchor="middle"><tspan class="tder">den / einen</tspan> Kaffee</text>
+        <rect class="bdie" x="8" y="62" width="170" height="30" rx="8"/><text x="93" y="83" font-size="16" text-anchor="middle"><tspan class="tdie">die / eine</tspan> Banane</text>
+        <text class="mut" x="251" y="83" font-size="22" text-anchor="middle">=</text>
+        <rect class="bdie" x="326" y="62" width="186" height="30" rx="8"/><text x="419" y="83" font-size="16" text-anchor="middle"><tspan class="tdie">die / eine</tspan> Banane</text>
+        <rect class="bdas" x="8" y="100" width="170" height="30" rx="8"/><text x="93" y="121" font-size="16" text-anchor="middle"><tspan class="tdas">das / ein</tspan> Brot</text>
+        <text class="mut" x="251" y="121" font-size="22" text-anchor="middle">=</text>
+        <rect class="bdas" x="326" y="100" width="186" height="30" rx="8"/><text x="419" y="121" font-size="16" text-anchor="middle"><tspan class="tdas">das / ein</tspan> Brot</text>
+        <rect class="bpl" x="8" y="138" width="170" height="30" rx="8"/><text x="93" y="159" font-size="16" text-anchor="middle"><tspan class="tpl">die</tspan> Äpfel</text>
+        <text class="mut" x="251" y="159" font-size="22" text-anchor="middle">=</text>
+        <rect class="bpl" x="326" y="138" width="186" height="30" rx="8"/><text x="419" y="159" font-size="16" text-anchor="middle"><tspan class="tpl">die</tspan> Äpfel</text>
+      </svg>
+      <p class="trick"><b>Trick:</b> "der man needs an <b>N</b>": den, einen, keinen. Everybody else stays the same. <i>Ich möchte <b>einen</b> Kaffee und <b>eine</b> Banane.</i></p>
+    </div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="ein">ein, eine oder nichts?</button></div>
+</section>
+
+<section class="lesson" id="l-plural">
+  <h2>4 · Singular und Plural <span class="en">(one and many)</span></h2>
+  <p class="lead">German has several plural endings. There is no single rule, so learn the plural with the noun: <i>der Tisch, die Tische</i>. Dictionaries write it short: <span class="mono">Tisch, der, -e</span>. The ¨ symbol means the vowel gets an umlaut: <span class="mono">Buch, das, ¨-er</span> → Bücher.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Ending</th><th>Typical for</th><th>Singular → Plural</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">-n / -en</td><td>most <span class="die">die</span> words</td><td>die Lampe → die Lampe<b>n</b> · die Wohnung → die Wohnung<b>en</b></td></tr>
+      <tr><td class="mono">-nen</td><td>female -in</td><td>die Freundin → die Freundin<b>nen</b></td></tr>
+      <tr><td class="mono">-e / ¨-e</td><td>many <span class="der">der</span> words</td><td>der Tisch → die Tisch<b>e</b> · der Stuhl → die St<b>ü</b>hl<b>e</b></td></tr>
+      <tr><td class="mono">-er / ¨-er</td><td>many <span class="das">das</span> words</td><td>das Kind → die Kind<b>er</b> · das Buch → die B<b>ü</b>ch<b>er</b></td></tr>
+      <tr><td class="mono">-s</td><td>loan words, ending in a vowel</td><td>das Handy → die Handy<b>s</b> · das Auto → die Auto<b>s</b></td></tr>
+      <tr><td class="mono">– / ¨</td><td>-er, -el, -chen</td><td>der Computer → die Computer · der Apfel → die <b>Ä</b>pfel</td></tr>
+    </tbody>
+  </table></div>
+  <div class="dia">
+      <div class="cap">Plural is always die<small>Every noun, any gender: more than one = die</small></div>
+      <svg viewBox="0 0 520 196" role="img" aria-label="der Tisch, das Buch and die Lampe all become die in plural">
+        <defs><marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M0,0L10,5L0,10z"/></marker></defs>
+        <rect class="bder" x="8" y="10" width="160" height="46" rx="8"/><text x="24" y="40" font-size="20"><tspan class="tder">der</tspan> Tisch</text>
+        <rect class="bdas" x="8" y="75" width="160" height="46" rx="8"/><text x="24" y="105" font-size="20"><tspan class="tdas">das</tspan> Buch</text>
+        <rect class="bdie" x="8" y="140" width="160" height="46" rx="8"/><text x="24" y="170" font-size="20"><tspan class="tdie">die</tspan> Lampe</text>
+        <path class="arr" d="M170,33 C250,33 260,80 326,86" marker-end="url(#ah1)"/>
+        <path class="arr" d="M170,98 L326,98" marker-end="url(#ah1)"/>
+        <path class="arr" d="M170,163 C250,163 260,116 326,110" marker-end="url(#ah1)"/>
+        <text class="mut" x="226" y="90" font-size="13">Plural</text>
+        <rect class="bpl" x="330" y="40" width="182" height="116" rx="12"/>
+        <text class="tpl" x="421" y="96" font-size="44" text-anchor="middle">die</text>
+        <text x="421" y="124" font-size="14" text-anchor="middle">Tische · Bücher</text>
+        <text x="421" y="142" font-size="14" text-anchor="middle">Lampen</text>
+      </svg>
+      <p class="trick"><b>Trick:</b> plural is a crowd, and the crowd always wears <span class="plc">purple "die"</span>. So if you only know the plural, you can't guess the gender. Learn singular + plural together.</p>
+    </div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="plural">Singular → Plural</button></div>
+</section>
+
+<section class="lesson" id="l-verbs">
+  <h2>5 · Verben im Präsens <span class="en">(verbs in present tense)</span></h2>
+  <p class="lead">The dictionary form ends in <b>-en</b> (wohnen = to live). Remove -en to get the stem (wohn-), then add the ending for each person.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Person</th><th>English</th><th>wohnen <span class="en">(to live)</span></th><th>heißen <span class="en">(to be called)</span></th><th>sein <span class="en">(to be)</span></th></tr></thead>
+    <tbody>
+      <tr><td>ich</td><td>I</td><td>wohn<b>e</b></td><td>heiß<b>e</b></td><td><b>bin</b></td></tr>
+      <tr><td>du</td><td>you (friend)</td><td>wohn<b>st</b></td><td>heiß<b>t</b></td><td><b>bist</b></td></tr>
+      <tr><td>er / sie / es</td><td>he / she / it</td><td>wohn<b>t</b></td><td>heiß<b>t</b></td><td><b>ist</b></td></tr>
+      <tr><td>wir</td><td>we</td><td>wohn<b>en</b></td><td>heiß<b>en</b></td><td><b>sind</b></td></tr>
+      <tr><td>ihr</td><td>you (group)</td><td>wohn<b>t</b></td><td>heiß<b>t</b></td><td><b>seid</b></td></tr>
+      <tr><td>sie / Sie</td><td>they / you (formal)</td><td>wohn<b>en</b></td><td>heiß<b>en</b></td><td><b>sind</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="dia">
+      <div class="cap">Verb endings: e · st · t · en · t · en<small>Same colour = same ending</small></div>
+      <div class="endgrid">
+        <div><span>ich</span><b>wohn-e</b></div><div class="e-en"><span>wir</span><b>wohn-en</b></div>
+        <div class="e-st"><span>du</span><b>wohn-st</b></div><div class="e-t"><span>ihr</span><b>wohn-t</b></div>
+        <div class="e-t"><span>er / sie / es</span><b>wohn-t</b></div><div class="e-en"><span>sie / Sie</span><b>wohn-en</b></div>
+      </div>
+      <p class="trick"><b>Trick:</b> <span class="das">wir and Sie</span> look exactly like the dictionary form (wohnen). <span class="der">er and ihr</span> both end in -t. <span class="die">du</span> is the only one with <b>-st</b>, like du bi<b>st</b>.</p>
+    </div>
+  <div class="rule"><b>Reminder · Small spelling changes.</b> Stem ends in -s, -ß or -z → du only adds <b>-t</b>: du heiß<b>t</b>. Stem ends in -t or -d → add an <b>-e-</b>: du arbeit<b>e</b>st, er arbeit<b>e</b>t. <b>sein</b> is irregular: learn it by heart.</div>
+  <div class="rule"><b>Reminder · Sie or du?</b> <b>Sie</b> (formal, always capital S) with the examiner, at work and with strangers: <i>Wie heißen Sie?</i> <b>du</b> with friends, family and often your exam partner: <i>Wie heißt du?</i> Sie uses the -en form, du the -st form.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="verbform">Verb-Endungen</button></div>
+</section>
+
+<section class="lesson" id="l-w">
+  <h2>6 · Satzbau und W-Fragen <span class="en">(word order and questions)</span></h2>
+  <p class="lead">German word order follows one main rule: the verb has a fixed place. Learn the verb train first, then the question words.</p>
+  <div class="dia">
+      <div class="cap">The verb train<small>The verb (red) is the 2nd car in statements and W-questions</small></div>
+      <div class="trainrow"><span class="lbl">Aussage · statement</span><div class="train"><span class="car"><small>1</small>Ich</span><span class="car v"><small>2</small>wohne</span><span class="car"><small>3</small>in Hamburg.</span></div></div>
+      <div class="trainrow"><span class="lbl">Zeit zuerst · time first</span><div class="train"><span class="car"><small>1</small>Heute</span><span class="car v"><small>2</small>lerne</span><span class="car"><small>3</small>ich</span><span class="car"><small>4</small>Deutsch.</span></div></div>
+      <div class="trainrow"><span class="lbl">W-Frage · W-question</span><div class="train"><span class="car"><small>1</small>Wo</span><span class="car v"><small>2</small>wohnen</span><span class="car"><small>3</small>Sie?</span></div></div>
+      <div class="trainrow"><span class="lbl">Ja/Nein-Frage · yes/no question: verb is the engine</span><div class="train"><span class="car v"><small>1</small>Wohnen</span><span class="car"><small>2</small>Sie</span><span class="car"><small>3</small>in Hamburg?</span></div></div>
+      <div class="trainrow"><span class="lbl">Modalverb · two verbs make a bracket</span><div class="train"><span class="car v"><small>1</small>Kannst</span><span class="car"><small>2</small>du</span><span class="car"><small>…</small>bitte das Fenster</span><span class="car v"><small>end</small>öffnen?</span></div></div>
+      <p class="trick"><b>Trick:</b> the verb car never moves from place 2. Whatever you put in front (Heute, Am Wochenende, Wo), the person (ich, Sie) has to jump behind the verb.</p>
+    </div>
+  <h3>W-Fragen <span class="en">(question words)</span></h3>
+  <p class="lead">Most question words start with <b>W</b>. You need them in the exam (Sprechen Teil 1 and 2) and in every conversation.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Fragewort</th><th>English</th><th>Beispiel <span class="en">(example)</span></th><th>Antwort <span class="en">(answer)</span></th></tr></thead>
+    <tbody>
+      <tr><td><b>Wer?</b></td><td>who</td><td>Wer ist das? <span class="en">(Who is that?)</span></td><td>Das ist Anna.</td></tr>
+      <tr><td><b>Was?</b></td><td>what</td><td>Was sind Sie von Beruf? <span class="en">(What are you by profession?)</span></td><td>Ich bin Ingenieurin.</td></tr>
+      <tr><td><b>Wo?</b></td><td>where (place)</td><td>Wo wohnen Sie? <span class="en">(Where do you live?)</span></td><td>In Hamburg.</td></tr>
+      <tr><td><b>Woher?</b></td><td>where from</td><td>Woher kommen Sie? <span class="en">(Where do you come from?)</span></td><td>Aus Brasilien.</td></tr>
+      <tr><td><b>Wohin?</b></td><td>where to</td><td>Wohin fahren Sie? <span class="en">(Where are you going?)</span></td><td>Nach Berlin.</td></tr>
+      <tr><td><b>Wie?</b></td><td>how</td><td>Wie heißen Sie? <span class="en">(What is your name? lit. How are you called?)</span></td><td>Ich heiße Maria.</td></tr>
+      <tr><td><b>Wie alt?</b></td><td>how old</td><td>Wie alt sind Sie? <span class="en">(How old are you?)</span></td><td>Ich bin dreißig <span class="pron">(DRY-sikh)</span> Jahre alt.</td></tr>
+      <tr><td><b>Wie viele?</b></td><td>how many</td><td>Wie viele Sprachen sprechen Sie? <span class="en">(How many languages do you speak?)</span></td><td>Drei <span class="pron">(dry)</span>.</td></tr>
+      <tr><td><b>Wie viel?</b></td><td>how much</td><td>Wie viel kostet das? <span class="en">(How much does that cost?)</span></td><td>Fünf <span class="pron">(fuenf)</span> Euro.</td></tr>
+      <tr><td><b>Wann?</b></td><td>when</td><td>Wann haben Sie Deutschkurs? <span class="en">(When do you have German class?)</span></td><td>Am Montag und Mittwoch.</td></tr>
+      <tr><td><b>Welche?</b></td><td>which</td><td>Welche Sprachen sprechen Sie? <span class="en">(Which languages do you speak?)</span></td><td>Englisch und Deutsch.</td></tr>
+      <tr><td><b>Warum?</b></td><td>why</td><td>Warum lernen Sie Deutsch? <span class="en">(Why do you learn German?)</span></td><td>Für die Arbeit.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="rule"><b>Reminder · Two kinds of questions.</b> W-question: W-word 1st, verb 2nd: <i>Wo <u>wohnen</u> Sie?</i> Yes/no question: verb 1st: <i><u>Wohnen</u> Sie in Hamburg?</i> – Ja. / Nein, in Berlin.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="satzbau">Welcher Satz ist richtig?</button><button class="go" type="button" data-go="wfrage">Welches Fragewort?</button></div>
+</section>
+
+<section class="lesson" id="l-qa">
+  <h2>7 · Fragen bilden und antworten <span class="en">(building questions and answers)</span></h2>
+  <p class="lead">Asking and answering is half of the speaking exam. Build every question with the same three steps, then answer by swapping the person.</p>
+
+  <h3>W-Frage in 3 Schritten <span class="en">(W-question in 3 steps)</span></h3>
+  <ol class="steps">
+    <li><b>W-word:</b> what do you want to know? Place → Wo. Origin → Woher. Name → Wie. Time → Wann. Thing → Was.</li>
+    <li><b>Verb:</b> conjugate it for the person you ask: du wohn<b>st</b>, Sie wohn<b>en</b>.</li>
+    <li><b>Person + rest:</b> du / Sie, then the rest of the sentence. End with <b>?</b></li>
+  </ol>
+  <div class="dia">
+    <div class="trainrow"><span class="lbl">Where do you live?</span><div class="train"><span class="car"><small>① W-Wort</small>Wo</span><span class="car v"><small>② Verb</small>wohnst</span><span class="car"><small>③ Person</small>du?</span></div></div>
+    <div class="trainrow"><span class="lbl">What do you like to drink?</span><div class="train"><span class="car"><small>① W-Wort</small>Was</span><span class="car v"><small>② Verb</small>trinken</span><span class="car"><small>③ Person</small>Sie</span><span class="car"><small>④ Rest</small>gern?</span></div></div>
+    <div class="trainrow"><span class="lbl">When does the course start?</span><div class="train"><span class="car"><small>① W-Wort</small>Wann</span><span class="car v"><small>② Verb</small>beginnt</span><span class="car"><small>③ Subjekt</small>der Kurs?</span></div></div>
+  </div>
+
+  <h3>Ja/Nein-Frage <span class="en">(yes/no question)</span></h3>
+  <p class="lead">No W-word. The verb jumps to the front: <i>Du wohnst in Hamburg.</i> → <i><b>Wohnst</b> du in Hamburg?</i> <span class="en">(Do you live in Hamburg?)</span></p>
+  <div class="dia">
+    <div class="trainrow"><span class="lbl">Do you live in Hamburg?</span><div class="train"><span class="car v"><small>① Verb</small>Wohnst</span><span class="car"><small>② Person</small>du</span><span class="car"><small>③ Rest</small>in Hamburg?</span></div></div>
+    <div class="trainrow"><span class="lbl">Answers</span><div class="train"><span class="car">Ja, ich wohne in Hamburg.</span><span class="car">Nein, ich wohne in Berlin.</span><span class="car">Nein, nicht in Hamburg.</span></div></div>
+  </div>
+
+  <h3>Antworten: die Person tauschen <span class="en">(answering: swap the person)</span></h3>
+  <div class="dia">
+    <div class="cap">Wo wohnst du? → Ich wohne in Hamburg.<small>Three things change when you answer</small></div>
+    <svg viewBox="0 0 520 176" role="img" aria-label="Question Wo wohnst du becomes answer Ich wohne in Hamburg: du becomes ich, wohnst becomes wohne, wo becomes the place">
+      <defs><marker id="ah5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M0,0L10,5L0,10z"/></marker></defs>
+      <text class="mut" x="8" y="20" font-size="12">FRAGE (question)</text>
+      <rect class="bder" x="8" y="28" width="90" height="42" rx="8"/><text x="53" y="56" font-size="20" text-anchor="middle" font-weight="800">Wo</text>
+      <rect class="bdie" x="108" y="28" width="130" height="42" rx="8"/><text x="173" y="56" font-size="20" text-anchor="middle" font-weight="800">wohnst</text>
+      <rect class="bpl" x="248" y="28" width="80" height="42" rx="8"/><text x="288" y="56" font-size="20" text-anchor="middle" font-weight="800">du ?</text>
+      <path class="arr" d="M288,72 C288,100 53,96 53,120" marker-end="url(#ah5)"/>
+      <path class="arr" d="M173,72 L173,120" marker-end="url(#ah5)"/>
+      <path class="arr" d="M53,72 C53,96 380,92 380,120" marker-end="url(#ah5)"/>
+      <rect class="bpl" x="8" y="124" width="90" height="42" rx="8"/><text x="53" y="152" font-size="20" text-anchor="middle" font-weight="800">Ich</text>
+      <rect class="bdie" x="108" y="124" width="130" height="42" rx="8"/><text x="173" y="152" font-size="20" text-anchor="middle" font-weight="800">wohne</text>
+      <rect class="bder" x="290" y="124" width="180" height="42" rx="8"/><text x="380" y="152" font-size="20" text-anchor="middle" font-weight="800">in Hamburg.</text>
+      <text class="mut" x="478" y="118" font-size="12" text-anchor="end">ANTWORT (answer)</text>
+    </svg>
+    <div class="legend"><span class="plc">du → ich</span><span class="die">wohnst → wohne</span><span class="der">Wo? → a place</span></div>
+  </div>
+  <div class="tablebox"><table>
+    <thead><tr><th>In the question</th><th>In your answer</th><th>Beispiel <span class="en">(example)</span></th></tr></thead>
+    <tbody>
+      <tr><td>du</td><td>ich</td><td>Woher komm<b>st du</b>? → <b>Ich</b> komm<b>e</b> aus Brasilien.</td></tr>
+      <tr><td>Sie</td><td>ich</td><td>Wie heiß<b>en Sie</b>? → <b>Ich</b> heiß<b>e</b> Maria.</td></tr>
+      <tr><td>ihr</td><td>wir</td><td>Hab<b>t ihr</b> Zeit? → Ja, <b>wir</b> hab<b>en</b> Zeit.</td></tr>
+      <tr><td>dein / Ihr</td><td>mein</td><td>Wie ist <b>dein</b> Name? → <b>Mein</b> Name ist Maria.</td></tr>
+      <tr><td>deine / Ihre</td><td>meine</td><td>Wie ist <b>Ihre</b> Nummer? → <b>Meine</b> Nummer ist …</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Nein sagen: nicht oder kein? <span class="en">(saying no: nicht or kein?)</span></h3>
+  <div class="trio">
+    <div class="gcard f"><span class="big die">kein</span><b>replaces ein, or no article, before a noun</b><ul><li>Hast du ein Auto? → Nein, ich habe <b>kein</b> Auto.</li><li>Hast du Zeit? → Nein, ich habe <b>keine</b> Zeit.</li><li>kein / keine / keinen: same endings as ein</li></ul></div>
+    <div class="gcard m"><span class="big der">nicht</span><b>for everything else</b><ul><li>verbs: Ich arbeite heute <b>nicht</b>.</li><li>adjectives: Das ist <b>nicht</b> weit.</li><li>places, names, der/die/das: <b>nicht</b> in Berlin, <b>nicht</b> mein Handy</li></ul></div>
+  </div>
+  <div class="rule"><b>Reminder · Short or full answer?</b> In conversation a short answer is fine: <i>Woher kommst du? – Aus Brasilien.</i> In the exam (Sprechen Teil 1) say full sentences: <i>Ich komme aus Brasilien.</i> It shows you can use the verb.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="antworten">Die richtige Antwort</button><button class="go" type="button" data-go="kein">nicht oder kein?</button><button class="go" type="button" data-go="wfrage">Welches Fragewort?</button><button class="go" type="button" data-go="satzbau">Welcher Satz ist richtig?</button></div>
+</section>
+
+<div class="part"><span class="kick">Teil B</span><h2>Buchstaben und Zahlen <span class="en">(letters and numbers)</span></h2><p class="lead">The alphabet, numbers, the time and prices, with a pronunciation guide. Names, numbers and times are the biggest points in the exam's listening test.</p></div>
+
+<section class="lesson" id="l-abc">
+  <h2>8 · Das Alphabet <span class="en">(the alphabet)</span></h2>
+  <p class="lead">In the exam you spell your name (Sprechen Teil 1), and in the listening test names are spelled to you. Under each letter: its German name, then an English sound guide. Letters with a <span class="die">red border</span> are easy to confuse for English speakers.</p>
+  <div class="abc" id="abcGrid"></div>
+  <div class="rule"><b>Reminder · The tricky ones.</b> <b>E</b> sounds like English "ay", <b>I</b> like English "ee". <b>J</b> = "yot", <b>V</b> = "fow", <b>W</b> = "vay", <b>Z</b> = "tset". When spelling double letters, say <i>Doppel-L</i> or just L, L. ß is called <i>Eszett</i>.</div>
+  <div class="dia">
+      <div class="cap">Letters that sound different<small>German spelling → the sound you say</small></div>
+      <div class="sound">
+        <div><span class="big2">ei → "eye"</span><span class="en">drei, zwei, heißen</span></div>
+        <div><span class="big2">ie → "ee"</span><span class="en">vier, sieben, Sie</span></div>
+        <div><span class="big2">W → "v"</span><span class="en">Wein (vine), wohnen</span></div>
+        <div><span class="big2">V → "f"</span><span class="en">Vater (father), vier</span></div>
+        <div><span class="big2">Z → "ts"</span><span class="en">zehn, zwei, Zimmer</span></div>
+        <div><span class="big2">J → "y"</span><span class="en">ja, Jahr, Juli</span></div>
+        <div><span class="big2">E → "ay"</span><span class="en">letter name of E</span></div>
+        <div><span class="big2">I → "ee"</span><span class="en">letter name of I</span></div>
+      </div>
+      <p class="trick"><b>Trick:</b> for <b>ei</b> and <b>ie</b>, say the English name of the <b>second</b> letter. e-<b>i</b> → "eye" (drei). i-<b>e</b> → "ee" (vier). <b>ü</b>: say "ee" with your lips round like "oo".</p>
+    </div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="hoerBuchstabe">Buchstabennamen</button><button class="go" type="button" data-go="buchstabieren">Buchstabieren</button></div>
+</section>
+
+<section class="lesson" id="l-numbers">
+  <h2>9 · Zahlen <span class="en">(numbers)</span></h2>
+  <p class="lead">The pronunciation guide uses English sounds; <span class="mono">CAPS</span> = stressed syllable, <span class="mono">kh</span> = the soft "ch" like in "ich", <span class="mono">ue</span> = ü (say "ee" with rounded lips).</p>
+  <div class="numgrid" id="numGrid"></div>
+  <div class="dia">
+      <div class="cap">Numbers are backwards<small>21–99: say the second digit first</small></div>
+      <svg viewBox="0 0 520 200" role="img" aria-label="47: the 7 is said first as sieben, then und, then 40 as vierzig">
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M0,0L10,5L0,10z"/></marker></defs>
+        <text class="tder" x="220" y="62" font-size="64" text-anchor="middle">4</text>
+        <text class="tdie" x="300" y="62" font-size="64" text-anchor="middle">7</text>
+        <path class="arr xdie" d="M300,72 C300,110 120,90 98,128" marker-end="url(#ah3)"/>
+        <path class="arr xder" d="M220,72 C220,110 400,90 422,128" marker-end="url(#ah3)"/>
+        <rect class="bdie" x="10" y="132" width="176" height="60" rx="10"/>
+        <text x="98" y="160" font-size="22" text-anchor="middle" font-weight="800">① sieben</text>
+        <text class="mut" x="98" y="182" font-size="12" text-anchor="middle">ZEE-ben</text>
+        <rect class="bsoft" x="198" y="132" width="114" height="60" rx="10"/>
+        <text x="255" y="160" font-size="22" text-anchor="middle" font-weight="800">② und</text>
+        <text class="mut" x="255" y="182" font-size="12" text-anchor="middle">oont</text>
+        <rect class="bder" x="324" y="132" width="188" height="60" rx="10"/>
+        <text x="418" y="160" font-size="22" text-anchor="middle" font-weight="800">③ vierzig</text>
+        <text class="mut" x="418" y="182" font-size="12" text-anchor="middle">FEER-tsikh</text>
+      </svg>
+      <p class="trick"><b>Trick:</b> like the old English rhyme "four-and-twenty blackbirds". When you hear a number, write the <b>right digit first</b>, then the left one. 47 = sieben·und·vierzig, 74 = vier·und·siebzig.</p>
+    </div>
+  <div class="rule"><b>Reminder · ein and zwo.</b> <b>eins</b> becomes <b>ein</b> inside a bigger number: einundzwanzig <span class="pron">(AYN-oont-TSVAN-tsikh)</span> = 21. On the phone people often say <b>zwo</b> <span class="pron">(tsvoh)</span> instead of zwei, so it doesn't sound like drei.</div>
+  <div class="rule"><b>Reminder · Watch the spelling.</b> sech<b>zehn</b> (16) and sech<b>zig</b> (60) drop the -s of sechs. sieb<b>zehn</b> (17) and sieb<b>zig</b> (70) drop the -en of sieben. dreißig (30) uses <b>ß</b>, not -zig.</div>
+  <h3>Zahlen-Explorer <span class="en">(number explorer)</span></h3>
+  <div class="explorer">
+    <label for="explIn" class="en">Type a number 0–999</label>
+    <input type="number" id="explIn" min="0" max="999" value="47">
+    <div class="out" id="explOut"></div>
+  </div>
+  <div class="rule"><b>Reminder · Numbers in the exam.</b> Phone numbers and postcodes are said <b>digit by digit</b>: 80331 = acht · null · drei · drei · eins. House numbers are one number: 47 = siebenundvierzig. Times: 19 Uhr = neunzehn Uhr <span class="pron">(NOYN-tsayn oor)</span>.</div>
+  <h3>Uhrzeit <span class="en">(telling the time)</span></h3>
+  <p class="lead">There are two ways. <b>Offiziell</b> <span class="en">(official: trains, appointments, announcements in the exam)</span> uses 0–24 hours. <b>Informell</b> <span class="en">(everyday)</span> uses 1–12 with nach, vor, Viertel and halb.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Uhr</th><th>offiziell <span class="en">(official)</span></th><th>informell <span class="en">(everyday)</span></th></tr></thead>
+    <tbody>
+      <tr><td>8:00</td><td>acht Uhr <span class="pron">(akht oor)</span></td><td>acht Uhr</td></tr>
+      <tr><td>8:05</td><td>acht Uhr fünf</td><td>fünf nach acht <span class="pron">(fuenf nakh akht)</span></td></tr>
+      <tr><td>8:15</td><td>acht Uhr fünfzehn</td><td>Viertel nach acht <span class="pron">(FEER-tel nakh akht)</span></td></tr>
+      <tr><td>8:30</td><td>acht Uhr dreißig</td><td><b>halb neun</b> <span class="pron">(hulp noyn)</span></td></tr>
+      <tr><td>8:45</td><td>acht Uhr fünfundvierzig</td><td>Viertel vor neun <span class="pron">(FEER-tel for noyn)</span></td></tr>
+      <tr><td>8:50</td><td>acht Uhr fünfzig</td><td>zehn vor neun <span class="pron">(tsayn for noyn)</span></td></tr>
+      <tr><td>14:30</td><td>vierzehn Uhr dreißig <span class="pron">(FEER-tsayn oor DRY-sikh)</span></td><td>halb drei <span class="pron">(hulp dry)</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="dia">
+    <div class="cap">halb looks forward<small>halb neun = half way TO nine = 8:30</small></div>
+    <svg viewBox="0 0 520 150" role="img" aria-label="Timeline from 8:00 to 9:00. First half is nach acht, second half is vor neun, 8:30 is halb neun">
+      <rect x="30" y="62" width="230" height="10" rx="5" class="fillder"/>
+      <rect x="260" y="62" width="230" height="10" rx="5" class="filldie"/>
+      <text class="tder" x="145" y="40" font-size="15" text-anchor="middle">… nach acht</text>
+      <text class="tdie" x="375" y="40" font-size="15" text-anchor="middle">… vor neun</text>
+      <text class="mut" x="30" y="56" font-size="12" text-anchor="middle">8:00</text>
+      <text class="mut" x="145" y="56" font-size="12" text-anchor="middle">8:15</text>
+      <text class="mut" x="375" y="56" font-size="12" text-anchor="middle">8:45</text>
+      <text class="mut" x="490" y="56" font-size="12" text-anchor="middle">9:00</text>
+      <circle cx="260" cy="67" r="13" class="fillpl"/><text x="260" y="72" font-size="12" text-anchor="middle" class="dotT">½</text>
+      <text x="30" y="96" font-size="13">acht</text>
+      <text x="145" y="96" font-size="13" text-anchor="middle">Viertel nach acht</text>
+      <text class="tpl" x="260" y="100" font-size="16" text-anchor="middle">halb neun</text>
+      <text x="375" y="96" font-size="13" text-anchor="middle">Viertel vor neun</text>
+      <text x="490" y="96" font-size="13" text-anchor="end">neun</text>
+      <text class="mut" x="260" y="128" font-size="13" text-anchor="middle">8:30 is already "half of nine", not 9:30!</text>
+    </svg>
+  </div>
+  <div class="rule"><b>Reminder · Asking the time.</b> <i>Wie spät ist es?</i> or <i>Wie viel Uhr ist es?</i> <span class="en">(What time is it?)</span> – <i>Es ist halb neun.</i> For "at", use <b>um</b>: <i>Um wie viel Uhr beginnt der Kurs? – Um acht.</i> <span class="en">(At what time does the course start? – At eight.)</span></div>
+
+  <h3>Preise <span class="en">(prices)</span></h3>
+  <div class="tablebox"><table>
+    <thead><tr><th>Preis</th><th>gesagt <span class="en">(said)</span></th><th>Aussprache <span class="en">(pronunciation)</span></th></tr></thead>
+    <tbody>
+      <tr><td>1,00 €</td><td>ein Euro</td><td class="pron">ayn OY-ro</td></tr>
+      <tr><td>2,50 €</td><td>zwei Euro fünfzig</td><td class="pron">tsvy OY-ro FUENF-tsikh</td></tr>
+      <tr><td>3,99 €</td><td>drei Euro neunundneunzig</td><td class="pron">dry OY-ro NOYN-oont-NOYN-tsikh</td></tr>
+      <tr><td>12,15 €</td><td>zwölf Euro fünfzehn</td><td class="pron">tsvoelf OY-ro FUENF-tsayn</td></tr>
+      <tr><td>0,80 €</td><td>achtzig Cent</td><td class="pron">AKHT-tsikh tsent</td></tr>
+    </tbody>
+  </table></div>
+  <div class="rule"><b>Reminder · Prices.</b> Euros, then the word <b>Euro</b>, then the cents without "Cent": 2,50 € = zwei Euro fünfzig. Germans write a <b>comma</b>: 2,50 (not 2.50). Listen for <b>-zehn</b> vs <b>-zig</b>: fünf<b>zehn</b> (15) vs fünf<b>zig</b> (50).</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="hoerZahl">Wort → Zahl</button><button class="go" type="button" data-go="zahlWort">Zahl → Wort</button><button class="go" type="button" data-go="telefon">Telefon & PLZ</button><button class="go" type="button" data-go="uhrzeit">Wie spät ist es?</button><button class="go" type="button" data-go="preis">Was kostet das?</button></div>
+</section>
+
+<div class="part"><span class="kick">Teil C</span><h2>Themen <span class="en">(topics)</span></h2><p class="lead">Ready-made sentences about you, your work, your free time and finding your way. Change them to fit your life.</p></div>
+
+<section class="lesson" id="l-me">
+  <h2>10 · Über mich <span class="en">(about me)</span></h2>
+  <p class="lead">The most important text you will ever say in German. In the exam (Sprechen Teil 1) you get a card with these seven keywords and say one sentence for each. Then the examiner asks you to <b>spell your name</b> and say a <b>number</b>. Fill in your details: the text updates with the English meaning. Practise it aloud until you can say it without reading.</p>
+  <div class="kwcard">Name? · Alter? · Land? · Wohnort? · Sprachen? · Beruf? · Hobby?</div>
+  <form class="builder" id="builder">
+    <label for="b-name">Name <span>name</span><input type="text" id="b-name" value="Maria"></label>
+    <label for="b-alter">Alter <span>age, in digits</span><input type="text" id="b-alter" inputmode="numeric" placeholder="z.B. 30"></label>
+    <label for="b-land">Land <span>country</span><input type="text" id="b-land" value="Brasilien"></label>
+    <label for="b-ort">Wohnort <span>where you live</span><input type="text" id="b-ort" value="Hamburg"></label>
+    <label for="b-spr">Sprachen <span>languages</span><input type="text" id="b-spr" value="Englisch, Portugiesisch und ein bisschen Deutsch"></label>
+    <label for="b-beruf">Beruf <span>job</span><input type="text" id="b-beruf" value="Ingenieurin"></label>
+    <label for="b-hobby">Hobbys <span>hobbies</span><input type="text" id="b-hobby" value="Lesen und Kochen"></label>
+    <label for="b-tel">Telefonnummer <span>example number</span><input type="text" id="b-tel" inputmode="tel" value="0176 1234567"></label>
+  </form>
+  <div class="introOut" id="introOut"></div>
+  <div class="rule"><b>Reminder · No article before a job.</b> <i>Ich bin Ingenieurin.</i> (not <s>eine</s> Ingenieurin). Women add <b>-in</b>: Ingenieur → Ingenieur<b>in</b>, Lehrer → Lehrer<b>in</b>.</div>
+  <div class="rule"><b>Reminder · Countries.</b> Most have no article: <i>aus Brasilien, aus Deutschland, in Hamburg</i>. A few do: <i>aus <b>der</b> Schweiz, aus <b>der</b> Türkei, aus <b>den</b> USA</i>.</div>
+  <div class="rule"><b>Reminder · Languages and hobbies.</b> Languages end in <b>-isch</b> and have a capital letter: Englisch, Portugiesisch, Chinesisch. A verb used as a hobby is a noun, so it gets a capital too: <i>das Lesen, das Kochen</i>. Or say it with gern: <i>Ich koche gern.</i> <span class="en">(I like cooking.)</span></div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="vorstellen">Sich vorstellen</button><button class="go" type="button" data-go="buchstabieren">Buchstabieren</button></div>
+</section>
+
+<section class="lesson" id="l-work">
+  <h2>11 · Arbeit und Beruf <span class="en">(work and job)</span></h2>
+  <p class="lead">Work comes up in the exam (Sprechen Teil 2) and in almost every small talk in Germany. Learn these questions, and change the answers to fit your job.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Frage <span class="en">(question)</span></th><th>Antwort <span class="en">(answer)</span></th></tr></thead>
+    <tbody>
+      <tr><td>Was sind Sie von Beruf? <span class="en">(What is your job?)</span></td><td>Ich bin Ingenieurin. <span class="en">(I am an engineer.)</span></td></tr>
+      <tr><td>Wo arbeiten Sie? <span class="en">(Where do you work?)</span></td><td>Ich arbeite bei Siemens in Hamburg. <span class="en">(I work at Siemens in Hamburg.)</span></td></tr>
+      <tr><td>Als was arbeiten Sie? <span class="en">(What do you work as?)</span></td><td>Ich arbeite als Ingenieurin. <span class="en">(I work as an engineer.)</span></td></tr>
+      <tr><td>Seit wann arbeiten Sie dort? <span class="en">(Since when have you worked there?)</span></td><td>Seit März. <span class="en">(Since March.)</span></td></tr>
+      <tr><td>Was machen Sie bei der Arbeit? <span class="en">(What do you do at work?)</span></td><td>Ich arbeite am Computer und habe viele Meetings. <span class="en">(I work on the computer and have many meetings.)</span></td></tr>
+      <tr><td>Wann arbeiten Sie? <span class="en">(When do you work?)</span></td><td>Von Montag bis Freitag, von 9 bis 17 Uhr. <span class="en">(Monday to Friday, 9 to 5.)</span> <span class="pron">neun (noyn) bis siebzehn (ZEEP-tsayn) Uhr (oor)</span></td></tr>
+      <tr><td>Arbeiten Sie im Büro? <span class="en">(Do you work in the office?)</span></td><td>Ja, aber zwei Tage im Homeoffice. <span class="en">(Yes, but two days from home.)</span> <span class="pron">zwei (tsvy)</span></td></tr>
+      <tr><td>Wie kommen Sie zur Arbeit? <span class="en">(How do you get to work?)</span></td><td>Mit dem Fahrrad. <span class="en">(By bike.)</span></td></tr>
+      <tr><td>Arbeiten Sie gern? <span class="en">(Do you like working?)</span></td><td>Ja, die Arbeit ist interessant. <span class="en">(Yes, the work is interesting.)</span></td></tr>
+    </tbody>
+  </table></div>
+  <h3>Wörter <span class="en">(words)</span></h3>
+  <div class="trio">
+    <div class="gcard m"><span class="big der">der</span><ul><li>der Beruf <span class="en">(job)</span></li><li>der Kollege <span class="en">(colleague, m)</span></li><li>der Chef <span class="en">(boss, m)</span></li><li>der Termin <span class="en">(appointment)</span></li><li>der Computer</li></ul></div>
+    <div class="gcard f"><span class="big die">die</span><ul><li>die Arbeit <span class="en">(work)</span></li><li>die Firma <span class="en">(company)</span></li><li>die Kollegin <span class="en">(colleague, f)</span></li><li>die Besprechung <span class="en">(meeting)</span></li><li>die Arbeitszeit <span class="en">(working hours)</span></li></ul></div>
+    <div class="gcard n"><span class="big das">das</span><ul><li>das Büro <span class="en">(office)</span></li><li>das Homeoffice <span class="en">(working from home)</span></li><li>das Meeting</li><li>das Team</li><li>das Projekt <span class="en">(project)</span></li></ul></div>
+  </div>
+  <h3>Berufe <span class="en">(jobs)</span>, male and female</h3>
+  <div class="tablebox"><table>
+    <thead><tr><th>Mann <span class="en">(man)</span></th><th>Frau <span class="en">(woman)</span></th><th>English</th></tr></thead>
+    <tbody>
+      <tr><td><span class="der">der</span> Ingenieur</td><td><span class="die">die</span> Ingenieur<b>in</b></td><td>engineer</td></tr>
+      <tr><td><span class="der">der</span> Informatiker</td><td><span class="die">die</span> Informatiker<b>in</b></td><td>IT specialist</td></tr>
+      <tr><td><span class="der">der</span> Programmierer</td><td><span class="die">die</span> Programmierer<b>in</b></td><td>programmer</td></tr>
+      <tr><td><span class="der">der</span> Lehrer</td><td><span class="die">die</span> Lehrer<b>in</b></td><td>teacher</td></tr>
+      <tr><td><span class="der">der</span> Arzt</td><td><span class="die">die</span> <b>Ä</b>rzt<b>in</b></td><td>doctor</td></tr>
+      <tr><td><span class="der">der</span> Verkäufer</td><td><span class="die">die</span> Verkäufer<b>in</b></td><td>salesperson</td></tr>
+      <tr><td><span class="der">der</span> Student</td><td><span class="die">die</span> Student<b>in</b></td><td>student</td></tr>
+    </tbody>
+  </table></div>
+  <div class="rule"><b>Reminder · bei, als, in.</b> <b>bei</b> + company, <b>als</b> + job, <b>in</b> + city: <i>Ich arbeite <b>als</b> Ingenieurin <b>bei</b> Siemens <b>in</b> Hamburg.</i> <span class="en">(I work as an engineer at Siemens in Hamburg.)</span></div>
+  <div class="rule"><b>Reminder · arbeiten needs an extra -e-.</b> The stem arbeit- ends in -t, so add -e- before -st and -t: du arbeit<b>e</b>st, er arbeit<b>e</b>t, ihr arbeit<b>e</b>t. Otherwise you can't hear the ending.</div>
+  <div class="rule"><b>Reminder · Time words.</b> <b>von … bis</b> = from … to: <i>von Montag bis Freitag</i>. <b>um</b> + clock time: <i>um 9 Uhr</i> <span class="pron">(noyn oor)</span>. <b>am</b> + day: <i>am Montag</i>. <b>seit</b> = since: <i>seit März</i>.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="arbeit">Über die Arbeit</button></div>
+</section>
+
+<section class="lesson" id="l-act">
+  <h2>12 · Aktivitäten <span class="en">(actions and free time)</span></h2>
+  <p class="lead">The everyday action verbs: what you do, and what you like doing. With <b>gern</b> you can say what you like doing with any verb. "Was machst du gern?" <span class="en">(What do you like doing?)</span> is a classic exam question.</p>
+
+  <h3>Die wichtigsten Verben <span class="en">(the most important verbs)</span></h3>
+  <p class="lead">Forms in <span class="die">red</span> change their vowel. The ending rules from lesson 5 still apply.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Verb</th><th>English</th><th>ich</th><th>du</th><th>er / sie / es</th></tr></thead>
+    <tbody>
+      <tr><td><b>gehen</b></td><td>to go, to walk</td><td>gehe</td><td>gehst</td><td>geht</td></tr>
+      <tr><td><b>machen</b></td><td>to do, to make</td><td>mache</td><td>machst</td><td>macht</td></tr>
+      <tr><td><b>spielen</b></td><td>to play</td><td>spiele</td><td>spielst</td><td>spielt</td></tr>
+      <tr><td><b>hören</b></td><td>to hear, listen to</td><td>höre</td><td>hörst</td><td>hört</td></tr>
+      <tr><td><b>kochen</b></td><td>to cook</td><td>koche</td><td>kochst</td><td>kocht</td></tr>
+      <tr><td><b>trinken</b></td><td>to drink</td><td>trinke</td><td>trinkst</td><td>trinkt</td></tr>
+      <tr><td><b>kaufen</b></td><td>to buy</td><td>kaufe</td><td>kaufst</td><td>kauft</td></tr>
+      <tr><td><b>schwimmen</b></td><td>to swim</td><td>schwimme</td><td>schwimmst</td><td>schwimmt</td></tr>
+      <tr><td><b>tanzen</b></td><td>to dance</td><td>tanze</td><td>tanzt</td><td>tanzt</td></tr>
+      <tr><td><b>reisen</b></td><td>to travel</td><td>reise</td><td>reist</td><td>reist</td></tr>
+      <tr><td><b>fahren</b></td><td>to drive, ride</td><td>fahre</td><td class="die">fährst</td><td class="die">fährt</td></tr>
+      <tr><td><b>schlafen</b></td><td>to sleep</td><td>schlafe</td><td class="die">schläfst</td><td class="die">schläft</td></tr>
+      <tr><td><b>laufen</b></td><td>to run, walk</td><td>laufe</td><td class="die">läufst</td><td class="die">läuft</td></tr>
+      <tr><td><b>essen</b></td><td>to eat</td><td>esse</td><td class="die">isst</td><td class="die">isst</td></tr>
+      <tr><td><b>sprechen</b></td><td>to speak</td><td>spreche</td><td class="die">sprichst</td><td class="die">spricht</td></tr>
+      <tr><td><b>treffen</b></td><td>to meet</td><td>treffe</td><td class="die">triffst</td><td class="die">trifft</td></tr>
+      <tr><td><b>nehmen</b></td><td>to take</td><td>nehme</td><td class="die">nimmst</td><td class="die">nimmt</td></tr>
+      <tr><td><b>lesen</b></td><td>to read</td><td>lese</td><td class="die">liest</td><td class="die">liest</td></tr>
+      <tr><td><b>sehen</b></td><td>to see, watch</td><td>sehe</td><td class="die">siehst</td><td class="die">sieht</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="dia">
+    <div class="cap">Three vowel changes<small>Only for du and er/sie/es. ich, wir, ihr, sie/Sie stay normal</small></div>
+    <div class="sortcols">
+      <div style="background:var(--der-bg);color:var(--der)"><h4>a → ä</h4><span>fahren → du f<b>ä</b>hrst</span><span>schlafen → du schl<b>ä</b>fst</span><span>laufen → du l<b>ä</b>ufst</span></div>
+      <div style="background:var(--die-bg);color:var(--die)"><h4>e → i</h4><span>essen → du <b>i</b>sst</span><span>sprechen → du spr<b>i</b>chst</span><span>treffen → du tr<b>i</b>ffst</span><span>nehmen → du n<b>i</b>mmst</span></div>
+      <div style="background:var(--das-bg);color:var(--das)"><h4>e → ie</h4><span>lesen → du l<b>ie</b>st</span><span>sehen → du s<b>ie</b>hst</span></div>
+    </div>
+    <p class="trick"><b>Trick:</b> think of the verb table as a sandwich. The bread (ich at the top, wir/ihr/sie at the bottom) stays plain. Only the filling, <b>du</b> and <b>er/sie/es</b>, gets the new vowel.</p>
+  </div>
+
+  <h3>gern <span class="en">(to like doing)</span></h3>
+  <p class="lead">German has no verb "to like doing". You add <b>gern</b> right after the verb: <i>Ich schwimme</i> <span class="en">(I swim)</span> → <i>Ich schwimme <b>gern</b></i> <span class="en">(I like swimming)</span>.</p>
+  <div class="dia">
+    <div class="trainrow"><span class="lbl">I like playing tennis.</span><div class="train"><span class="car">Ich</span><span class="car v">spiele</span><span class="car g">gern</span><span class="car">Tennis.</span></div></div>
+    <div class="trainrow"><span class="lbl">I don't like dancing.</span><div class="train"><span class="car">Ich</span><span class="car v">tanze</span><span class="car g">nicht gern.</span></div></div>
+    <div class="trainrow"><span class="lbl">What do you like doing?</span><div class="train"><span class="car">Was</span><span class="car v">machst</span><span class="car">du</span><span class="car g">gern?</span></div></div>
+    <div class="trainrow"><span class="lbl">Do you like playing football?</span><div class="train"><span class="car v">Spielst</span><span class="car">du</span><span class="car g">gern</span><span class="car">Fußball?</span></div></div>
+    <p class="trick"><b>Trick:</b> <span class="die">red</span> verb, then <span class="das">green</span> gern. Scale: <b>sehr gern</b> (love it) › <b>gern</b> (like it) › <b>nicht so gern</b> (not really) › <b>nicht gern</b> (don't like it).</p>
+  </div>
+
+  <h3>Freizeit <span class="en">(free time)</span></h3>
+  <div class="tablebox"><table>
+    <thead><tr><th>Aktivität</th><th>English</th><th>Satz <span class="en">(sentence)</span></th></tr></thead>
+    <tbody>
+      <tr><td>Fußball spielen</td><td>play football</td><td>Ich spiele gern Fußball.</td></tr>
+      <tr><td>Musik hören</td><td>listen to music</td><td>Ich höre gern Musik.</td></tr>
+      <tr><td>ins Kino gehen</td><td>go to the cinema</td><td>Wir gehen am Samstag ins Kino.</td></tr>
+      <tr><td>Fahrrad fahren</td><td>ride a bike</td><td>Er fährt gern Fahrrad.</td></tr>
+      <tr><td>Freunde treffen</td><td>meet friends</td><td>Ich treffe am Wochenende Freunde.</td></tr>
+      <tr><td>Bücher lesen</td><td>read books</td><td>Sie liest gern Bücher.</td></tr>
+      <tr><td>im Park joggen</td><td>jog in the park</td><td>Ich jogge im Park.</td></tr>
+      <tr><td>Filme sehen</td><td>watch films</td><td>Siehst du gern Filme?</td></tr>
+    </tbody>
+  </table></div>
+  <div class="rule"><b>Reminder · gern vs. mögen.</b> <b>gern</b> goes with a verb (doing): <i>Ich esse gern Pizza.</i> <b>mögen</b> goes with a thing: <i>Ich mag Pizza.</i> <span class="en">(Both: I like pizza.)</span> mögen: ich mag, du magst, er mag.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="aktion">Was machst du gern?</button><button class="go" type="button" data-go="verbform">Verb-Endungen</button></div>
+</section>
+
+<section class="lesson" id="l-weg">
+  <h2>13 · Wegbeschreibung <span class="en">(directions)</span></h2>
+  <p class="lead">Asking the way and understanding the answer. Directions often come up in the listening test (announcements, short dialogues) and every day in the city.</p>
+
+  <h3>Fragen <span class="en">(asking)</span></h3>
+  <div class="tablebox"><table>
+    <thead><tr><th>Frage <span class="en">(question)</span></th><th>English</th></tr></thead>
+    <tbody>
+      <tr><td><b>Entschuldigung</b>, wo ist der Bahnhof?</td><td>Excuse me, where is the station?</td></tr>
+      <tr><td>Wie komme ich <b>zum</b> Bahnhof?</td><td>How do I get to the station?</td></tr>
+      <tr><td>Wie komme ich <b>zur</b> Post?</td><td>How do I get to the post office?</td></tr>
+      <tr><td>Gibt es hier eine Apotheke?</td><td>Is there a pharmacy here?</td></tr>
+      <tr><td>Ist das weit? – Nein, nur fünf Minuten zu Fuß.</td><td>Is it far? – No, only five <span class="pron">(fuenf)</span> minutes on foot.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Richtungen <span class="en">(directions)</span></h3>
+  <div class="dirs">
+    <div><span class="ar">↑</span><b>geradeaus</b><span class="en">straight ahead</span><span class="pron">ge-RAH-de-ows</span></div>
+    <div><span class="ar">←</span><b>links</b><span class="en">left</span><span class="pron">links</span></div>
+    <div><span class="ar">→</span><b>rechts</b><span class="en">right</span><span class="pron">rekhts</span></div>
+    <div><span class="ar">↓</span><b>zurück</b><span class="en">back</span><span class="pron">tsoo-RUEK</span></div>
+  </div>
+
+  <div class="dia">
+    <div class="cap">Wie komme ich zum Bahnhof?<small>Follow the red route and read the steps</small></div>
+    <svg viewBox="0 0 520 300" role="img" aria-label="Map: go straight ahead, at the traffic light turn right, take the second street on the left, the station is on the right">
+      <defs><marker id="ah6" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path class="filldie" d="M0,0L10,5L0,10z"/></marker></defs>
+      <rect class="road" x="100" y="40" width="40" height="255"/>
+      <rect class="road" x="100" y="110" width="415" height="40"/>
+      <rect class="road" x="250" y="10" width="40" height="110"/>
+      <rect class="road" x="380" y="10" width="40" height="110"/>
+      <text class="mut" x="270" y="34" font-size="11" text-anchor="middle">1.</text>
+      <text class="mut" x="400" y="34" font-size="11" text-anchor="middle">2.</text>
+      <rect x="146" y="88" width="10" height="22" rx="3" class="filldie"/><circle cx="151" cy="94" r="3" class="dotT"/>
+      <text class="mut" x="160" y="104" font-size="11">Ampel</text>
+      <rect class="bldg" x="430" y="20" width="80" height="56" rx="6"/><text class="tder" x="470" y="53" font-size="14" text-anchor="middle">Bahnhof</text>
+      <path class="route" d="M120,280 L120,130 L400,130 L400,58" marker-end="url(#ah6)"/>
+      <circle cx="120" cy="282" r="7" class="dot"/><text x="134" y="287" font-size="12" font-weight="700">Sie sind hier</text>
+      <circle cx="90" cy="210" r="11" class="dot"/><text x="90" y="215" font-size="12" text-anchor="middle" class="dotT">1</text>
+      <circle cx="90" cy="130" r="11" class="dot"/><text x="90" y="135" font-size="12" text-anchor="middle" class="dotT">2</text>
+      <circle cx="330" cy="165" r="11" class="dot"/><text x="330" y="170" font-size="12" text-anchor="middle" class="dotT">3</text>
+      <circle cx="430" cy="95" r="11" class="dot"/><text x="430" y="100" font-size="12" text-anchor="middle" class="dotT">4</text>
+    </svg>
+    <ol class="steps">
+      <li><b>Gehen Sie geradeaus.</b> <span class="en">(Go straight ahead.)</span></li>
+      <li><b>An der Ampel rechts.</b> <span class="en">(At the traffic light, right.)</span></li>
+      <li><b>Dann die zweite Straße links.</b> <span class="en">(Then the second street on the left.)</span> zweite <span class="pron">(TSVY-te)</span></li>
+      <li><b>Der Bahnhof ist rechts.</b> <span class="en">(The station is on the right.)</span></li>
+    </ol>
+  </div>
+
+  <h3>Orte <span class="en">(places)</span> mit zum / zur</h3>
+  <div class="trio">
+    <div class="gcard m"><span class="big der">der → zum</span><ul><li>zum Bahnhof <span class="en">(station)</span></li><li>zum Supermarkt</li><li>zum Marktplatz <span class="en">(market square)</span></li><li>zum Arzt <span class="en">(doctor)</span></li></ul></div>
+    <div class="gcard n"><span class="big das">das → zum</span><ul><li>zum Museum</li><li>zum Hotel</li><li>zum Krankenhaus <span class="en">(hospital)</span></li><li>zum Kino <span class="en">(cinema)</span></li></ul></div>
+    <div class="gcard f"><span class="big die">die → zur</span><ul><li>zur Post <span class="en">(post office)</span></li><li>zur Apotheke <span class="en">(pharmacy)</span></li><li>zur Bank</li><li>zur Haltestelle <span class="en">(bus/tram stop)</span></li></ul></div>
+  </div>
+  <div class="rule"><b>Reminder · zum or zur?</b> zu + dem = <b>zum</b> (der and das words), zu + der = <b>zur</b> (die words). Same pairing as ein/eine: der and das go together, die is alone.</div>
+  <div class="rule"><b>Reminder · Giving directions with Sie.</b> Verb first, then Sie: <i><b>Gehen</b> Sie geradeaus. <b>Nehmen</b> Sie den Bus.</i> <span class="en">(Go straight ahead. Take the bus.)</span> Counting streets: die <b>erste</b> <span class="pron">(AIR-ste)</span>, <b>zweite</b> <span class="pron">(TSVY-te)</span>, <b>dritte</b> <span class="pron">(DRIT-te)</span> Straße.</div>
+  <div class="rule"><b>Reminder · Where is it?</b> <b>neben</b> der Bank <span class="en">(next to)</span> · <b>gegenüber</b> <span class="en">(opposite)</span> · <b>an der Ecke</b> <span class="en">(on the corner)</span> · <b>zwischen</b> <span class="en">(between)</span> · <b>hier</b> / <b>dort</b> <span class="en">(here / there)</span>.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="weg">Wegbeschreibung</button></div>
+</section>
+
+<div class="part"><span class="kick">Teil D</span><h2>Prüfung <span class="en">(the exam)</span></h2><p class="lead">What happens in each part of the Goethe-Zertifikat A1, with model answers.</p></div>
+
+<section class="lesson" id="l-exam">
+  <h2>14 · Goethe-Zertifikat A1 <span class="en">(the A1 exam)</span></h2>
+  <p class="lead">The exam has four parts. You pass with <b>60 of 100 points</b> (sechzig <span class="pron">ZEKH-tsikh</span> von hundert <span class="pron">HOON-dert</span>). Check the official Modellsatz (sample test) from the Goethe-Institut before the exam.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Teil <span class="en">(part)</span></th><th>Dauer <span class="en">(time)</span></th><th>Was? <span class="en">(what?)</span></th></tr></thead>
+    <tbody>
+      <tr><td><b>Hören</b> <span class="en">(listening)</span></td><td>ca. 20 Min.</td><td>Announcements, phone messages, short dialogues. Listen for <b>numbers, times, prices, days</b>.</td></tr>
+      <tr><td><b>Lesen</b> <span class="en">(reading)</span></td><td>ca. 25 Min.</td><td>Short emails, signs, notices, ads.</td></tr>
+      <tr><td><b>Schreiben</b> <span class="en">(writing)</span></td><td>ca. 20 Min.</td><td>Teil 1: fill in a form. Teil 2: a short message, about 30 words.</td></tr>
+      <tr><td><b>Sprechen</b> <span class="en">(speaking)</span></td><td>ca. 15 Min., in a group</td><td>Teil 1: introduce yourself. Teil 2: ask and answer questions. Teil 3: make requests and react.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="examhead"><span class="tag">Sprechen · Teil 1</span><h3>Sich vorstellen <span class="en">(introduce yourself)</span></h3></div>
+  <p class="lead">Prepare it in lesson <a href="#l-me">10 · Über mich</a>: write your own text there and practise it aloud.</p>
+
+  <div class="examhead"><span class="tag">Sprechen · Teil 2</span><h3>Fragen stellen und antworten <span class="en">(ask and answer)</span></h3></div>
+  <p class="lead">You get a topic (Thema) and a card with one word. Make a question with that word for your partner. Then answer their question.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Thema</th><th>Karte <span class="en">(card)</span></th><th>Frage <span class="en">(question)</span></th><th>Antwort <span class="en">(answer)</span></th></tr></thead>
+    <tbody>
+      <tr><td>Essen und Trinken <span class="en">(food & drink)</span></td><td>Frühstück <span class="en">(breakfast)</span></td><td>Was isst du zum Frühstück? <span class="en">(What do you eat for breakfast?)</span></td><td>Ich esse Brot und trinke Kaffee. <span class="en">(I eat bread and drink coffee.)</span></td></tr>
+      <tr><td>Essen und Trinken</td><td>Lieblingsessen <span class="en">(favourite food)</span></td><td>Was ist dein Lieblingsessen? <span class="en">(What is your favourite food?)</span></td><td>Mein Lieblingsessen ist Pizza.</td></tr>
+      <tr><td>Essen und Trinken</td><td>Restaurant</td><td>Gehst du oft ins Restaurant? <span class="en">(Do you often go to a restaurant?)</span></td><td>Nein, nicht oft. Ich koche gern. <span class="en">(No, not often. I like cooking.)</span></td></tr>
+      <tr><td>Freizeit <span class="en">(free time)</span></td><td>Wochenende <span class="en">(weekend)</span></td><td>Was machst du am Wochenende? <span class="en">(What do you do at the weekend?)</span></td><td>Ich fahre Fahrrad. <span class="en">(I ride my bike.)</span></td></tr>
+      <tr><td>Freizeit</td><td>Sport</td><td>Machst du gern Sport? <span class="en">(Do you like doing sport?)</span></td><td>Ja, sehr gern. <span class="en">(Yes, very much.)</span></td></tr>
+      <tr><td>Einkaufen <span class="en">(shopping)</span></td><td>Supermarkt</td><td>Wo kaufst du ein? <span class="en">(Where do you shop?)</span></td><td>Im Supermarkt. <span class="en">(At the supermarket.)</span></td></tr>
+      <tr><td>Einkaufen</td><td>Preis <span class="en">(price)</span></td><td>Wie viel kostet das Brot? <span class="en">(How much is the bread?)</span></td><td>Zwei Euro. <span class="pron">(tsvy OY-ro)</span></td></tr>
+      <tr><td>Arbeit <span class="en">(work)</span></td><td>Büro <span class="en">(office)</span></td><td>Arbeitest du im Büro? <span class="en">(Do you work in the office?)</span></td><td>Ja, aber auch im Homeoffice. <span class="en">(Yes, but also from home.)</span></td></tr>
+      <tr><td>Arbeit</td><td>Kollegen <span class="en">(colleagues)</span></td><td>Wie sind deine Kollegen? <span class="en">(What are your colleagues like?)</span></td><td>Sehr nett! <span class="en">(Very nice!)</span></td></tr>
+      <tr><td>Arbeit</td><td>Arbeitszeit <span class="en">(working hours)</span></td><td>Wann arbeitest du? <span class="en">(When do you work?)</span></td><td>Von 9 bis 17 Uhr. <span class="pron">(noyn bis ZEEP-tsayn oor)</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="rule"><b>Reminder · du-questions.</b> With your partner use du: the verb ends in <b>-st</b>: mach<b>st</b> du, geh<b>st</b> du, kauf<b>st</b> du. Irregular: <i>isst du</i> (essen), <i>fährst du</i> (fahren).</div>
+
+  <div class="examhead"><span class="tag">Sprechen · Teil 3</span><h3>Bitten formulieren <span class="en">(make requests)</span></h3></div>
+  <p class="lead">You get a picture card (for example a window or a pen). Ask your partner for something, and your partner reacts.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Bild <span class="en">(picture)</span></th><th>Bitte <span class="en">(request)</span></th><th>Reaktion <span class="en">(reaction)</span></th></tr></thead>
+    <tbody>
+      <tr><td>Fenster <span class="en">(window)</span></td><td>Kannst du bitte das Fenster öffnen? <span class="en">(Can you please open the window?)</span></td><td>Ja, gern. <span class="en">(Yes, gladly.)</span></td></tr>
+      <tr><td>Kuli <span class="en">(pen)</span></td><td>Hast du einen Kuli für mich? <span class="en">(Do you have a pen for me?)</span></td><td>Ja, hier bitte. <span class="en">(Yes, here you are.)</span></td></tr>
+      <tr><td>Kaffee</td><td>Ich möchte bitte einen Kaffee. <span class="en">(I would like a coffee, please.)</span></td><td>Gern. Mit Milch? <span class="en">(Sure. With milk?)</span></td></tr>
+      <tr><td>Wasser <span class="en">(water)</span></td><td>Gib mir bitte das Wasser. <span class="en">(Give me the water, please.)</span></td><td>Hier, bitte. <span class="en">(Here you are.)</span></td></tr>
+      <tr><td>Handy <span class="en">(phone)</span></td><td>Darf ich dein Handy benutzen? <span class="en">(May I use your phone?)</span></td><td>Nein, tut mir leid. <span class="en">(No, sorry.)</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="rule"><b>Reminder · Infinitive at the end.</b> <i><u>Kannst</u> du bitte das Fenster <u>öffnen</u>?</i> kann/möchte/darf comes early, the second verb goes to the <b>end</b>.</div>
+  <div class="rule"><b>Reminder · Akkusativ: only der changes.</b> After haben, möchten, brauchen: <span class="der">der</span> → <b>den</b>, <span class="der">ein</span> → <b>einen</b>. <i>Ich möchte <b>einen</b> Kaffee.</i> die, das and plural stay the same: <i>eine Banane, ein Brot</i>.</div>
+
+  <div class="examhead"><span class="tag">Schreiben · Teil 1</span><h3>Ein Formular ausfüllen <span class="en">(fill in a form)</span></h3></div>
+  <p class="lead">You read a short text about a person and fill in their details in a form. Know these field names.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Formular</th><th>English</th><th>Formular</th><th>English</th></tr></thead>
+    <tbody>
+      <tr><td><b>Familienname / Nachname</b></td><td>surname</td><td><b>Vorname</b></td><td>first name</td></tr>
+      <tr><td><b>Geburtsdatum</b></td><td>date of birth</td><td><b>Geburtsort</b></td><td>place of birth</td></tr>
+      <tr><td><b>Staatsangehörigkeit</b></td><td>nationality</td><td><b>Muttersprache</b></td><td>native language</td></tr>
+      <tr><td><b>Straße, Hausnummer</b></td><td>street, house no.</td><td><b>PLZ</b> (Postleitzahl)</td><td>postcode</td></tr>
+      <tr><td><b>Wohnort</b></td><td>town where you live</td><td><b>Telefonnummer</b></td><td>phone number</td></tr>
+      <tr><td><b>Familienstand</b></td><td>marital status</td><td><b>ledig / verheiratet / geschieden</b></td><td>single / married / divorced</td></tr>
+      <tr><td><b>Anzahl der Kinder</b></td><td>number of children</td><td><b>Geschlecht</b>: männlich / weiblich</td><td>sex: male / female</td></tr>
+      <tr><td><b>Datum</b></td><td>date</td><td><b>Unterschrift</b></td><td>signature</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="examhead"><span class="tag">Schreiben · Teil 2</span><h3>Eine kurze Nachricht <span class="en">(a short message)</span></h3></div>
+  <p class="lead">Write about 30 words and answer <b>all three points</b> on the task. Example task: invite a friend to your birthday party (when? what time? what to bring?).</p>
+  <div class="introOut">
+    <div class="iline"><div><span class="de">Liebe Anna,</span><span class="en">Dear Anna,</span></div></div>
+    <div class="iline"><div><span class="de">am Samstag habe ich Geburtstag.</span><span class="en">on Saturday I have (my) birthday.</span></div></div>
+    <div class="iline"><div><span class="de">Die Party beginnt um 19 Uhr.</span><span class="en">The party starts at 7 pm. · 19 Uhr = neunzehn Uhr <span class="pron">(NOYN-tsayn oor)</span></span></div></div>
+    <div class="iline"><div><span class="de">Kannst du bitte Musik mitbringen?</span><span class="en">Can you please bring music?</span></div></div>
+    <div class="iline"><div><span class="de">Viele Grüße<br>Maria</span><span class="en">Many greetings, Maria</span></div></div>
+  </div>
+  <div class="rule"><b>Reminder · Greetings.</b> <b>Liebe</b> + woman (Liebe Anna), <b>Lieber</b> + man (Lieber Tom). Formal: <i>Sehr geehrte Damen und Herren,</i> … <i>Mit freundlichen Grüßen</i>. After the comma, the next line starts with a small letter.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><button class="go" type="button" data-go="formular">Formular-Wörter</button><button class="go" type="button" data-go="vorstellen">Sich vorstellen</button><button class="go" type="button" data-go="telefon">Telefon & PLZ</button></div>
+</section>
+
+<section class="lesson" id="l-tips">
+  <h2>Lerntipps <span class="en">(study tips)</span></h2>
+  <p class="lead">Small habits that help the rules stick.</p>
+  <ul class="habits">
+    <li><b>Colour sticky notes</b> at home: blue for der, red for die, green for das. Stick them on things: <i>der Tisch, die Lampe, das Bett</i>.</li>
+    <li><b>Three rooms in your head:</b> der nouns live in a blue room, die nouns in a red room, das nouns in a green room. When you learn a noun, picture it in its room.</li>
+    <li><b>Say the noun package aloud</b> three times: <i>der Tisch, die Tische</i>. Article + noun + plural, always together.</li>
+    <li><b>Numbers everywhere:</b> read prices in the supermarket, bus numbers and house numbers in German, in your head.</li>
+    <li><b>Spell your name</b> and street once a day: M – A – R – I – A <span class="pron">(emm – ah – err – ee – ah)</span>.</li>
+  </ul>
+</section>
+
+</main>
+
+<!-- ============ TEST ============ -->
+<main id="view-cheat" hidden>
+<div class="cheathead"><h2>Spickzettel <span class="en">(cheat sheet)</span></h2><p class="lead">All the key rules on one page. Click a card's lesson link for the full explanation.</p></div>
+<div class="cheat">
+  <div class="ccard"><h3>der · die · das <a href="#l-articles" data-learn>Lektion 2</a></h3>
+    <div><span class="der">der</span> men, days, months, -er, -ling</div>
+    <div><span class="die">die</span> women, most -e, -ung, -heit, -keit, -ion, -in</div>
+    <div><span class="das">das</span> -chen, -lein, -um, verb as noun, many loan words</div>
+    <div><span class="plc">die</span> = every plural</div></div>
+
+  <div class="ccard"><h3>ein · kein <a href="#l-ein" data-learn>Lektion 3</a></h3>
+    <table><tbody>
+      <tr><td class="der">der</td><td>ein</td><td>kein</td><td class="en">Akk: einen</td></tr>
+      <tr><td class="das">das</td><td>ein</td><td>kein</td><td class="en">ein</td></tr>
+      <tr><td class="die">die</td><td>eine</td><td>keine</td><td class="en">eine</td></tr>
+      <tr><td class="plc">Pl.</td><td>—</td><td>keine</td><td class="en">—</td></tr>
+    </tbody></table>
+    <div class="en">der + das = ein. Only der changes in Akkusativ (after haben, möchten).</div></div>
+
+  <div class="ccard"><h3>Verben <a href="#l-verbs" data-learn>Lektion 5</a></h3>
+    <table><thead><tr><th></th><th>wohnen</th><th>sein</th><th>haben</th></tr></thead><tbody>
+      <tr><td>ich</td><td>wohn<b>e</b></td><td>bin</td><td>habe</td></tr>
+      <tr><td>du</td><td>wohn<b>st</b></td><td>bist</td><td>hast</td></tr>
+      <tr><td>er/sie/es</td><td>wohn<b>t</b></td><td>ist</td><td>hat</td></tr>
+      <tr><td>wir</td><td>wohn<b>en</b></td><td>sind</td><td>haben</td></tr>
+      <tr><td>ihr</td><td>wohn<b>t</b></td><td>seid</td><td>habt</td></tr>
+      <tr><td>sie/Sie</td><td>wohn<b>en</b></td><td>sind</td><td>haben</td></tr>
+    </tbody></table>
+    <div class="en">du heiß<b>t</b> (-s/-ß/-z) · du arbeit<b>e</b>st (-t/-d) · du f<b>ä</b>hrst, du i<b>ss</b>t, du spr<b>i</b>chst</div></div>
+
+  <div class="ccard"><h3>Satzbau <a href="#l-w" data-learn>Lektion 6</a></h3>
+    <ul>
+      <li>Statement: verb <b>2nd</b>: Ich <u>wohne</u> hier. Heute <u>wohne</u> ich hier.</li>
+      <li>W-question: verb <b>2nd</b>: Wo <u>wohnst</u> du?</li>
+      <li>Yes/no question: verb <b>1st</b>: <u>Wohnst</u> du hier?</li>
+      <li>Request (Sie): verb <b>1st</b>: <u>Gehen</u> Sie links.</li>
+      <li>Two verbs: 2nd verb at the <b>end</b>: Ich möchte Kaffee <u>trinken</u>.</li>
+    </ul></div>
+
+  <div class="ccard"><h3>W-Wörter <a href="#l-w" data-learn>Lektion 6</a></h3>
+    <div>Wer <span class="en">who</span> · Was <span class="en">what</span> · Wo <span class="en">where</span> · Woher <span class="en">from where</span> · Wohin <span class="en">to where</span> · Wie <span class="en">how</span> · Wie alt <span class="en">how old</span> · Wie viel(e) <span class="en">how much/many</span> · Wann <span class="en">when</span> · Welche <span class="en">which</span> · Warum <span class="en">why</span> · Wie spät <span class="en">what time</span></div></div>
+
+  <div class="ccard"><h3>Antworten <a href="#l-qa" data-learn>Lektion 7</a></h3>
+    <div>du / Sie → <b>ich</b> · ihr → <b>wir</b> · dein / Ihr → <b>mein</b></div>
+    <div>Wo wohnst du? → <b>Ich</b> wohn<b>e</b> in Hamburg.</div>
+    <div><b>kein</b> = instead of ein / no article: Ich habe kein Auto.</div>
+    <div><b>nicht</b> = everything else: Das ist nicht weit.</div></div>
+
+  <div class="ccard"><h3>Alphabet <a href="#l-abc" data-learn>Lektion 8</a></h3>
+    <div>E <span class="k">ay</span> · I <span class="k">ee</span> · J <span class="k">yot</span> · V <span class="k">fow</span> · W <span class="k">vay</span> · Z <span class="k">tset</span> · Y <span class="k">UEP-see-lon</span> · ß <span class="k">ESS-tset</span></div>
+    <div><b>ei</b> = "eye" (drei) · <b>ie</b> = "ee" (vier): say the 2nd letter</div>
+    <div>W sounds v · V sounds f · Z sounds ts · J sounds y</div></div>
+
+  <div class="ccard"><h3>Zahlen <a href="#l-numbers" data-learn>Lektion 9</a></h3>
+    <table><tbody>
+      <tr><td>1 eins <span class="k">aynss</span></td><td>2 zwei <span class="k">tsvy</span></td><td>3 drei <span class="k">dry</span></td></tr>
+      <tr><td>4 vier <span class="k">feer</span></td><td>5 fünf <span class="k">fuenf</span></td><td>6 sechs <span class="k">zeks</span></td></tr>
+      <tr><td>7 sieben <span class="k">ZEE-ben</span></td><td>8 acht <span class="k">akht</span></td><td>9 neun <span class="k">noyn</span></td></tr>
+      <tr><td>10 zehn <span class="k">tsayn</span></td><td>11 elf <span class="k">elf</span></td><td>12 zwölf <span class="k">tsvoelf</span></td></tr>
+    </tbody></table>
+    <div>13–19: <b>-zehn</b> (dreizehn) · 20–90: <b>-zig</b> (vierzig) · but zwan<b>zig</b>, drei<b>ßig</b>, sech<b>zig</b>, sieb<b>zig</b></div>
+    <div>47 = <b>sieben</b>-und-<b>vierzig</b> <span class="k">ZEE-ben-oont-FEER-tsikh</span>: ones first!</div>
+    <div>100 hundert <span class="k">HOON-dert</span> · phone numbers digit by digit · zwo = zwei</div></div>
+
+  <div class="ccard"><h3>Uhrzeit und Preise <a href="#l-numbers" data-learn>Lektion 9</a></h3>
+    <div>14:30 = vierzehn Uhr dreißig = <b>halb drei</b> <span class="k">hulp dry</span></div>
+    <div>Viertel nach acht <span class="en">8:15</span> · Viertel vor neun <span class="en">8:45</span></div>
+    <div><b>halb</b> looks forward: halb neun = 8:30</div>
+    <div>2,50 € = zwei Euro fünfzig <span class="k">tsvy OY-ro FUENF-tsikh</span></div>
+    <div>fünf<b>zehn</b> 15 ≠ fünf<b>zig</b> 50</div></div>
+
+  <div class="ccard"><h3>Über mich <a href="#l-me" data-learn>Lektion 10</a></h3>
+    <div>Ich heiße … · Ich bin … Jahre alt.</div>
+    <div>Ich komme aus … · Ich wohne in …</div>
+    <div>Ich spreche … · Ich bin … von Beruf.</div>
+    <div>Meine Hobbys sind … · Mein Name: M – A – R – I – A</div>
+    <div class="en">No article before a job: Ich bin Lehrerin. Women: -in.</div></div>
+
+  <div class="ccard"><h3>Arbeit <a href="#l-work" data-learn>Lektion 11</a></h3>
+    <div>Ich arbeite <b>als</b> Ingenieurin <b>bei</b> Siemens <b>in</b> Hamburg.</div>
+    <div class="en">als + job · bei + company · in + city</div>
+    <div><b>von</b> Montag <b>bis</b> Freitag · <b>um</b> 9 Uhr · <b>seit</b> März</div></div>
+
+  <div class="ccard"><h3>Aktionen <span class="en">(actions)</span> <a href="#l-act" data-learn>Lektion 12</a></h3>
+    <div>gehen <span class="en">go</span> · machen <span class="en">do</span> · essen <span class="en">eat</span> · trinken <span class="en">drink</span> · schlafen <span class="en">sleep</span> · lesen <span class="en">read</span> · sehen <span class="en">see</span> · hören <span class="en">listen</span> · spielen <span class="en">play</span> · kochen <span class="en">cook</span> · fahren <span class="en">drive</span> · treffen <span class="en">meet</span></div>
+    <div>Vowel change only in <b>du</b> and <b>er/sie/es</b>:</div>
+    <div><b>a → ä</b> du fährst · <b>e → i</b> du isst, sprichst · <b>e → ie</b> du liest, siehst</div>
+    <div><b>gern</b> right after the verb: Ich spiele <b>gern</b> Tennis. Ich tanze <b>nicht gern</b>.</div>
+    <div>Was machst du gern? – Ich lese gern.</div></div>
+
+  <div class="ccard"><h3>Wegbeschreibung <a href="#l-weg" data-learn>Lektion 13</a></h3>
+    <div>↑ geradeaus · ← links · → rechts · ↓ zurück</div>
+    <div>Wie komme ich <b>zum</b> Bahnhof / <b>zur</b> Post?</div>
+    <div class="en">der + das → zum · die → zur</div>
+    <div>Gehen Sie die <b>erste</b> / <b>zweite</b> Straße links. An der Ampel rechts.</div></div>
+
+</div>
+</main>
+
+<main id="view-test" hidden>
+  <div class="testgrid" id="testGrid"></div>
+  <div class="panel" id="panel"></div>
+</main>
+</div>
+
+<script>
+/* ---------- data ---------- */
+const NOUNS = [
+ ["der","Tisch","Tische","table"],["der","Stuhl","Stühle","chair"],["die","Lampe","Lampen","lamp"],["das","Buch","Bücher","book"],
+ ["der","Kuli","Kulis","pen"],["das","Heft","Hefte","notebook"],["die","Tasche","Taschen","bag"],["die","Brille","Brillen","glasses"],
+ ["die","Uhr","Uhren","clock / watch"],["der","Computer","Computer","computer"],["die","Zeitung","Zeitungen","newspaper"],["das","Wörterbuch","Wörterbücher","dictionary"],
+ ["das","Handy","Handys","mobile phone"],["das","Telefon","Telefone","telephone"],["die","Familie","Familien","family"],["die","Mutter","Mütter","mother"],
+ ["der","Vater","Väter","father"],["das","Kind","Kinder","child"],["der","Bruder","Brüder","brother"],["die","Schwester","Schwestern","sister"],
+ ["der","Freund","Freunde","friend (m)"],["die","Freundin","Freundinnen","friend (f)"],["die","Wohnung","Wohnungen","flat / apartment"],["das","Zimmer","Zimmer","room"],
+ ["die","Küche","Küchen","kitchen"],["das","Bett","Betten","bed"],["der","Kaffee","Kaffees","coffee"],["der","Tee","Tees","tea"],
+ ["das","Brot","Brote","bread"],["der","Apfel","Äpfel","apple"],["die","Banane","Bananen","banana"],["das","Auto","Autos","car"],
+ ["das","Fahrrad","Fahrräder","bicycle"],["die","Straße","Straßen","street"],["die","Stadt","Städte","city"],["das","Land","Länder","country"],
+ ["der","Name","Namen","name"],["der","Kurs","Kurse","course"],["die","Sprache","Sprachen","language"],["der","Beruf","Berufe","job"],
+ ["das","Mädchen","Mädchen","girl"],["die","Frau","Frauen","woman"],["der","Mann","Männer","man"],["das","Haus","Häuser","house"],
+ ["die","Information","Informationen","information"],["der","Lehrer","Lehrer","teacher (m)"],["die","Lehrerin","Lehrerinnen","teacher (f)"],["das","Foto","Fotos","photo"],
+ ["die","Firma","Firmen","company"],["das","Büro","Büros","office"],["der","Kollege","Kollegen","colleague (m)"],["die","Kollegin","Kolleginnen","colleague (f)"],
+ ["der","Chef","Chefs","boss (m)"],["die","Besprechung","Besprechungen","meeting"],["der","Termin","Termine","appointment"],["das","Projekt","Projekte","project"],
+ ["der","Schrank","Schränke","wardrobe"],["das","Sofa","Sofas","sofa"],["die","Tür","Türen","door"],["das","Fenster","Fenster","window"],
+ ["der","Bahnhof","Bahnhöfe","train station"],["die","Haltestelle","Haltestellen","bus / tram stop"],["die","Apotheke","Apotheken","pharmacy"],["das","Hotel","Hotels","hotel"],
+ ["das","Museum","Museen","museum"],["die","Bank","Banken","bank"],["der","Supermarkt","Supermärkte","supermarket"],["das","Krankenhaus","Krankenhäuser","hospital"],
+ ["die","Ampel","Ampeln","traffic light"],["die","Kreuzung","Kreuzungen","crossroads"],["der","Platz","Plätze","square"],["der","Bus","Busse","bus"],
+ ["der","Tag","Tage","day"],["die","Woche","Wochen","week"],["der","Monat","Monate","month"],["das","Jahr","Jahre","year"],
+ ["die","Stunde","Stunden","hour"],["die","Minute","Minuten","minute"],["der","Saft","Säfte","juice"],["das","Ei","Eier","egg"],
+ ["die","Kartoffel","Kartoffeln","potato"],["die","Tomate","Tomaten","tomato"],["das","Glas","Gläser","glass"],["die","Flasche","Flaschen","bottle"],
+ ["der","Schlüssel","Schlüssel","key"],["der","Sohn","Söhne","son"],["die","Tochter","Töchter","daughter"],["der","Hund","Hunde","dog"],
+ ["die","Katze","Katzen","cat"],["das","Kino","Kinos","cinema"],["das","Restaurant","Restaurants","restaurant"],["der","Garten","Gärten","garden"],
+ ["das","Bad","Bäder","bathroom"],["der","Fernseher","Fernseher","TV"],["die","Wurst","Würste","sausage"],["der","Stift","Stifte","pen / pencil"]
+].map(([a,w,p,en])=>({a,w,p,en}));
+
+function ruleFor(n){
+  const w=n.w;
+  if(/chen$|lein$/.test(w)) return "Nouns ending -chen/-lein are always das.";
+  if(/um$/.test(w)&&n.a==="das") return "Nouns ending -um are das.";
+  if(/(ung|heit|keit|ion)$/.test(w)) return "Nouns ending -ung, -heit, -keit, -ion are always die.";
+  if(/in$/.test(w)&&n.a==="die") return "Female people ending -in are die.";
+  if(["Mann","Vater","Bruder","Freund","Lehrer","Kollege","Chef","Sohn"].includes(w)) return "Male people are der.";
+  if(["Frau","Mutter","Schwester","Tochter"].includes(w)) return "Female people are die.";
+  if(/e$/.test(w)&&n.a==="die") return "Most nouns ending -e are die.";
+  if(/e$/.test(w)&&n.a!=="die") return "Exception: ends in -e but is "+n.a+". Learn it by heart.";
+  if(["Handy","Auto","Foto","Büro","Sofa","Kino","Hotel","Restaurant"].includes(w)) return "Many loan words ending in a vowel are das.";
+  if(w==="Computer") return "Many nouns ending -er (tools, machines) are der.";
+  return "No easy rule here. Learn it as one unit: "+n.a+" "+w+".";
+}
+function pluralNote(n){
+  const s=n.w,p=n.p;
+  if(s===p) return "No ending added: "+s+" stays "+p+".";
+  if(p.endsWith("nnen")) return "Female -in → -innen.";
+  if(p.endsWith("s")&&!s.endsWith("s")) return "Loan word / vowel ending → -s.";
+  const uml=/[äöü]/i.test(p)&&!/[äöü]/i.test(s);
+  if(p.endsWith("er")&&!s.endsWith("er")) return (uml?"Umlaut + ":"")+"-er plural (typical for das words).";
+  if(p.endsWith("en")||p.endsWith("n")&&!uml) return "-n / -en plural (typical for die words).";
+  if(p.endsWith("e")) return (uml?"Umlaut + ":"")+"-e plural (typical for der words).";
+  if(uml) return "Only an umlaut is added.";
+  return "Learn the plural with the noun.";
+}
+
+/* numbers */
+const U={0:["null","nool"],1:["eins","aynss"],2:["zwei","tsvy"],3:["drei","dry"],4:["vier","feer"],5:["fünf","fuenf"],6:["sechs","zeks"],7:["sieben","ZEE-ben"],8:["acht","akht"],9:["neun","noyn"],10:["zehn","tsayn"],11:["elf","elf"],12:["zwölf","tsvoelf"],13:["dreizehn","DRY-tsayn"],14:["vierzehn","FEER-tsayn"],15:["fünfzehn","FUENF-tsayn"],16:["sechzehn","ZEKH-tsayn"],17:["siebzehn","ZEEP-tsayn"],18:["achtzehn","AKHT-tsayn"],19:["neunzehn","NOYN-tsayn"]};
+const T={2:["zwanzig","TSVAN-tsikh"],3:["dreißig","DRY-sikh"],4:["vierzig","FEER-tsikh"],5:["fünfzig","FUENF-tsikh"],6:["sechzig","ZEKH-tsikh"],7:["siebzig","ZEEP-tsikh"],8:["achtzig","AKHT-tsikh"],9:["neunzig","NOYN-tsikh"]};
+function num(n){
+  if(n<20) return U[n];
+  if(n<100){const t=Math.floor(n/10),o=n%10; if(!o) return T[t];
+    return [(o===1?"ein":U[o][0])+"und"+T[t][0], (o===1?"ayn":U[o][1])+"-oont-"+T[t][1]];}
+  if(n<1000){const h=Math.floor(n/100),r=n%100; const hw=(h===1?"ein":U[h][0])+"hundert", hp=(h===1?"ayn":U[h][1])+"-HOON-dert";
+    if(!r) return [hw,hp]; const rr=num(r); return [hw+rr[0], hp+"-"+rr[1]];}
+  return ["tausend","TOW-zent"];
+}
+
+/* alphabet */
+const ABC=[["A","ah"],["B","bay"],["C","tsay"],["D","day"],["E","ay",1],["F","eff"],["G","gay",1],["H","hah"],["I","ee",1],["J","yot",1],["K","kah"],["L","ell"],["M","emm"],["N","enn"],["O","oh"],["P","pay"],["Q","koo"],["R","err"],["S","ess"],["T","tay"],["U","oo"],["V","fow",1],["W","vay",1],["X","iks"],["Y","UEP-see-lon",1],["Z","tset",1],["Ä","eh"],["Ö","oe"],["Ü","ue"],["ß","ESS-tset"]];
+const SAY={A:"Ah",B:"Beh",C:"Zeh",D:"Deh",E:"Eh",F:"Eff",G:"Geh",H:"Hah",I:"Ih",J:"Jott",K:"Kah",L:"Ell",M:"Emm",N:"Enn",O:"Oh",P:"Peh",Q:"Kuh",R:"Err",S:"Ess",T:"Teh",U:"Uh",V:"Fau",W:"Weh",X:"Ix",Y:"Üpsilon",Z:"Zett","Ä":"Äh","Ö":"Öh","Ü":"Üh","ß":"Eszett"};
+const CONFUSE=[["E","I","A","Ä"],["G","J","K","Y"],["V","W","F","B"],["Z","C","S","T"],["I","E","Y","Ü"],["J","G","Y","I"],["W","V","U","B"],["H","A","K","R"],["Ü","U","I","Ö"],["Ö","O","E","Ä"],["Q","K","U","C"],["R","A","H","E"],["B","P","D","T"],["D","T","B","E"],["X","S","Z","C"],["F","V","W","H"],["L","R","N","M"],["Ä","E","A","Ö"],["ß","S","Z","B"]];
+const SPELL=["Maria","Müller","Schmidt","Weber","Becker","Koch","Wagner","Hoffmann","Bauer","Jung","Vogel","Zimmer","Schulz","Keller","Hilde","Yvonne","Goethe","Straße","Weg","Platz","Jasmin","Viktor","Krüger","Schäfer","Jäger","Fischer","Meyer","Wolf","Lehmann","Neumann","Ziegler","Hamburg","Bahnhof","Kaffee","Quelle","Xaver"];
+
+/* word types */
+const TYPES=["Nomen","Verb","Artikel","Pronomen","Adjektiv","Adverb","Präposition","Konjunktion"];
+const TEN={Nomen:"noun",Verb:"verb",Artikel:"article",Pronomen:"pronoun",Adjektiv:"adjective",Adverb:"adverb","Präposition":"preposition",Konjunktion:"conjunction"};
+const SENTS=[
+ [["Ich","Pronomen","I"],["heiße","Verb","am called"],["Maria","Nomen","Maria"]],
+ [["Die","Artikel","the"],["Frau","Nomen","woman"],["trinkt","Verb","drinks"],["einen","Artikel","a"],["Kaffee","Nomen","coffee"]],
+ [["Das","Artikel","the"],["Buch","Nomen","book"],["ist","Verb","is"],["neu","Adjektiv","new"]],
+ [["Wir","Pronomen","we"],["wohnen","Verb","live"],["in","Präposition","in"],["Hamburg","Nomen","Hamburg"]],
+ [["Er","Pronomen","he"],["kommt","Verb","comes"],["aus","Präposition","from"],["Brasilien","Nomen","Brazil"],["und","Konjunktion","and"],["sie","Pronomen","she"],["kommt","Verb","comes"],["aus","Präposition","from"],["Spanien","Nomen","Spain"]],
+ [["Der","Artikel","the"],["Kurs","Nomen","course"],["ist","Verb","is"],["heute","Adverb","today"],["sehr","Adverb","very"],["gut","Adjektiv","good"]],
+ [["Du","Pronomen","you"],["lernst","Verb","learn"],["auch","Adverb","also"],["Deutsch","Nomen","German"]],
+ [["Die","Artikel","the"],["Lampe","Nomen","lamp"],["ist","Verb","is"],["klein","Adjektiv","small"],["aber","Konjunktion","but"],["schön","Adjektiv","beautiful"]],
+ [["Ich","Pronomen","I"],["trinke","Verb","drink"],["Tee","Nomen","tea"],["oder","Konjunktion","or"],["Wasser","Nomen","water"]],
+ [["Sie","Pronomen","she"],["wohnt","Verb","lives"],["hier","Adverb","here"],["mit","Präposition","with"],["ihrer","Pronomen","her"],["Familie","Nomen","family"]],
+ [["Wir","Pronomen","we"],["gehen","Verb","go"],["heute","Adverb","today"],["ins","Präposition","to the"],["Kino","Nomen","cinema"]],
+ [["Der","Artikel","the"],["Bahnhof","Nomen","station"],["ist","Verb","is"],["nicht","Adverb","not"],["weit","Adjektiv","far"]],
+ [["Gehen","Verb","go"],["Sie","Pronomen","you"],["hier","Adverb","here"],["links","Adverb","left"]],
+ [["Mein","Artikel","my"],["Bruder","Nomen","brother"],["wohnt","Verb","lives"],["in","Präposition","in"],["Berlin","Nomen","Berlin"]],
+ [["Das","Artikel","the"],["Brot","Nomen","bread"],["ist","Verb","is"],["frisch","Adjektiv","fresh"],["und","Konjunktion","and"],["billig","Adjektiv","cheap"]],
+ [["Ich","Pronomen","I"],["arbeite","Verb","work"],["oft","Adverb","often"],["mit","Präposition","with"],["Kollegen","Nomen","colleagues"]],
+ [["Wir","Pronomen","we"],["fahren","Verb","drive"],["morgen","Adverb","tomorrow"],["nach","Präposition","to"],["Berlin","Nomen","Berlin"]],
+ [["Die","Artikel","the"],["Wohnung","Nomen","flat"],["ist","Verb","is"],["groß","Adjektiv","big"],["aber","Konjunktion","but"],["teuer","Adjektiv","expensive"]]
+];
+
+/* exam data */
+const WWORDS=["Wer","Was","Wo","Woher","Wohin","Wie","Wie alt","Wie viele","Wie viel","Wann","Welche","Warum","Wie spät"];
+const WQ=[
+ ["Ich komme aus Brasilien.","Woher","kommen Sie","I come from Brazil.","Where do you come from?"],
+ ["Ich wohne in Hamburg.","Wo","wohnen Sie","I live in Hamburg.","Where do you live?"],
+ ["Ich heiße Maria.","Wie","heißen Sie","My name is Maria.","What is your name? (lit. how are you called?)"],
+ ["Ich bin dreißig Jahre alt.","Wie alt","sind Sie","I am thirty (dreißig = DRY-sikh) years old.","How old are you?"],
+ ["Ich bin Ingenieurin.","Was","sind Sie von Beruf","I am an engineer.","What is your job? (lit. what are you by profession?)"],
+ ["Das ist mein Bruder.","Wer","ist das","That is my brother.","Who is that?"],
+ ["Ich fahre nach Berlin.","Wohin","fahren Sie","I am going to Berlin.","Where are you going (to)?"],
+ ["Am Montag und Mittwoch.","Wann","haben Sie Deutschkurs","On Monday and Wednesday.","When do you have German class?"],
+ ["Englisch und ein bisschen Deutsch.","Welche","Sprachen sprechen Sie","English and a little German.","Which languages do you speak?"],
+ ["Ich spreche drei Sprachen.","Wie viele","Sprachen sprechen Sie","I speak three (drei = dry) languages.","How many languages do you speak?"],
+ ["Ich arbeite bei Siemens.","Wo","arbeiten Sie","I work at Siemens.","Where do you work?"],
+ ["Von 9 bis 17 Uhr.","Wann","arbeiten Sie","From 9 to 17 o'clock (neun bis siebzehn Uhr = noyn bis ZEEP-tsayn oor).","When do you work?"],
+ ["Das kostet fünf Euro.","Wie viel","kostet das","That costs five (fünf = fuenf) euros.","How much does that cost?"],
+ ["Ich trinke gern Tee.","Was","trinken Sie gern","I like drinking tea.","What do you like to drink?"],
+ ["Danke, gut.","Wie","geht es Ihnen","Fine, thanks.","How are you?"],
+ ["Für die Arbeit.","Warum","lernen Sie Deutsch","For work.","Why do you learn German?"],
+ ["Um 19 Uhr.","Wann","beginnt die Party","At 7 pm (neunzehn Uhr = NOYN-tsayn oor).","When does the party start?"],
+ ["Im Supermarkt.","Wo","kaufen Sie ein","At the supermarket.","Where do you shop?"],
+ ["Mit dem Bus.","Wie","kommen Sie zur Arbeit","By bus.","How do you get to work?"],
+ ["Geradeaus und dann links.","Wie","komme ich zum Bahnhof","Straight ahead and then left.","How do I get to the station?"],
+ ["Der Bahnhof ist hier links.","Wo","ist der Bahnhof","The station is here on the left.","Where is the station?"],
+ ["Es ist halb drei.","Wie spät","ist es","It is half past two. (halb drei = hulp dry)","What time is it?"],
+ ["Mein Kollege.","Wer","ist der Mann","My colleague.","Who is the man?"],
+ ["Sechs, bitte.","Wie viele","Äpfel möchten Sie","Six, please. (sechs = zeks)","How many apples would you like?"],
+ ["Aus Italien.","Woher","kommt dein Kollege","From Italy.","Where does your colleague come from?"],
+ ["Nach Hause.","Wohin","gehst du","Home.","Where are you going?"],
+ ["Am Wochenende.","Wann","hast du Zeit","At the weekend.","When do you have time?"],
+ ["Pizza und Salat.","Was","isst du gern","Pizza and salad.","What do you like to eat?"],
+ ["Zwei Euro fünfzig.","Wie viel","kostet der Kaffee","Two euros fifty. (tsvy OY-ro FUENF-tsikh)","How much is the coffee?"],
+ ["Er heißt Tom.","Wie","heißt dein Bruder","He is called Tom.","What is your brother called?"]
+];
+const INTRO=[
+ ["Name","Wie heißen Sie?","Ich heiße …","What is your name?"],
+ ["Alter","Wie alt sind Sie?","Ich bin … Jahre alt.","How old are you?"],
+ ["Land","Woher kommen Sie?","Ich komme aus …","Where are you from?"],
+ ["Wohnort","Wo wohnen Sie?","Ich wohne in …","Where do you live?"],
+ ["Sprachen","Welche Sprachen sprechen Sie?","Ich spreche …","Which languages do you speak?"],
+ ["Beruf","Was sind Sie von Beruf?","Ich bin … von Beruf.","What is your job?"],
+ ["Hobby","Was sind Ihre Hobbys?","Meine Hobbys sind …","What are your hobbies?"]
+];
+const ORDER=[
+ ["Wo wohnen Sie?","Wo Sie wohnen?","Wohnen wo Sie?","Where do you live?","W-question: W-word 1st, verb 2nd."],
+ ["Woher kommst du?","Woher du kommst?","Du woher kommst?","Where do you come from?","W-question: W-word 1st, verb 2nd."],
+ ["Wie alt sind Sie?","Wie alt Sie sind?","Sind wie alt Sie?","How old are you?","'Wie alt' counts as one position; the verb comes next."],
+ ["Was sind Sie von Beruf?","Was Sie sind von Beruf?","Was von Beruf Sie sind?","What is your job?","W-question: W-word 1st, verb 2nd."],
+ ["Ich wohne in Hamburg.","Ich in Hamburg wohne.","In Hamburg ich wohne.","I live in Hamburg.","Statement: the verb is always in position 2."],
+ ["Heute lerne ich Deutsch.","Heute ich lerne Deutsch.","Ich heute lerne Deutsch.","Today I learn German.","If you start with 'heute', the verb still comes 2nd and the person moves after it."],
+ ["Am Wochenende fahre ich Fahrrad.","Am Wochenende ich fahre Fahrrad.","Ich am Wochenende fahre Fahrrad.","At the weekend I ride my bike.","Time first → verb 2nd → then 'ich'."],
+ ["Sprechen Sie Englisch?","Englisch Sie sprechen?","Sprechen Englisch Sie?","Do you speak English?","Yes/no question: the verb comes 1st."],
+ ["Arbeiten Sie in Hamburg?","Sie in Hamburg arbeiten?","Arbeiten in Hamburg Sie?","Do you work in Hamburg?","Yes/no question: the verb comes 1st."],
+ ["Ich arbeite als Ingenieurin bei Siemens.","Ich als Ingenieurin arbeite bei Siemens.","Als Ingenieurin ich arbeite bei Siemens.","I work as an engineer at Siemens.","Statement: the verb (arbeite) in position 2."],
+ ["Kannst du bitte das Fenster öffnen?","Kannst du bitte öffnen das Fenster?","Kannst öffnen du bitte das Fenster?","Can you please open the window?","kannst early, the infinitive (öffnen) at the end."],
+ ["Ich möchte einen Kaffee trinken.","Ich möchte trinken einen Kaffee.","Ich trinken möchte einen Kaffee.","I would like to drink a coffee.","möchte in position 2, the infinitive (trinken) at the end."],
+ ["Meine Hobbys sind Lesen und Kochen.","Meine Hobbys Lesen und Kochen sind.","Sind meine Hobbys Lesen und Kochen.","My hobbies are reading and cooking.","Statement: the verb (sind) in position 2."],
+ ["Wie komme ich zum Bahnhof?","Wie ich komme zum Bahnhof?","Wie komme zum Bahnhof ich?","How do I get to the station?","W-question: W-word 1st, verb 2nd."],
+ ["Gehen Sie geradeaus.","Geradeaus Sie gehen.","Sie geradeaus gehen.","Go straight ahead.","Request with Sie: verb 1st, then Sie."],
+ ["Morgen arbeite ich im Homeoffice.","Morgen ich arbeite im Homeoffice.","Ich morgen arbeite im Homeoffice.","Tomorrow I work from home.","Time first → verb 2nd → ich."],
+ ["Um 8 Uhr frühstücke ich.","Um 8 Uhr ich frühstücke.","Ich um 8 Uhr frühstücke.","At 8 o'clock I have breakfast.","Time first → verb 2nd → ich."],
+ ["Hast du heute Zeit?","Heute du hast Zeit?","Hast heute du Zeit?","Do you have time today?","Yes/no question: verb 1st, then the person."],
+ ["Ich habe kein Auto.","Ich habe nicht Auto.","Ich kein Auto habe.","I don't have a car.","kein + noun; verb in position 2."],
+ ["Das Museum ist nicht weit.","Das Museum nicht ist weit.","Das Museum ist weit nicht.","The museum is not far.","nicht comes before the adjective."],
+ ["Wann beginnt der Kurs?","Wann der Kurs beginnt?","Wann beginnt Kurs der?","When does the course start?","W-word 1st, verb 2nd, then the subject."],
+ ["Ich möchte bitte zwei Brötchen.","Ich bitte möchte zwei Brötchen.","Möchte ich bitte zwei Brötchen.","I would like two bread rolls, please.","Statement: verb (möchte) in position 2."]
+];
+const FORM=[
+ ["Familienname / Nachname","surname / last name"],["Vorname","first name"],["Geburtsdatum","date of birth"],["Geburtsort","place of birth"],
+ ["Staatsangehörigkeit","nationality"],["Muttersprache","native language"],["Straße, Hausnummer","street, house number"],["PLZ (Postleitzahl)","postcode"],
+ ["Wohnort","town where you live"],["Telefonnummer","phone number"],["Familienstand","marital status"],["ledig","single (not married)"],
+ ["verheiratet","married"],["geschieden","divorced"],["Anzahl der Kinder","number of children"],["Geschlecht","sex (male / female)"],
+ ["männlich","male"],["weiblich","female"],["Beruf","job / profession"],["Unterschrift","signature"],["Datum","date"]
+];
+
+const WORK=[
+ ["Ich arbeite ___ Siemens.","I work at Siemens.",["bei","als","in"],"bei","<b>bei</b> + company."],
+ ["Ich arbeite ___ Ingenieurin.","I work as an engineer.",["als","bei","in"],"als","<b>als</b> + job, with no article."],
+ ["Ich arbeite ___ Hamburg.","I work in Hamburg.",["in","bei","als"],"in","<b>in</b> + city."],
+ ["Du ___ im Büro.","You work in the office.",["arbeitest","arbeitst","arbeiten"],"arbeitest","Stem ends in -t → du arbeit<b>e</b>st."],
+ ["Er ___ im Homeoffice.","He works from home.",["arbeitet","arbeit","arbeitt"],"arbeitet","Stem ends in -t → er arbeit<b>e</b>t."],
+ ["Ich arbeite ___ Montag ___ Freitag.","I work from Monday to Friday.",["von … bis","bis … von","um … bis"],"von … bis","<b>von … bis</b> = from … to."],
+ ["Die Besprechung ist ___ 10 Uhr.","The meeting is at 10 o'clock. (zehn Uhr = tsayn oor)",["um","von","am"],"um","<b>um</b> + clock time."],
+ ["Ich komme ___ dem Fahrrad zur Arbeit.","I come to work by bike.",["mit","bei","von"],"mit","<b>mit</b> = with / by (transport)."],
+ ["Sie ist ___.","She is a teacher.",["Lehrerin","eine Lehrerin","Lehrer"],"Lehrerin","No article before a job, and women add -in."],
+ ["___ arbeiten Sie?","Where do you work?",["Wo","Woher","Wer"],"Wo","<b>Wo</b> = where (place)."],
+ ["Meine ___ ist sehr nett.","My (female) colleague is very nice.",["Kollegin","Kollege","Kollegen"],"Kollegin","Meine + a woman: <b>die Kollegin</b>."],
+ ["Ich arbeite ___ März dort.","I have worked there since March.",["seit","um","von"],"seit","<b>seit</b> = since."],
+ ["Das ist ___ Büro.","That is the office.",["das","der","die"],"das","<b>das</b> Büro (loan word ending in a vowel)."],
+ ["Ich habe heute ___ Termin.","I have an appointment today.",["einen","eine","ein"],"einen","<b>der</b> Termin → Akkusativ: <b>einen</b> Termin. Only der changes."]
+];
+
+/* more data */
+const VREG=[["wohnen","wohn","to live"],["kommen","komm","to come"],["lernen","lern","to learn"],["spielen","spiel","to play"],["trinken","trink","to drink"],["machen","mach","to do / make"],["kaufen","kauf","to buy"],["gehen","geh","to go"],["kochen","koch","to cook"],["brauchen","brauch","to need"],["hören","hör","to hear"],["schreiben","schreib","to write"],["schwimmen","schwimm","to swim"],["joggen","jogg","to jog"],["fragen","frag","to ask"],["suchen","such","to look for"]];
+const VIRR={sein:["bin","bist","ist","sind","seid","sind","to be"],haben:["habe","hast","hat","haben","habt","haben","to have"],heißen:["heiße","heißt","heißt","heißen","heißt","heißen","to be called"],arbeiten:["arbeite","arbeitest","arbeitet","arbeiten","arbeitet","arbeiten","to work"],fahren:["fahre","fährst","fährt","fahren","fahrt","fahren","to drive / ride"],essen:["esse","isst","isst","essen","esst","essen","to eat"],sprechen:["spreche","sprichst","spricht","sprechen","sprecht","sprechen","to speak"],möchten:["möchte","möchtest","möchte","möchten","möchtet","möchten","would like"],
+ schlafen:["schlafe","schläfst","schläft","schlafen","schlaft","schlafen","to sleep"],lesen:["lese","liest","liest","lesen","lest","lesen","to read"],
+ sehen:["sehe","siehst","sieht","sehen","seht","sehen","to see"],laufen:["laufe","läufst","läuft","laufen","lauft","laufen","to run / walk"],
+ treffen:["treffe","triffst","trifft","treffen","trefft","treffen","to meet"],nehmen:["nehme","nimmst","nimmt","nehmen","nehmt","nehmen","to take"],
+ tanzen:["tanze","tanzt","tanzt","tanzen","tanzt","tanzen","to dance"],reisen:["reise","reist","reist","reisen","reist","reisen","to travel"]};
+const ACT=[["gehen","to go"],["machen","to do / make"],["spielen","to play"],["hören","to hear / listen"],["kochen","to cook"],["trinken","to drink"],["kaufen","to buy"],["schwimmen","to swim"],["tanzen","to dance"],["reisen","to travel"],["fahren","to drive / ride"],["schlafen","to sleep"],["laufen","to run / walk"],["essen","to eat"],["sprechen","to speak"],["treffen","to meet"],["nehmen","to take"],["lesen","to read"],["sehen","to see / watch"],["schreiben","to write"],["arbeiten","to work"],["lernen","to learn"]];
+const GERN=[
+ ["Ich spiele gern Tennis.","Ich gern spiele Tennis.","Ich spielen gern Tennis.","I like playing tennis."],
+ ["Ich lese gern.","Ich gern lese.","Ich liest gern.","I like reading."],
+ ["Er fährt gern Fahrrad.","Er fahrt gern Fahrrad.","Er gern fährt Fahrrad.","He likes cycling."],
+ ["Wir tanzen nicht gern.","Wir nicht gern tanzen.","Wir tanzt nicht gern.","We don't like dancing."],
+ ["Was machst du gern?","Was du machst gern?","Was machen du gern?","What do you like doing?"],
+ ["Spielst du gern Fußball?","Du gern spielst Fußball?","Spielt du gern Fußball?","Do you like playing football?"],
+ ["Sie liest gern Zeitung.","Sie lest gern Zeitung.","Sie gern liest Zeitung.","She likes reading the newspaper."],
+ ["Isst du gern Pizza?","Esst du gern Pizza?","Du gern isst Pizza?","Do you like eating pizza?"],
+ ["Am Wochenende schlafe ich gern lange.","Am Wochenende ich schlafe gern lange.","Am Wochenende schläfe ich gern lange.","At the weekend I like sleeping in."],
+ ["Er sieht gern Filme.","Er seht gern Filme.","Er gern sieht Filme.","He likes watching films."],
+ ["Triffst du gern Freunde?","Treffst du gern Freunde?","Triffst gern du Freunde?","Do you like meeting friends?"],
+ ["Ich koche nicht so gern.","Ich nicht so gern koche.","Ich kochst nicht so gern.","I don't really like cooking."]
+];
+function forms(v){ if(VIRR[v]) return VIRR[v].slice(0,6); const r=VREG.find(x=>x[0]===v); return ["e","st","t","en","t","en"].map(e=>r[1]+e); }
+const KEIN=[
+ ["Hast du ein Auto?","Nein, ich habe ___ Auto.","Do you have a car? – No, I have no car.",["kein","keine","nicht"],"kein","das Auto: ein → <b>kein</b>."],
+ ["Ist das eine Lampe?","Nein, das ist ___ Lampe.","Is that a lamp? – No, that is not a lamp.",["keine","kein","nicht"],"keine","die Lampe: eine → <b>keine</b>."],
+ ["Wohnst du in Berlin?","Nein, ich wohne ___ in Berlin.","Do you live in Berlin? – No, I don't live in Berlin.",["nicht","kein","keine"],"nicht","A place, no noun with ein → <b>nicht</b>."],
+ ["Ist der Bahnhof weit?","Nein, er ist ___ weit.","Is the station far? – No, it is not far.",["nicht","kein","keine"],"nicht","Adjective (weit) → <b>nicht</b>."],
+ ["Trinkst du Kaffee?","Nein, ich trinke ___ Kaffee.","Do you drink coffee? – No, I drink no coffee.",["keinen","kein","nicht"],"keinen","Noun without article → kein. der Kaffee in Akkusativ → <b>keinen</b>."],
+ ["Hast du Zeit?","Nein, ich habe ___ Zeit.","Do you have time? – No, I have no time.",["keine","kein","nicht"],"keine","die Zeit, no article → <b>keine</b>."],
+ ["Arbeitest du heute?","Nein, ich arbeite heute ___.","Are you working today? – No, I'm not working today.",["nicht","kein","keine"],"nicht","Verb → <b>nicht</b>, often at the end."],
+ ["Ist das dein Handy?","Nein, das ist ___ Handy.","Is that your phone? – No, that is not my phone.",["nicht mein","kein mein","keine"],"nicht mein","With mein/dein use <b>nicht</b>. kein only replaces ein or no article."],
+ ["Brauchst du einen Stift?","Nein, ich brauche ___ Stift.","Do you need a pen? – No, I don't need a pen.",["keinen","kein","nicht"],"keinen","der Stift, Akkusativ: einen → <b>keinen</b>."],
+ ["Ist das Hotel teuer?","Nein, es ist ___ teuer.","Is the hotel expensive? – No, it is not expensive.",["nicht","kein","keine"],"nicht","Adjective (teuer) → <b>nicht</b>."],
+ ["Gibt es hier eine Apotheke?","Nein, hier gibt es ___ Apotheke.","Is there a pharmacy here? – No, there is no pharmacy here.",["keine","kein","nicht"],"keine","die Apotheke: eine → <b>keine</b>."],
+ ["Kommst du aus Spanien?","Nein, ich komme ___ aus Spanien.","Are you from Spain? – No, I'm not from Spain.",["nicht","kein","keine"],"nicht","A country / place → <b>nicht</b>."],
+ ["Ist das ein Bahnhof?","Nein, das ist ___ Bahnhof.","Is that a station? – No, that is not a station.",["kein","keinen","nicht"],"kein","der Bahnhof after 'ist' (not Akkusativ): ein → <b>kein</b>."]
+];
+const ANSW=[
+ ["Wo wohnst du?","Where do you live?","Ich wohne in Hamburg.","Ich wohnst in Hamburg.","Du wohnst in Hamburg.","du-question → answer with <b>ich</b> + -e: ich wohne."],
+ ["Wie heißen Sie?","What is your name?","Ich heiße Maria.","Sie heißen Maria.","Ich heißen Maria.","Sie-question → answer with <b>ich</b>: ich heiße."],
+ ["Woher kommst du?","Where are you from?","Ich komme aus Brasilien.","Ich komme in Brasilien.","Ich kommst aus Brasilien.","Woher → <b>aus</b> + country."],
+ ["Wohnst du in Berlin?","Do you live in Berlin?","Nein, ich wohne in Hamburg.","Nein, du wohnst in Hamburg.","Ja, ich wohnst in Berlin.","Yes/no question → Ja / Nein + full sentence with ich."],
+ ["Was ist dein Lieblingsessen?","What is your favourite food?","Mein Lieblingsessen ist Pizza.","Dein Lieblingsessen ist Pizza.","Mein Lieblingsessen bin Pizza.","<b>dein → mein</b> when you answer."],
+ ["Wie ist Ihre Telefonnummer?","What is your phone number?","Meine Nummer ist 0176 1234567.","Ihre Nummer ist 0176 1234567.","Mein Nummer ist 0176 1234567.","<b>Ihre → meine</b> (die Nummer)."],
+ ["Habt ihr heute Zeit?","Do you (all) have time today?","Ja, wir haben Zeit.","Ja, ihr habt Zeit.","Ja, wir habt Zeit.","ihr-question → answer with <b>wir</b>."],
+ ["Sprechen Sie Englisch?","Do you speak English?","Ja, ich spreche Englisch.","Ja, Sie sprechen Englisch.","Ja, ich sprichst Englisch.","Sie → ich: <b>ich spreche</b>."],
+ ["Wie komme ich zum Bahnhof?","How do I get to the station?","Gehen Sie geradeaus und dann links.","Ich gehe geradeaus und dann links.","Gehen geradeaus Sie und dann links.","Give directions with the Sie form: <b>Gehen Sie</b> …"],
+ ["Was sind Sie von Beruf?","What is your job?","Ich bin Ingenieurin.","Ich bin eine Ingenieurin.","Ich sind Ingenieurin.","No article before a job; Sie → <b>ich bin</b>."],
+ ["Wann beginnt der Kurs?","When does the course start?","Um 18 Uhr.","Am 18 Uhr.","In 18 Uhr.","<b>um</b> + clock time. (achtzehn Uhr = AKHT-tsayn oor)"],
+ ["Hast du ein Fahrrad?","Do you have a bike?","Nein, ich habe kein Fahrrad.","Nein, ich habe nicht Fahrrad.","Nein, ich hast kein Fahrrad.","ein → <b>kein</b> in a no-answer."],
+ ["Wie alt bist du?","How old are you?","Ich bin 30 Jahre alt.","Ich habe 30 Jahre.","Du bist 30 Jahre alt.","German uses <b>sein</b>: Ich bin … Jahre alt. (dreißig = DRY-sikh)"],
+ ["Was machst du am Wochenende?","What do you do at the weekend?","Ich koche und lese.","Du kochst und liest.","Ich kochst und lese.","du → <b>ich</b>: ich koche, ich lese."]
+];
+const PLACES=[["der","Bahnhof","station"],["der","Supermarkt","supermarket"],["der","Marktplatz","market square"],["das","Museum","museum"],["das","Hotel","hotel"],["das","Krankenhaus","hospital"],["das","Kino","cinema"],["die","Post","post office"],["die","Apotheke","pharmacy"],["die","Bank","bank"],["die","Haltestelle","bus stop"],["die","Universität","university"]];
+const ARROWS=[["←","links","left"],["→","rechts","right"],["↑","geradeaus","straight ahead"],["↓","zurück","back"]];
+const DIR=[["Gehen Sie geradeaus.","Go straight ahead."],["Gehen Sie die erste Straße links.","Take the first street on the left."],["An der Ampel rechts.","Turn right at the traffic light."],["Der Bahnhof ist gegenüber.","The station is opposite."],["Die Post ist neben der Bank.","The post office is next to the bank."],["Das ist nicht weit, nur fünf Minuten zu Fuß.","It's not far, only five minutes on foot."],["Nehmen Sie den Bus Nummer drei.","Take bus number three."],["Gehen Sie über die Kreuzung.","Go across the crossroads."],["Die Apotheke ist an der Ecke.","The pharmacy is on the corner."],["Gehen Sie zurück.","Go back."],["Die zweite Straße rechts.","The second street on the right."]];
+function timeOff(h,m){return `${h===1?"ein":num(h)[0]} Uhr${m?" "+num(m)[0]:""}`;}
+function timeInf(h,m){const a=h%12||12,b=a%12+1,w=x=>U[x][0];
+ if(m===0) return a===1?"ein Uhr":`${w(a)} Uhr`;
+ return m===5?`fünf nach ${w(a)}`:m===10?`zehn nach ${w(a)}`:m===15?`Viertel nach ${w(a)}`:m===20?`zwanzig nach ${w(a)}`:m===30?`halb ${w(b)}`:m===40?`zwanzig vor ${w(b)}`:m===45?`Viertel vor ${w(b)}`:`zehn vor ${w(b)}`;}
+function teenSwap(x){ if(x>=13&&x<=19) return (x-10)*10; if(x%10===0&&x>=30&&x<=90) return x/10+10; return x+10<100?x+10:x-10; }
+const priceFmt=(e,c)=>`${e},${String(c).padStart(2,"0")} €`;
+const priceSay=(e,c)=>`${e===1?"ein":num(e)[0]} Euro${c?" "+num(c)[0]:""}`;
+const pricePron=(e,c)=>`${e===1?"ayn":num(e)[1]} OY-ro${c?" "+num(c)[1]:""}`;
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* speech */
+const hasTTS = false;
+let deVoice=null;
+let deVoices=[];
+function loadVoices(){ if(!hasTTS) return; const vs=speechSynthesis.getVoices();
+  deVoices=vs.filter(v=>/^de([-_]|$)/i.test(v.lang));
+  const score=v=>(/premium|enhanced|natural|neural|online/i.test(v.name)?4:0)+(/google/i.test(v.name)?3:0)+(/anna|petra|helena|katja|conrad|yannick|markus|vicki/i.test(v.name)?2:0)+(/DE/i.test(v.lang)?1:0);
+  deVoices.sort((a,b)=>score(b)-score(a));
+  const want=store.get("voice",null);
+  deVoice=deVoices.find(v=>v.name===want)||deVoices[0]||null;
+  fillVoiceSel(); showVoice(vs.length); }
+function fillVoiceSel(){ const box=document.getElementById("voicePick"), sel=document.getElementById("voiceSel"); if(!sel) return;
+  box.hidden=deVoices.length<1;
+  sel.innerHTML=deVoices.map((v,i)=>`<option value="${i}"${v===deVoice?" selected":""}>${esc(v.name)} (${esc(v.lang)})</option>`).join(""); }
+function showVoice(n){ const el=document.getElementById("voiceInfo"); if(!el) return;
+  if(!hasTTS){ el.textContent="This browser can't play speech, so the listening parts won't work here."; el.className="voice warn"; return; }
+  if(deVoice){ el.innerHTML=`🔊 Stimme <span class="pron">(voice)</span>: <b>${esc(deVoice.name)}</b>. This is a computer voice from your device. For the most natural sound, pick “Google Deutsch” (Chrome) or a voice marked Premium / Enhanced (Mac, iPhone: download it in Settings → Accessibility → Spoken Content). Test each one below.`; el.className="voice"; }
+  else if(n){ el.innerHTML=`⚠️ No German voice on this device, so audio may sound English. Add one: <b>Mac</b> System Settings → Accessibility → Spoken Content → System voice → Manage Voices → Deutsch. <b>Windows</b> Settings → Time &amp; language → Speech → Add voices → Deutsch. <b>iPhone</b> Settings → Accessibility → Spoken Content → Voices → German. Or open the page in Chrome, which has “Google Deutsch”.`; el.className="voice warn"; } }
+if(hasTTS){ loadVoices(); speechSynthesis.onvoiceschanged=loadVoices; setTimeout(loadVoices,700); setTimeout(loadVoices,2500); } else { setTimeout(()=>showVoice(0),0); }
+let rate=0.85;
+function speak(){ return; }
+function _speakUnused(parts, r){
+  if(!hasTTS){ $("#noVoice").hidden=false; return; }
+  if(!deVoice) loadVoices();
+  speechSynthesis.cancel();
+  [].concat(parts).forEach(t=>{ const u=new SpeechSynthesisUtterance(t); u.lang="de-DE"; if(deVoice) u.voice=deVoice; u.rate=r||rate; speechSynthesis.speak(u); });
+}
+const letterSay=l=>SAY[l]||l;
+
+
+/* ---------- learn rendering ---------- */
+const typeColor={Nomen:"var(--der)",Verb:"var(--die)",Artikel:"var(--das)",Pronomen:"var(--pl)",Adjektiv:"var(--muted)",Adverb:"var(--muted)","Präposition":"var(--muted)",Konjunktion:"var(--muted)"};
+$("#demoSent").innerHTML=SENTS[1].map(([w,t,e])=>`<span class="tok"><b>${w}</b><i>${e}</i><s style="color:${typeColor[t]}">${t}</s></span>`).join("")
+;
+
+const gridNums=[...Array(21).keys(),21,22,25,30,40,47,50,60,70,74,80,90,99,100,101,250];
+$("#numGrid").innerHTML=gridNums.map(n=>{const [w,p]=num(n);return `<div class="numcell"><span class="d">${n}</span><span class="w">${w}</span><span class="pron">${p}</span></div>`}).join("");
+function explore(){ const v=parseInt($("#explIn").value,10); if(isNaN(v)||v<0||v>999){$("#explOut").innerHTML='<span class="en">Enter a number from 0 to 999.</span>';return}
+  const [w,p]=num(v); $("#explOut").innerHTML=`<b>${w}</b><br><span class="pron">${p}</span>`; }
+$("#explIn").addEventListener("input",explore); explore();
+$("#abcGrid").innerHTML=ABC.map(([l,p,t])=>`<div class="abcc${t?' trap':''}"><b>${l}</b><span style="font-weight:600">${SAY[l]}</span><span class="pron">${p}</span></div>`).join("");
+document.addEventListener("click",e=>{const b=e.target.closest("[data-say]"); if(b) speak(b.dataset.say);});
+
+/* ---------- tabs ---------- */
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===t));
+  ["learn","test","cheat"].forEach(v=>{ $("#view-"+v).hidden=t.dataset.view!==v; });
+  store.set("view",t.dataset.view);
+});
+
+/* ---------- tests ---------- */
+const TESTS={
+ artikel:{tag:"Artikel",title:"der, die oder das?",en:"the: which gender?",kind:"choice",
+  gen(){const n=pick(NOUNS);return{prompt:`<span class="big">___ ${n.w}</span><span class="en">${n.en}</span>`,
+   options:["der","die","das"],cls:o=>"o-"+o,answer:n.a,explain:`<b><span class="${n.a}">${n.a}</span> ${n.w}</b>, Plural: <span class="plc">die</span> ${n.p}. ${ruleFor(n)}`}}},
+ plural:{tag:"Plural",title:"Singular → Plural",en:"choose the plural form",kind:"choice",
+  gen(){const n=pick(NOUNS.filter(x=>!["Name","Kaffee","Tee"].includes(x.w)));const s=n.w;
+   const cand=new Set([s+"e",s+"en",s+"n",s+"s",s+"er",s,s+"nen"]);
+   const um=s.replace(/a(?!.*[aou])|o(?!.*[aou])|u(?!.*[aou])/,m=>({a:"ä",o:"ö",u:"ü"}[m]));
+   if(um!==s){cand.add(um+"e");cand.add(um+"er");cand.add(um);}
+   cand.delete(n.p); const wrong=shuffle([...cand].filter(c=>!/(ee|nnn|ene$)/.test(c))).slice(0,2);
+   return{prompt:`<span class="en">Singular</span><span class="big"><span class="${n.a}">${n.a}</span> ${s}</span><span class="en">${n.en} → Plural: <span class="plc">die</span> ___ ?</span>`,
+   options:shuffle([n.p,...wrong]),answer:n.p,explain:`<b><span class="${n.a}">${n.a}</span> ${s} → <span class="plc">die</span> ${n.p}</b>. ${pluralNote(n)}`}}},
+ ein:{tag:"ein / eine",title:"ein, eine oder nichts?",en:"a / an, or no article",kind:"choice",
+  gen(){const n=pick(NOUNS.filter(x=>x.w!==x.p)); const pl=Math.random()<.25;
+   if(pl) return{prompt:`<span class="big">Das sind ___ ${n.p}.</span><span class="en">Those are ___ ${n.en}s.</span>`,options:["ein","eine","— (nothing)"],answer:"— (nothing)",
+     explain:`<b>Das sind ${n.p}.</b> In plural there is no ein/eine. Negative: <i>Das sind keine ${n.p}.</i>`};
+   const a=n.a==="die"?"eine":"ein";
+   return{prompt:`<span class="big">Das ist ___ ${n.w}.</span><span class="en">That is a ${n.en}.</span>`,options:["ein","eine","— (nothing)"],answer:a,
+     explain:`<b><span class="${n.a}">${n.a}</span> ${n.w}</b> → <b>${a} ${n.w}</b>. ${n.a==="die"?"die → eine (feminine adds -e).":"der and das → ein."}`}}},
+ hoerZahl:{tag:"Lesen · Zahlen",title:"Wort → Zahl",en:"read the German number and type it in digits",kind:"input",ranges:[["0–20",0,20],["21–99",21,99],["0–100",0,100],["100–999",100,999]],
+  gen(r){const n=rnd(r[1],r[2]);const [w,p]=num(n);return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,40px)">${w}</span><span class="en">Type this number in digits.</span>`,answer:String(n),inputmode:"numeric",
+   explain:`<b>${w}</b> = <b>${n}</b> <span class="pron">(${p})</span>${n>20&&n<100&&n%10?`<br>Ones first: ${U[n%10][0]}… then …${T[Math.floor(n/10)][0]}.`:""}`}}},
+ zahlWort:{tag:"Lesen · Zahlen",title:"Welches Wort passt?",en:"which word matches the number?",kind:"choice",ranges:[["0–20",0,20],["21–99",21,99],["100–999",100,999]],
+  gen(r){const n=rnd(r[1],r[2]); const opts=new Set([n]); const o=n%10,t=Math.floor(n/10)%10;
+   if(n>20&&o&&t&&o!==t) opts.add(n-o-t*10+o*10+t); // digit swap trap 47↔74
+   while(opts.size<4){const d=n+pick([-10,-1,1,10,-2,2,20,-20,100,-100]); if(d>=r[1]&&d<=r[2]) opts.add(d);}
+   const list=shuffle([...opts]);
+   return{prompt:`<span class="big">${n}</span><span class="en">Choose the German word.</span>`,options:list.map(x=>num(x)[0]),answer:num(n)[0],say:null,
+   explain:`<b>${n}</b> = ${num(n)[0]} <span class="pron">(${num(n)[1]})</span>${n>20&&n<100&&o?" · Remember: ones first!":""}`}}},
+ hoerBuchstabe:{tag:"Lesen · ABC",title:"Welcher Buchstabe ist das?",en:"which letter has this German name?",kind:"choice",
+  gen(){const set=pick(CONFUSE);const l=set[0];const p=ABC.find(x=>x[0]===l)[1];
+   return{prompt:`<span class="big">${SAY[l]}</span><span class="en">This is the German name of a letter. Which letter is it?</span>`,options:shuffle(set),answer:l,
+   explain:`<b>${SAY[l]}</b> = <b>${l}</b> <span class="pron">(sounds like "${p}")</span>`}}},
+ buchstabieren:{tag:"Lesen · Buchstabieren",title:"Name buchstabieren",en:"read the spelled letters and write the word",kind:"input",
+  gen(){const w=pick(SPELL);const letters=[...w.toUpperCase().replace("STRASSE","STRAßE")].map(c=>c==="ẞ"?"ß":c);
+   return{prompt:`<span class="big" style="font-size:clamp(20px,5vw,30px)">${letters.map(c=>SAY[c]||c).join(" – ")}</span><span class="en">Wie schreibt man das? <span class="pron">(How do you write that?)</span> Type the word.</span>`,answer:w,umlauts:true,
+   explain:`<b>${w}</b>: ${letters.map(c=>{const f=ABC.find(x=>x[0]===c);return f?`${c} <span class="pron">(${f[1]})</span>`:c}).join(" · ")}`}}},
+ wortart:{tag:"Wortarten",title:"Welche Wortart?",en:"what type of word is it?",kind:"choice",
+  gen(){const s=pick(SENTS);const i=rnd(0,s.length-1);const [w,t,e]=s[i];
+   const opts=shuffle([t,...shuffle(TYPES.filter(x=>x!==t)).slice(0,3)]);
+   return{prompt:`<span class="big" style="font-size:clamp(22px,5vw,32px)">${s.map((x,j)=>j===i?`<span class="hl">${x[0]}</span>`:x[0]).join(" ")}.</span><span class="en">${s.map(x=>x[2]).join(" · ")}</span>`,
+   options:opts,label:o=>`${o} <span class="en" style="font-weight:400">(${TEN[o]})</span>`,answer:t,explain:`<b>${w}</b> (${e}) is a <b>${t}</b> (${TEN[t]}).`}}},
+ wfrage:{tag:"W-Fragen",title:"Welches Fragewort?",en:"which question word fits the answer?",kind:"choice",
+  gen(){const x=pick(WQ);const opts=shuffle([x[1],...shuffle(WWORDS.filter(w=>w!==x[1])).slice(0,3)]);
+   return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">___ ${x[2]}?</span><span class="en">Antwort <span class="pron">(answer)</span>: <b>${x[0]}</b> · ${x[3]}</span>`,options:opts,answer:x[1],
+   explain:`<b>${x[1]} ${x[2]}?</b> · ${x[4]}<br>Reminder: W-word 1st, verb 2nd.`}}},
+ satzbau:{tag:"Satzbau",title:"Welcher Satz ist richtig?",en:"which sentence has the right word order?",kind:"choice",
+  gen(){const x=pick(ORDER);return{prompt:`<span class="en">${x[3]}</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
+   explain:`<b>${x[0]}</b><br>${x[4]}`}}},
+ vorstellen:{tag:"Prüfung · Sprechen 1",title:"Sich vorstellen",en:"introduce yourself: keyword, question, answer",kind:"choice",
+  gen(){const x=pick(INTRO);const others=shuffle(INTRO.filter(y=>y!==x)).slice(0,3);const mode=rnd(0,1);
+   if(mode===0) return{prompt:`<span class="en">Prüfungskarte <span class="pron">(exam card)</span>: which question asks about…</span><span class="big">${x[0]}?</span>`,
+     options:shuffle([x[1],...others.map(y=>y[1])]),answer:x[1],say:null,
+     explain:`<b>${x[0]}</b> → <b>${x[1]}</b> <span class="en">(${x[3]})</span><br>Answer: <i>${x[2]}</i>`};
+   return{prompt:`<span class="en">The examiner asks:</span><span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">${x[3]} · How do you start your answer?</span>`,
+     options:shuffle([x[2],...others.map(y=>y[2])]),answer:x[2],
+     explain:`<b>${x[1]}</b> → <b>${x[2]}</b>`}}},
+ telefon:{tag:"Lesen · Prüfung",title:"Telefon, PLZ, Hausnummer",en:"read exam-style numbers and type them in digits",kind:"input",
+  gen(){const m=rnd(0,2);const zwo=Math.random()<.4;let digits,label,words,ex;
+   const dw=d=>d==="2"&&zwo?"zwo":U[+d][0];
+   if(m===2){const h=rnd(1,120);digits=String(h);label="Hausnummer (house number)";words=num(h)[0];
+     ex=`House numbers are said as one number <span class="pron">(${num(h)[1]})</span>.`;}
+   else{digits=m===0?"01"+pick(["5","6","7"])+rnd(0,9)+Array.from({length:7},()=>rnd(0,9)).join(""):"8"+rnd(0,1)+Array.from({length:3},()=>rnd(0,9)).join("");
+     label=m===0?"Telefonnummer (phone number)":"Postleitzahl, PLZ (postcode)";words=[...digits].map(dw).join(" · ");
+     ex=`${m===0?"Phone numbers":"Postcodes"} are said digit by digit.${zwo&&digits.includes("2")?" <b>zwo</b> = zwei; people say it on the phone so it doesn't sound like drei.":""}`;}
+   return{prompt:`<span class="en">${label}</span><span class="big" style="font-size:clamp(20px,5vw,30px)">${words}</span><span class="en">Type it in digits.</span>`,answer:digits,inputmode:"numeric",explain:`<b>${digits}</b><br>${ex}`}}},
+ formular:{tag:"Prüfung · Schreiben 1",title:"Formular-Wörter",en:"form vocabulary for the writing test",kind:"choice",
+  gen(){const x=pick(FORM);const others=shuffle(FORM.filter(y=>y!==x)).slice(0,3);
+   if(Math.random()<.5) return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">What does this form field mean?</span>`,
+     options:shuffle([x[1],...others.map(y=>y[1])]),answer:x[1],explain:`<b>${x[0]}</b> = ${x[1]}`};
+   return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German form field is this?</span>`,
+     options:shuffle([x[0],...others.map(y=>y[0])]),answer:x[0],explain:`${x[1]} = <b>${x[0]}</b>`}}},
+ arbeit:{tag:"Arbeit",title:"Über die Arbeit sprechen",en:"talking about work: fill the gap",kind:"choice",
+  gen(){const x=pick(WORK);return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">${x[1]}</span>`,
+   options:shuffle(x[2]),answer:x[3],explain:`<b>${x[0].replace("___ Freitag","Freitag").replace("___",x[3]).replace("von … bis Montag","von Montag bis").replace(/von … bis/,"von")}</b><br>${x[4]}`}}},
+ verbform:{tag:"Verben",title:"Verb-Endungen",en:"choose the right verb form",kind:"choice",
+  gen(){const all=[...VREG.map(x=>x[0]),...Object.keys(VIRR)];const v=pick(all);const f=forms(v);const i=rnd(0,5);const ans=f[i];
+   const others=[...new Set(f.filter(x=>x!==ans))];const opts=shuffle([ans,...shuffle(others).slice(0,2)]);
+   const per=i===2?pick(["er","sie","es"]):i===5?pick(["sie","Sie"]):["ich","du","","wir","ihr"][i];
+   const en=VIRR[v]?VIRR[v][6]:VREG.find(x=>x[0]===v)[2];
+   const note=VIRR[v]?`<b>${v}</b> is irregular: ${f.join(", ")}.`:`${["ich → -e","du → -st","er/sie/es → -t","wir → -en","ihr → -t","sie/Sie → -en"][i]}: ${v.replace(/en$/,"")}-${["e","st","t","en","t","en"][i]}.`;
+   return{prompt:`<span class="big">${per} ___</span><span class="en">${v} (${en})</span>`,options:opts,answer:ans,explain:`<b>${per} ${ans}</b><br>${note}`}}},
+ kein:{tag:"Fragen & Antworten",title:"nicht oder kein?",en:"say no the right way",kind:"choice",
+  gen(){const x=pick(KEIN);return{prompt:`<span class="en">${x[0]}</span><span class="big" style="font-size:clamp(22px,5.5vw,34px)">${x[1]}</span><span class="en">${x[2]}</span>`,
+   options:shuffle(x[3]),answer:x[4],explain:`<b>${x[1].replace("___",x[4])}</b><br>${x[5]}`}}},
+ antworten:{tag:"Fragen & Antworten",title:"Die richtige Antwort",en:"choose the correct answer to the question",kind:"choice",
+  gen(){const x=pick(ANSW);return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">${x[1]}</span>`,
+   options:shuffle([x[2],x[3],x[4]]),answer:x[2],explain:`<b>${x[0]} → ${x[2]}</b><br>${x[5]}`}}},
+ uhrzeit:{tag:"Zahlen · Uhrzeit",title:"Wie spät ist es?",en:"what time is it? choose the words",kind:"choice",
+  gen(){const h=rnd(1,23),m=pick([0,5,10,15,20,30,40,45,50]);const inf=Math.random()<.6;const f=inf?timeInf:timeOff;const ans=f(h,m);const opts=new Set([ans]);
+   const tries=inf?[[h-1,m],[h+1,m],[h,m===30?0:30],[h,m===15?45:m===45?15:15],[h,60-m===60?0:60-m]]:[[h,m===55?50:m+5],[h+1,m],[h-1,m],[h,m===30?13:30]];
+   for(const [a,b] of shuffle(tries)){ if(opts.size>=4) break; const hh=((a%24)+24)%24||12; if(b<0||b>59) continue; opts.add(f(hh,b)); }
+   let guard=0; while(opts.size<4&&guard++<20) opts.add(f(rnd(1,23),pick([0,15,30,45])));
+   const hs=String(h).padStart(2,"0"),ms=String(m).padStart(2,"0");
+   return{prompt:`<span class="big">${hs}:${ms}</span><span class="en">${inf?"Informell (everyday)":"Offiziell (official)"}: wie sagt man das? <span class="pron">(how do you say it?)</span></span>`,
+   options:shuffle([...opts]),answer:ans,explain:`<b>${hs}:${ms}</b> = offiziell <b>${timeOff(h,m)}</b> · informell <b>${timeInf(h,m)}</b>${m===30?"<br>Reminder: halb looks forward to the next hour.":""}`}}},
+ preis:{tag:"Zahlen · Preise",title:"Was kostet das?",en:"match the price and the words",kind:"choice",
+  gen(){const e=rnd(1,30),c=pick([0,10,20,25,40,49,50,60,75,80,90,95,99]);const set=new Map([[priceFmt(e,c),[e,c]]]);
+   for(const [a,b] of shuffle([[e,teenSwap(c)],[teenSwap(e),c],[e+1,c],[e,(c+10)%100],[e>1?e-1:e+2,c]])){ if(set.size>=4) break; if(a>=1&&a<=99&&b>=0&&b<=99) set.set(priceFmt(a,b),[a,b]); }
+   const items=[...set.values()];const mode=Math.random()<.5;
+   if(mode) return{prompt:`<span class="big">${priceFmt(e,c)}</span><span class="en">How do you say this price?</span>`,options:shuffle(items.map(([a,b])=>priceSay(a,b))),answer:priceSay(e,c),
+     explain:`<b>${priceFmt(e,c)}</b> = ${priceSay(e,c)} <span class="pron">(${pricePron(e,c)})</span>`};
+   return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${priceSay(e,c)}</span><span class="en">Which price is it?</span>`,options:shuffle(items.map(([a,b])=>priceFmt(a,b))),answer:priceFmt(e,c),
+     explain:`<b>${priceSay(e,c)}</b> = ${priceFmt(e,c)} <span class="pron">(${pricePron(e,c)})</span>`}}},
+ weg:{tag:"Wegbeschreibung",title:"Wie komme ich …?",en:"directions: words, zum / zur, sentences",kind:"choice",
+  gen(){const m=rnd(0,2);
+   if(m===0){const pl=pick(PLACES);const a=pl[0]==="die"?"zur":"zum";return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">Wie komme ich ___ ${pl[1]}?</span><span class="en">How do I get to the ${pl[2]}?</span>`,options:["zum","zur","zu"],answer:a,
+     explain:`<b><span class="${pl[0]}">${pl[0]}</span> ${pl[1]}</b> → <b>${a} ${pl[1]}</b>. der/das → zum, die → zur.`};}
+   if(m===1){const x=pick(ARROWS);return{prompt:`<span class="big" style="color:var(--die)">${x[0]}</span><span class="en">Which direction is this?</span>`,options:shuffle(ARROWS.map(y=>y[1])),answer:x[1],explain:`${x[0]} = <b>${x[1]}</b> (${x[2]})`};}
+   const x=pick(DIR);const others=shuffle(DIR.filter(y=>y!==x)).slice(0,3);
+   return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,32px)">${x[0]}</span><span class="en">What does it mean?</span>`,options:shuffle([x[1],...others.map(y=>y[1])]),answer:x[1],explain:`<b>${x[0]}</b> = ${x[1]}`}}},
+ aktion:{tag:"Aktivitäten",title:"Was machst du gern?",en:"action verbs and gern",kind:"choice",
+  gen(){const m=rnd(0,2);
+   if(m<2){const x=pick(ACT);const o=shuffle(ACT.filter(y=>y!==x)).slice(0,3);const f=forms(x[0]);
+     const ex=`<b>${x[0]}</b> = ${x[1]} · ich ${f[0]}, du ${f[1]}, er ${f[2]}`;
+     if(m===0) return{prompt:`<span class="big">${x[0]}</span><span class="en">What does this verb mean?</span>`,options:shuffle([x[1],...o.map(y=>y[1])]),answer:x[1],explain:ex};
+     return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German verb is it?</span>`,options:shuffle([x[0],...o.map(y=>y[0])]),answer:x[0],explain:ex};}
+   const x=pick(GERN);return{prompt:`<span class="en">${x[3]}</span><span class="en">Welcher Satz ist richtig? (Which sentence is correct?)</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
+     explain:`<b>${x[0]}</b><br>gern comes right after the verb (and the person). Check the verb form too.`};}},
+ mix:{tag:"Alle Teile",title:"Gemischter Test",en:"10 random questions from all parts",kind:"mixed",
+  gen(){const keys=Object.keys(TESTS).filter(k=>k!=="mix");const k=pick(keys);const t=TESTS[k];const r=t.ranges?pick(t.ranges):null;const q=t.gen(r);q.kind=t.kind;q.from=t.tag;q.fromKey=k;return q;}}
+};
+
+const GROUPS=[
+ ["Alles","everything",["mix"]],
+ ["A · Grammatik","grammar",["artikel","ein","plural","wortart","verbform","satzbau","wfrage","antworten","kein"]],
+ ["B · Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"]],
+ ["C + D · Themen und Prüfung","topics and exam",["vorstellen","arbeit","aktion","weg","formular"]]
+];
+let current=null, q=null, stats={ok:0,n:0}, rangeIdx={};
+const best=store.get("best",{});
+
+function renderGrid(){
+  $("#testGrid").innerHTML=GROUPS.map(([g,ge,keys])=>`<div class="tgroup"><h3>${g} <span class="en">(${ge})</span></h3><div class="tgrid">`+keys.map(k=>[k,TESTS[k]]).map(([k,t])=>{const b=best[k];
+    return `<button class="tcard" data-test="${k}" aria-pressed="${k===current}"><span class="tag">${t.listen?"🔊 ":""}${t.tag}</span><h3>${t.title}</h3><span class="en">${t.en}</span>
+    <span class="best">${b?`Your total: ${b.ok}/${b.n} right (${Math.round(b.ok/b.n*100)}%)`:"Not tried yet"}</span></button>`}).join("")+`</div></div>`).join("");
+  document.querySelectorAll(".tcard").forEach(c=>c.onclick=()=>{start(c.dataset.test); $("#panel").scrollIntoView({behavior:"smooth",block:"start"});});
+}
+function start(k){ current=k; stats={ok:0,n:0,miss:[]}; store.set("test",k); renderGrid(); nextQ(); }
+function nextQ(){
+  if(current==="mix"&&stats.n>=10){ showResult(); return; }
+  const t=TESTS[current]; const r=t.ranges?t.ranges[rangeIdx[current]||0]:null;
+  q=t.gen(r); q.done=false; draw(); if(q.say) setTimeout(()=>speak(q.say),250);
+}
+function draw(){
+  const t=TESTS[current];
+  let h=`<div class="panelhead"><div><h2>${t.title}</h2><span class="en">${current==="mix"?`Frage ${stats.n+1} von 10 · ${q.from}`:t.en}</span></div><span class="score">Richtig (correct): ${stats.ok}/${stats.n}</span></div>`;
+  if(t.ranges) h+=`<div class="seg" role="group" aria-label="Range">${t.ranges.map((r,i)=>`<button data-r="${i}" aria-pressed="${(rangeIdx[current]||0)===i}">${r[0]}</button>`).join("")}</div>`;
+  h+=`<div class="q">${q.prompt}</div>`;
+  if(q.say) h+=`<div class="controls"><button class="btn ghost" id="again">▶ Noch einmal <span class="en">(again)</span></button><button class="btn ghost" id="slow">🐢 Langsam <span class="en">(slow)</span></button></div>`;
+  if((q.kind||t.kind)==="choice"){
+    h+=`<div class="opts">${q.options.map((o,i)=>`<button class="opt ${q.cls?q.cls(o):""}" data-i="${i}">${q.label?q.label(o):esc(o)}</button>`).join("")}</div>`;
+  } else {
+    h+=`<form class="answerrow" id="ansForm"><input type="text" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" ${q.inputmode?`inputmode="${q.inputmode}"`:""} aria-label="Your answer" placeholder="Antwort (answer)">
+      ${q.umlauts?`<div class="umlauts">${["ä","ö","ü","ß"].map(c=>`<button type="button" data-ch="${c}">${c}</button>`).join("")}</div>`:""}
+      <button class="btn" type="submit">Prüfen <span style="font-weight:400">(check)</span></button></form>`;
+  }
+  h+=`<div id="fb"></div>`;
+  $("#panel").innerHTML=h;
+  $("#panel").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{rangeIdx[current]=+b.dataset.r; nextQ();});
+  if(q.say){ $("#again").onclick=()=>speak(q.say); $("#slow").onclick=()=>speak(q.say,0.55); }
+  if((q.kind||t.kind)==="choice") $("#panel").querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(q.options[+b.dataset.i],b));
+  else {
+    const inp=$("#ans"); inp.focus({preventScroll:true});
+    $("#panel").querySelectorAll("[data-ch]").forEach(b=>b.onclick=()=>{inp.value+=b.dataset.ch; inp.focus();});
+    $("#ansForm").onsubmit=e=>{e.preventDefault(); if(q.done){nextQ();return} if(inp.value.trim()) answer(inp.value.trim());};
+  }
+}
+const norm=s=>s.toLowerCase().replace(/\s+/g,"").replace(/ae/g,"ä").replace(/oe/g,"ö").replace(/ue/g,"ü").replace(/ss/g,"ß");
+function answer(v,btn){
+  if(q.done) return; q.done=true;
+  const ok = (q.kind||TESTS[current].kind)==="choice" ? v===q.answer : (norm(v)===norm(q.answer)||v.trim()===q.answer);
+  stats.n++; if(ok) stats.ok++; else if(q.from&&!stats.miss.includes(q.fromKey)) stats.miss.push(q.fromKey);
+  const b=best[current]||{ok:0,n:0}; b.n++; if(ok) b.ok++; best[current]=b; store.set("best",best);
+  if(btn){ $("#panel").querySelectorAll(".opt").forEach(o=>{o.disabled=true; if(q.options[+o.dataset.i]===q.answer) o.classList.add("right");}); if(!ok) btn.classList.add("wrong"); }
+  $("#panel .score").textContent=`Richtig (correct): ${stats.ok}/${stats.n}`;
+  $("#fb").innerHTML=`<div class="feedback ${ok?"ok":"no"}"><span class="verdict">${ok?pick(["Richtig! (correct)","Super! (great)","Sehr gut! (very good)","Genau! (exactly)"]):`Leider falsch. (Sadly wrong.) Answer: ${esc(q.answer)}`}</span><span>${q.explain}</span></div>
+   <div class="controls" style="margin-top:10px"><button class="btn" id="next">${current==="mix"&&stats.n>=10?'Ergebnis <span style="font-weight:400">(result)</span> →':'Weiter <span style="font-weight:400">(next)</span> →'}</button>${q.say?"":""}</div>`;
+  $("#next").onclick=nextQ; $("#next").focus({preventScroll:true});
+  renderGrid();
+}
+
+/* intro builder */
+const BF=["b-name","b-alter","b-land","b-ort","b-spr","b-beruf","b-hobby","b-tel"];
+const saved=store.get("intro",{}); BF.forEach(id=>{ if(saved[id]!=null) document.getElementById(id).value=saved[id]; });
+let introSay=[];
+function buildIntro(){
+  const g=id=>document.getElementById(id).value.trim(); const v={}; BF.forEach(id=>v[id]=g(id)); store.set("intro",v);
+  const name=v["b-name"]||"…", land=esc(v["b-land"]||"…"), ort=esc(v["b-ort"]||"…"), spr=esc(v["b-spr"]||"…"), beruf=esc(v["b-beruf"]||"…"), hob=esc(v["b-hobby"]||"…");
+  const a=parseInt(v["b-alter"],10), aOk=!isNaN(a)&&a>=0&&a<1000;
+  const letters=[...name.toUpperCase()].filter(c=>/[A-ZÄÖÜß]/.test(c));
+  const spellDe=letters.join(" – "), spellPron=letters.map(c=>{const f=ABC.find(x=>x[0]===c);return f?`${c} = ${f[1]}`:c}).join(" · ");
+  const tel=v["b-tel"].replace(/\D/g,""), telWords=[...tel].map(d=>U[+d][0]);
+  const L=[
+   ["Name",`Hallo, ich heiße ${esc(name)}.`,`Hello, I am called ${esc(name)}.`],
+   ["Alter",`Ich bin ${aOk?a:"…"} Jahre alt.`,aOk?`I am ${a} years old. · ${a} = ${num(a)[0]} <span class="pron">(${num(a)[1]})</span>`:"I am … years old. · Type your age above.",aOk?`Ich bin ${num(a)[0]} Jahre alt.`:null],
+   ["Land",`Ich komme aus ${land}.`,`I come from ${land}.`],
+   ["Wohnort",`Ich wohne in ${ort}.`,`I live in ${ort}.`],
+   ["Sprachen",`Ich spreche ${spr}.`,`I speak ${spr}.`],
+   ["Beruf",`Ich bin ${beruf} von Beruf.`,`I am ${beruf} by profession. (no article!)`],
+   ["Hobby",`Meine Hobbys sind ${hob}.`,`My hobbies are ${hob}.`],
+   ["Buchstabieren",`Mein Name: ${spellDe}.`,`Spelling: <span class="pron">${spellPron}</span>`,letters.length?["Mein Name",...letters.map(letterSay)]:null],
+   ["Nummer",`Meine Telefonnummer ist ${esc(v["b-tel"]||"…")}.`,tel?`Say it digit by digit: ${telWords.join(" · ")}`:"Type a number above.",tel?["Meine Telefonnummer ist",...telWords]:null]
+  ];
+  introSay=[];
+  document.getElementById("introOut").innerHTML=L.map((l,i)=>{const say=l[3]===undefined?l[1]:l[3]; if(say) introSay=introSay.concat(say);
+    return `<div class="iline"><div><span class="kw">${l[0]}</span><span class="de">${l[1]}</span><span class="en">${l[2]}</span></div></div>`;}).join("");
+  document.querySelectorAll("[data-line]").forEach(b=>b.onclick=()=>{const l=L[+b.dataset.line]; speak(l[3]===undefined?l[1]:l[3]);});
+}
+document.getElementById("builder").addEventListener("input",buildIntro);
+document.getElementById("builder").addEventListener("submit",e=>e.preventDefault());
+buildIntro();
+
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go]"); if(!g) return; $("#tab-test").click(); start(g.dataset.go); setTimeout(()=>$("#panel").scrollIntoView({behavior:"smooth",block:"start"}),30);});
+
+document.addEventListener("click",e=>{const a=e.target.closest("[data-learn]"); if(!a) return; e.preventDefault(); $("#tab-learn").click(); const el=document.querySelector(a.getAttribute("href")); if(el) setTimeout(()=>el.scrollIntoView({behavior:"smooth",block:"start"}),30);});
+
+function showResult(){
+  const pct=Math.round(stats.ok/stats.n*100);
+  const msg=pct>=80?"Super! Sehr gut. (Great! Very good.)":pct>=60?"Gut! (Good!) 60% is the pass mark in the exam.":"Weiter üben! (Keep practising!)";
+  $("#panel").innerHTML=`<div class="panelhead"><div><h2>Ergebnis <span class="en">(result)</span></h2><span class="en">Gemischter Test · 10 Fragen</span></div></div>
+   <div class="q"><span class="big">${stats.ok} / ${stats.n}</span><span class="en">${msg}</span></div>
+   ${stats.miss.length?`<div class="practice"><span>Üb das noch einmal <span class="en">(practise these again)</span></span>${stats.miss.map(k=>`<button class="go" type="button" data-go="${k}">${TESTS[k].title}</button>`).join("")}</div>`:""}
+   <div class="controls"><button class="btn" id="again10" type="button">Neuer Test <span style="font-weight:400">(new test)</span></button></div>`;
+  $("#again10").onclick=()=>start("mix");
+}
+
+/* init */
+renderGrid(); start(store.get("test","artikel"));
+{ const v=store.get("view","learn"); const tb=document.getElementById("tab-"+v); if(v!=="learn"&&tb) tb.click(); }
+
+</script>
+
+</html>

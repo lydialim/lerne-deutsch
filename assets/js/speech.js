@@ -9,18 +9,18 @@ const TTS = (() => {
   let voices = [];
   const pref = () => store.get("voice", "");
   const slow = () => store.get("slow", false);
-  function load() {
-    if (!ok) return;
-    voices = speechSynthesis.getVoices().filter(v => /^de(-|_|$)/i.test(v.lang));
-    voices.sort((a, b) => (b.lang === "de-DE") - (a.lang === "de-DE") || (/google|natural|premium|enhanced/i.test(b.name)) - (/google|natural|premium|enhanced/i.test(a.name)));
-    fillPicker();
+
+  /* ---- diagnostics: what Safari actually did (shown under the voice picker, also in the console) ---- */
+  const diag = { voices: 0, last: "idle", err: "", n: 0 };
+  function diagText() {
+    const s = ok ? speechSynthesis : {};
+    return `voices:${diag.voices} · last:${diag.last}${diag.err ? " (" + diag.err + ")" : ""} · speaking:${!!s.speaking} pending:${!!s.pending} paused:${!!s.paused}`;
   }
-  function voice() { return voices.find(v => v.name === pref()) || voices[0] || null; }
-  /* iOS Safari quirks handled here:
-     - speak() must run synchronously inside the tap (no setTimeout/await before it), or iOS blocks it;
-     - utterances can be garbage-collected mid-speech and then never play, so keep a reference;
-     - failures are shown in a small on-screen note, because iPhone has no easy console. */
-  let keep = null;
+  function report(ev, err) {
+    diag.last = ev; diag.err = err || "";
+    try { console.log("[TTS]", diagText()); } catch (e) {}
+    const el = document.getElementById("voiceDiag"); if (el) el.textContent = diagText();
+  }
   function note(msg) {
     let n = document.getElementById("ttsNote");
     if (!n) {
@@ -29,25 +29,65 @@ const TTS = (() => {
       document.body.appendChild(n);
     }
     n.textContent = msg; n.hidden = false;
-    clearTimeout(note.t); note.t = setTimeout(() => { n.hidden = true; }, 6000);
+    clearTimeout(note.t); note.t = setTimeout(() => { n.hidden = true; }, 8000);
   }
-  function speak(text, rate) {
+
+  /* ---- voices: iOS fills the list late (or only after the first tap), so keep retrying ---- */
+  function load() {
+    if (!ok) return;
+    voices = speechSynthesis.getVoices().filter(v => /^de(-|_|$)/i.test(v.lang));
+    voices.sort((a, b) => (b.lang === "de-DE") - (a.lang === "de-DE") || (/google|natural|premium|enhanced/i.test(b.name)) - (/google|natural|premium|enhanced/i.test(a.name)));
+    diag.voices = voices.length;
+    fillPicker();
+    return voices.length;
+  }
+  /* poll for up to ~15 s until the browser has produced a voice list */
+  function pollVoices(tries) {
+    if (!ok || load() || tries <= 0) { report(diag.last, diag.err); return; }
+    setTimeout(() => pollVoices(tries - 1), 300);
+  }
+  function voice() {
+    if (!voices.length) load();                         /* late list: look again right before speaking */
+    return voices.find(v => v.name === pref()) || voices[0] || null;
+  }
+
+  /* ---- speaking ----
+     iOS needs speak() to run synchronously inside the tap, so we cannot wait after cancel().
+     Instead: cancel + speak in the same tick, ignore stale events from the cancelled utterance
+     (generation token), and use a watchdog that retries once if Safari never starts. */
+  let keep = null;                                      /* keep a reference: Safari may garbage-collect a playing utterance */
+  function speak(text, rate, retry) {
     if (!ok || !text) return false;
+    const my = ++diag.n;
     try {
-      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
-      if (speechSynthesis.paused) speechSynthesis.resume();
+      const s = speechSynthesis;
+      if (s.speaking || s.pending || s.paused) { s.cancel(); report("cancel-previous"); }
+      if (s.paused) s.resume();
       const u = new SpeechSynthesisUtterance(String(text));
       u.lang = "de-DE";
       const v = voice(); if (v) u.voice = v;
       u.rate = rate || (slow() ? 0.65 : 0.9);
       keep = u;
-      u.onend = () => { if (keep === u) keep = null; };
+      let started = false;
+      u.onstart = () => { if (my !== diag.n) return; started = true; report("started"); };
+      u.onend = () => { if (my !== diag.n) return; keep = null; report(started ? "finished" : "ended-without-start"); };
       u.onerror = e => {
-        if (keep === u) keep = null;
-        if (e && e.error && !/canceled|interrupted/.test(e.error)) note("Audio error: " + e.error + ". Check silent switch, volume and the German voice (see Einrichtung).");
+        if (my !== diag.n) return;                      /* error from a cancelled, older utterance */
+        keep = null;
+        const code = (e && e.error) || "unknown";
+        report("error", code);
+        if (!/canceled|interrupted/.test(code)) note("Audio error: " + code + ". Check the silent switch, volume and the German voice (see Einrichtung).");
       };
-      speechSynthesis.speak(u);
-    } catch (e) { note("Audio failed: " + e.message); return false; }
+      s.speak(u);
+      report("queued");
+      /* watchdog: if nothing started after 1.5 s, the queue is stuck */
+      setTimeout(() => {
+        if (my !== diag.n || started) return;
+        report("stuck");
+        if (!retry) { try { s.cancel(); s.resume(); } catch (e) {} speak(text, rate, true); }
+        else note("Safari did not start the audio. Tap 🔊 again, check the silent switch and volume, or reload the page. " + diagText());
+      }, 1500);
+    } catch (e) { report("exception", e.message); note("Audio failed: " + e.message); return false; }
     return true;
   }
   function fillPicker() {
@@ -57,8 +97,14 @@ const TTS = (() => {
     const w = document.getElementById("voiceWarn");
     if (w) w.hidden = voices.length > 0;
   }
-  if (ok) { load(); speechSynthesis.onvoiceschanged = load; setTimeout(load, 500); }
-  return { ok, speak, load, fillPicker, slow };
+  if (ok) {
+    load();
+    if (speechSynthesis.addEventListener) speechSynthesis.addEventListener("voiceschanged", load); else speechSynthesis.onvoiceschanged = load;
+    pollVoices(50);
+    /* first tap: iOS often only exposes voices after a user gesture */
+    document.addEventListener("touchstart", () => { if (!voices.length) pollVoices(10); }, { once: true, passive: true });
+  }
+  return { ok, speak, load, fillPicker, slow, diagText, report };
 })();
 const speak = (t, r) => TTS.speak(t, r);
 
@@ -110,13 +156,14 @@ function voicePicker() {
     ? `<span>🔊 Stimme <span class="en">(voice)</span></span><select id="voiceSel" aria-label="German voice"></select>
        <label><input type="checkbox" id="slowChk"${TTS.slow() ? " checked" : ""}> 🐢 langsam <span class="en">(slow)</span></label>
        <button type="button" class="spk" id="voiceTest">Test</button>
+       <small id="voiceDiag" class="en" style="flex-basis:100%"></small>
        <span class="warn" id="voiceWarn" hidden>No German voice found on this device. Audio may sound English. <a href="../einrichtung.html">How to add a German voice →</a></span>`
     : `<span class="warn">This browser cannot read text aloud. Try Chrome, Edge or Safari.</span>`;
   box.innerHTML = `<summary>🔊 Stimme &amp; Tempo <span class="en">(voice &amp; speed)</span></summary><div class="vbody">${inner}</div>`;
   box.open = !(window.matchMedia && matchMedia("(max-width: 759px)").matches);
   h.appendChild(box);
   if (!TTS.ok) return;
-  TTS.fillPicker();
+  TTS.fillPicker(); TTS.report("idle");
   $("#voiceSel").onchange = e => { store.set("voice", e.target.value); speak("Hallo! Ich spreche Deutsch."); };
   $("#slowChk").onchange = e => store.set("slow", e.target.checked);
   $("#voiceTest").onclick = () => speak("Hallo! Ich heiße Anna. Ich wohne in München. Meine Nummer ist null, eins, sieben, sechs.");

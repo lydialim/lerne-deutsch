@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Grammatik-Basis · Deutsch A1</title>
+<meta name="description" content="How German sentences are built: word types, der/die/das, plural, verbs, word order, and how to ask and answer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div class="wrap">
+<header id="site-header"></header>
+<main>
+<nav class="subnav" aria-label="Lektionen"><a href="#l-types">1 Wortarten</a><a href="#l-articles">2 der/die/das</a><a href="#l-ein">3 ein/eine</a><a href="#l-plural">4 Plural</a><a href="#l-verbs">5 Verben</a><a href="#l-w">6 Satzbau</a><a href="#l-qa">7 Fragen &amp; Antworten</a></nav>
+<div class="part"><span class="kick">Teil A</span><h2>Grammatik-Basis <span class="en">(grammar basics)</span></h2><p class="lead">How German sentences are built: word types, der/die/das, plural, verbs, word order, and how to ask and answer.</p></div>
+
+<section class="lesson" id="l-types">
+  <h2>1 · Wortarten <span class="en">(word types)</span></h2>
+  <p class="lead">Every sentence is built from a few kinds of words. Knowing the type tells you what rules apply: nouns need an article, verbs change their ending, adjectives describe.</p>
+  <div class="types">
+    <div class="type"><h3>Nomen <small>noun</small></h3><p>A thing, person, place or idea. <b>Always starts with a capital letter</b> in German.</p><p class="mono">Buch, Frau, Hamburg, Kaffee</p></div>
+    <div class="type"><h3>Artikel <small>article</small></h3><p>The little word before a noun. Shows the gender.</p><p class="mono">der, die, das · ein, eine</p></div>
+    <div class="type"><h3>Verb <small>verb</small></h3><p>An action or state. The ending changes with the person (ich, du, er …).</p><p class="mono">heißen, wohnen, sein, trinken</p></div>
+    <div class="type"><h3>Pronomen <small>pronoun</small></h3><p>Replaces a noun or a person.</p><p class="mono">ich, du, er, sie, es, wir, ihr, Sie</p></div>
+    <div class="type"><h3>Adjektiv <small>adjective</small></h3><p>Describes a noun: how it is.</p><p class="mono">gut, neu, schön, klein</p></div>
+    <div class="type"><h3>Adverb <small>adverb</small></h3><p>Says when, where, how much. Never changes its form.</p><p class="mono">heute, hier, sehr, auch</p></div>
+    <div class="type"><h3>Präposition <small>preposition</small></h3><p>Shows place, origin, direction.</p><p class="mono">in, aus, mit, bei</p></div>
+    <div class="type"><h3>Konjunktion <small>conjunction</small></h3><p>Joins words or sentences.</p><p class="mono">und, oder, aber</p></div>
+  </div>
+  <h3>Beispiel <span class="en">(example)</span>, word by word</h3>
+  <div class="sent" id="demoSent"></div>
+  <div class="rule"><b>Reminder · Nouns have a capital letter.</b> If a word in the middle of a sentence starts with a capital, it is a noun (or a name, or Sie = formal you). That is your first clue for der/die/das.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><a class="go" href="tests.html#wortart">Welche Wortart?</a></div>
+</section>
+
+<section class="lesson" id="l-articles">
+  <h2>2 · der, die, das <span class="en">(the)</span></h2>
+  <p class="lead">Every German noun has a grammatical gender. English has one word "the"; German has three. The gender is often <b>not logical</b> (das Mädchen = the girl is neuter), so learn every noun <b>together with its article</b>, like one word: <i>die Lampe</i>, never just <i>Lampe</i>.</p>
+  <div class="trio">
+    <div class="gcard m"><span class="big der">der</span><b>maskulin (masculine)</b><ul><li>male people: der Mann, der Vater</li><li>days, months, seasons: der Montag</li><li>often ending -er (tools/jobs): der Computer, der Lehrer</li></ul></div>
+    <div class="gcard f"><span class="big die">die</span><b>feminin (feminine)</b><ul><li>female people: die Frau, die Mutter</li><li>most nouns ending <b>-e</b>: die Lampe, die Tasche</li><li><b>-ung, -heit, -keit, -ion, -in</b>: die Wohnung, die Freundin</li></ul></div>
+    <div class="gcard n"><span class="big das">das</span><b>neutral (neuter)</b><ul><li><b>-chen, -lein</b>: das Mädchen</li><li>many short words: das Buch, das Kind, das Haus</li><li>English loan words: das Handy, das Auto</li></ul></div>
+  </div>
+  <div class="dia">
+      <div class="cap">Endings tell the gender<small>Look at the end of the noun first. Outlined = always, the rest = usually</small></div>
+      <div class="sortcols">
+        <div style="background:var(--der-bg);color:var(--der)"><h4>der</h4>
+          <div><span class="chip">-er</span><span class="chip">-ling</span><span class="chip always">days</span><span class="chip always">months</span><span class="chip always">seasons</span><span class="chip always">men</span></div>
+          <span class="en">der Computer, der Montag, der Juli, der Sommer, der Mann</span></div>
+        <div style="background:var(--die-bg);color:var(--die)"><h4>die</h4>
+          <div><span class="chip">-e</span><span class="chip always">-ung</span><span class="chip always">-heit</span><span class="chip always">-keit</span><span class="chip always">-ion</span><span class="chip always">-schaft</span><span class="chip">-in</span></div>
+          <span class="en">die Lampe, die Wohnung, die Information, die Freundin</span></div>
+        <div style="background:var(--das-bg);color:var(--das)"><h4>das</h4>
+          <div><span class="chip always">-chen</span><span class="chip always">-lein</span><span class="chip">-um</span><span class="chip">-ment</span><span class="chip always">verb → noun</span></div>
+          <span class="en">das Mädchen, das Zentrum, das Radfahren</span></div>
+      </div>
+      <p class="trick"><b>Trick:</b> -chen makes things small and cute, and "small = neutral": das Mädchen (girl), das Brötchen (bread roll). A verb used as a noun is always das: <i>das Essen, das Radfahren</i>.</p>
+    </div>
+  <div class="rule"><b>Reminder · Colour your notes.</b> Write nouns in your notebook in colour: <span class="der">blue = der</span>, <span class="die">red = die</span>, <span class="das">green = das</span>. Netzwerk neu uses the same colours.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><a class="go" href="tests.html#artikel">der, die oder das?</a></div>
+</section>
+
+<section class="lesson" id="l-ein">
+  <h2>3 · ein, eine <span class="en">(a / an)</span> and kein, keine <span class="en">(no / not a)</span></h2>
+  <p class="lead"><b>der/die/das</b> = a specific thing (the). <b>ein/eine</b> = any one thing (a). <i>Das ist <u>eine</u> Lampe. <u>Die</u> Lampe ist schön.</i> <span class="en">(That is <u>a</u> lamp. <u>The</u> lamp is beautiful.)</span></p>
+  <div class="tablebox"><table>
+    <thead><tr><th></th><th>the (definite)</th><th>a (indefinite)</th><th>not a / no (negative)</th></tr></thead>
+    <tbody>
+      <tr><td class="der">maskulin</td><td><b class="der">der</b> Tisch</td><td><b class="der">ein</b> Tisch</td><td><b class="der">kein</b> Tisch</td></tr>
+      <tr><td class="das">neutral</td><td><b class="das">das</b> Buch</td><td><b class="das">ein</b> Buch</td><td><b class="das">kein</b> Buch</td></tr>
+      <tr><td class="die">feminin</td><td><b class="die">die</b> Lampe</td><td><b class="die">eine</b> Lampe</td><td><b class="die">keine</b> Lampe</td></tr>
+      <tr><td class="plc">Plural</td><td><b class="plc">die</b> Bücher</td><td><b class="plc">—</b> Bücher <span class="en">(nothing)</span></td><td><b class="plc">keine</b> Bücher</td></tr>
+    </tbody>
+  </table></div>
+  <div class="dia">
+      <div class="cap">der + das = ein · die = eine<small>Only the feminine "die" adds an -e</small></div>
+      <svg viewBox="0 0 520 220" role="img" aria-label="der and das become ein, die becomes eine, plural has no ein">
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M0,0L10,5L0,10z"/></marker></defs>
+        <rect class="bder" x="8" y="8" width="130" height="42" rx="8"/><text class="tder" x="73" y="36" font-size="22" text-anchor="middle">der</text>
+        <rect class="bdas" x="8" y="60" width="130" height="42" rx="8"/><text class="tdas" x="73" y="88" font-size="22" text-anchor="middle">das</text>
+        <rect class="bdie" x="8" y="118" width="130" height="42" rx="8"/><text class="tdie" x="73" y="146" font-size="22" text-anchor="middle">die</text>
+        <rect class="bpl" x="8" y="172" width="130" height="42" rx="8"/><text class="tpl" x="73" y="199" font-size="18" text-anchor="middle">die (Plural)</text>
+        <path class="arr" d="M140,29 C230,29 250,45 326,50" marker-end="url(#ah2)"/>
+        <path class="arr" d="M140,81 C230,81 250,64 326,60" marker-end="url(#ah2)"/>
+        <path class="arr" d="M140,139 L326,139" marker-end="url(#ah2)"/>
+        <path class="arr" d="M140,193 L326,193" marker-end="url(#ah2)"/>
+        <rect class="bsoft" x="330" y="12" width="182" height="88" rx="12"/>
+        <text x="421" y="58" font-size="36" font-weight="800" text-anchor="middle">ein</text>
+        <text class="mut" x="421" y="84" font-size="13" text-anchor="middle">ein Tisch · ein Buch</text>
+        <rect class="bdie" x="330" y="118" width="182" height="42" rx="8"/>
+        <text x="421" y="147" font-size="22" text-anchor="middle"><tspan font-weight="800">ein</tspan><tspan class="tdie">e</tspan> Lampe</text>
+        <rect class="bpl" x="330" y="172" width="182" height="42" rx="8"/>
+        <text x="421" y="199" font-size="17" text-anchor="middle">— Bücher / keine</text>
+      </svg>
+      <p class="trick"><b>Trick:</b> "di<b>e</b>" ends with <b>e</b>, so "ein<b>e</b>" gets an <b>e</b> too. Same for kein → kein<b>e</b>. der and das are twins: they share "ein".</p>
+    </div>
+  <h3>Next step: Akkusativ <span class="en">(the object form)</span></h3>
+  <p class="lead">When a noun is the thing you have, want or buy (after haben, möchten, brauchen, kaufen), only the <span class="der">der</span> words change. You need this in Sprechen Teil 3.</p>
+  <div class="dia">
+      <div class="cap">Akkusativ: only der changes<small>After haben, möchten, brauchen, kaufen</small></div>
+      <svg viewBox="0 0 520 176" role="img" aria-label="In accusative der becomes den and ein becomes einen. die, das and plural stay the same">
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M0,0L10,5L0,10z"/></marker></defs>
+        <rect class="bder" x="8" y="8" width="170" height="40" rx="8"/><text x="93" y="34" font-size="18" text-anchor="middle"><tspan class="tder">der / ein</tspan> Kaffee</text>
+        <path class="arr xder" d="M182,28 L320,28" marker-end="url(#ah4)"/><text class="tder" x="251" y="20" font-size="13" text-anchor="middle">changes!</text>
+        <rect class="bder" x="326" y="8" width="186" height="40" rx="8"/><text x="419" y="34" font-size="18" text-anchor="middle"><tspan class="tder">den / einen</tspan> Kaffee</text>
+        <rect class="bdie" x="8" y="62" width="170" height="30" rx="8"/><text x="93" y="83" font-size="16" text-anchor="middle"><tspan class="tdie">die / eine</tspan> Banane</text>
+        <text class="mut" x="251" y="83" font-size="22" text-anchor="middle">=</text>
+        <rect class="bdie" x="326" y="62" width="186" height="30" rx="8"/><text x="419" y="83" font-size="16" text-anchor="middle"><tspan class="tdie">die / eine</tspan> Banane</text>
+        <rect class="bdas" x="8" y="100" width="170" height="30" rx="8"/><text x="93" y="121" font-size="16" text-anchor="middle"><tspan class="tdas">das / ein</tspan> Brot</text>
+        <text class="mut" x="251" y="121" font-size="22" text-anchor="middle">=</text>
+        <rect class="bdas" x="326" y="100" width="186" height="30" rx="8"/><text x="419" y="121" font-size="16" text-anchor="middle"><tspan class="tdas">das / ein</tspan> Brot</text>
+        <rect class="bpl" x="8" y="138" width="170" height="30" rx="8"/><text x="93" y="159" font-size="16" text-anchor="middle"><tspan class="tpl">die</tspan> Äpfel</text>
+        <text class="mut" x="251" y="159" font-size="22" text-anchor="middle">=</text>
+        <rect class="bpl" x="326" y="138" width="186" height="30" rx="8"/><text x="419" y="159" font-size="16" text-anchor="middle"><tspan class="tpl">die</tspan> Äpfel</text>
+      </svg>
+      <p class="trick"><b>Trick:</b> "der man needs an <b>N</b>": den, einen, keinen. Everybody else stays the same. <i>Ich möchte <b>einen</b> Kaffee und <b>eine</b> Banane.</i></p>
+    </div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><a class="go" href="tests.html#ein">ein, eine oder nichts?</a></div>
+</section>
+
+<section class="lesson" id="l-plural">
+  <h2>4 · Singular und Plural <span class="en">(one and many)</span></h2>
+  <p class="lead">German has several plural endings. There is no single rule, so learn the plural with the noun: <i>der Tisch, die Tische</i>. Dictionaries write it short: <span class="mono">Tisch, der, -e</span>. The ¨ symbol means the vowel gets an umlaut: <span class="mono">Buch, das, ¨-er</span> → Bücher.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Ending</th><th>Typical for</th><th>Singular → Plural</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">-n / -en</td><td>most <span class="die">die</span> words</td><td>die Lampe → die Lampe<b>n</b> · die Wohnung → die Wohnung<b>en</b></td></tr>
+      <tr><td class="mono">-nen</td><td>female -in</td><td>die Freundin → die Freundin<b>nen</b></td></tr>
+      <tr><td class="mono">-e / ¨-e</td><td>many <span class="der">der</span> words</td><td>der Tisch → die Tisch<b>e</b> · der Stuhl → die St<b>ü</b>hl<b>e</b></td></tr>
+      <tr><td class="mono">-er / ¨-er</td><td>many <span class="das">das</span> words</td><td>das Kind → die Kind<b>er</b> · das Buch → die B<b>ü</b>ch<b>er</b></td></tr>
+      <tr><td class="mono">-s</td><td>loan words, ending in a vowel</td><td>das Handy → die Handy<b>s</b> · das Auto → die Auto<b>s</b></td></tr>
+      <tr><td class="mono">– / ¨</td><td>-er, -el, -chen</td><td>der Computer → die Computer · der Apfel → die <b>Ä</b>pfel</td></tr>
+    </tbody>
+  </table></div>
+  <div class="dia">
+      <div class="cap">Plural is always die<small>Every noun, any gender: more than one = die</small></div>
+      <svg viewBox="0 0 520 196" role="img" aria-label="der Tisch, das Buch and die Lampe all become die in plural">
+        <defs><marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M0,0L10,5L0,10z"/></marker></defs>
+        <rect class="bder" x="8" y="10" width="160" height="46" rx="8"/><text x="24" y="40" font-size="20"><tspan class="tder">der</tspan> Tisch</text>
+        <rect class="bdas" x="8" y="75" width="160" height="46" rx="8"/><text x="24" y="105" font-size="20"><tspan class="tdas">das</tspan> Buch</text>
+        <rect class="bdie" x="8" y="140" width="160" height="46" rx="8"/><text x="24" y="170" font-size="20"><tspan class="tdie">die</tspan> Lampe</text>
+        <path class="arr" d="M170,33 C250,33 260,80 326,86" marker-end="url(#ah1)"/>
+        <path class="arr" d="M170,98 L326,98" marker-end="url(#ah1)"/>
+        <path class="arr" d="M170,163 C250,163 260,116 326,110" marker-end="url(#ah1)"/>
+        <text class="mut" x="226" y="90" font-size="13">Plural</text>
+        <rect class="bpl" x="330" y="40" width="182" height="116" rx="12"/>
+        <text class="tpl" x="421" y="96" font-size="44" text-anchor="middle">die</text>
+        <text x="421" y="124" font-size="14" text-anchor="middle">Tische · Bücher</text>
+        <text x="421" y="142" font-size="14" text-anchor="middle">Lampen</text>
+      </svg>
+      <p class="trick"><b>Trick:</b> plural is a crowd, and the crowd always wears <span class="plc">purple "die"</span>. So if you only know the plural, you can't guess the gender. Learn singular + plural together.</p>
+    </div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><a class="go" href="tests.html#plural">Singular → Plural</a></div>
+</section>
+
+<section class="lesson" id="l-verbs">
+  <h2>5 · Verben im Präsens <span class="en">(verbs in present tense)</span></h2>
+  <p class="lead">The dictionary form ends in <b>-en</b> (wohnen = to live). Remove -en to get the stem (wohn-), then add the ending for each person.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Person</th><th>English</th><th>wohnen <span class="en">(to live)</span></th><th>heißen <span class="en">(to be called)</span></th><th>sein <span class="en">(to be)</span></th></tr></thead>
+    <tbody>
+      <tr><td>ich</td><td>I</td><td>wohn<b>e</b></td><td>heiß<b>e</b></td><td><b>bin</b></td></tr>
+      <tr><td>du</td><td>you (friend)</td><td>wohn<b>st</b></td><td>heiß<b>t</b></td><td><b>bist</b></td></tr>
+      <tr><td>er / sie / es</td><td>he / she / it</td><td>wohn<b>t</b></td><td>heiß<b>t</b></td><td><b>ist</b></td></tr>
+      <tr><td>wir</td><td>we</td><td>wohn<b>en</b></td><td>heiß<b>en</b></td><td><b>sind</b></td></tr>
+      <tr><td>ihr</td><td>you (group)</td><td>wohn<b>t</b></td><td>heiß<b>t</b></td><td><b>seid</b></td></tr>
+      <tr><td>sie / Sie</td><td>they / you (formal)</td><td>wohn<b>en</b></td><td>heiß<b>en</b></td><td><b>sind</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="dia">
+      <div class="cap">Verb endings: e · st · t · en · t · en<small>Same colour = same ending</small></div>
+      <div class="endgrid">
+        <div><span>ich</span><b>wohn-e</b></div><div class="e-en"><span>wir</span><b>wohn-en</b></div>
+        <div class="e-st"><span>du</span><b>wohn-st</b></div><div class="e-t"><span>ihr</span><b>wohn-t</b></div>
+        <div class="e-t"><span>er / sie / es</span><b>wohn-t</b></div><div class="e-en"><span>sie / Sie</span><b>wohn-en</b></div>
+      </div>
+      <p class="trick"><b>Trick:</b> <span class="das">wir and Sie</span> look exactly like the dictionary form (wohnen). <span class="der">er and ihr</span> both end in -t. <span class="die">du</span> is the only one with <b>-st</b>, like du bi<b>st</b>.</p>
+    </div>
+  <div class="rule"><b>Reminder · Small spelling changes.</b> Stem ends in -s, -ß or -z → du only adds <b>-t</b>: du heiß<b>t</b>. Stem ends in -t or -d → add an <b>-e-</b>: du arbeit<b>e</b>st, er arbeit<b>e</b>t. <b>sein</b> is irregular: learn it by heart.</div>
+  <div class="rule"><b>Reminder · Sie or du?</b> <b>Sie</b> (formal, always capital S) with the examiner, at work and with strangers: <i>Wie heißen Sie?</i> <b>du</b> with friends, family and often your exam partner: <i>Wie heißt du?</i> Sie uses the -en form, du the -st form.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><a class="go" href="tests.html#verbform">Verb-Endungen</a></div>
+</section>
+
+<section class="lesson" id="l-w">
+  <h2>6 · Satzbau und W-Fragen <span class="en">(word order and questions)</span></h2>
+  <p class="lead">German word order follows one main rule: the verb has a fixed place. Learn the verb train first, then the question words.</p>
+  <div class="dia">
+      <div class="cap">The verb train<small>The verb (red) is the 2nd car in statements and W-questions</small></div>
+      <div class="trainrow"><span class="lbl">Aussage · statement</span><div class="train"><span class="car"><small>1</small>Ich</span><span class="car v"><small>2</small>wohne</span><span class="car"><small>3</small>in Hamburg.</span></div></div>
+      <div class="trainrow"><span class="lbl">Zeit zuerst · time first</span><div class="train"><span class="car"><small>1</small>Heute</span><span class="car v"><small>2</small>lerne</span><span class="car"><small>3</small>ich</span><span class="car"><small>4</small>Deutsch.</span></div></div>
+      <div class="trainrow"><span class="lbl">W-Frage · W-question</span><div class="train"><span class="car"><small>1</small>Wo</span><span class="car v"><small>2</small>wohnen</span><span class="car"><small>3</small>Sie?</span></div></div>
+      <div class="trainrow"><span class="lbl">Ja/Nein-Frage · yes/no question: verb is the engine</span><div class="train"><span class="car v"><small>1</small>Wohnen</span><span class="car"><small>2</small>Sie</span><span class="car"><small>3</small>in Hamburg?</span></div></div>
+      <div class="trainrow"><span class="lbl">Modalverb · two verbs make a bracket</span><div class="train"><span class="car v"><small>1</small>Kannst</span><span class="car"><small>2</small>du</span><span class="car"><small>…</small>bitte das Fenster</span><span class="car v"><small>end</small>öffnen?</span></div></div>
+      <p class="trick"><b>Trick:</b> the verb car never moves from place 2. Whatever you put in front (Heute, Am Wochenende, Wo), the person (ich, Sie) has to jump behind the verb.</p>
+    </div>
+  <h3>W-Fragen <span class="en">(question words)</span></h3>
+  <p class="lead">Most question words start with <b>W</b>. You need them in the exam (Sprechen Teil 1 and 2) and in every conversation.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Fragewort</th><th>English</th><th>Beispiel <span class="en">(example)</span></th><th>Antwort <span class="en">(answer)</span></th></tr></thead>
+    <tbody>
+      <tr><td><b>Wer?</b></td><td>who</td><td>Wer ist das? <span class="en">(Who is that?)</span></td><td>Das ist Anna.</td></tr>
+      <tr><td><b>Was?</b></td><td>what</td><td>Was sind Sie von Beruf? <span class="en">(What are you by profession?)</span></td><td>Ich bin Ingenieurin.</td></tr>
+      <tr><td><b>Wo?</b></td><td>where (place)</td><td>Wo wohnen Sie? <span class="en">(Where do you live?)</span></td><td>In Hamburg.</td></tr>
+      <tr><td><b>Woher?</b></td><td>where from</td><td>Woher kommen Sie? <span class="en">(Where do you come from?)</span></td><td>Aus Brasilien.</td></tr>
+      <tr><td><b>Wohin?</b></td><td>where to</td><td>Wohin fahren Sie? <span class="en">(Where are you going?)</span></td><td>Nach Berlin.</td></tr>
+      <tr><td><b>Wie?</b></td><td>how</td><td>Wie heißen Sie? <span class="en">(What is your name? lit. How are you called?)</span></td><td>Ich heiße Maria.</td></tr>
+      <tr><td><b>Wie alt?</b></td><td>how old</td><td>Wie alt sind Sie? <span class="en">(How old are you?)</span></td><td>Ich bin dreißig <span class="pron">(DRY-sikh)</span> Jahre alt.</td></tr>
+      <tr><td><b>Wie viele?</b></td><td>how many</td><td>Wie viele Sprachen sprechen Sie? <span class="en">(How many languages do you speak?)</span></td><td>Drei <span class="pron">(dry)</span>.</td></tr>
+      <tr><td><b>Wie viel?</b></td><td>how much</td><td>Wie viel kostet das? <span class="en">(How much does that cost?)</span></td><td>Fünf <span class="pron">(fuenf)</span> Euro.</td></tr>
+      <tr><td><b>Wann?</b></td><td>when</td><td>Wann haben Sie Deutschkurs? <span class="en">(When do you have German class?)</span></td><td>Am Montag und Mittwoch.</td></tr>
+      <tr><td><b>Welche?</b></td><td>which</td><td>Welche Sprachen sprechen Sie? <span class="en">(Which languages do you speak?)</span></td><td>Englisch und Deutsch.</td></tr>
+      <tr><td><b>Warum?</b></td><td>why</td><td>Warum lernen Sie Deutsch? <span class="en">(Why do you learn German?)</span></td><td>Für die Arbeit.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="rule"><b>Reminder · Two kinds of questions.</b> W-question: W-word 1st, verb 2nd: <i>Wo <u>wohnen</u> Sie?</i> Yes/no question: verb 1st: <i><u>Wohnen</u> Sie in Hamburg?</i> – Ja. / Nein, in Berlin.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><a class="go" href="tests.html#satzbau">Welcher Satz ist richtig?</a><a class="go" href="tests.html#wfrage">Welches Fragewort?</a></div>
+</section>
+
+<section class="lesson" id="l-qa">
+  <h2>7 · Fragen bilden und antworten <span class="en">(building questions and answers)</span></h2>
+  <p class="lead">Asking and answering is half of the speaking exam. Build every question with the same three steps, then answer by swapping the person.</p>
+
+  <h3>W-Frage in 3 Schritten <span class="en">(W-question in 3 steps)</span></h3>
+  <ol class="steps">
+    <li><b>W-word:</b> what do you want to know? Place → Wo. Origin → Woher. Name → Wie. Time → Wann. Thing → Was.</li>
+    <li><b>Verb:</b> conjugate it for the person you ask: du wohn<b>st</b>, Sie wohn<b>en</b>.</li>
+    <li><b>Person + rest:</b> du / Sie, then the rest of the sentence. End with <b>?</b></li>
+  </ol>
+  <div class="dia">
+    <div class="trainrow"><span class="lbl">Where do you live?</span><div class="train"><span class="car"><small>① W-Wort</small>Wo</span><span class="car v"><small>② Verb</small>wohnst</span><span class="car"><small>③ Person</small>du?</span></div></div>
+    <div class="trainrow"><span class="lbl">What do you like to drink?</span><div class="train"><span class="car"><small>① W-Wort</small>Was</span><span class="car v"><small>② Verb</small>trinken</span><span class="car"><small>③ Person</small>Sie</span><span class="car"><small>④ Rest</small>gern?</span></div></div>
+    <div class="trainrow"><span class="lbl">When does the course start?</span><div class="train"><span class="car"><small>① W-Wort</small>Wann</span><span class="car v"><small>② Verb</small>beginnt</span><span class="car"><small>③ Subjekt</small>der Kurs?</span></div></div>
+  </div>
+
+  <h3>Ja/Nein-Frage <span class="en">(yes/no question)</span></h3>
+  <p class="lead">No W-word. The verb jumps to the front: <i>Du wohnst in Hamburg.</i> → <i><b>Wohnst</b> du in Hamburg?</i> <span class="en">(Do you live in Hamburg?)</span></p>
+  <div class="dia">
+    <div class="trainrow"><span class="lbl">Do you live in Hamburg?</span><div class="train"><span class="car v"><small>① Verb</small>Wohnst</span><span class="car"><small>② Person</small>du</span><span class="car"><small>③ Rest</small>in Hamburg?</span></div></div>
+    <div class="trainrow"><span class="lbl">Answers</span><div class="train"><span class="car">Ja, ich wohne in Hamburg.</span><span class="car">Nein, ich wohne in Berlin.</span><span class="car">Nein, nicht in Hamburg.</span></div></div>
+  </div>
+
+  <h3>Antworten: die Person tauschen <span class="en">(answering: swap the person)</span></h3>
+  <div class="dia">
+    <div class="cap">Wo wohnst du? → Ich wohne in Hamburg.<small>Three things change when you answer</small></div>
+    <svg viewBox="0 0 520 176" role="img" aria-label="Question Wo wohnst du becomes answer Ich wohne in Hamburg: du becomes ich, wohnst becomes wohne, wo becomes the place">
+      <defs><marker id="ah5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M0,0L10,5L0,10z"/></marker></defs>
+      <text class="mut" x="8" y="20" font-size="12">FRAGE (question)</text>
+      <rect class="bder" x="8" y="28" width="90" height="42" rx="8"/><text x="53" y="56" font-size="20" text-anchor="middle" font-weight="800">Wo</text>
+      <rect class="bdie" x="108" y="28" width="130" height="42" rx="8"/><text x="173" y="56" font-size="20" text-anchor="middle" font-weight="800">wohnst</text>
+      <rect class="bpl" x="248" y="28" width="80" height="42" rx="8"/><text x="288" y="56" font-size="20" text-anchor="middle" font-weight="800">du ?</text>
+      <path class="arr" d="M288,72 C288,100 53,96 53,120" marker-end="url(#ah5)"/>
+      <path class="arr" d="M173,72 L173,120" marker-end="url(#ah5)"/>
+      <path class="arr" d="M53,72 C53,96 380,92 380,120" marker-end="url(#ah5)"/>
+      <rect class="bpl" x="8" y="124" width="90" height="42" rx="8"/><text x="53" y="152" font-size="20" text-anchor="middle" font-weight="800">Ich</text>
+      <rect class="bdie" x="108" y="124" width="130" height="42" rx="8"/><text x="173" y="152" font-size="20" text-anchor="middle" font-weight="800">wohne</text>
+      <rect class="bder" x="290" y="124" width="180" height="42" rx="8"/><text x="380" y="152" font-size="20" text-anchor="middle" font-weight="800">in Hamburg.</text>
+      <text class="mut" x="478" y="118" font-size="12" text-anchor="end">ANTWORT (answer)</text>
+    </svg>
+    <div class="legend"><span class="plc">du → ich</span><span class="die">wohnst → wohne</span><span class="der">Wo? → a place</span></div>
+  </div>
+  <div class="tablebox"><table>
+    <thead><tr><th>In the question</th><th>In your answer</th><th>Beispiel <span class="en">(example)</span></th></tr></thead>
+    <tbody>
+      <tr><td>du</td><td>ich</td><td>Woher komm<b>st du</b>? → <b>Ich</b> komm<b>e</b> aus Brasilien.</td></tr>
+      <tr><td>Sie</td><td>ich</td><td>Wie heiß<b>en Sie</b>? → <b>Ich</b> heiß<b>e</b> Maria.</td></tr>
+      <tr><td>ihr</td><td>wir</td><td>Hab<b>t ihr</b> Zeit? → Ja, <b>wir</b> hab<b>en</b> Zeit.</td></tr>
+      <tr><td>dein / Ihr</td><td>mein</td><td>Wie ist <b>dein</b> Name? → <b>Mein</b> Name ist Maria.</td></tr>
+      <tr><td>deine / Ihre</td><td>meine</td><td>Wie ist <b>Ihre</b> Nummer? → <b>Meine</b> Nummer ist …</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Nein sagen: nicht oder kein? <span class="en">(saying no: nicht or kein?)</span></h3>
+  <div class="trio">
+    <div class="gcard f"><span class="big die">kein</span><b>replaces ein, or no article, before a noun</b><ul><li>Hast du ein Auto? → Nein, ich habe <b>kein</b> Auto.</li><li>Hast du Zeit? → Nein, ich habe <b>keine</b> Zeit.</li><li>kein / keine / keinen: same endings as ein</li></ul></div>
+    <div class="gcard m"><span class="big der">nicht</span><b>for everything else</b><ul><li>verbs: Ich arbeite heute <b>nicht</b>.</li><li>adjectives: Das ist <b>nicht</b> weit.</li><li>places, names, der/die/das: <b>nicht</b> in Berlin, <b>nicht</b> mein Handy</li></ul></div>
+  </div>
+  <div class="rule"><b>Reminder · Short or full answer?</b> In conversation a short answer is fine: <i>Woher kommst du? – Aus Brasilien.</i> In the exam (Sprechen Teil 1) say full sentences: <i>Ich komme aus Brasilien.</i> It shows you can use the verb.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><a class="go" href="tests.html#antworten">Die richtige Antwort</a><a class="go" href="tests.html#kein">nicht oder kein?</a><a class="go" href="tests.html#wfrage">Welches Fragewort?</a><a class="go" href="tests.html#satzbau">Welcher Satz ist richtig?</a></div>
+</section>
+</main>
+<footer class="foot">Lerne Deutsch · A1 · Test scores are saved in this browser only.</footer>
+</div>
+<script src="js/level.js"></script>
+<script src="../assets/js/common.js"></script>
+<script src="../assets/js/layout.js"></script>
+<script src="js/data.js"></script>
+<script src="js/lessons.js"></script>
+</body>
+</html>

@@ -66,7 +66,7 @@ function vocabNote(n){
 /* ---------- calendar ---------- */
 const DAYS=[["Montag","MOHN-tahk","Monday","Mo"],["Dienstag","DEENS-tahk","Tuesday","Di"],["Mittwoch","MIT-vokh","Wednesday","Mi"],["Donnerstag","DON-ers-tahk","Thursday","Do"],["Freitag","FRY-tahk","Friday","Fr"],["Samstag","ZAMS-tahk","Saturday","Sa"],["Sonntag","ZON-tahk","Sunday","So"]];
 const MONTHS=[["Januar","YAH-noo-ahr","January"],["Februar","FAY-broo-ahr","February"],["März","mairts","March"],["April","ah-PRIL","April"],["Mai","my","May"],["Juni","YOO-nee","June"],["Juli","YOO-lee","July"],["August","ow-GOOST","August"],["September","zep-TEM-ber","September"],["Oktober","ok-TOH-ber","October"],["November","no-VEM-ber","November"],["Dezember","day-TSEM-ber","December"]];
-const SEASONS=[["Frühling","FRUE-ling","spring","März – Mai"],["Sommer","ZOM-er","summer","Juni – August"],["Herbst","hairpst","autumn","September – November"],["Winter","VIN-ter","winter","Dezember – Februar"]];
+const SEASONS=[["Frühling","FRÜ-ling","spring","März – Mai"],["Sommer","ZOM-er","summer","Juni – August"],["Herbst","hairpst","autumn","September – November"],["Winter","VIN-ter","winter","Dezember – Februar"]];
 const DAYTIMES=[["Morgen","MOR-gen","morning","morgens","6–10"],["Vormittag","FOR-mit-tahk","late morning","vormittags","10–12"],["Mittag","MIT-tahk","noon","mittags","12–14"],["Nachmittag","NAKH-mit-tahk","afternoon","nachmittags","14–18"],["Abend","AH-bent","evening","abends","18–22"],["Nacht","nakht","night","nachts","22–6"]];
 const ORD_IRR={1:["erst","EHRST"],3:["dritt","DRIT"],7:["siebt","ZEEPT"],8:["acht","AKHT"]};
 function ordBase(n){ if(ORD_IRR[n]) return ORD_IRR[n][0]; return num(n)[0]+(n<20?"t":"st"); }
@@ -114,11 +114,11 @@ const CAFE=[
  ["Was nehmen Sie?","What will you have?","Ich nehme die Suppe.","Ich nehme der Suppe.","Ich nimmst die Suppe.","nehmen: ich <b>nehme</b>. die Suppe stays die."],
  ["Möchten Sie noch etwas?","Would you like anything else?","Nein, danke. Das ist alles.","Ja, danke. Das ist alles.","Nein, bitte. Ich möchte.","<b>Das ist alles.</b> = That's all."],
  ["Zusammen oder getrennt?","Together or separately? (paying)","Getrennt, bitte.","Ja, gern.","Zwei Kaffee.","The waiter asks if you pay together (zusammen) or separately (getrennt)."],
- ["Das macht 7,50 €.","That comes to 7.50 € (sieben Euro fünfzig, ZEE-ben OY-ro FUENF-tsikh).","Hier, bitte. Stimmt so.","Danke, ich nehme 7,50 €.","Das ist teuer, danke.","<b>Stimmt so.</b> = Keep the change (tip)."],
+ ["Das macht 7,50 €.","That comes to 7.50 € (sieben Euro fünfzig, ZEE-ben OY-ro FÜNF-tsikh).","Hier, bitte. Stimmt so.","Danke, ich nehme 7,50 €.","Das ist teuer, danke.","<b>Stimmt so.</b> = Keep the change (tip)."],
  ["Kann ich mit Karte zahlen?","Can I pay by card?","Ja, natürlich.","Ja, ich zahle.","Nein, mit Karte.","The waiter answers: <b>Ja, natürlich.</b> = Yes, of course."],
  ["Die Rechnung, bitte!","The bill, please!","(You ask for the bill.)","(You order a drink.)","(You say hello.)","<b>Die Rechnung, bitte!</b> or <b>Zahlen, bitte!</b>"],
  ["Was kostet ein Kilo Äpfel?","How much does a kilo of apples cost?","2,99 € das Kilo.","Ein Kilo, bitte.","Ich mag Äpfel.","2,99 € = zwei Euro neunundneunzig (tsvy OY-ro NOYN-oont-NOYN-tsikh)."],
- ["Ich hätte gern 500 Gramm Käse.","I would like 500 grams (fünfhundert Gramm, FUENF-hoon-dert) of cheese.","Gern. Noch etwas?","Ja, das ist Käse.","Nein, ich habe Käse.","<b>Ich hätte gern …</b> = I would like … (very polite)."],
+ ["Ich hätte gern 500 Gramm Käse.","I would like 500 grams (fünfhundert Gramm, FÜNF-hoon-dert) of cheese.","Gern. Noch etwas?","Ja, das ist Käse.","Nein, ich habe Käse.","<b>Ich hätte gern …</b> = I would like … (very polite)."],
  ["Haben Sie Brötchen?","Do you have bread rolls?","Ja, wie viele möchten Sie?","Ja, ich habe Hunger.","Nein, ich bin Brötchen.","<b>Wie viele?</b> = how many (things you can count)."],
  ["Wie viele Brötchen möchten Sie?","How many bread rolls would you like?","Vier, bitte.","Vier Euro, bitte.","Am Montag.","vier (feer) = 4."],
  ["Wo finde ich die Milch?","Where do I find the milk?","Da hinten, links.","Ja, ich trinke Milch.","Die Milch ist weiß.","Answer a <b>Wo?</b> question with a place."],
@@ -161,7 +161,7 @@ const FAMQ=[
  ["Der Sohn von meinem Bruder ist mein ___.","My brother's son is my …","Neffe","Cousin","Enkel"]
 ];
 
-/* ---------- countries: [country, article in 'aus …' ("" = none), language, man, woman, English, pron] ---------- */
+/* ---------- countries: [country, article in 'aus …' ("" = none), language, masculine, feminine, English, pron] ---------- */
 const COUNTRIES=[
  ["Deutschland","","Deutsch","Deutscher","Deutsche","Germany","DOYTCH-lant"],["Österreich","","Deutsch","Österreicher","Österreicherin","Austria","OE-ster-rykh"],
  ["die Schweiz","der","Deutsch, Französisch, Italienisch","Schweizer","Schweizerin","Switzerland","shvyts"],["Frankreich","","Französisch","Franzose","Französin","France","FRANK-rykh"],
@@ -173,7 +173,7 @@ const COUNTRIES=[
  ["Indien","","Hindi, Englisch","Inder","Inderin","India","IN-dee-en"],["Malaysia","","Malaiisch","Malaysier","Malaysierin","Malaysia","ma-LY-zee-ah"],
  ["Vietnam","","Vietnamesisch","Vietnamese","Vietnamesin","Vietnam","vee-et-NAM"],["die USA","den","Englisch","Amerikaner","Amerikanerin","the USA","oo-ess-AH"],
  ["Brasilien","","Portugiesisch","Brasilianer","Brasilianerin","Brazil","bra-ZEE-lee-en"],["Mexiko","","Spanisch","Mexikaner","Mexikanerin","Mexico","MEK-see-ko"],
- ["der Iran","dem","Persisch","Iraner","Iranerin","Iran","ee-RAHN"],["Ägypten","","Arabisch","Ägypter","Ägypterin","Egypt","ae-GUEP-ten"]
+ ["der Iran","dem","Persisch","Iraner","Iranerin","Iran","ee-RAHN"],["Ägypten","","Arabisch","Ägypter","Ägypterin","Egypt","ae-GÜP-ten"]
 ];
 const COLORS=[["rot","red","#d33"],["blau","blue","#2a5bd7"],["grün","green","#2b9a4b"],["gelb","yellow","#f2c500"],["schwarz","black","#111"],["weiß","white","#fff"],["grau","grey","#888"],["braun","brown","#8a5a2b"],["orange","orange","#f28c28"],["lila","purple","#8e44ad"],["rosa","pink","#f4a6c0"],["hellblau","light blue","#8ec5ff"],["dunkelblau","dark blue","#13306b"],["dunkelgrün","dark green","#1d5c2f"]];
 const ADJ_PAIRS=[["groß","big / tall","klein","small"],["neu","new","alt","old"],["teuer","expensive","billig","cheap"],["hell","bright / light","dunkel","dark"],["schön","beautiful / nice","hässlich","ugly"],["laut","loud / noisy","leise","quiet"],["warm","warm","kalt","cold"],["lang","long","kurz","short"],["schnell","fast","langsam","slow"],["gut","good","schlecht","bad"],["voll","full","leer","empty"],["jung","young","alt","old (person)"],["richtig","right","falsch","wrong"],["früh","early","spät","late"],["offen","open","geschlossen","closed"],["leicht","easy / light","schwer","difficult / heavy"]];
@@ -227,7 +227,7 @@ const LESEN=[
   en:"Dear Anna, I am today until 18 (achtzehn, AKHT-tsayn) o'clock in-the office. Can you please bread and milk buy? The money lies on the table. Thanks! Tom",
   qs:[["Tom ist bis 18 Uhr im Büro.","Tom is in the office until 6 pm.",1,"„bis 18 Uhr im Büro“ = until 18:00 in the office."],["Anna soll Brot und Käse kaufen.","Anna should buy bread and cheese.",0,"Brot und <b>Milch</b>, not Käse."]]},
  {t:"Praxis Dr. Weber\nMo – Fr: 8 – 12 Uhr\nMo, Di, Do: 15 – 18 Uhr\nMittwoch- und Freitagnachmittag geschlossen.",
-  en:"Practice Dr Weber. Mon–Fri 8 (acht) – 12 (zwölf, tsvoelf) o'clock. Mon, Tue, Thu 15 (fünfzehn) – 18 (achtzehn). Wednesday and Friday afternoon closed.",
+  en:"Practice Dr Weber. Mon–Fri 8 (acht) – 12 (zwölf, tsvölf) o'clock. Mon, Tue, Thu 15 (fünfzehn) – 18 (achtzehn). Wednesday and Friday afternoon closed.",
   qs:[["Am Mittwochnachmittag ist die Praxis offen.","On Wednesday afternoon the practice is open.",0,"Mittwoch<b>nachmittag geschlossen</b> = closed."],["Am Montag kann man um 16 Uhr zum Arzt gehen.","On Monday you can go to the doctor at 4 pm.",1,"Mo 15 – 18 Uhr: 16 (sechzehn) is in between."]]},
  {t:"Hallo Lena,\nam Samstag habe ich Geburtstag. Ich mache eine Party um 20 Uhr. Kommst du? Bring bitte etwas zu trinken mit.\nViele Grüße\nMarco",
   en:"Hello Lena, on Saturday have I birthday. I make a party at 20 (zwanzig) o'clock. Come you? Bring please something to drink along. Many greetings, Marco",
@@ -264,7 +264,7 @@ const HOEREN=[
  ["Hallo Maria, hier ist Peter. Wir treffen uns morgen um halb neun am Café. Tschüss!","Wann treffen sie sich?","When are they meeting?","um 8:30 Uhr","um 9:30 Uhr","um 9:00 Uhr","Hello Maria, here is Peter. We meet tomorrow at half nine (halb neun, halp noyn = 8:30) at-the café."],
  ["Guten Tag, hier ist die Praxis Dr. Klein. Ihr Termin ist nicht am Montag, sondern am Mittwoch um zehn Uhr.","Wann ist der Termin?","When is the appointment?","Mittwoch, 10 Uhr","Montag, 10 Uhr","Mittwoch, 12 Uhr","Good day, here is the practice Dr Klein. Your appointment is not on Monday but on Wednesday at ten (zehn, tsayn) o'clock."],
  ["Was kostet das T-Shirt? – Das kostet neunzehn Euro neunundneunzig.","Was kostet das T-Shirt?","How much is the T-shirt?","19,99 €","9,99 €","90,99 €","What costs the T-shirt? – It costs 19.99 € (NOYN-tsayn OY-ro NOYN-oont-NOYN-tsikh)."],
- ["Liebe Kunden, heute haben wir Äpfel im Angebot: ein Kilo nur einen Euro fünfzig.","Was kostet ein Kilo Äpfel?","How much is a kilo of apples?","1,50 €","5,10 €","1,15 €","Dear customers, today we have apples on offer: a kilo only one euro fifty (FUENF-tsikh)."],
+ ["Liebe Kunden, heute haben wir Äpfel im Angebot: ein Kilo nur einen Euro fünfzig.","Was kostet ein Kilo Äpfel?","How much is a kilo of apples?","1,50 €","5,10 €","1,15 €","Dear customers, today we have apples on offer: a kilo only one euro fifty (FÜNF-tsikh)."],
  ["Hallo, ich bin Frau Schulz. Meine Telefonnummer ist null eins sieben sechs, drei vier fünf, zwei zwei eins.","Wie ist die Telefonnummer?","What is the phone number?","0176 345 221","0167 345 221","0176 354 221","Hello, I am Mrs Schulz. My phone number is 0176 345 221."],
  ["Mein Name ist Krüger. K – R – Ü – G – E – R.","Wie heißt die Frau?","What is the woman's name?","Krüger","Kröger","Krieger","My name is Krüger, spelled K-R-Ü-G-E-R."],
  ["Der Deutschkurs beginnt nicht heute, sondern am Donnerstag.","Wann beginnt der Kurs?","When does the course start?","am Donnerstag","heute","am Dienstag","The German course starts not today but on Thursday."],
@@ -290,7 +290,7 @@ WORK.push(
  ["Mein Chef ___ sehr nett.","My boss is very nice.",["ist","bin","hat"],"ist","er (mein Chef) → <b>ist</b>."],
  ["Ich habe ___ Uhr Feierabend.","I finish work at 5 pm (17 Uhr, siebzehn, ZEEP-tsayn).",["um 17","am 17","im 17"],"um 17","<b>um</b> + clock time. Feierabend = end of the working day."],
  ["Was ___ du von Beruf?","What do you do for a living?",["bist","ist","hast"],"bist","du → <b>bist</b>."],
- ["Er ist Arzt. Sie ist ___.","He is a doctor. She is a doctor.",["Ärztin","Arztin","Arzt"],"Ärztin","Women add -in (and here an umlaut): <b>Ärztin</b>."],
+ ["Er ist Arzt. Sie ist ___.","He is a doctor. She is a doctor.",["Ärztin","Arztin","Arzt"],"Ärztin","Feminine forms add -in (and here an umlaut): <b>Ärztin</b>."],
  ["Ich arbeite ___ Teilzeit.","I work part-time.",["in","als","bei"],"in","<b>in Teilzeit</b> / <b>in Vollzeit</b> = part-time / full-time."],
  ["Ich mache eine ___ als Köchin.","I'm doing an apprenticeship as a cook.",["Ausbildung","Arbeit","Beruf"],"Ausbildung","<b>die Ausbildung</b> = training / apprenticeship."]
 );
@@ -316,7 +316,7 @@ KEIN.push(
 ANSW.push(
  ["Wann hast du Geburtstag?","When is your birthday?","Am 12. Mai.","Im 12. Mai.","Um 12. Mai.","Date → <b>am</b>: am zwölften (TSVOELF-ten) Mai."],
  ["Hast du Kinder?","Do you have children?","Ja, ich habe zwei Kinder.","Ja, ich hat zwei Kinder.","Ja, du hast zwei Kinder.","du → ich: <b>ich habe</b>. zwei = tsvy."],
- ["Wie viel kostet das?","How much does that cost?","Drei Euro fünfzig.","Drei Uhr fünfzig.","Am dritten.","Price: Euro, not Uhr. 3,50 € = dry OY-ro FUENF-tsikh."],
+ ["Wie viel kostet das?","How much does that cost?","Drei Euro fünfzig.","Drei Uhr fünfzig.","Am dritten.","Price: Euro, not Uhr. 3,50 € = dry OY-ro FÜNF-tsikh."],
  ["Wann beginnt der Kurs?","When does the course start?","Um 18 Uhr.","Am 18 Uhr.","Im 18 Uhr.","Clock time → <b>um</b>. 18 = achtzehn (AKHT-tsayn)."],
  ["Was machst du am Wochenende?","What are you doing at the weekend?","Ich besuche meine Eltern.","Du besuchst meine Eltern.","Ich besuchst meine Eltern.","du → <b>ich besuche</b>."],
  ["Bist du verheiratet?","Are you married?","Nein, ich bin ledig.","Nein, ich habe ledig.","Nein, du bist ledig.","<b>ledig</b> = single. ich <b>bin</b>."],

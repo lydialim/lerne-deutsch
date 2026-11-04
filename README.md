@@ -4,7 +4,7 @@ Free German practice workbooks by level: lessons with memory diagrams, a one-pag
 
 | Level | Start page | What's inside |
 |---|---|---|
-| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 18 lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 43 tests in rounds of 20 questions, with stars, streaks and a daily goal |
+| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 18 lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 45 tests in rounds of 20 questions, with stars, streaks and a daily goal |
 | A2 | coming later | |
 
 Live site: https://lydialim.github.io/lerne-deutsch/
@@ -24,10 +24,10 @@ lerne-deutsch/
 │       └── speech.js         reads German aloud (🔊 buttons, listening tests, voice picker)
 └── a1/
     ├── index.html            overview of all A1 lessons
-    ├── grammatik.html        Teil A · lessons 1–7 plus 3+ (mein/dein), 5+ (war/hatte), 6+ (modal verbs), 7+ (longer sentences)
-    ├── zahlen.html           Teil B · lessons 8–9 and 9+ (calendar)
-    ├── themen.html           Teil C · lessons 10–17 (incl. food, family, flat, countries)
-    ├── pruefung.html         Teil D · lessons 18, 18+ (listening and reading) + study tips
+    ├── grammatik.html        Teil A · lessons 1–7 (incl. mein/dein, du or Sie, war/hatte, modal verbs, longer sentences)
+    ├── zahlen.html           Teil B · lessons 8–9 (incl. time, prices, calendar)
+    ├── themen.html           Teil C · lessons 10–22 (food, family, flat, countries, weather, body and doctor, clothes, transport, hotel and post)
+    ├── pruefung.html         Teil D · lesson 23 (the exam, listening and reading), writing checker, speaking practice, study tips
     ├── spickzettel.html      cheat sheet
     ├── karten.html           picture flashcards (emoji + article colour, guess der/die/das)
     ├── tests.html            all tests (open one directly: tests.html#artikel)
@@ -38,6 +38,7 @@ lerne-deutsch/
         ├── tests.js          A1 test definitions (TESTS) + RULES (rule of the day on the tests page)
         ├── tests2.js         more tests (listening, vocabulary, calendar …) and GROUPS (one tab per group on the tests page: [title, English, keys, tab label, tab English])
         ├── karten.js         data and logic for the picture cards
+        ├── pruefung.js       writing checker and speaking practice (recordings stay in the browser)
         └── lessons.js        interactive parts of the lessons (clock, conjugation chips, word-order builder, floor plan / shop / family-tree scenes, Sprechen simulator)
 ```
 

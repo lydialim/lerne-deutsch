@@ -97,7 +97,51 @@ const KARTEN = [
 🚗|das|Auto|car
 🚌|der|Bus|bus
 🚆|der|Zug|train
-🚲|das|Fahrrad|bicycle`]
+🚲|das|Fahrrad|bicycle`],
+ ["Wetter", "weather", `☀️|die|Sonne|sun
+🌧️|der|Regen|rain
+❄️|der|Schnee|snow
+💨|der|Wind|wind
+☁️|die|Wolke|cloud
+⛈️|das|Gewitter|thunderstorm
+🌫️|der|Nebel|fog
+🌡️|die|Temperatur|temperature`],
+ ["Körper", "body", `🧠|der|Kopf|head
+👁️|das|Auge|eye
+👂|das|Ohr|ear
+👃|die|Nase|nose
+👄|der|Mund|mouth
+🦷|der|Zahn|tooth
+💪|der|Arm|arm
+✋|die|Hand|hand
+🦵|das|Bein|leg
+🦶|der|Fuß|foot
+💊|die|Tablette|tablet
+🏥|das|Krankenhaus|hospital`],
+ ["Kleidung", "clothes", `👕|das|T-Shirt|T-shirt
+👔|das|Hemd|shirt
+👖|die|Hose|trousers
+👗|das|Kleid|dress
+🧥|die|Jacke|jacket
+👟|die|Schuhe|shoes
+🧦|die|Socken|socks
+🧢|die|Mütze|cap
+🧣|der|Schal|scarf
+🧤|die|Handschuhe|gloves`],
+ ["Verkehr", "transport", `🚋|die|Straßenbahn|tram
+🚇|die|U-Bahn|underground
+🚕|das|Taxi|taxi
+✈️|das|Flugzeug|aeroplane
+🚉|der|Bahnhof|station
+🚏|die|Haltestelle|bus stop
+🎫|die|Fahrkarte|ticket`],
+ ["Hotel und Post", "hotel and post", `🛏️|das|Einzelzimmer|single room
+🧳|der|Koffer|suitcase
+🧾|die|Rechnung|bill
+✉️|der|Brief|letter
+📮|der|Briefkasten|postbox
+📦|das|Paket|parcel
+🏷️|die|Briefmarke|stamp`]
 ].map(([de, en, raw]) => ({ de, en, items: raw.split("\n").map(l => { const [pic, art, word, eng] = l.split("|"); return { pic, art, word, eng }; }) }));
 
 (function () {

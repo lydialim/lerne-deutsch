@@ -16,6 +16,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Lessons are hand-written HTML.** Each lesson is a `<section class="lesson" id="l-…">` in one of `grammatik.html`, `zahlen.html`, `themen.html` or `pruefung.html`. Each lesson page also has its own `<nav class="subnav">` of anchors.
 
+## Lessons
+
+Lessons are numbered 1–23 with no "+" add-ons. Folded sub-lessons are `<h3 class="sub" id="l-…">` inside their parent section (the old ids still work as anchors but are not in the menu). Only top-level `section.lesson` ids belong in `level.js` `parts` and the `.subnav`.
+
 ## Keep in sync
 
 Adding, renaming or reordering a lesson means updating all of these:

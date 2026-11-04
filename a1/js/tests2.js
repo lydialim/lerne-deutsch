@@ -113,7 +113,7 @@ Object.assign(TESTS,{
      explain:`<b>Ich komme ${aus}.</b><br>${c[1]?`A few countries have an article: <b>die</b> Schweiz, <b>die</b> Türkei, <b>die</b> Ukraine → aus <b>der</b> …; <b>der</b> Iran → aus <b>dem</b> Iran; <b>die</b> USA → aus <b>den</b> USA.`:"Most countries have no article: aus Spanien, in Spanien."}`,sayAfter:`Ich komme ${aus}.`};}
    if(m===2){const fem=Math.random()<.5;const ans=fem?c[4]:c[3];const o=pick(COUNTRIES.filter(y=>y!==c));
      return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${fem?"Sie":"Er"} kommt ${aus}. ${fem?"Sie":"Er"} ist ___.</span><span class="en">${fem?"She":"He"} comes from ${c[5]}. ${fem?"She":"He"} is …</span>`,
-     options:shuffle([...new Set([ans,fem?c[3]:c[4],fem?o[4]:o[3]])]),answer:ans,explain:`man: <b>${c[3]}</b> · woman: <b>${c[4]}</b>. Women usually add <b>-in</b> (but: Deutsche).`,sayAfter:`${fem?"Sie":"Er"} ist ${ans}.`};}
+     options:shuffle([...new Set([ans,fem?c[3]:c[4],fem?o[4]:o[3]])]),answer:ans,explain:`masculine: <b>${c[3]}</b> · feminine: <b>${c[4]}</b>. The feminine form usually adds <b>-in</b> (but: Deutsche).`,sayAfter:`${fem?"Sie":"Er"} ist ${ans}.`};}
    return{prompt:`<span class="big">${c[0]}</span><span class="en">Which country is it?</span>`,options:opts4(c[5],COUNTRIES.map(y=>y[5])),answer:c[5],explain:`<b>${c[0]}</b> <span class="pron">(${c[6]})</span> = ${c[5]}`,sayAfter:c[0]}}},
  farben:{tag:"Farben · Adjektive",title:"Farben und Adjektive",en:"colours, opposites and zu + adjective",kind:"choice",
   gen(){const m=rnd(0,3);
@@ -160,7 +160,22 @@ Object.assign(TESTS,{
      explain:`<b>${x[1].replace("___",ans)}</b><br>${x[3]} = ${MOD[x[3]][6]}.${x[4]?" "+x[4]:""}`,sayAfter:x[1].replace("___",ans)}}
    const x=pick(MODORD);
    return{prompt:`<span class="en">${x[3]}</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
-    explain:`<b>${x[0]}</b><br>${x[4]}`,sayAfter:x[0]}}}
+    explain:`<b>${x[0]}</b><br>${x[4]}`,sayAfter:x[0]}}},
+
+ /* ---------- du or Sie ---------- */
+ dusie:{tag:"du oder Sie",title:"du oder Sie?",en:"informal or formal you: choose the word or the verb form",kind:"choice",
+  gen(){if(Math.random()<.45){const x=pick(DUSIE_SIT);
+    return{prompt:`<span class="en">Which word do you use for you?</span><span class="big" style="font-size:clamp(22px,5.5vw,34px)">${x[0]}</span>`,options:["du","Sie"],answer:x[1],
+     explain:`<b>${x[1]}</b>: ${x[1]==="du"?"you know the person well, or it is a friend, family or child. Verb ending -st.":"formal: strangers, officials, doctors, bosses and letters to companies. Verb ending -en, like wir."}`}}
+   const x=pick(DUSIE_GAP);
+   return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${x[0]}</span><span class="en">${x[3]}</span>`,options:shuffle([x[1],...x[2]]),answer:x[1],
+    explain:`<b>${x[0].replace("___",x[1])}</b><br>${x[4]}`,sayAfter:x[0].replace("___",x[1])}}},
+
+ /* ---------- new topics: weather, body, clothes, transport, hotel and post ---------- */
+ themen2:{tag:"Neue Themen",title:"Neue Themen: Wörter",en:"weather, body, clothes, transport, hotel and post: words and phrases",kind:"choice",
+  gen(){const x=pick(THEMEN2),others=shuffle(THEMEN2.filter(y=>y!==x)).slice(0,3);
+   if(Math.random()<.5) return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">What does this mean?</span>`,options:shuffle([x[1],...others.map(y=>y[1])]),answer:x[1],explain:`<b>${x[0]}</b> = ${x[1]}`,sayAfter:x[0]};
+   return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German word is this?</span>`,options:shuffle([x[0],...others.map(y=>y[0])]),answer:x[0],explain:`${x[1]} = <b>${x[0]}</b>`,sayAfter:x[0]}}}
 });
 
 /* modal verb data: [ich, du, er/sie/es, wir, ihr, sie/Sie, English] */
@@ -206,10 +221,36 @@ GROUPS.length=0;
 GROUPS.push(
  ["Alles","everything",["mix"]],
  ["Wörter","words: vocabulary, articles, plural",["wortschatz","artikel","ein","plural","wortart","akkusativ","possessiv"],"Wörter","words"],
- ["Sätze","sentences: verbs, word order, questions",["verbform","warHatte","modal","satzbau","ordnen","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
+ ["Sätze","sentences: verbs, word order, questions",["verbform","dusie","warHatte","modal","satzbau","ordnen","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
  ["B · Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
  ["B · Kalender","calendar",["kalender","datum","zeitpraep"],"Kalender","calendar"],
  ["Hören","listening (turn the sound on)",["hoerenZahl","hoerenUhr","hoerenPreis","hoerenTelefon","hoerenName","hoerenPruefung"],"Hören","listening"],
- ["C · Themen","topics",["vorstellen","arbeit","aktion","weg","cafe","familie","laender","farben"],"Themen","topics"],
+ ["C · Themen","topics",["vorstellen","arbeit","aktion","weg","cafe","familie","laender","farben","themen2"],"Themen","topics"],
  ["D · Prüfung","exam",["lesenPruefung","formular"],"Prüfung","exam"]
 );
+
+/* du or Sie: situations [text, du|Sie] and gaps [sentence, answer, [wrong, wrong], English, explanation] */
+const DUSIE_SIT=[["Your friend Anna","du"],["The examiner in the speaking test","Sie"],["Your classmate","du"],["A doctor you meet for the first time","Sie"],["An older man you do not know","Sie"],["A child in the park","du"],["The bank clerk","Sie"],["Your brother","du"],["The hotel receptionist","Sie"],["Your boss","Sie"],["Your exam partner in Sprechen Teil 2","du"],["An email to a language school","Sie"],["A colleague who says: 'Wir können uns duzen.'","du"],["Your landlord, first meeting","Sie"]];
+const DUSIE_GAP=[
+ ["Wie ___ du?","heißt",["heißen","heiße"],"What is your name? (friend)","du → -st / -t after ß: heißt."],
+ ["Wie ___ Sie?","heißen",["heißt","heiße"],"What is your name? (formal)","Sie → -en, the same as wir."],
+ ["Woher ___ du?","kommst",["kommen","kommt"],"Where are you from? (friend)","du → -st."],
+ ["Woher ___ Sie?","kommen",["kommst","kommt"],"Where are you from? (formal)","Sie → -en."],
+ ["Wo ___ Sie?","wohnen",["wohnst","wohnt"],"Where do you live? (formal)","Sie → -en."],
+ ["Wo ___ du?","wohnst",["wohnen","wohnt"],"Where do you live? (friend)","du → -st."],
+ ["___ Sie Deutsch?","Sprechen",["Sprichst","Spricht"],"Do you speak German? (formal)","Sie → sprechen (same as wir)."],
+ ["___ du Zeit?","Hast",["Haben","Hat"],"Do you have time? (friend)","du hast."],
+ ["___ Sie mir helfen?","Können",["Kannst","Kann"],"Can you help me? (formal)","Sie → können."],
+ ["Wie ist ___ Telefonnummer? (formal)","Ihre",["deine","dein"],"What is your phone number? (formal)","Formal: Ihr / Ihre with a capital I."],
+ ["Wie ist ___ Name? (to a friend)","dein",["Ihr","deine"],"What is your name? (friend)","Informal: dein / deine."],
+ ["Wie geht es ___? (formal)","Ihnen",["dir","dich"],"How are you? (formal)","Formal: Ihnen. Informal: Wie geht's dir?"],
+ ["Wie geht's ___? (to a friend)","dir",["Ihnen","Ihr"],"How are you? (friend)","Informal: dir."]
+];
+/* new topics vocabulary [German, English] */
+const THEMEN2=[
+ ["das Wetter","weather"],["die Sonne","sun"],["der Regen","rain"],["der Schnee","snow"],["der Wind","wind"],["die Wolke","cloud"],["das Gewitter","thunderstorm"],["Es regnet.","It is raining."],["Es schneit.","It is snowing."],["sonnig","sunny"],["bewölkt","cloudy"],["kalt","cold"],["heiß","hot"],
+ ["der Kopf","head"],["das Auge","eye"],["das Ohr","ear"],["der Mund","mouth"],["die Nase","nose"],["der Hals","neck, throat"],["der Arm","arm"],["die Hand","hand"],["der Bauch","stomach, belly"],["das Bein","leg"],["der Fuß","foot"],["der Rücken","back"],["der Zahn","tooth"],["der Arzt","doctor"],["das Fieber","fever"],["der Husten","cough"],["Kopfschmerzen","headache"],["die Tablette","tablet"],["die Apotheke","pharmacy"],["Gute Besserung!","Get well soon!"],["krank","ill"],
+ ["das T-Shirt","T-shirt"],["die Hose","trousers"],["das Kleid","dress"],["die Jacke","jacket"],["die Schuhe","shoes"],["die Socken","socks"],["die Mütze","cap, hat"],["der Schal","scarf"],["die Größe","size"],["zu groß","too big"],["zu klein","too small"],["zu teuer","too expensive"],["anprobieren","to try on"],
+ ["der Bus","bus"],["die Straßenbahn","tram"],["die U-Bahn","underground"],["der Zug","train"],["das Flugzeug","aeroplane"],["der Bahnhof","station"],["die Haltestelle","bus stop"],["das Gleis","platform"],["die Fahrkarte","ticket"],["einfach","single (ticket)"],["hin und zurück","return"],["die Verspätung","delay"],["die Abfahrt","departure"],["die Ankunft","arrival"],
+ ["das Zimmer","room"],["das Einzelzimmer","single room"],["das Doppelzimmer","double room"],["der Schlüssel","key"],["das Frühstück","breakfast"],["die Rechnung","bill"],["der Brief","letter"],["die Briefmarke","stamp"],["das Paket","parcel"],["die Postkarte","postcard"],["der Absender","sender"],["der Empfänger","recipient"],["die Postleitzahl","postcode"]
+];

@@ -51,11 +51,12 @@ buildIntro();
 
 /* ---------- Visual widgets ---------- */
 const artCls=a=>a==="der"?"m":a==="die"?"f":"n";
+const sayArt=(a,w)=>a?a+" "+w:w;
 
 /* Scenes: tap an object to hear it. rooms = [[title, English, [[emoji, article, word], …]], …] */
 function renderScene(id, rooms){
   const el=$("#"+id); if(!el) return;
-  el.innerHTML=rooms.map(([t,en,os])=>`<div class="room"><h4>${t} <span>(${en})</span></h4><div class="objs">${os.map(([e,a,w])=>`<button type="button" class="obj ${artCls(a)}" data-tap-say="${a} ${w}"><span class="e" aria-hidden="true">${e}</span><span class="w"><i>${a}</i> ${w}</span></button>`).join("")}</div></div>`).join("");
+  el.innerHTML=rooms.map(([t,en,os])=>`<div class="room"><h4>${t} <span>(${en})</span></h4><div class="objs">${os.map(([e,a,w])=>`<button type="button" class="obj ${artCls(a)}" data-tap-say="${sayArt(a,w)}"><span class="e" aria-hidden="true">${e}</span><span class="w">${a?`<i>${a}</i> `:""}${w}</span></button>`).join("")}</div></div>`).join("");
 }
 renderScene("sceneWohnung",[
  ["Die Küche","kitchen",[["🧊","der","Kühlschrank"],["🍽️","der","Tisch"],["🪑","der","Stuhl"],["🍳","die","Pfanne"]]],
@@ -170,3 +171,19 @@ if($("#sprechSim")){
   if(b.dataset.act==="sol"){shown=true;draw();speak(c[4]+" "+c[5]);}});
  draw();
 }
+
+/* New topic scenes (lessons 18-22) */
+renderScene("sceneWetter",[
+ ["Das Wetter","weather",[["☀️","die","Sonne"],["🌧️","der","Regen"],["❄️","der","Schnee"],["💨","der","Wind"],["☁️","die","Wolke"],["⛈️","das","Gewitter"],["🌫️","der","Nebel"]]],
+ ["Es ist …","it is …",[["☀️","","sonnig"],["☁️","","bewölkt"],["💨","","windig"],["🥵","","heiß"],["🌤️","","warm"],["🥶","","kalt"]]]]);
+renderScene("sceneKleidung",[
+ ["Oben","on top",[["👕","das","T-Shirt"],["👔","das","Hemd"],["🧥","die","Jacke"],["👗","das","Kleid"]]],
+ ["Unten und Füße","bottom and feet",[["👖","die","Hose"],["👟","die","Schuhe"],["🧦","die","Socken"]]],
+ ["Dazu","extras",[["🧢","die","Mütze"],["🧣","der","Schal"],["🧤","die","Handschuhe"],["👜","die","Tasche"],["👓","die","Brille"]]]]);
+renderScene("sceneVerkehr",[
+ ["In der Stadt","in town",[["🚌","der","Bus"],["🚋","die","Straßenbahn"],["🚇","die","U-Bahn"],["🚕","das","Taxi"],["🚲","das","Fahrrad"],["🚏","die","Haltestelle"]]],
+ ["Fernverkehr","long distance",[["🚆","der","Zug"],["🚉","der","Bahnhof"],["✈️","das","Flugzeug"],["🛫","der","Flughafen"],["🚗","das","Auto"],["🎫","die","Fahrkarte"]]]]);
+renderScene("sceneHotel",[
+ ["Das Zimmer","the room",[["🛏️","das","Einzelzimmer"],["🛌","das","Doppelzimmer"],["🛁","das","Bad"],["📶","das","WLAN"]]],
+ ["An der Rezeption","at reception",[["🔑","der","Schlüssel"],["🧳","der","Koffer"],["🥐","das","Frühstück"],["🧾","die","Rechnung"]]]]);
+document.addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("lbl")){e.preventDefault();e.target.dispatchEvent(new MouseEvent("click",{bubbles:true}));} });

@@ -63,7 +63,34 @@ function num(n){
     return [(o===1?"ein":U[o][0])+"und"+T[t][0], (o===1?"ayn":U[o][1])+"-oont-"+T[t][1]];}
   if(n<1000){const h=Math.floor(n/100),r=n%100; const hw=(h===1?"ein":U[h][0])+"hundert", hp=(h===1?"ayn":U[h][1])+"-HOON-dert";
     if(!r) return [hw,hp]; const rr=num(r); return [hw+rr[0], hp+"-"+rr[1]];}
-  return ["tausend","TOW-zent"];
+  if(n<1e6){const t=Math.floor(n/1000), r=n%1000, tt=num(t), tw=tt[0].replace(/eins$/,"ein")+"tausend", tp=tt[1].replace(/aynss$/,"ayn")+"-TOW-zent";
+    if(!r) return [tw,tp]; const rr=num(r); return [tw+rr[0], tp+"-"+rr[1]];}
+  if(n<1e9){const m=Math.floor(n/1e6), r=n%1e6, mw=m===1?"eine Million":num(m)[0]+" Millionen", mp=m===1?"AY-nuh mil-YOHN":num(m)[1]+" mil-YOH-nen";
+    if(!r) return [mw,mp]; const rr=num(r); return [mw+" "+rr[0], mp+" "+rr[1]];}
+  return [String(n),""];
+}
+const dots=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,".");
+/* a random big number; often a "round" one like 62.000 or 293.300 */
+function rndBig(lo,hi){ if(lo>=10000&&Math.random()<.65){ const n=rnd(Math.ceil(lo/1000),Math.floor(hi/1000))*1000+rnd(0,9)*100; return Math.min(n,hi); } return rnd(lo,hi); }
+/* "2,5 Millionen": m,d → [German words, pronunciation] */
+const millionDec=(m,d)=>[`${num(m)[0]} Komma ${num(d)[0]} Millionen`,`${num(m)[1]} KOM-ah ${num(d)[1]} mil-YOH-nen`];
+/* years: 1100–1999 are said in hundreds (1990 = neunzehnhundertneunzig), from 2000 as a normal number (2026 = zweitausendsechsundzwanzig) */
+function yearSay(y){
+  if(y>=2000||y<1100) return num(y);
+  const h=Math.floor(y/100), r=y%100, hh=num(h), hw=hh[0]+"hundert", hp=hh[1]+"-HOON-dert";
+  if(!r) return [hw,hp]; const rr=num(r); return [hw+rr[0], hp+"-"+rr[1]];
+}
+/* short memory hint shown after a number question (n = the number, yr = it is a year) */
+function bigNote(n,yr){
+  const last=n%100; let s="";
+  if(last>20&&last%10) s+=`<br>Ones first: ${U[last%10][0]}… then …${T[Math.floor(last/10)][0]}.`;
+  if(yr&&n<2000) s+="<br>Years before 2000: say the hundreds. 19|90 = neunzehn·hundert·neunzig.";
+  else if(yr) s+="<br>From 2000 a year is a normal number: zwei·tausend·sechsundzwanzig.";
+  else if(n>=1e6) s+="<br>die Million: <b>eine</b> Million, zwei Million<b>en</b> (plural -en), written as a separate word.";
+  else if(n>=10000) s+="<br>Say the number before “tausend” like a normal number: 62.000 = zweiundsechzig·tausend.";
+  else if(n>=1000) s+="<br>1000 = (ein)tausend. No “und” after hundert or tausend.";
+  else if(n>=100) s+="<br>No “und” after hundert: hundert·fünfundzwanzig.";
+  return s;
 }
 
 /* alphabet */

@@ -10,10 +10,16 @@ if($("#demoSent")) $("#demoSent").innerHTML=SENTS[1].map(([w,t,e])=>`<span class
 if($("#numGrid")){
 const gridNums=[...Array(21).keys(),21,22,25,30,40,47,50,60,70,74,80,90,99,100,101,250];
 $("#numGrid").innerHTML=gridNums.map(n=>{const [w,p]=num(n);return `<div class="numcell" data-tap-say="${w}"><span class="d">${n}</span><span class="w">${w}</span><span class="pron">${p}</span></div>`}).join("");
-function explore(){ const v=parseInt($("#explIn").value,10); if(isNaN(v)||v<0||v>999){$("#explOut").innerHTML='<span class="en">Enter a number from 0 to 999.</span>';return}
-  const [w,p]=num(v); $("#explOut").innerHTML=`<b>${w}</b><br><span class="pron">${p}</span>`; }
+function explore(){ const v=parseInt($("#explIn").value,10); if(isNaN(v)||v<0||v>999999999){$("#explOut").innerHTML='<span class="en">Enter a number from 0 to 999,999,999.</span>';return}
+  const [w,p]=num(v); let h=`<b>${w}</b><br><span class="pron">${p}</span>`;
+  if(v>=1100&&v<=2099){const [yw,yp]=yearSay(v); if(yw!==w) h+=`<br><span class="en">As a year (als Jahr):</span> <b>${yw}</b><br><span class="pron">${yp}</span>`; else h+=`<br><span class="en">As a year it sounds the same.</span>`;}
+  $("#explOut").innerHTML=h; }
 $("#explIn").addEventListener("input",explore); explore();
 }
+
+/* Lesson 9: hundreds, thousands and years */
+if($("#bigGrid")) $("#bigGrid").innerHTML=[100,101,250,999,1000,2500,9999,10000,62000,100000,293300,1000000,2500000].map(n=>{const [w,p]=num(n);return `<div class="numcell" data-tap-say="${w}"><span class="d">${n.toLocaleString("de-DE")}</span><span class="w">${w}</span><span class="pron">${p}</span></div>`}).join("");
+if($("#yearGrid")) $("#yearGrid").innerHTML=[1950,1980,1990,1999,2000,2010,2026].map(n=>{const [w,p]=yearSay(n);return `<div class="numcell" data-tap-say="${w}"><span class="d">${n}</span><span class="w">${w}</span><span class="pron">${p}</span></div>`}).join("");
 
 /* Lesson 8: alphabet grid */
 if($("#abcGrid")) $("#abcGrid").innerHTML=ABC.map(([l,p,t])=>`<div class="abcc${t?' trap':''}" data-tap-say="${SAY[l]}"><b>${l}</b><span style="font-weight:600">${SAY[l]}</span><span class="pron">${p}</span></div>`).join("");

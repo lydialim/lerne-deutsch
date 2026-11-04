@@ -82,11 +82,67 @@
   <div class="rule"><b>Reminder · Watch the spelling.</b> sech<b>zehn</b> (16) and sech<b>zig</b> (60) drop the -s of sechs. sieb<b>zehn</b> (17) and sieb<b>zig</b> (70) drop the -en of sieben. dreißig (30) uses <b>ß</b>, not -zig.</div>
   <h3>Zahlen-Explorer <span class="en">(number explorer)</span></h3>
   <div class="explorer">
-    <label for="explIn" class="en">Type a number 0–999</label>
-    <input type="number" id="explIn" min="0" max="999" value="47">
+    <label for="explIn" class="en">Type a number 0–999999999 (or a year)</label>
+    <input type="number" id="explIn" min="0" max="999999999" value="47">
     <div class="out" id="explOut"></div>
   </div>
   <div class="rule"><b>Reminder · Numbers in the exam.</b> Phone numbers and postcodes are said <b>digit by digit</b>: 80331 = acht · null · drei · drei · eins. House numbers are one number: 47 = siebenundvierzig. Times: 19 Uhr = neunzehn Uhr <span class="pron">(NOYN-tsayn oor)</span>.</div>
+  <h3 class="sub" id="l-big">Hunderter, Tausender, Millionen, Jahreszahlen <span class="en">(hundreds, thousands, millions, years)</span></h3>
+  <p class="lead">Big numbers are built like LEGO: say the <b>big block first</b> (hundert, tausend), then the small number you already know. There is <b>no “und”</b> after hundert or tausend. The “und” only sits between the ones and the tens: 125 = <i>hundert·fünf·und·zwanzig</i>.</p>
+  <div class="numgrid" id="bigGrid"></div>
+  <div class="dia">
+    <div class="cap">Hundert und tausend: wie ein Baukasten <small>(like building blocks)</small></div>
+    <div class="train"><span class="car g">zwei<em>2</em></span><span class="car">+</span><span class="car g">tausend<em>1000</em></span><span class="car">+</span><span class="car g">fünf<em>5</em></span><span class="car">+</span><span class="car g">hundert<em>100</em></span><span class="car">+</span><span class="car g">sechs·und·dreißig<em>36</em></span></div>
+    <p class="trick"><b>2536</b> = zweitausendfünfhundertsechsunddreißig: one long word, written together. Read it from the left: <b>2</b>·1000 + <b>5</b>·100 + <b>36</b>. Only the last two digits are “backwards” (ones first).</p>
+  </div>
+  <div class="dia">
+    <div class="cap">Tausender: die Zahl vor „tausend“ <small>(thousands: the number before “tausend”)</small></div>
+    <div class="train"><span class="car g">zweiundsechzig<em>62</em></span><span class="car">+</span><span class="car g">tausend<em>.000</em></span><span class="car">=</span><span class="car">62.000<em>zweiundsechzigtausend</em></span></div>
+    <div class="train"><span class="car g">zweihundertdreiundneunzig<em>293</em></span><span class="car">+</span><span class="car g">tausend<em>.</em></span><span class="car g">dreihundert<em>300</em></span><span class="car">=</span><span class="car">293.300<em>…tausenddreihundert</em></span></div>
+    <p class="trick"><b>Trick:</b> look at the <b>dot</b>. Everything left of it is a normal number (1–999), then say <b>tausend</b>, then the three digits on the right: 293.300 = 293 · tausend · 300. Say it in this order and you can read any price, population or salary.</p>
+  </div>
+  <h3>Millionen <span class="en">(millions)</span></h3>
+  <div class="cols2">
+    <div class="dia">
+      <div class="cap">die Million: ein Nomen <small>(a noun, with a capital M)</small></div>
+      <p class="trick"><b>1.000.000</b> = <b>eine</b> Million <span class="pron">(AY-nuh mil-YOHN)</span><br><b>2.000.000</b> = zwei Million<b>en</b> <span class="pron">(tsvy mil-YOH-nen)</span><br><b>2.500.000</b> = zwei Millionen fünfhunderttausend</p>
+      <p class="trick"><b>Trick:</b> Million is <span class="die">die</span> (feminine): <b>eine</b> Million, but two or more get <b>-en</b>. It is a separate word, not glued to the number.</p>
+    </div>
+    <div class="dia">
+      <div class="cap">Kurzform mit Komma <small>(short form with a decimal comma)</small></div>
+      <p class="trick"><b>2,5 Millionen</b> = zwei <b>Komma</b> fünf Millionen <span class="pron">(tsvy KOM-ah fuenf mil-YOH-nen)</span><br><span class="en">The comma is said “Komma”. Also: zweieinhalb Millionen (two and a half).</span></p>
+      <p class="trick"><b>Berlin</b> hat etwa <b>3,7 Millionen</b> Einwohner. <b>Deutschland</b> hat etwa <b>84 Millionen</b> Einwohner.<br><span class="en">Berlin has about 3.7 million inhabitants. Germany has about 84 million.</span></p>
+    </div>
+  </div>
+  <div class="wordgrid">
+    <span data-say="Berlin hat etwa drei Komma sieben Millionen Einwohner."><b>3,7 Millionen</b><span class="en">drei Komma sieben Millionen</span></span>
+    <span data-say="Deutschland hat etwa vierundachtzig Millionen Einwohner."><b>84 Millionen</b><span class="en">vierundachtzig Millionen</span></span>
+    <span data-say="Das Auto kostet zweiundsechzigtausend Euro."><b>62.000 €</b><span class="en">zweiundsechzigtausend Euro</span></span>
+    <span data-say="Die Stadt hat zweihundertdreiundneunzigtausenddreihundert Einwohner."><b>293.300</b><span class="en">zweihundertdreiundneunzigtausenddreihundert</span></span>
+  </div>
+  <div class="rule"><b>Reminder · Writing numbers.</b> Germans write a <b>dot</b> for thousands and a <b>comma</b> for decimals: 2.500 = zweitausendfünfhundert, but 2,50 € = zwei Euro fünfzig. Years have <b>no dot</b>: 2026. In the tests you can type 62000 or 62.000, both are accepted.</div>
+  <h3>Jahreszahlen <span class="en">(years)</span></h3>
+  <div class="cols2">
+    <div class="dia">
+      <div class="cap">Vor 2000: in Hunderten <small>(before 2000: in hundreds)</small></div>
+      <p class="trick"><b>1990</b> = <b>neunzehn·hundert·neunzig</b> <span class="pron">(NOYN-tsayn-HOON-dert-NOYN-tsikh)</span><br><span class="en">literally: nineteen-hundred-ninety. Not “eintausendneunhundert…”!</span></p>
+      <p class="trick"><b>1905</b> = neunzehnhundertfünf · <b>1999</b> = neunzehnhundertneunundneunzig · <b>2000</b> = zweitausend</p>
+    </div>
+    <div class="dia">
+      <div class="cap">Ab 2000: normale Zahl <small>(from 2000: a normal number)</small></div>
+      <p class="trick"><b>2026</b> = <b>zwei·tausend·sechs·und·zwanzig</b> <span class="pron">(TSVY-TOW-zent-ZEKS-oont-TSVAN-tsikh)</span><br><span class="en">literally: two-thousand-six-and-twenty.</span></p>
+      <p class="trick"><b>2005</b> = zweitausendfünf · <b>2019</b> = zweitausendneunzehn</p>
+    </div>
+  </div>
+  <div class="numgrid" id="yearGrid"></div>
+  <div class="wordgrid">
+    <span data-say="Ich bin 1990 geboren."><b>Ich bin 1990 geboren.</b><span class="en">I was born in 1990.</span></span>
+    <span data-say="Ich wohne seit 2020 in Deutschland."><b>Seit 2020 in Deutschland</b><span class="en">in Germany since 2020</span></span>
+    <span data-say="Wann bist du geboren? Im Jahr 2001."><b>Im Jahr 2001</b><span class="en">in the year 2001 (or just: 2001)</span></span>
+  </div>
+  <div class="rule"><b>Reminder · No “in” before a year.</b> Say <i>im Jahr 1990</i> or just <i>1990</i>: <i>Ich bin 1990 geboren.</i> (not “in 1990”). In the exam you meet years in dates of birth: 14.2.1990 = der vierzehnte Februar neunzehnhundertneunzig.</div>
+  <div class="practice"><span>Jetzt üben <span class="en">(practise now)</span></span><a class="go" href="tests.html#hoerenZahl">🔊 Zahlen hören</a><a class="go" href="tests.html#hoerZahl">Wort → Zahl</a><a class="go" href="tests.html#zahlWort">Zahl → Wort</a></div>
+
   <h3>Uhrzeit <span class="en">(telling the time)</span></h3>
   <p class="lead">There are two ways. <b>Offiziell</b> <span class="en">(official: trains, appointments, announcements in the exam)</span> uses 0–24 hours. <b>Informell</b> <span class="en">(everyday)</span> uses 1–12 with nach, vor, Viertel and halb.</p>
   <div class="tablebox"><table>

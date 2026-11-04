@@ -21,10 +21,14 @@ Object.assign(TESTS,{
    return{prompt:`<span class="big">___ ${n.w}</span><span class="en">${n.en} · der, die oder das?</span>`,options:["der","die","das"],cls:o=>"o-"+o,answer:n.a,explain:ex,sayAfter:`${n.a} ${n.w}`}}},
 
  /* ---------- listening drills (read aloud by the browser) ---------- */
- hoerenZahl:{tag:"🔊 Hören · Zahlen",title:"Zahlen hören",en:"listen to the number and type it in digits",kind:"input",ranges:[["0–20",0,20],["21–99",21,99],["100–999",100,999],["1000–9999",1000,9999]],
-  gen(r){const n=rnd(r[1],r[2]);const w=n>999?numBig(n):num(n)[0];
-   return{say:w,prompt:`<span class="big">🔊</span><span class="en">Hör zu und schreib die Zahl. <span class="pron">(Listen and write the number.)</span></span>`,answer:String(n),inputmode:"numeric",
-    explain:`<b>${n}</b> = ${w}${n<1000?` <span class="pron">(${num(n)[1]})</span>`:""}${n>20&&n%100>20&&n%10?"<br>Remember: ones first, then tens: 47 = sieben-und-vierzig (seven-and-forty).":""}`}}},
+ hoerenZahl:{tag:"🔊 Hören · Zahlen",title:"Zahlen hören",en:"listen to the number or year and type it in digits",kind:"input",ranges:[["0–20",0,20],["21–99",21,99],["100–999",100,999],["1000–9999",1000,9999],["10.000–999.999",10000,999999],["Millionen (2,5)",0,0,"mio"],["Jahre (years)",1900,2030,1]],
+  gen(r){const yr=r[3]===1,mio=r[3]==="mio";
+   if(mio){const m=rnd(2,9),d=rnd(1,9),[w,p]=millionDec(m,d);
+    return{say:w,prompt:`<span class="big">🔊</span><span class="en">Hör zu: wie viele Millionen? Schreib zum Beispiel 2,5. <span class="pron">(Listen: how many millions? Write e.g. 2,5.)</span></span>`,answer:`${m},${d}`,inputmode:"decimal",
+     explain:`<b>${m},${d} Millionen</b> = ${w} <span class="pron">(${p})</span><br>Komma = decimal comma. ${m},${d} Millionen = ${dots(m*1e6+d*1e5)}.`}}
+   const n=r[1]>=10000?rndBig(r[1],r[2]):rnd(r[1],r[2]);const [w,p]=yr?yearSay(n):num(n);
+   return{say:w,prompt:`<span class="big">🔊</span><span class="en">${yr?"Hör zu und schreib das Jahr. <span class=\"pron\">(Listen and write the year.)</span>":"Hör zu und schreib die Zahl. <span class=\"pron\">(Listen and write the number.)</span>"}</span>`,answer:String(n),inputmode:"numeric",
+    explain:`<b>${yr?n:dots(n)}</b> = ${w} <span class="pron">(${p})</span>${bigNote(n,yr)}`}}},
  hoerenUhr:{tag:"🔊 Hören · Uhrzeit",title:"Uhrzeit hören",en:"listen to the time and choose it",kind:"choice",
   gen(){const h=rnd(1,23),m=pick([0,5,10,15,20,25,30,35,40,45,50,55]);const inf=Math.random()<.6;
    const show=(a,b)=>inf?fmtT(a%12||12,b):fmtT(a,b); const ans=show(h,m); const s=new Set([ans]);
@@ -213,8 +217,6 @@ const MODORD=[
  ["Kannst du bitte langsam sprechen?","Kannst du sprechen bitte langsam?","Sprechen kannst du bitte langsam?","Can you speak slowly, please?","bitte and langsam sit inside the sandwich."],
  ["Er muss heute lange arbeiten.","Er musst heute lange arbeiten.","Er muss arbeiten heute lange.","He has to work long today.","er has no ending after a modal verb (muss, not musst), and arbeiten is at the end."]
 ];
-/* big numbers for listening: 1000–9999 */
-function numBig(n){const t=Math.floor(n/1000),r=n%1000;return (t===1?"ein":num(t)[0])+"tausend"+(r?num(r)[0]:"");}
 
 /* test page order */
 GROUPS.length=0;

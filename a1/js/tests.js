@@ -18,16 +18,25 @@ const TESTS={
    const a=n.a==="die"?"eine":"ein";
    return{prompt:`<span class="big">Das ist ___ ${n.w}.</span><span class="en">That is a ${n.en}.</span>`,options:["ein","eine","— (nothing)"],answer:a,
      explain:`<b><span class="${n.a}">${n.a}</span> ${n.w}</b> → <b>${a} ${n.w}</b>. ${n.a==="die"?"die → eine (feminine adds -e).":"der and das → ein."}`}}},
- hoerZahl:{tag:"Lesen · Zahlen",title:"Wort → Zahl",en:"read the German number and type it in digits",kind:"input",ranges:[["0–20",0,20],["21–99",21,99],["0–100",0,100],["100–999",100,999]],
-  gen(r){const n=rnd(r[1],r[2]);const [w,p]=num(n);return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,40px)">${w}</span><span class="en">Type this number in digits.</span>`,answer:String(n),inputmode:"numeric",
-   explain:`<b>${w}</b> = <b>${n}</b> <span class="pron">(${p})</span>${n>20&&n<100&&n%10?`<br>Ones first: ${U[n%10][0]}… then …${T[Math.floor(n/10)][0]}.`:""}`}}},
- zahlWort:{tag:"Lesen · Zahlen",title:"Welches Wort passt?",en:"which word matches the number?",kind:"choice",ranges:[["0–20",0,20],["21–99",21,99],["100–999",100,999]],
-  gen(r){const n=rnd(r[1],r[2]); const opts=new Set([n]); const o=n%10,t=Math.floor(n/10)%10;
-   if(n>20&&o&&t&&o!==t) opts.add(n-o-t*10+o*10+t); // digit swap trap 47↔74
-   while(opts.size<4){const d=n+pick([-10,-1,1,10,-2,2,20,-20,100,-100]); if(d>=r[1]&&d<=r[2]) opts.add(d);}
+ hoerZahl:{tag:"Lesen · Zahlen",title:"Wort → Zahl",en:"read the German number and type it in digits",kind:"input",ranges:[["0–20",0,20],["21–99",21,99],["0–100",0,100],["100–999",100,999],["1000–9999",1000,9999],["10.000–999.999",10000,999999],["Millionen",0,0,"mio"],["Jahre (years)",1900,2030,1]],
+  gen(r){const yr=r[3]===1,mio=r[3]==="mio",n=mio?rnd(1,9)*1e6+rnd(0,9)*1e5:r[1]>=10000?rndBig(r[1],r[2]):rnd(r[1],r[2]);const [w,p]=yr?yearSay(n):num(n);
+   return{prompt:`<span class="big" style="font-size:clamp(20px,5vw,34px);overflow-wrap:anywhere">${w}</span><span class="en">${yr?"Type this year in digits.":mio?"Type this number in digits. (Dots are fine: 2.500.000)":"Type this number in digits."}</span>`,answer:String(n),inputmode:"numeric",
+   explain:`<b>${w}</b> = <b>${yr?n:dots(n)}</b> <span class="pron">(${p})</span>${mio?`<br>Short form: ${(n/1e6).toString().replace(".",",")} Millionen.`:""}${bigNote(n,yr)}`}}},
+ zahlWort:{tag:"Lesen · Zahlen",title:"Welches Wort passt?",en:"which word matches the number?",kind:"choice",ranges:[["0–20",0,20],["21–99",21,99],["100–999",100,999],["1000–9999",1000,9999],["10.000–999.999",10000,999999],["Millionen (2,5 Mio.)",0,0,"mio"],["Jahre (years)",1900,2030,1]],
+  gen(r){const yr=r[3]===1,mio=r[3]==="mio";
+   if(mio){const m=rnd(2,9),d=rnd(1,9);const right=millionDec(m,d)[0];const s=new Set([right]);
+    for(const [a,b] of shuffle([[d,m],[m,d*10<100?d*10:d],[m+1,d],[m,d===9?1:d+1],[m===2?3:m-1,d]])){ if(s.size>=4) break; if(a>=2&&a<=9&&b>=1&&b<=90&&!(a===m&&b===d)) s.add(`${num(a)[0]} Komma ${num(b)[0]} Millionen`); }
+    let g=0; while(s.size<4&&g++<30) s.add(millionDec(rnd(2,9),rnd(1,9))[0]);
+    return{prompt:`<span class="big">${m},${d} Millionen</span><span class="en">Choose the German words. (a comma is said “Komma”)</span>`,options:shuffle([...s]),answer:right,say:null,
+     explain:`<b>${m},${d} Millionen</b> = ${right} <span class="pron">(${millionDec(m,d)[1]})</span><br>= ${dots(m*1e6+d*1e5)}. Also possible: <i>${m} Millionen ${num(d*100000)[0]}</i>.`}}
+   const f=yr?yearSay:num,n=r[1]>=10000?rndBig(r[1],r[2]):rnd(r[1],r[2]); const opts=new Set([n]); const o=n%10,t=Math.floor(n/10)%10;
+   if(n>20&&o&&t&&o!==t){const sw=n-o-t*10+o*10+t; if(sw>=r[1]&&sw<=r[2]) opts.add(sw);} // digit swap trap 47↔74
+   if(n>=10000&&n%1000===0){ if(n*10<=r[2]) opts.add(n*10); if(n/10>=r[1]) opts.add(n/10); }
+   const steps=r[1]>=10000?[-10000,10000,-1000,1000,-100,100,-300,300]:r[1]>=1000&&!yr?[-1000,1000,-100,100,-10,10,-1,1]:yr?[-10,10,-1,1,-100,100,-9,9]:[-10,-1,1,10,-2,2,20,-20,100,-100];
+   let g=0; while(opts.size<4&&g++<60){const d=n+pick(steps); if(d>=r[1]&&d<=r[2]) opts.add(d);}
    const list=shuffle([...opts]);
-   return{prompt:`<span class="big">${n}</span><span class="en">Choose the German word.</span>`,options:list.map(x=>num(x)[0]),answer:num(n)[0],say:null,
-   explain:`<b>${n}</b> = ${num(n)[0]} <span class="pron">(${num(n)[1]})</span>${n>20&&n<100&&o?" · Remember: ones first!":""}`}}},
+   return{prompt:`<span class="big">${yr?n:dots(n)}</span><span class="en">${yr?"Choose the German word for this year.":"Choose the German word."}</span>`,options:list.map(x=>f(x)[0]),answer:f(n)[0],say:null,
+   explain:`<b>${yr?n:dots(n)}</b> = ${f(n)[0]} <span class="pron">(${f(n)[1]})</span>${bigNote(n,yr)}`}}},
  hoerBuchstabe:{tag:"Lesen · ABC",title:"Welcher Buchstabe ist das?",en:"which letter has this German name?",kind:"choice",
   gen(){const set=pick(CONFUSE);const l=set[0];const p=ABC.find(x=>x[0]===l)[1];
    return{prompt:`<span class="big">${SAY[l]}</span><span class="en">This is the German name of a letter. Which letter is it?</span>`,options:shuffle(set),answer:l,

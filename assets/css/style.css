@@ -856,3 +856,8 @@ details.fold ul{margin-top:2px}
 .meter{height:12px;border-radius:6px;background:var(--soft);overflow:hidden}
 .meter i{display:block;height:100%;width:0;background:var(--ok);transition:width .08s}
 .dev h3{margin-top:0}
+
+/* long number words (hundreds, thousands, years) must wrap inside their cell */
+#bigGrid,#yearGrid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+#bigGrid .numcell,#yearGrid .numcell{min-width:0}
+#bigGrid .w,#yearGrid .w,#bigGrid .pron,#yearGrid .pron{overflow-wrap:anywhere;word-break:break-word}

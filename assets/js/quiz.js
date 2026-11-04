@@ -32,6 +32,8 @@ let day=lstore.get("day",{date:"",count:0,streak:0});
 const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const today=()=>ymd(new Date()), yesterday=()=>ymd(new Date(Date.now()-864e5));
 function bumpDay(){ const t=today(); if(day.date!==t){ day.streak=day.date===yesterday()?day.streak+1:1; day.date=t; day.count=0; } day.count++; lstore.set("day",day); }
+/* numbers typed with thousand dots (62.000) or a decimal point (2.5 for 2,5) still count */
+const numEq=(v,a)=>/^\d+$/.test(a)?v.replace(/[.\s]/g,"")===a:/^\d+,\d+$/.test(a)?v.replace(/\s*(mio\.?|millionen?)$/i,"").replace(/\s/g,"").replace(".",",")===a:false;
 const numSay=n=>typeof num==="function"?`${num(n)[0]} <span class="pron">(${num(n)[1]})</span>`:String(n);
 const starStr=s=>"★".repeat(s)+"☆".repeat(3-s);
 
@@ -169,7 +171,7 @@ const COMBO={3:"3 in Folge! (3 in a row)",5:"5 in Folge! Weiter so! (keep it up)
 function answer(v,btn){
   if(q.done) return; q.done=true;
   const kind=q.kind||TESTS[current].kind;
-  const ok = kind==="choice"||kind==="order" ? v===q.answer : (norm(v)===norm(q.answer)||v.trim()===q.answer);
+  const ok = kind==="choice"||kind==="order" ? v===q.answer : (norm(v)===norm(q.answer)||v.trim()===q.answer||numEq(v,q.answer));
   stats.n++; stats.res.push(ok); let gain=0;
   if(ok){ stats.ok++; stats.combo++; stats.maxCombo=Math.max(stats.maxCombo,stats.combo); gain=10+(stats.combo>=3?5:0); stats.xp+=gain; xp+=gain; lstore.set("xp",xp); }
   else { stats.combo=0; if(q.from&&!stats.miss.includes(q.fromKey)) stats.miss.push(q.fromKey); stats.wrong.push({p:q.prompt,a:q.answer,e:q.explain,given:v}); }

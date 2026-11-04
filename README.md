@@ -27,9 +27,11 @@ Live site: https://lydialim.github.io/lerne-deutsch/
 lerne-deutsch/
 ├── README.md
 ├── index.html                landing page: choose a level
+├── einrichtung.html          standalone voice and microphone setup page (detects the device, tests voice and mic); not part of any level menu
 ├── assets/                   shared by every level
 │   ├── css/style.css         design system (colours: der blue, die red, das green, plural purple)
 │   └── js/
+│       ├── einrichtung.js    device detection and the voice / microphone tests (used by einrichtung.html)
 │       ├── common.js         helpers + per-level browser storage
 │       ├── layout.js         page header, phone bottom bar and lesson menu (reads window.LEVEL)
 │       ├── quiz.js           test engine: overview tabs, 10-question rounds, progress, stars, review (reads TESTS, GROUPS, RULES)

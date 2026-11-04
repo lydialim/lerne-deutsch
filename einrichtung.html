@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Einrichtung · Lerne Deutsch</title>
+<meta name="description" content="Set up the German voice and the microphone on your phone or computer.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="flagline" aria-hidden="true"><span style="background:var(--der)"></span><span style="background:var(--die)"></span><span style="background:var(--das)"></span></div>
+  <p class="crumb"><a href="index.html">Lerne Deutsch</a> › Einrichtung</p>
+</header>
+<main>
+<div class="part"><span class="kick">Hilfe · für alle Seiten</span><h2>Einrichtung <span class="en">(setup: voice and microphone)</span></h2><p class="lead">The 🔊 buttons need a <b>German voice</b> on your device. The speaking practice needs your <b>microphone</b>. The page detected your device and shows only the steps for it.</p></div>
+
+<div class="devbar" id="devbar" aria-live="polite"></div>
+<div class="ktabs" id="devtabs" role="tablist" aria-label="Gerät wählen (choose device)"></div>
+
+<section class="lesson" id="l-test">
+  <h2>1 · Teste dein Gerät <span class="en">(test your device)</span></h2>
+  <div class="devtest">
+    <div class="tcard"><h3>🔊 Stimme <span class="en">(voice)</span></h3>
+      <p id="voiceStatus" class="en">…</p>
+      <div class="btns"><button type="button" class="go" id="voiceTest">▶ Anhören <span class="en">(play)</span></button></div>
+      <p class="en" id="voiceList"></p></div>
+    <div class="tcard"><h3>🎙 Mikrofon <span class="en">(microphone)</span></h3>
+      <p id="micStatus" class="en">Press the button and say something.</p>
+      <div class="meter" aria-hidden="true"><i id="micBar"></i></div>
+      <div class="btns"><button type="button" class="go" id="micTest">🎙 Testen <span class="en">(test)</span></button></div></div>
+  </div>
+</section>
+
+<section class="lesson" id="l-steps">
+  <h2>2 · Schritte für dein Gerät <span class="en">(steps for your device)</span></h2>
+
+  <div class="dev" data-dev="android" hidden>
+    <h3>📱 Android</h3>
+    <div class="cols2">
+      <div class="dia"><div class="cap">🔊 Deutsche Stimme <small>(German voice)</small></div>
+        <ol class="steps">
+          <li>Open <b>Settings → System → Languages &amp; input → Text-to-speech output</b> (on some phones: <b>Settings → Accessibility</b>).</li>
+          <li>Preferred engine: <b>Speech Services by Google</b>. Tap the ⚙ gear next to it.</li>
+          <li>Tap <b>Install voice data → Deutsch (Deutschland)</b> and download it.</li>
+          <li>Come back here and press <b>Anhören</b> above. Turn the media volume up.</li>
+        </ol></div>
+      <div class="dia"><div class="cap">🎙 Mikrofon <small>(microphone)</small></div>
+        <ol class="steps">
+          <li>Use <b>Chrome</b>. Press <b>Testen</b> above and tap <b>Allow</b> when asked.</li>
+          <li>If you tapped Block: tap the 🔒 icon (or ⋮ menu → <b>Settings → Site settings → Microphone</b>) and set this site to <b>Allow</b>.</li>
+          <li>Still silent? <b>Settings → Apps → Chrome → Permissions → Microphone → Allow</b>.</li>
+        </ol></div>
+    </div>
+  </div>
+
+  <div class="dev" data-dev="ios" hidden>
+    <h3>📱 iPhone / iPad</h3>
+    <div class="cols2">
+      <div class="dia"><div class="cap">🔊 Deutsche Stimme <small>(German voice)</small></div>
+        <ol class="steps">
+          <li>Open <b>Settings → Accessibility → Spoken Content</b>. Can't find it? Pull down in Settings and search for <b>Spoken Content</b>, or scroll the Accessibility list (it is in the <b>Vision</b> group).</li>
+          <li>Turn on <b>Speak Selection</b> (or <b>Speak Screen</b>). The <b>Voices</b> row only shows up after that. You don't have to use the feature.</li>
+          <li>Tap <b>Voices → German</b>, pick a voice (for example <b>Anna</b>) and tap the download icon. <b>Enhanced</b> sounds best. Use Wi-Fi.</li>
+          <li><b>Still no German in the list?</b> Try <b>Settings → Accessibility → VoiceOver → Speech → Add New Language → German</b>, or add German in <b>Settings → General → Language &amp; Region → Add Language</b> first.</li>
+          <li>Check the <b>silent switch</b> on the side: if it is on (orange), the sound stays off. Turn the volume up.</li>
+          <li>Come back here and press <b>Anhören</b> above.</li>
+        </ol></div>
+      <div class="dia"><div class="cap">🎙 Mikrofon <small>(microphone)</small></div>
+        <ol class="steps">
+          <li>Use <b>Safari</b>. Press <b>Testen</b> above and tap <b>Allow</b>.</li>
+          <li>If you tapped Don't Allow: tap <b>aA</b> in the address bar → <b>Website Settings → Microphone → Allow</b>.</li>
+          <li>Or: <b>Settings → Apps → Safari → Microphone → Ask / Allow</b>.</li>
+          <li>Recording does not work in some in-app browsers (inside other apps). Open the page in Safari.</li>
+        </ol></div>
+    </div>
+  </div>
+
+  <div class="dev" data-dev="windows" hidden>
+    <h3>💻 Windows</h3>
+    <div class="cols2">
+      <div class="dia"><div class="cap">🔊 Deutsche Stimme <small>(German voice)</small></div>
+        <ol class="steps">
+          <li><b>Edge</b> has the best voices (for example <b>Katja</b>, <b>Conrad</b>, "Online (Natural)"). Chrome also works with "Google Deutsch".</li>
+          <li>No German voice in the test? Open <b>Settings → Time &amp; language → Speech → Manage voices → Add voices</b> and add <b>German (Germany)</b>.</li>
+          <li>Restart the browser, then press <b>Anhören</b> above.</li>
+          <li>Pick a voice with the small voice menu in the page header, if you see one.</li>
+        </ol></div>
+      <div class="dia"><div class="cap">🎙 Mikrofon <small>(microphone)</small></div>
+        <ol class="steps">
+          <li>Press <b>Testen</b> above and click <b>Allow</b> in the pop-up.</li>
+          <li>If you clicked Block: click the 🔒 icon left of the address → <b>Microphone → Allow</b>, then reload.</li>
+          <li>Still silent? <b>Settings → Privacy &amp; security → Microphone</b>: turn on <b>Microphone access</b> and <b>Let desktop apps access your microphone</b>.</li>
+          <li>Check the right microphone is chosen in <b>Settings → System → Sound → Input</b>.</li>
+        </ol></div>
+    </div>
+  </div>
+
+  <div class="dev" data-dev="mac" hidden>
+    <h3>💻 Mac</h3>
+    <div class="cols2">
+      <div class="dia"><div class="cap">🔊 Deutsche Stimme <small>(German voice)</small></div>
+        <ol class="steps">
+          <li>Open <b>System Settings → Accessibility → Spoken Content</b>.</li>
+          <li>Click <b>System voice → Manage Voices… → German</b> and download <b>Anna</b> (or Markus, Petra). Enhanced / Premium voices sound better.</li>
+          <li>Restart the browser, then press <b>Anhören</b> above.</li>
+          <li><b>Chrome</b> also brings its own "Google Deutsch" voice.</li>
+        </ol></div>
+      <div class="dia"><div class="cap">🎙 Mikrofon <small>(microphone)</small></div>
+        <ol class="steps">
+          <li>Press <b>Testen</b> above and click <b>Allow</b>.</li>
+          <li><b>Safari:</b> Safari menu → <b>Settings → Websites → Microphone</b> → set this site to <b>Allow</b>.</li>
+          <li><b>Chrome / Edge / Firefox:</b> click the 🔒 icon left of the address → <b>Microphone → Allow</b>, then reload.</li>
+          <li>Still silent? <b>System Settings → Privacy &amp; Security → Microphone</b> → turn your browser on.</li>
+        </ol></div>
+    </div>
+  </div>
+
+  <div class="dev" data-dev="other" hidden>
+    <h3>🖥 Linux / Chromebook / other</h3>
+    <div class="cols2">
+      <div class="dia"><div class="cap">🔊 Deutsche Stimme <small>(German voice)</small></div>
+        <ol class="steps">
+          <li><b>Chrome</b> and <b>Chromium</b> usually bring online "Google Deutsch" voices. You need an internet connection.</li>
+          <li><b>Firefox on Linux:</b> install <b>speech-dispatcher</b> and a German voice (for example <b>espeak-ng</b> or <b>mbrola-de</b>), then restart Firefox.</li>
+          <li><b>Chromebook:</b> <b>Settings → Accessibility → Text-to-speech → Voices</b>: add German.</li>
+        </ol></div>
+      <div class="dia"><div class="cap">🎙 Mikrofon <small>(microphone)</small></div>
+        <ol class="steps">
+          <li>Press <b>Testen</b> above and click <b>Allow</b>.</li>
+          <li>If blocked: click the 🔒 icon left of the address → <b>Microphone → Allow</b>, then reload.</li>
+          <li>Check the input device in your system sound settings.</li>
+        </ol></div>
+    </div>
+  </div>
+
+  <div class="rule"><b>Reminder · Why no sound?</b> Four common reasons: the <b>volume is off</b> (phones: media volume), the <b>silent switch</b> is on (iPhone), there is <b>no German voice</b> installed, or the page is opened <b>inside another app</b>. The microphone also needs <b>https</b> (or a local file on your own computer). <span class="en">The page works without a voice: you still see everything, you just don't hear it.</span></div>
+</section>
+</main>
+<footer class="foot" id="site-footer"></footer>
+</div>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/speech.js"></script>
+<script src="assets/js/einrichtung.js"></script>
+</body>
+</html>

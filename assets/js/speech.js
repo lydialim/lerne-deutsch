@@ -86,7 +86,7 @@ function voicePicker() {
     ? `<span>🔊 Stimme <span class="en">(voice)</span></span><select id="voiceSel" aria-label="German voice"></select>
        <label><input type="checkbox" id="slowChk"${TTS.slow() ? " checked" : ""}> 🐢 langsam <span class="en">(slow)</span></label>
        <button type="button" class="spk" id="voiceTest">Test</button>
-       <span class="warn" id="voiceWarn" hidden>No German voice found on this device. Audio may sound English. On a phone: Settings → Accessibility → Spoken content → Voices → German.</span>`
+       <span class="warn" id="voiceWarn" hidden>No German voice found on this device. Audio may sound English. <a href="../einrichtung.html">How to add a German voice →</a></span>`
     : `<span class="warn">This browser cannot read text aloud. Try Chrome, Edge or Safari.</span>`;
   box.innerHTML = `<summary>🔊 Stimme &amp; Tempo <span class="en">(voice &amp; speed)</span></summary><div class="vbody">${inner}</div>`;
   box.open = !(window.matchMedia && matchMedia("(max-width: 759px)").matches);

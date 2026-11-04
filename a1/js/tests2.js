@@ -154,10 +154,11 @@ function numBig(n){const t=Math.floor(n/1000),r=n%1000;return (t===1?"ein":num(t
 GROUPS.length=0;
 GROUPS.push(
  ["Alles","everything",["mix"]],
- ["Wortschatz","vocabulary",["wortschatz"]],
- ["A · Grammatik","grammar",["artikel","ein","plural","akkusativ","possessiv","wortart","verbform","warHatte","satzbau","ordnen","luecke","wfrage","antworten","kein"]],
- ["B · Buchstaben, Zahlen, Kalender","letters, numbers, calendar",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis","kalender","datum","zeitpraep"]],
- ["🔊 Hören","listening (turn the sound on)",["hoerenZahl","hoerenUhr","hoerenPreis","hoerenTelefon","hoerenName","hoerenPruefung"]],
- ["C · Themen","topics",["vorstellen","arbeit","aktion","weg","cafe","familie","laender","farben"]],
- ["D · Prüfung","exam",["lesenPruefung","formular"]]
+ ["Wörter","words: vocabulary, articles, plural",["wortschatz","artikel","ein","plural","wortart","akkusativ","possessiv"],"Wörter","words"],
+ ["Sätze","sentences: verbs, word order, questions",["verbform","warHatte","satzbau","ordnen","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
+ ["B · Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
+ ["B · Kalender","calendar",["kalender","datum","zeitpraep"],"Kalender","calendar"],
+ ["Hören","listening (turn the sound on)",["hoerenZahl","hoerenUhr","hoerenPreis","hoerenTelefon","hoerenName","hoerenPruefung"],"Hören","listening"],
+ ["C · Themen","topics",["vorstellen","arbeit","aktion","weg","cafe","familie","laender","farben"],"Themen","topics"],
+ ["D · Prüfung","exam",["lesenPruefung","formular"],"Prüfung","exam"]
 );

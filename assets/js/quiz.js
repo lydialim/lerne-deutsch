@@ -1,134 +1,220 @@
 /* Lerne Deutsch: test engine shared by every level.
-   Needs TESTS and GROUPS from <level>/js/tests.js.
+   Needs TESTS and GROUPS (and optional RULES) from <level>/js/tests.js, and num() from <level>/js/data.js.
+   GROUPS entries: [title, english, [test keys], tabLabel?, tabEnglish?]. The tests page shows one tab per group (except the "mix" group).
    Each test: {tag, title, en, kind: "choice" | "input" | "order" | "mixed", ranges?, gen(range) -> question}
    Each question: {prompt, answer, explain, kind? (overrides the test's kind), options? (choice), inputmode?, umlauts?,
      tokens + end? (order: shuffled word chips the learner taps into place; answer = tokens in order joined by spaces + end),
      say? (listening: German text read aloud with assets/js/speech.js, plays automatically), sayAfter? (read aloud from the feedback)}
+   Every test runs in rounds of 10 questions, with a progress bar, a streak counter, points and stars.
    Open a test directly with tests.html#<key>, e.g. tests.html#artikel or tests.html#mix. */
-let current = null, q = null, stats = { ok: 0, n: 0, miss: [] }, rangeIdx = {};
-const best = lstore.get("best", {});
-const MIX_LEN = 10;
+const ROUND=10, GOAL=20;
+const FLAME='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c1 3.5 5.5 6 5.5 11a5.5 5.5 0 0 1-11 0c0-2.4 1-4 2.2-5.2.2 1.6.9 2.7 2 3.2C10 8 10.5 5 12 2z"/></svg>';
+let current=null, q=null, stats=null, rangeIdx={};
+const GROUPS_SHOWN=GROUPS.filter(g=>!(g[2].length===1&&g[2][0]==="mix")).map(g=>[g[0],g[1],g[2],g[3]||g[0].split(" · ")[0],g[4]||g[1]]);
+const RULESET=typeof RULES!=="undefined"?RULES:[];
+const best=lstore.get("best",{});
+const starBest=lstore.get("stars",{});
+let xp=lstore.get("xp",0);
+let day=lstore.get("day",{date:"",count:0,streak:0});
+const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const today=()=>ymd(new Date()), yesterday=()=>ymd(new Date(Date.now()-864e5));
+function bumpDay(){ const t=today(); if(day.date!==t){ day.streak=day.date===yesterday()?day.streak+1:1; day.date=t; day.count=0; } day.count++; lstore.set("day",day); }
+const numSay=n=>typeof num==="function"?`${num(n)[0]} <span class="pron">(${num(n)[1]})</span>`:String(n);
+const starStr=s=>"★".repeat(s)+"☆".repeat(3-s);
 
-function renderGrid() {
-  $("#testGrid").innerHTML = GROUPS.map(([g, ge, keys]) =>
-    `<div class="tgroup"><h3>${g} <span class="en">(${ge})</span></h3><div class="tgrid">` +
-    keys.map(k => {
-      const t = TESTS[k], b = best[k];
-      return `<a class="tcard" href="#${k}" aria-pressed="${k === current}"><span class="tag">${t.tag}</span><h3>${t.title}</h3><span class="en">${t.en}</span>
-        <span class="best">${b ? `Your total: ${b.ok}/${b.n} right (${Math.round(b.ok / b.n * 100)}%)` : "Not tried yet"}</span></a>`;
-    }).join("") + `</div></div>`).join("");
+/* Tests overview: one screen. Slim stats line, one start button, group tabs, compact test list. */
+let homeTab=lstore.get("tab",0);
+function renderHome(){
+  const t=today(), streak=(day.date===t||day.date===yesterday())?day.streak:0, cnt=day.date===t?day.count:0;
+  const r=RULESET.length?RULESET[Math.floor(Date.now()/864e5)%RULESET.length]:null;
+  const weak=Object.entries(best).filter(([k,b])=>TESTS[k]&&k!=="mix"&&b.n>=5).sort((a,b)=>a[1].ok/a[1].n-b[1].ok/b[1].n)[0];
+  if(homeTab>=GROUPS_SHOWN.length) homeTab=0;
+  const [g,ge,keys]=GROUPS_SHOWN[homeTab];
+  document.body.classList.add("tests-page");
+  let h=`<div class="thome">
+   <div class="statline">
+    <span title="Tage in Folge (days in a row)"><span class="fl">${FLAME}</span><b>${streak}</b> Tage <small>(days)</small></span>
+    <span title="Tagesziel (daily goal)"><b>${Math.min(cnt,GOAL)}/${GOAL}</b> heute <small>(today)</small></span>
+    <span><b>${xp}</b> Punkte <small>(points)</small></span>
+   </div>
+   <a class="mixbtn" href="#mix"><span><b>Gemischter Test</b><small>10 Fragen, alle Teile (10 questions, all parts)</small></span><span class="play" aria-hidden="true">▶</span></a>`;
+  if(weak){ const [k,b]=weak; h+=`<a class="weakline" href="#${k}">Schwächstes <span class="en">(weakest)</span>: <b>${TESTS[k].title}</b> <span class="pct">${Math.round(b.ok/b.n*100)}%</span> →</a>`; }
+  h+=`<div class="gtabs" role="tablist" aria-label="Testgruppen (test groups)">${GROUPS_SHOWN.map((x,i)=>`<button type="button" role="tab" data-tab="${i}" aria-selected="${i===homeTab}">${x[3]}<small>${x[4]}</small></button>`).join("")}</div>
+   <div class="tlist" role="tabpanel" aria-label="${esc(g)} (${esc(ge)})">`+keys.map(k=>{const tt=TESTS[k],b=best[k],st=starBest[k]||0,pc=b?Math.round(b.ok/b.n*100):null;
+    return `<a class="trow" href="#${k}"><span class="tt"><b>${tt.title}</b><small>${tt.en}</small></span><span class="tr"><span class="stars" aria-label="${st} von 3 Sternen (${st} of 3 stars)">${starStr(st)}</span>${pc===null?"":`<small>${pc}%</small>`}</span></a>`}).join("")+`</div>`;
+  if(r) h+=`<div class="rday"><span class="tag">Regel des Tages · rule of the day</span><h3>${r[0]} <span class="en">(${r[1]})</span></h3><span class="ex">${r[2]}</span><span class="en">${r[3]}</span><a class="go" href="#${r[4]}">Üben (practise) →</a></div>`;
+  $("#testHome").innerHTML=h+`</div>`;
+  $("#testHome").querySelectorAll("[data-tab]").forEach(btn=>btn.onclick=()=>{homeTab=+btn.dataset.tab; lstore.set("tab",homeTab); renderHome(); const f=$(`#testHome [data-tab="${homeTab}"]`); if(f) f.focus({preventScroll:true});});
+  const sel=$(`#testHome [data-tab="${homeTab}"]`), strip=$("#testHome .gtabs"); if(sel&&strip) strip.scrollLeft=sel.offsetLeft-(strip.clientWidth-sel.offsetWidth)/2;
 }
 
-function start(k) {
-  if (!TESTS[k]) return;
-  current = k; stats = { ok: 0, n: 0, miss: [] }; lstore.set("test", k);
-  renderGrid(); nextQ();
+function showQuiz(on){ $("#testHome").hidden=on; $("#quiz").hidden=!on; document.body.classList.toggle("quizzing",on); if(!on) closeFb(); }
+function start(k){ current=k; stats={ok:0,n:0,miss:[],wrong:[],res:[],combo:0,maxCombo:0,xp:0}; lstore.set("test",k); showQuiz(true); window.scrollTo(0,0); nextQ(); }
+function exitQuiz(){ if(TESTS[decodeURIComponent(location.hash.slice(1))]){ location.hash=""; return; } current=null; showQuiz(false); renderHome(); window.scrollTo(0,0); }
+function nextQ(){
+  closeFb();
+  if(stats.n>=ROUND){ showResult(); return; }
+  const t=TESTS[current]; const r=t.ranges?t.ranges[rangeIdx[current]||0]:null;
+  q=t.gen(r); q.done=false; draw();
 }
-
-function nextQ() {
-  if (current === "mix" && stats.n >= MIX_LEN) { showResult(); return; }
-  const t = TESTS[current], r = t.ranges ? t.ranges[rangeIdx[current] || 0] : null;
-  q = t.gen(r); q.done = false; draw();
+function togo(){
+  const left=ROUND-stats.n;
+  if(left<=0) return `<b>Fertig!</b> (done) Alle ${numSay(ROUND)} Fragen beantwortet (all questions answered)`;
+  if(left===1) return `<b>Letzte Frage!</b> (last question)`;
+  return `<b>Noch ${left} Fragen</b> (${left} questions to go) · ${numSay(left)}`;
 }
-
-function draw() {
-  const t = TESTS[current], kind = q.kind || t.kind;
-  let h = `<div class="panelhead"><div><h2>${t.title}</h2><span class="en">${current === "mix" ? `Frage ${stats.n + 1} von ${MIX_LEN} · ${q.from}` : t.en}</span></div><span class="score">Richtig (correct): ${stats.ok}/${stats.n}</span></div>`;
-  if (t.ranges) h += `<div class="seg" role="group" aria-label="Range">${t.ranges.map((r, i) => `<button data-r="${i}" aria-pressed="${(rangeIdx[current] || 0) === i}">${r[0]}</button>`).join("")}</div>`;
-  h += `<div class="q">${q.prompt}</div>`;
-  if (q.say) h += `<div class="controls"><button class="btn ghost" type="button" id="again">▶ Anhören <span class="en">(listen)</span></button><button class="btn ghost" type="button" id="slow">🐢 Langsam <span class="en">(slow)</span></button>${typeof TTS !== "undefined" && TTS.ok ? "" : `<span class="warn">Audio doesn't work in this browser. Try Chrome, Edge or Safari.</span>`}</div>`;
-  if (kind === "order") {
-    h += `<div class="ordline" id="built" aria-label="Dein Satz (your sentence)"></div><div class="pool" id="pool"></div>
+function topBar(){
+  const shown=Math.min(stats.n+1,ROUND);
+  return `<div class="qtop"><button class="xbtn" id="qx" type="button" aria-label="Test beenden (end test)">✕</button>
+   <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="${ROUND}" aria-valuenow="${stats.n}" aria-label="Fortschritt (progress)">${Array.from({length:ROUND},(_,i)=>`<i class="${stats.res[i]===true?"ok":stats.res[i]===false?"no":i===stats.n?"cur":""}"></i>`).join("")}</div>
+   <span class="qcount" id="qcount" aria-label="Frage ${shown} von ${ROUND} (question ${shown} of ${ROUND})">${shown}<small>/${ROUND}</small></span>
+   <div class="qtogo"><span id="togo">${togo()}</span><span class="streak ${stats.combo>=3?"hot":""}" title="Richtig in Folge (correct in a row)">${FLAME}<span id="combo">${stats.combo}</span></span></div></div>`;
+}
+function draw(){
+  const t=TESTS[current], kind=q.kind||t.kind;
+  window.scrollTo(0,0);
+  let h=topBar()+`<div class="qcard">
+   <div class="qhead"><span class="tag">${current==="mix"?esc(q.from):esc(t.tag)}</span><h2 class="qtitle">${t.title} <span class="en">(${t.en})</span></h2></div>`;
+  if(t.ranges) h+=`<div class="seg" role="group" aria-label="Bereich (range)">${t.ranges.map((r,i)=>`<button type="button" data-r="${i}" aria-pressed="${(rangeIdx[current]||0)===i}">${r[0]}</button>`).join("")}</div>`;
+  h+=`<div class="q">${q.prompt}</div>`;
+  if(q.say) h+=`<div class="controls"><button class="btn ghost" type="button" id="again">▶ Anhören <span class="en">(listen)</span></button><button class="btn ghost" type="button" id="slow">🐢 Langsam <span class="en">(slow)</span></button>${typeof TTS!=="undefined"&&TTS.ok?"":`<span class="warn">Audio doesn't work in this browser. Try Chrome, Edge or Safari.</span>`}</div>`;
+  if(kind==="order"){
+    h+=`<div class="ordline" id="built" aria-label="Dein Satz (your sentence)"></div><div class="pool" id="pool"></div>
       <div class="controls"><button class="btn" type="button" id="chk">Prüfen <span style="font-weight:400">(check)</span></button><button class="btn ghost" type="button" id="undo">↺ Neu <span class="en">(reset)</span></button></div>`;
-  } else if (kind === "choice") {
-    h += `<div class="opts">${q.options.map((o, i) => `<button class="opt ${q.cls ? q.cls(o) : ""}" data-i="${i}">${q.label ? q.label(o) : esc(o)}</button>`).join("")}</div>`;
+  } else if(kind==="choice"){
+    h+=`<div class="opts">${q.options.map((o,i)=>`<button type="button" class="opt ${q.cls?q.cls(o):""}" data-i="${i}">${i<9?`<span class="k">${i+1}</span>`:""}<span>${q.label?q.label(o):esc(o)}</span></button>`).join("")}</div>`;
   } else {
-    h += `<form class="answerrow" id="ansForm"><input type="text" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" ${q.inputmode ? `inputmode="${q.inputmode}"` : ""} aria-label="Your answer" placeholder="Antwort (answer)">
-      ${q.umlauts ? `<div class="umlauts">${["ä", "ö", "ü", "ß"].map(c => `<button type="button" data-ch="${c}">${c}</button>`).join("")}</div>` : ""}
+    h+=`<form class="answerrow" id="ansForm"><input type="text" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" ${q.inputmode?`inputmode="${q.inputmode}"`:""} aria-label="Deine Antwort (your answer)" placeholder="Antwort (answer)">
+      ${q.umlauts?`<div class="umlauts">${["ä","ö","ü","ß"].map(c=>`<button type="button" data-ch="${c}">${c}</button>`).join("")}</div>`:""}
       <button class="btn" type="submit">Prüfen <span style="font-weight:400">(check)</span></button></form>`;
   }
-  h += `<div id="fb"></div>`;
-  $("#panel").innerHTML = h;
-  $("#panel").querySelectorAll("[data-r]").forEach(b => b.onclick = () => { rangeIdx[current] = +b.dataset.r; nextQ(); });
-  if (q.say) { $("#again").onclick = () => speak(q.say); $("#slow").onclick = () => speak(q.say, 0.6); setTimeout(() => speak(q.say), 250); }
-  if (kind === "order") drawOrder();
-  else if (kind === "choice") {
-    $("#panel").querySelectorAll(".opt").forEach(b => b.onclick = () => answer(q.options[+b.dataset.i], b));
-  } else {
-    const inp = $("#ans"); inp.focus({ preventScroll: true });
-    $("#panel").querySelectorAll("[data-ch]").forEach(b => b.onclick = () => { inp.value += b.dataset.ch; inp.focus(); });
-    $("#ansForm").onsubmit = e => { e.preventDefault(); if (q.done) { nextQ(); return; } if (inp.value.trim()) answer(inp.value.trim()); };
+  $("#quiz").innerHTML=h+`</div>`;
+  $("#qx").onclick=exitQuiz;
+  $("#quiz").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{rangeIdx[current]=+b.dataset.r; const tt=TESTS[current]; q=tt.gen(tt.ranges[+b.dataset.r]); q.done=false; draw();});
+  if(q.say){ $("#again").onclick=()=>speak(q.say); $("#slow").onclick=()=>speak(q.say,0.6); setTimeout(()=>speak(q.say),250); }
+  if(kind==="order") drawOrder();
+  else if(kind==="choice") $("#quiz").querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(q.options[+b.dataset.i],b));
+  else {
+    const inp=$("#ans"); if(matchMedia("(hover:hover)").matches) inp.focus({preventScroll:true});
+    $("#quiz").querySelectorAll("[data-ch]").forEach(b=>b.onclick=()=>{inp.value+=b.dataset.ch; inp.focus();});
+    $("#ansForm").onsubmit=e=>{e.preventDefault(); if(q.done){nextQ();return} if(inp.value.trim()) answer(inp.value.trim());};
   }
 }
-
 /* order questions: tap a chip in the pool to add it, tap it in the sentence to take it back */
-function drawOrder() {
-  let built = [];
-  const end = q.end || "";
-  const paint = () => {
-    const inPool = q.tokens.map((_, i) => i).filter(i => !built.includes(i));
-    $("#built").innerHTML = (built.length ? built.map(i => `<button type="button" class="chipbtn" data-b="${i}">${esc(q.tokens[i])}</button>`).join("")
-      : `<span class="ph">Tippe die Wörter an. <span class="en">(Tap the words.)</span></span>`) + `<span class="endp">${esc(end)}</span>`;
-    $("#pool").innerHTML = inPool.map(i => `<button type="button" class="chipbtn" data-p="${i}">${esc(q.tokens[i])}</button>`).join("");
-    if (q.done) $("#panel").querySelectorAll(".chipbtn").forEach(b => b.disabled = true);
-    $("#pool").querySelectorAll("[data-p]").forEach(b => b.onclick = () => { if (q.done) return; built.push(+b.dataset.p); paint(); });
-    $("#built").querySelectorAll("[data-b]").forEach(b => b.onclick = () => { if (q.done) return; built = built.filter(i => i !== +b.dataset.b); paint(); });
+function drawOrder(){
+  let built=[];
+  const end=q.end||"";
+  const paint=()=>{
+    const inPool=q.tokens.map((_,i)=>i).filter(i=>!built.includes(i));
+    $("#built").innerHTML=(built.length?built.map(i=>`<button type="button" class="chipbtn" data-b="${i}">${esc(q.tokens[i])}</button>`).join("")
+      :`<span class="ph">Tippe die Wörter an. <span class="en">(Tap the words.)</span></span>`)+`<span class="endp">${esc(end)}</span>`;
+    $("#pool").innerHTML=inPool.map(i=>`<button type="button" class="chipbtn" data-p="${i}">${esc(q.tokens[i])}</button>`).join("");
+    if(q.done) $("#quiz").querySelectorAll(".chipbtn").forEach(b=>b.disabled=true);
+    $("#pool").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{ if(q.done) return; built.push(+b.dataset.p); paint(); });
+    $("#built").querySelectorAll("[data-b]").forEach(b=>b.onclick=()=>{ if(q.done) return; built=built.filter(i=>i!==+b.dataset.b); paint(); });
   };
   paint();
-  $("#undo").onclick = () => { if (q.done) return; built = []; paint(); };
-  $("#chk").onclick = () => {
-    if (q.done) return;
-    if (built.length < q.tokens.length) { $("#fb").innerHTML = `<p class="warn">Benutze alle Wörter. (Use all the words.)</p>`; return; }
-    const v = built.map(i => q.tokens[i]).join(" ") + end;
+  $("#undo").onclick=()=>{ if(q.done) return; built=[]; paint(); };
+  $("#chk").onclick=()=>{
+    if(q.done) return;
+    if(built.length<q.tokens.length){ toast("Benutze alle Wörter. (Use all the words.)"); return; }
+    const v=built.map(i=>q.tokens[i]).join(" ")+end;
     answer(v);
-    $("#built").classList.add(v === q.answer ? "ok" : "no"); paint();
-    $("#chk").disabled = true; $("#undo").disabled = true;
+    $("#built").classList.add(v===q.answer?"ok":"no"); paint();
+    $("#chk").disabled=true; $("#undo").disabled=true;
   };
 }
-
-function answer(v, btn) {
-  if (q.done) return; q.done = true;
-  const kind = q.kind || TESTS[current].kind;
-  const ok = kind === "choice" || kind === "order" ? v === q.answer : (norm(v) === norm(q.answer) || v.trim() === q.answer);
-  stats.n++;
-  if (ok) stats.ok++; else if (q.fromKey && !stats.miss.includes(q.fromKey)) stats.miss.push(q.fromKey);
-  const b = best[current] || { ok: 0, n: 0 }; b.n++; if (ok) b.ok++; best[current] = b; lstore.set("best", best);
-  if (btn) {
-    $("#panel").querySelectorAll(".opt").forEach(o => { o.disabled = true; if (q.options[+o.dataset.i] === q.answer) o.classList.add("right"); });
-    if (!ok) btn.classList.add("wrong");
-  }
-  $("#panel .score").textContent = `Richtig (correct): ${stats.ok}/${stats.n}`;
-  const last = current === "mix" && stats.n >= MIX_LEN;
-  $("#fb").innerHTML = `<div class="feedback ${ok ? "ok" : "no"}"><span class="verdict">${ok ? pick(["Richtig! (correct)", "Super! (great)", "Sehr gut! (very good)", "Genau! (exactly)"]) : `Leider falsch. (Sadly wrong.) Answer: ${esc(q.answer)}`}</span><span>${q.explain}</span></div>
-   <div class="controls" style="margin-top:10px">${(q.say || q.sayAfter) && typeof TTS !== "undefined" && TTS.ok ? `<button class="btn ghost" type="button" id="hearAns">🔊 <span class="en">(listen again)</span></button>` : ""}<button class="btn" id="next">${last ? 'Ergebnis <span style="font-weight:400">(result)</span> →' : 'Weiter <span style="font-weight:400">(next)</span> →'}</button></div>`;
-  $("#next").onclick = nextQ; $("#next").focus({ preventScroll: true });
-  if ($("#hearAns")) $("#hearAns").onclick = () => speak(q.sayAfter || q.say);
-  if (typeof addSpeakers === "function") addSpeakers($("#fb"));
-  renderGrid();
+const CHEERS=["Richtig! (correct)","Super! (great)","Sehr gut! (very good)","Genau! (exactly)","Toll! (great)","Prima! (excellent)"];
+const COMBO={3:"3 in Folge! (3 in a row)",5:"5 in Folge! Weiter so! (keep it up)",7:"7 in Folge! Wow!",10:"Perfekt! 10 von 10!"};
+function answer(v,btn){
+  if(q.done) return; q.done=true;
+  const kind=q.kind||TESTS[current].kind;
+  const ok = kind==="choice"||kind==="order" ? v===q.answer : (norm(v)===norm(q.answer)||v.trim()===q.answer);
+  stats.n++; stats.res.push(ok); let gain=0;
+  if(ok){ stats.ok++; stats.combo++; stats.maxCombo=Math.max(stats.maxCombo,stats.combo); gain=10+(stats.combo>=3?5:0); stats.xp+=gain; xp+=gain; lstore.set("xp",xp); }
+  else { stats.combo=0; if(q.from&&!stats.miss.includes(q.fromKey)) stats.miss.push(q.fromKey); stats.wrong.push({p:q.prompt,a:q.answer,e:q.explain,given:v}); }
+  const b=best[current]||{ok:0,n:0}; b.n++; if(ok) b.ok++; best[current]=b; lstore.set("best",best);
+  bumpDay();
+  if(btn){ $("#quiz").querySelectorAll(".opt").forEach(o=>{o.disabled=true; if(q.options[+o.dataset.i]===q.answer) o.classList.add("right");}); if(!ok) btn.classList.add("wrong"); }
+  else if(kind!=="order"){ const inp=$("#ans"); if(inp) inp.readOnly=true; }
+  const pi=$("#quiz").querySelectorAll(".prog i"); pi[stats.n-1].className=ok?"ok":"no"; $("#togo").innerHTML=togo();
+  $("#combo").textContent=stats.combo; $("#quiz .streak").classList.toggle("hot",stats.combo>=3);
+  if(ok&&COMBO[stats.combo]) toast(COMBO[stats.combo]);
+  const last=stats.n>=ROUND;
+  const sh=$("#fbSheet"); sh.className="fbsheet "+(ok?"ok":"no");
+  sh.innerHTML=`<div class="fbin"><div class="fbtop"><span class="verdict">${ok?pick(CHEERS):"Leider falsch. (Sadly wrong.)"}</span>${ok?`<span class="gain">+${gain} ${stats.combo>=3?"🔥":""}</span>`:""}</div>
+   ${ok?"":`<span class="ans">Richtig ist (correct is): ${esc(q.answer)}</span>`}<span>${q.explain}</span>
+   <div class="fbrow">${(q.say||q.sayAfter)&&typeof TTS!=="undefined"&&TTS.ok?`<button class="btn ghost" type="button" id="hearAns" aria-label="Noch einmal anhören (listen again)">🔊</button>`:""}<button class="btn" id="next" type="button">${last?'Ergebnis <span style="font-weight:400">(result)</span> →':`Weiter <span style="font-weight:400">(next) · noch ${ROUND-stats.n}</span> →`}</button></div></div>`;
+  sh.hidden=false; document.body.classList.add("fbopen"); fitAboveSheet();
+  $("#next").onclick=nextQ; $("#next").focus({preventScroll:true});
+  if($("#hearAns")) $("#hearAns").onclick=()=>speak(q.sayAfter||q.say);
+  if(typeof addSpeakers==="function") addSpeakers(sh);
 }
-
-function showResult() {
-  const pct = Math.round(stats.ok / stats.n * 100);
-  const msg = pct >= 80 ? "Super! Sehr gut. (Great! Very good.)" : pct >= 60 ? "Gut! (Good!) 60% is the pass mark in the exam." : "Weiter üben! (Keep practising!)";
-  $("#panel").innerHTML = `<div class="panelhead"><div><h2>Ergebnis <span class="en">(result)</span></h2><span class="en">Gemischter Test · ${MIX_LEN} Fragen</span></div></div>
-   <div class="q"><span class="big">${stats.ok} / ${stats.n}</span><span class="en">${msg}</span></div>
-   ${stats.miss.length ? `<div class="practice"><span>Üb das noch einmal <span class="en">(practise these again)</span></span>${stats.miss.map(k => `<a class="go" href="#${k}">${TESTS[k].title}</a>`).join("")}</div>` : ""}
-   <div class="controls"><button class="btn" id="againMix" type="button">Neuer Test <span style="font-weight:400">(new test)</span></button></div>`;
-  $("#againMix").onclick = () => start("mix");
+function closeFb(){ const s=$("#fbSheet"); if(s){ s.hidden=true; s.innerHTML=""; } document.body.classList.remove("fbopen"); const z=$("#quiz"); if(z) z.style.paddingBottom=""; }
+/* Keep the question and your answer visible above the feedback panel, without manual scrolling. */
+function fitAboveSheet(){
+  const sh=$("#fbSheet"), z=$("#quiz"); if(!sh||!z) return;
+  const hgt=sh.offsetHeight; z.style.paddingBottom=(hgt+16)+"px";
+  const target=z.querySelector(".opts")||z.querySelector(".answerrow")||z.querySelector(".pool"); if(!target) return;
+  const over=target.getBoundingClientRect().bottom-(innerHeight-hgt-12);
+  if(over>0) window.scrollBy({top:over,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
 }
+let toastT=null;
+function toast(msg){ const el=$("#toast"); el.textContent=msg; el.hidden=false; el.style.animation="none"; void el.offsetWidth; el.style.animation=""; clearTimeout(toastT); toastT=setTimeout(()=>el.hidden=true,1500); }
 
-/* Hash routing: tests.html#artikel opens that test. Clicking the current test again restarts it. */
-function fromHash(scroll) {
-  const k = decodeURIComponent(location.hash.slice(1));
-  if (!TESTS[k]) return false;
-  start(k);
-  if (scroll) setTimeout(() => $("#panel").scrollIntoView({ behavior: "smooth", block: "start" }), 30);
-  return true;
-}
-window.addEventListener("hashchange", () => fromHash(true));
-document.addEventListener("click", e => {
-  const a = e.target.closest('a[href^="#"]');
-  if (a && a.getAttribute("href").slice(1) === location.hash.slice(1)) { e.preventDefault(); fromHash(true); }
+document.addEventListener("keydown",e=>{
+  if(!document.body.classList.contains("quizzing")||!q||q.done) return;
+  if(e.target.matches("input,textarea,select")) return;
+  const n=parseInt(e.key,10); if(!n) return;
+  const o=$("#quiz").querySelectorAll(".opt")[n-1]; if(o){ e.preventDefault(); o.click(); }
 });
-renderGrid();
-if (!fromHash(true)) start(lstore.get("test", "artikel"));
+
+function showResult(){
+  closeFb();
+  const pct=Math.round(stats.ok/stats.n*100), s=pct===100?3:pct>=80?2:pct>=60?1:0;
+  const newBest=s>(starBest[current]||0); if(newBest){ starBest[current]=s; lstore.set("stars",starBest); }
+  const msg=pct===100?"Perfekt! Alles richtig. (Perfect! All correct.)":pct>=80?"Super! Sehr gut. (Great! Very good.)":pct>=60?"Bestanden! (Passed!) 60% is the pass mark in the exam.":"Weiter üben! (Keep practising!) You will get there.";
+  const t=TESTS[current];
+  let h=topBar()+`<div class="qcard"><div class="result">
+   <div class="bigstars" aria-label="${s} von 3 Sternen (${s} of 3 stars)">${[0,1,2].map(i=>`<span class="${i<s?"on":""}">★</span>`).join("")}</div>
+   <div class="rscore">${stats.ok} / ${stats.n}</div>
+   <span class="en">${numSay(stats.ok)} von <span class="pron">(fon)</span> ${numSay(stats.n)}</span>
+   <p class="rmsg">${msg}</p>
+   <div class="rchips"><span class="xp">+${stats.xp} Punkte (points)</span><span>${FLAME.replace('<svg','<svg style="width:16px;height:16px;vertical-align:-2px;color:var(--gold)"')} Beste Serie (best streak): ${stats.maxCombo}</span>${newBest?`<span>Neuer Rekord! (new record)</span>`:""}</div>`;
+  if(stats.wrong.length) h+=`<details class="review" ${stats.wrong.length<=3?"open":""}><summary><h3>Wiederholen <span class="en">(review your ${stats.wrong.length} mistakes)</span></h3></summary>${stats.wrong.map(w=>`<div class="rv"><div class="rp">${w.p}</div><span class="ra">✓ ${esc(w.a)} <span class="en" style="font-weight:400;color:var(--bad)">· deine Antwort (your answer): ${esc(w.given)}</span></span><span class="re">${w.e}</span></div>`).join("")}</details>`;
+  if(current==="mix"&&stats.miss.length) h+=`<div class="practice"><span>Üb das noch einmal <span class="en">(practise these again)</span></span>${stats.miss.map(k=>`<a class="go" href="#${k}">${TESTS[k].title}</a>`).join("")}</div>`;
+  h+=`<div class="rbtns"><button class="btn" id="again10" type="button">Noch eine Runde <span style="font-weight:400">(one more round)</span></button><button class="btn ghost" id="home10" type="button">Übersicht <span style="font-weight:400">(overview)</span></button></div></div></div>`;
+  $("#quiz").innerHTML=h; window.scrollTo(0,0);
+  $("#qx").onclick=exitQuiz; $("#again10").onclick=()=>start(current); $("#home10").onclick=exitQuiz;
+  if(s>=2) confetti();
+}
+
+function confetti(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const c=$("#confetti"), x=c.getContext("2d"), cs=getComputedStyle(document.documentElement);
+  const cols=["--der","--die","--das","--gold","--pl"].map(v=>cs.getPropertyValue(v).trim());
+  const W=c.width=innerWidth, H=c.height=innerHeight;
+  const P=Array.from({length:120},()=>({x:W/2+(Math.random()-.5)*W*.3,y:H*.35,vx:(Math.random()-.5)*11,vy:-Math.random()*12-4,r:Math.random()*6+4,a:Math.random()*6,va:(Math.random()-.5)*.3,c:pick(cols)}));
+  let f=0; (function step(){ x.clearRect(0,0,W,H); P.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va; x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(++f<150) requestAnimationFrame(step); else x.clearRect(0,0,W,H); })();
+}
+
+
+/* Hash routing: tests.html#artikel opens that test, tests.html shows the overview.
+   The browser's back button leaves a running test. */
+function fromHash(){
+  const k=decodeURIComponent(location.hash.slice(1));
+  if(TESTS[k]){ start(k); return true; }
+  if(current){ current=null; showQuiz(false); renderHome(); window.scrollTo(0,0); }
+  return false;
+}
+window.addEventListener("hashchange",fromHash);
+document.addEventListener("click",e=>{
+  const a=e.target.closest('a[href^="#"]'); if(!a) return;
+  const k=a.getAttribute("href").slice(1);
+  if(a.hasAttribute("data-scroll")){ e.preventDefault(); const el=document.getElementById(k); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); return; }
+  if(TESTS[k]&&k===decodeURIComponent(location.hash.slice(1))){ e.preventDefault(); start(k); }
+});
+document.body.insertAdjacentHTML("beforeend",'<div class="fbsheet" id="fbSheet" hidden></div><div class="toast" id="toast" role="status" hidden></div><canvas id="confetti" aria-hidden="true"></canvas>');
+renderHome();
+fromHash();

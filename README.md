@@ -4,7 +4,7 @@ Free German practice workbooks by level: lessons with memory diagrams, a one-pag
 
 | Level | Start page | What's inside |
 |---|---|---|
-| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 14 lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 21 tests and a 10-question mixed test |
+| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 18 lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 42 tests in rounds of 10 questions, with stars, streaks and a daily goal |
 | A2 | coming later | |
 
 Live site: https://lydialim.github.io/lerne-deutsch/
@@ -19,8 +19,8 @@ lerne-deutsch/
 │   ├── css/style.css         design system (colours: der blue, die red, das green, plural purple)
 │   └── js/
 │       ├── common.js         helpers + per-level browser storage
-│       ├── layout.js         page header and level menu (reads window.LEVEL)
-│       ├── quiz.js           test engine (reads TESTS and GROUPS)
+│       ├── layout.js         page header, phone bottom bar and lesson menu (reads window.LEVEL)
+│       ├── quiz.js           test engine: overview tabs, 10-question rounds, progress, stars, review (reads TESTS, GROUPS, RULES)
 │       └── speech.js         reads German aloud (🔊 buttons, listening tests, voice picker)
 └── a1/
     ├── index.html            overview of all A1 lessons
@@ -31,11 +31,11 @@ lerne-deutsch/
     ├── spickzettel.html      cheat sheet
     ├── tests.html            all tests (open one directly: tests.html#artikel)
     └── js/
-        ├── level.js          A1 menu + storage prefix
+        ├── level.js          A1 menu, lesson list for the phone lesson menu (keep in step with the lessons) + storage prefix
         ├── data.js           word lists, sentences, number and time helpers
         ├── data2.js          vocabulary with articles, calendar, food, family, countries, exam texts
-        ├── tests.js          A1 test definitions (TESTS)
-        ├── tests2.js         more tests (listening, vocabulary, calendar …) and GROUPS (test page order)
+        ├── tests.js          A1 test definitions (TESTS) + RULES (rule of the day on the tests page)
+        ├── tests2.js         more tests (listening, vocabulary, calendar …) and GROUPS (one tab per group on the tests page: [title, English, keys, tab label, tab English])
         └── lessons.js        interactive parts of the lessons
 ```
 

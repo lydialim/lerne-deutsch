@@ -57,7 +57,7 @@ lerne-deutsch/
 ## Where to change things
 
 - **Lesson text:** edit the page for that part (`a1/grammatik.html`, …). Each lesson is one `<section class="lesson" id="l-…">`.
-- **Audio:** every `.train`, every element with `data-say="German text"`, and table columns headed Beispiel / Deutsch / Satz / Wort … get a 🔊 button automatically.
+- **Audio:** every `.train`, every element with `data-say="German text"`, and table columns headed Beispiel / Deutsch / Satz / Wort … get a 🔊 button automatically. See [Audio: setup and how it works](#audio-setup-and-how-it-works).
 - **Test questions:** add items to the lists in `a1/js/data.js` (for example `NOUNS`, `WQ`, `ORDER`).
 - **A new test:** add an entry to `TESTS` in `a1/js/tests.js` or `tests2.js` and its key to `GROUPS` (in `tests2.js`). A question with `say: "…"` is read aloud (listening test). Link to it from a lesson with `<a class="go" href="tests.html#key">`.
 - **Colours and fonts:** `assets/css/style.css`.
@@ -68,6 +68,27 @@ lerne-deutsch/
 2. In `a2/js/level.js`, change `id`, `level`, `title` and the menu.
 3. Replace the lessons, `data.js` and `tests.js` with A2 content. `assets/` stays shared.
 4. Add A2 to the table above and to the root `index.html`.
+
+## Audio: setup and how it works
+
+**How it works.** German is read aloud by the speech voice built into the browser or device (the Web Speech API). Nothing is downloaded from a server and no account is needed. The app lists the German voices it finds, ranking `de-DE` first and then Google, Natural, Premium or Enhanced voices, and uses the top one unless you choose another. The voice and the slow setting are saved in each visitor's browser. Recordings made on the exam page's Sprechen section stay in memory only: they are never uploaded and are lost on reload.
+
+**iPhone (Safari or Chrome)**
+1. Turn the volume up.
+2. Settings → Accessibility → Spoken Content → Voices → Deutsch. Download a voice such as Anna or Markus; Enhanced or Premium voices sound more natural.
+3. For recording, allow the microphone when asked. If you refused, go to Settings → Safari → Microphone, then reload.
+
+**Computer (Chrome, Edge, Firefox or Safari)**
+1. Windows: Settings → Time & language → Language & region → Deutsch → Language options → speech voice. Mac: System Settings → Accessibility → Spoken Content → System Voice → Manage Voices → Deutsch. Menu names differ between versions.
+2. In the app, open **🔊 Stimme & Tempo** at the top of the page, choose a German voice and press **Test**.
+3. For recording, allow the microphone. If you blocked it, click the padlock in the address bar, set Microphone to Allow, then reload.
+
+**In the app**
+- **🔊 Stimme & Tempo** (top of every page): voice choice, Test button and 🐢 langsam (slow, rate 0.65 instead of 0.9).
+- Every 🔊 button reads its text aloud with the chosen voice.
+- Sprechen (exam page): Anhören plays the model, Langsam plays it slower, Aufnehmen records up to 25 seconds, and Vergleichen plays the model followed by your recording.
+- Recording needs a secure page (https, or localhost while developing). GitHub Pages is https.
+- If no German voice is installed, the app shows a warning and the voice may sound English.
 
 ## Use it
 

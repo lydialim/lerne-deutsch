@@ -159,7 +159,7 @@
   </div>
   <div class="fbar">
     <p class="love">Mit <span class="heart" aria-label="Liebe">♥</span> gemacht von <b>lydialim</b> · © 2026 Lerne Deutsch</p>
-    <p>Entstanden auf meiner Deutsch-Lernreise, zusammen mit Claude. <span class="en">(Created on my German learning journey, together with Claude.)</span></p>
+    <p>Entstanden auf meiner Deutsch-Lernreise, zusammen mit Claude. <span class="en">(Built while learning German, with help from Claude.)</span></p>
     <p>Privates Lernprojekt, nicht verbunden mit dem Goethe-Institut oder Klett. Keine Cookies, kein Tracking. <span class="en">(Private project, not affiliated with the Goethe-Institut or Klett. No cookies, no tracking.)</span></p>
   </div>
   <details class="fnotes">

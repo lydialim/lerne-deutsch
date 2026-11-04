@@ -17,28 +17,37 @@ const TTS = (() => {
   }
   function voice() { return voices.find(v => v.name === pref()) || voices[0] || null; }
   /* iOS Safari quirks handled here:
-     - the first speak() must happen inside a real tap, so we "unlock" speech on the first touch/click;
-     - cancel() directly followed by speak() is silently dropped, so cancel only when needed and wait a tick;
-     - utterances can be garbage-collected mid-speech and then never play, so keep a reference. */
-  let unlocked = false, keep = null;
-  function unlock() {
-    if (unlocked || !ok) return;
-    unlocked = true;
-    try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; speechSynthesis.speak(u); } catch (e) {}
+     - speak() must run synchronously inside the tap (no setTimeout/await before it), or iOS blocks it;
+     - utterances can be garbage-collected mid-speech and then never play, so keep a reference;
+     - failures are shown in a small on-screen note, because iPhone has no easy console. */
+  let keep = null;
+  function note(msg) {
+    let n = document.getElementById("ttsNote");
+    if (!n) {
+      n = document.createElement("div"); n.id = "ttsNote"; n.setAttribute("role", "status");
+      n.style.cssText = "position:fixed;left:8px;right:8px;bottom:70px;z-index:99;background:#7a1f1f;color:#fff;padding:8px 12px;border-radius:10px;font-size:13px";
+      document.body.appendChild(n);
+    }
+    n.textContent = msg; n.hidden = false;
+    clearTimeout(note.t); note.t = setTimeout(() => { n.hidden = true; }, 6000);
   }
-  ["touchstart", "touchend", "click"].forEach(ev => document.addEventListener(ev, unlock, { once: false, passive: true, capture: true }));
   function speak(text, rate) {
     if (!ok || !text) return false;
-    const busy = speechSynthesis.speaking || speechSynthesis.pending;
-    if (busy) speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(String(text));
-    u.lang = "de-DE";
-    const v = voice(); if (v) u.voice = v;
-    u.rate = rate || (slow() ? 0.65 : 0.9);
-    keep = u;
-    u.onend = u.onerror = () => { if (keep === u) keep = null; };
-    const go = () => { if (speechSynthesis.paused) speechSynthesis.resume(); speechSynthesis.speak(u); };
-    if (busy) setTimeout(go, 80); else go();
+    try {
+      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+      if (speechSynthesis.paused) speechSynthesis.resume();
+      const u = new SpeechSynthesisUtterance(String(text));
+      u.lang = "de-DE";
+      const v = voice(); if (v) u.voice = v;
+      u.rate = rate || (slow() ? 0.65 : 0.9);
+      keep = u;
+      u.onend = () => { if (keep === u) keep = null; };
+      u.onerror = e => {
+        if (keep === u) keep = null;
+        if (e && e.error && !/canceled|interrupted/.test(e.error)) note("Audio error: " + e.error + ". Check silent switch, volume and the German voice (see Einrichtung).");
+      };
+      speechSynthesis.speak(u);
+    } catch (e) { note("Audio failed: " + e.message); return false; }
     return true;
   }
   function fillPicker() {

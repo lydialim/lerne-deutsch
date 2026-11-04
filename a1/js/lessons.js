@@ -157,7 +157,7 @@ if($("#sprechSim")){
   [3,"","Fenster","🪟","Kannst du bitte das Fenster öffnen?","Ja, gern."],
   [3,"","Kuli","🖊️","Hast du einen Kuli für mich?","Ja, hier bitte."],
   [3,"","Kaffee","☕","Ich möchte bitte einen Kaffee.","Gern. Mit Milch?"],
-  [3,"","Wasser","💧","Gib mir bitte das Wasser.","Hier, bitte."],
+  [3,"","Wasser","💧","Kannst du mir bitte das Wasser geben?","Hier, bitte."],
   [3,"","Handy","📱","Darf ich dein Handy benutzen?","Nein, tut mir leid."]];
  let c=null,shown=false;
  const draw=()=>{ if(!c){$("#sprechSim").innerHTML=`<div class="btns"><button type="button" class="go" data-g="2">Teil 2 · Karte ziehen <span class="en">(draw a card)</span></button><button type="button" class="go" data-g="3">Teil 3 · Bild ziehen <span class="en">(draw a picture)</span></button></div>`;return;}

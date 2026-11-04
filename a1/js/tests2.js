@@ -82,7 +82,7 @@ Object.assign(TESTS,{
    return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([...x[2]]),answer:x[2][0],explain:`<b>${esc(full)}</b><br>${x[3]}<br><span class="en">Trick: <b>am</b> Tag (day) · <b>um</b> Uhr (clock) · <b>im</b> Monat, Jahreszeit (month, season).</span>`,sayAfter:full}}},
 
  /* ---------- food and shopping ---------- */
- akkusativ:{tag:"Akkusativ",title:"einen, eine, ein · den, die, das",en:"the object form: Ich nehme einen Kaffee",kind:"choice",
+ akkusativ:{enReq:true,tag:"Akkusativ",title:"einen, eine, ein · den, die, das",en:"the object form: Ich nehme einen Kaffee",kind:"choice",
   gen(){const m=rnd(0,3);const pool=VOCAB.filter(v=>v.p!==""&&!v.note&&["essen","alltag","wohnung"].includes(v.t));const n=pick(pool);const v=pick(SHOPVERBS);
    const tab=`<br><span class="en">Akkusativ: der → <b>den / einen / keinen</b> · die, das, plural stay the same.</span>`;
    if(m===0){const a=n.a==="der"?"einen":n.a==="die"?"eine":"ein";return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Ich ${v[0]} ___ ${n.w}.</span><span class="en">I ${v[1]} a ${n.en}.</span>`,options:["einen","eine","ein"],answer:a,
@@ -104,9 +104,9 @@ Object.assign(TESTS,{
    const ex2={Großeltern:"grandparents",Einzelkind:"only child",ledig:"single (not married)",geschieden:"divorced",verheiratet:"married",Nichte:"niece",Neffe:"nephew"}[x[2]];
    return{prompt:`<span class="big" style="font-size:clamp(20px,5vw,30px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([x[2],x[3],x[4]]),answer:x[2],
    explain:`<b>${esc(full)}</b><br>${x[2]} = ${v?`${artSpan(v.a,v.w)} = ${v.en}`:ex2||""}`,sayAfter:full}}},
- laender:{tag:"Länder · Sprachen",title:"Länder, Sprachen, Leute",en:"countries, languages and nationalities",kind:"choice",
+ laender:{enReq:true,tag:"Länder · Sprachen",title:"Länder, Sprachen, Leute",en:"countries, languages and nationalities",kind:"choice",
   gen(){const c=pick(COUNTRIES);const m=rnd(0,3);const name=c[0].replace(/^(die|der) /,"");const aus=`aus ${c[1]?c[1]+" ":""}${name}`;
-   if(m===0) return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Was spricht man in ${c[1]==="den"?"den USA":c[1]?(c[1]==="der"?"der ":"dem ")+name:name}?</span><span class="en">What language do people speak in ${c[5]}?</span>`,
+   if(m===0) return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Was spricht man in ${c[1]==="den"?"den USA":c[1]==="der"?"der "+name:c[1]?"im "+name:name}?</span><span class="en">What language do people speak in ${c[5]}?</span>`,
      options:opts4(c[2],COUNTRIES.map(y=>y[2]).filter(y=>y!==c[2])),answer:c[2],explain:`<b>${c[0]}</b> <span class="pron">(${c[6]})</span> → <b>${c[2]}</b>. Languages often end in <b>-isch</b>.`,sayAfter:`In ${name} spricht man ${c[2]}.`};
    if(m===1){const opts=c[1]?[aus,`aus ${name}`,`aus ${c[0]}`]:[aus,`aus der ${name}`,`aus dem ${name}`];
      return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Ich komme ___.</span><span class="en">I come from ${c[5]}.</span>`,options:shuffle(opts),answer:aus,
@@ -124,7 +124,7 @@ Object.assign(TESTS,{
    const x=pick(ZU);return{prompt:`<span class="big" style="font-size:clamp(20px,5vw,30px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([x[2],x[3],x[4]]),answer:x[2],explain:`<b>${esc(x[0].replace("___",x[2]))}</b><br>${x[5]}`,sayAfter:x[0].replace("___",x[2])}}},
 
  /* ---------- possessives, war/hatte ---------- */
- possessiv:{tag:"mein, dein, sein",title:"Possessivartikel",en:"my, your, his, her …: choose the right word",kind:"choice",
+ possessiv:{enReq:true,tag:"mein, dein, sein",title:"Possessivartikel",en:"my, your, his, her …: choose the right word",kind:"choice",
   gen(){const p=pick(POSS);const acc=Math.random()<.3;const nn=acc?pick(POSSN.filter(n=>["Schlüssel","Handy","Tasche","Auto","Name","Telefonnummer","Adresse"].includes(n[1]))):pick(POSSN);
    const ans=possForm(p[1],nn[0],nn[3],acc);const b=p[1]==="euer"?"eur":p[1];
    const wrongs=[b+"e",p[1],b+"en",b+"er"].filter(x=>x!==ans);const other=pick(POSS.filter(q=>q[1]!==p[1]));const oth=possForm(other[1],nn[0],nn[3],acc);
@@ -148,7 +148,7 @@ Object.assign(TESTS,{
    explain:`<b>Text:</b> ${esc(x[0])}<br><span class="en">${esc(x[6])}</span>`}}},
 
  /* ---------- modal verbs ---------- */
- modal:{tag:"Modalverben",title:"Modalverben",en:"können, müssen, wollen, dürfen, möchten: forms, meaning, word order",kind:"choice",
+ modal:{enReq:true,tag:"Modalverben",title:"Modalverben",en:"können, müssen, wollen, dürfen, möchten: forms, meaning, word order",kind:"choice",
   gen(){const m=Math.random();
    if(m<.35){const v=pick(MODKEYS);const i=rnd(0,5);const f=MOD[v].slice(0,6);const ans=f[i];
     return{prompt:`<span class="big">${PERS6[i][0]} ___</span><span class="en">${v} (${MOD[v][6]}) · ${PERS6[i][1]}</span>`,
@@ -194,7 +194,7 @@ const MODGAP=[
  [1,"___ du mir helfen?","Can you help me?","können"],
  [0,"___ ich hier sitzen?","May I sit here?","dürfen"],
  [2,"Das Kind ___ nicht lange fernsehen.","The child is not allowed to watch TV for long.","dürfen","nicht dürfen = forbidden."],
- [5,"Sie ___ am Montag nicht arbeiten.","They don't have to work on Monday.","müssen","nicht müssen = don't have to."],
+ [5,"Sie ___ am Montag nicht arbeiten, denn Montag ist frei.","They don't have to work on Monday, because Monday is a day off.","müssen","nicht müssen = don't have to."],
  [4,"Ihr ___ leise sein.","You (all) must be quiet.","müssen"],
  [1,"Was ___ du am Wochenende machen?","What do you want to do at the weekend?","wollen"],
  [2,"Anna ___ sehr gut Deutsch sprechen.","Anna can speak German very well.","können"],
@@ -222,17 +222,17 @@ GROUPS.push(
  ["Alles","everything",["mix"]],
  ["Wörter","words: vocabulary, articles, plural",["wortschatz","artikel","ein","plural","wortart","akkusativ","possessiv"],"Wörter","words"],
  ["Sätze","sentences: verbs, word order, questions",["verbform","dusie","warHatte","modal","satzbau","ordnen","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
- ["B · Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
- ["B · Kalender","calendar",["kalender","datum","zeitpraep"],"Kalender","calendar"],
+ ["Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
+ ["Kalender","calendar",["kalender","datum","zeitpraep"],"Kalender","calendar"],
  ["Hören","listening (turn the sound on)",["hoerenZahl","hoerenUhr","hoerenPreis","hoerenTelefon","hoerenName","hoerenPruefung"],"Hören","listening"],
- ["C · Themen","topics",["vorstellen","arbeit","aktion","weg","cafe","familie","laender","farben","themen2"],"Themen","topics"],
- ["D · Prüfung","exam",["lesenPruefung","formular"],"Prüfung","exam"]
+ ["Themen","topics",["vorstellen","arbeit","aktion","weg","cafe","familie","laender","farben","themen2"],"Themen","topics"],
+ ["Prüfung","exam",["lesenPruefung","formular"],"Prüfung","exam"]
 );
 
 /* du or Sie: situations [text, du|Sie] and gaps [sentence, answer, [wrong, wrong], English, explanation] */
 const DUSIE_SIT=[["Your friend Anna","du"],["The examiner in the speaking test","Sie"],["Your classmate","du"],["A doctor you meet for the first time","Sie"],["An older man you do not know","Sie"],["A child in the park","du"],["The bank clerk","Sie"],["Your brother","du"],["The hotel receptionist","Sie"],["Your boss","Sie"],["Your exam partner in Sprechen Teil 2","du"],["An email to a language school","Sie"],["A colleague who says: 'Wir können uns duzen.'","du"],["Your landlord, first meeting","Sie"]];
 const DUSIE_GAP=[
- ["Wie ___ du?","heißt",["heißen","heiße"],"What is your name? (friend)","du → -st / -t after ß: heißt."],
+ ["Wie ___ du?","heißt",["heißen","heiße"],"What is your name? (friend)","du → -st, but after ß only -t: du heißt."],
  ["Wie ___ Sie?","heißen",["heißt","heiße"],"What is your name? (formal)","Sie → -en, the same as wir."],
  ["Woher ___ du?","kommst",["kommen","kommt"],"Where are you from? (friend)","du → -st."],
  ["Woher ___ Sie?","kommen",["kommst","kommt"],"Where are you from? (formal)","Sie → -en."],
@@ -251,6 +251,6 @@ const THEMEN2=[
  ["das Wetter","weather"],["die Sonne","sun"],["der Regen","rain"],["der Schnee","snow"],["der Wind","wind"],["die Wolke","cloud"],["das Gewitter","thunderstorm"],["Es regnet.","It is raining."],["Es schneit.","It is snowing."],["sonnig","sunny"],["bewölkt","cloudy"],["kalt","cold"],["heiß","hot"],
  ["der Kopf","head"],["das Auge","eye"],["das Ohr","ear"],["der Mund","mouth"],["die Nase","nose"],["der Hals","neck, throat"],["der Arm","arm"],["die Hand","hand"],["der Bauch","stomach, belly"],["das Bein","leg"],["der Fuß","foot"],["der Rücken","back"],["der Zahn","tooth"],["der Arzt","doctor"],["das Fieber","fever"],["der Husten","cough"],["Kopfschmerzen","headache"],["die Tablette","tablet"],["die Apotheke","pharmacy"],["Gute Besserung!","Get well soon!"],["krank","ill"],
  ["das T-Shirt","T-shirt"],["die Hose","trousers"],["das Kleid","dress"],["die Jacke","jacket"],["die Schuhe","shoes"],["die Socken","socks"],["die Mütze","cap, hat"],["der Schal","scarf"],["die Größe","size"],["zu groß","too big"],["zu klein","too small"],["zu teuer","too expensive"],["anprobieren","to try on"],
- ["der Bus","bus"],["die Straßenbahn","tram"],["die U-Bahn","underground"],["der Zug","train"],["das Flugzeug","aeroplane"],["der Bahnhof","station"],["die Haltestelle","bus stop"],["das Gleis","platform"],["die Fahrkarte","ticket"],["einfach","single (ticket)"],["hin und zurück","return"],["die Verspätung","delay"],["die Abfahrt","departure"],["die Ankunft","arrival"],
+ ["der Bus","bus"],["die Straßenbahn","tram"],["die U-Bahn","underground"],["der Zug","train"],["das Flugzeug","aeroplane"],["der Bahnhof","station"],["die Haltestelle","bus stop"],["das Gleis","platform"],["die Fahrkarte","ticket"],["einfach","single (ticket)"],["hin und zurück","return (ticket)"],["die Verspätung","delay"],["die Abfahrt","departure"],["die Ankunft","arrival"],
  ["das Zimmer","room"],["das Einzelzimmer","single room"],["das Doppelzimmer","double room"],["der Schlüssel","key"],["das Frühstück","breakfast"],["die Rechnung","bill"],["der Brief","letter"],["die Briefmarke","stamp"],["das Paket","parcel"],["die Postkarte","postcard"],["der Absender","sender"],["der Empfänger","recipient"],["die Postleitzahl","postcode"]
 ];

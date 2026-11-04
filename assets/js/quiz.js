@@ -1,7 +1,7 @@
 /* Lerne Deutsch: test engine shared by every level.
    Needs TESTS and GROUPS (and optional RULES) from <level>/js/tests.js, and num() from <level>/js/data.js.
    GROUPS entries: [title, english, [test keys], tabLabel?, tabEnglish?]. The tests page shows one tab per group (except the "mix" group).
-   Each test: {tag, title, en, kind: "choice" | "input" | "order" | "mixed", ranges?, gen(range) -> question}
+   Each test: {tag, title, en, enReq? (true = the English line is part of the exercise, so it stays visible even when EN is off), kind: "choice" | "input" | "order" | "mixed", ranges?, gen(range) -> question}
    Each question: {prompt, answer, explain, kind? (overrides the test's kind), options? (choice), inputmode?, umlauts?,
      tokens + end? (order: shuffled word chips the learner taps into place; answer = tokens in order joined by spaces + end),
      say? (listening: German text read aloud with assets/js/speech.js, plays automatically), sayAfter? (read aloud from the feedback)}
@@ -81,7 +81,7 @@ function showIntro(){
     <li><span class="ic">${how[0]}</span><span>${how[1]}<small class="keep">${how[2]}</small></span></li>
     <li><span class="ic">✅</span><span>Unten siehst du: richtig oder falsch, mit Erklärung.<small class="keep">A panel at the bottom tells you right or wrong, with an explanation.</small></span></li>
     <li><span class="ic">➡️</span><span>Tippe auf „Weiter“ oder drücke Enter.<small class="keep">Tap “Weiter” (next) or press Enter for the next question.</small></span></li>
-    <li><span class="ic">EN</span><span>Englisch ein- oder ausschalten.<small class="keep">The EN button (top right) shows or hides English hints. It is off by default.</small></span></li>
+    <li><span class="ic">EN</span><span>Englisch ein- oder ausschalten.<small class="keep">The EN button (top right) shows or hides English hints. It is off by default. In a few exercises English stays on because you need it.</small></span></li>
     <li><span class="ic">✕</span><span>Mit ✕ beendest du den Test.<small class="keep">✕ (top left) ends the test. One round = ${ROUND} questions.</small></span></li>
    </ol>
    <div class="rbtns"><button class="btn" id="go" type="button">Los geht's <span style="font-weight:400">(start)</span> →</button><button class="btn ghost" id="intx" type="button">Zurück <span class="en">(back)</span></button></div></div>`;
@@ -129,7 +129,7 @@ function draw(){
   }
   $("#quiz").innerHTML=h+`</div>`;
   $("#qx").onclick=exitQuiz; $(".entog").onclick=toggleEn; applyEn();
-  { const qq=$("#quiz .q"), c=qq.cloneNode(true); c.querySelectorAll(".en").forEach(e=>e.remove()); if(!c.textContent.trim()) qq.classList.add("needs-en"); }
+  { const qq=$("#quiz .q"), c=qq.cloneNode(true); c.querySelectorAll(".en").forEach(e=>e.remove()); if(!c.textContent.trim()||TESTS[current].enReq||q.enReq) qq.classList.add("needs-en"); }
   $("#quiz").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{rangeIdx[current]=+b.dataset.r; const tt=TESTS[current]; q=tt.gen(tt.ranges[+b.dataset.r]); q.done=false; draw();});
   if(q.say){ $("#again").onclick=()=>speak(q.say); $("#slow").onclick=()=>speak(q.say,0.6); setTimeout(()=>speak(q.say),250); }
   if(kind==="order") drawOrder();

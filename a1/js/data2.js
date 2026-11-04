@@ -2,7 +2,7 @@
    possessives, war/hatte, exam reading and listening texts, and extra items for older tests. */
 
 /* ---------- vocabulary: [article, word, plural ("" = no plural), English, topic, note?] ---------- */
-const VTOPICS=[["essen","Essen und Trinken","food and drink"],["familie","Familie","family"],["wohnung","Wohnung","flat / home"],["stadt","Stadt und Verkehr","town and transport"],["zeit","Zeit","time"],["alltag","Alltag und Kleidung","everyday things and clothes"]];
+const VTOPICS=[["essen","Essen und Trinken","food and drink"],["beruf","Berufe","jobs"],["familie","Familie","family"],["wohnung","Wohnung","flat / home"],["stadt","Stadt und Verkehr","town and transport"],["zeit","Zeit","time"],["alltag","Alltag und Kleidung","everyday things and clothes"]];
 const VOCAB=[
  ["der","Kaffee","Kaffees","coffee","essen"],["der","Tee","Tees","tea","essen"],["der","Saft","Säfte","juice","essen"],["das","Wasser","","water","essen"],
  ["die","Milch","","milk","essen"],["das","Bier","Biere","beer","essen"],["der","Wein","Weine","wine","essen"],["das","Brot","Brote","bread","essen"],
@@ -46,7 +46,22 @@ const VOCAB=[
  ["der","Mittag","Mittage","noon / midday","zeit","Times of day are der … except die Nacht."],["der","Nachmittag","Nachmittage","afternoon","zeit","Times of day are der … except die Nacht."],["der","Abend","Abende","evening","zeit","Times of day are der … except die Nacht."],["die","Nacht","Nächte","night","zeit","The one exception: die Nacht. All other times of day are der."],
  ["das","Wochenende","Wochenenden","weekend","zeit","das Ende (the end) decides: das Wochenende."],["der","Termin","Termine","appointment","zeit"],["der","Geburtstag","Geburtstage","birthday","zeit","Like all days: der Tag → der Geburtstag."],["der","Urlaub","Urlaube","holiday / vacation","zeit"],
  ["der","Frühling","Frühlinge","spring","zeit","Seasons, months and days are all der."],["der","Sommer","Sommer","summer","zeit","Seasons, months and days are all der."],["der","Herbst","Herbste","autumn / fall","zeit","Seasons, months and days are all der."],["der","Winter","Winter","winter","zeit","Seasons, months and days are all der."],
- ["der","Montag","Montage","Monday","zeit","Days of the week are all der."],["der","Freitag","Freitage","Friday","zeit","Days of the week are all der."],["der","Mai","Maie","May","zeit","Months are all der."],["der","Dezember","Dezember","December","zeit","Months are all der."],
+ ["der","Montag","Montage","Monday","zeit","Days of the week are all der."],["der","Freitag","Freitage","Friday","zeit","Days of the week are all der."],["der","Mai","","May","zeit","Months are all der."],["der","Dezember","Dezember","December","zeit","Months are all der."],
+
+ ["der","Buchhalter","Buchhalter","accountant (m)","beruf"],
+ ["die","Buchhalterin","Buchhalterinnen","accountant (f)","beruf"],
+ ["der","Projektmanager","Projektmanager","project manager (m)","beruf"],
+ ["die","Projektmanagerin","Projektmanagerinnen","project manager (f)","beruf"],
+ ["der","Kellner","Kellner","waiter","beruf"],
+ ["die","Kellnerin","Kellnerinnen","waitress","beruf"],
+ ["der","Architekt","Architekten","architect (m)","beruf"],
+ ["die","Architektin","Architektinnen","architect (f)","beruf"],
+ ["der","Ingenieur","Ingenieure","engineer (m)","beruf"],
+ ["die","Ingenieurin","Ingenieurinnen","engineer (f)","beruf"],
+ ["der","Lehrer","Lehrer","teacher (m)","beruf"],
+ ["die","Lehrerin","Lehrerinnen","teacher (f)","beruf"],
+ ["der","Verkäufer","Verkäufer","salesperson (m)","beruf"],
+ ["die","Verkäuferin","Verkäuferinnen","salesperson (f)","beruf"],
 
  ["der","Kuli","Kulis","pen","alltag"],["das","Heft","Hefte","exercise book","alltag"],["das","Buch","Bücher","book","alltag"],["die","Tasche","Taschen","bag","alltag"],
  ["die","Brille","Brillen","glasses","alltag"],["die","Uhr","Uhren","clock / watch","alltag"],["das","Handy","Handys","mobile phone","alltag"],["der","Schlüssel","Schlüssel","key","alltag"],
@@ -146,7 +161,7 @@ const FAMQ=[
  ["Meine Mutter und mein Vater sind meine ___.","My mother and my father are my …","Eltern","Geschwister","Kinder"],
  ["Mein Bruder und meine Schwester sind meine ___.","My brother and my sister are my …","Geschwister","Eltern","Großeltern"],
  ["Der Sohn von meinem Sohn ist mein ___.","My son's son is my …","Enkel","Neffe","Bruder"],
- ["Die Tochter von meinen Eltern ist meine ___.","My parents' daughter is my …","Schwester","Tochter","Tante"],
+ ["Die andere Tochter von meinen Eltern ist meine ___.","My parents' other daughter is my …","Schwester","Tochter","Tante"],
  ["Ich bin die Mutter. Mein Kind ist ein Junge. Er ist mein ___.","I am the mother. My child is a boy. He is my …","Sohn","Bruder","Vater"],
  ["Ich bin der Vater. Mein Kind ist ein Mädchen. Sie ist meine ___.","I am the father. My child is a girl. She is my …","Tochter","Schwester","Mutter"],
  ["Mein Opa und meine Oma sind meine ___.","My grandpa and my grandma are my …","Großeltern","Eltern","Geschwister"],
@@ -202,7 +217,7 @@ const WARHATTE=[
  ["Gestern ___ ich krank.","Yesterday I was ill.","war","hatte","bin","sein → <b>ich war</b>. Gestern = yesterday."],
  ["Letzte Woche ___ ich keine Zeit.","Last week I had no time.","hatte","war","habe","haben → <b>ich hatte</b>."],
  ["Wo ___ du am Wochenende?","Where were you at the weekend?","warst","hattest","wart","du → <b>warst</b> (-st, like every du form)."],
- ["___ ihr gestern im Kino?","Were you (all) at the cinema yesterday?","Wart","Wart ihr","Waren","ihr → <b>wart</b>."],
+ ["___ ihr gestern im Kino?","Were you (all) at the cinema yesterday?","Wart","Warst","Waren","ihr → <b>wart</b>."],
  ["Wir ___ im Urlaub in Spanien.","We were on holiday in Spain.","waren","war","hatten","wir → <b>waren</b>."],
  ["Mein Vater ___ früher ein Auto.","My father had a car in the past.","hatte","hat","war","er → <b>hatte</b>. früher = in the past."],
  ["Das Wetter ___ schön.","The weather was nice.","war","hatte","waren","es → <b>war</b>."],
@@ -237,7 +252,7 @@ const LESEN=[
   en:"Supermarket Frisch. Opening hours: Mon–Sat 7 (sieben) – 21 (einundzwanzig, AYN-oont-TSVAN-tsikh) o'clock. Sunday closed.",
   qs:[["Man kann am Sonntag einkaufen.","You can go shopping on Sunday.",0,"Sonntag <b>geschlossen</b>."],["Am Samstag ist der Supermarkt bis 21 Uhr offen.","On Saturday the supermarket is open until 9 pm.",1,"Mo – Sa 7 – 21 Uhr."]]},
  {t:"Wohnung zu vermieten: 2 Zimmer, Küche, Bad, Balkon. 55 m², 3. Stock, 750 € warm. Ab 1. März. Tel. 0176 554433",
-  en:"Flat to rent: 2 (zwei) rooms, kitchen, bath, balcony. 55 m² (fünfundfünfzig Quadratmeter), 3rd (dritter) floor, 750 € (siebenhundertfünfzig) incl. heating. From 1 March (ersten März). Phone …",
+  en:"Flat to rent: 2 (zwei) rooms, kitchen, bath, balcony. 55 m² (fünfundfünfzig Quadratmeter), 3rd (dritter) floor, 750 € (siebenhundertfünfzig) including utilities (warm). From 1 March (ersten März). Phone …",
   qs:[["Die Wohnung hat einen Balkon.","The flat has a balcony.",1,"„Balkon“ is in the list."],["Die Wohnung ist ab Januar frei.","The flat is free from January.",0,"ab 1. <b>März</b>."]]},
  {t:"Deutschkurs A1 für Anfänger\nDienstag und Donnerstag, 18:30 – 20:00 Uhr\nBeginn: 4. November\nAnmeldung im Büro, Raum 12",
   en:"German course A1 for beginners. Tuesday and Thursday 18:30 (achtzehn Uhr dreißig) – 20:00. Start: 4 (vierten) November. Registration in-the office, room 12 (zwölf).",
@@ -261,12 +276,12 @@ const LESEN=[
 /* ---------- exam: listening. [what is said, question, English question, right, wrong, wrong, English of the text] ---------- */
 const HOEREN=[
  ["Achtung an Gleis 4: Der Zug nach Hamburg fährt heute von Gleis 7.","Von welchem Gleis fährt der Zug?","From which platform does the train leave?","Gleis 7","Gleis 4","Gleis 11","Attention at platform 4 (vier): The train to Hamburg leaves today from platform 7 (sieben, ZEE-ben)."],
- ["Hallo Maria, hier ist Peter. Wir treffen uns morgen um halb neun am Café. Tschüss!","Wann treffen sie sich?","When are they meeting?","um 8:30 Uhr","um 9:30 Uhr","um 9:00 Uhr","Hello Maria, here is Peter. We meet tomorrow at half nine (halb neun, halp noyn = 8:30) at-the café."],
+ ["Hallo Maria, hier ist Peter. Wir treffen uns morgen um halb neun im Café. Tschüss!","Wann treffen sie sich?","When are they meeting?","um 8:30 Uhr","um 9:30 Uhr","um 9:00 Uhr","Hello Maria, here is Peter. We meet tomorrow at half nine (halb neun, halp noyn = 8:30) in the café."],
  ["Guten Tag, hier ist die Praxis Dr. Klein. Ihr Termin ist nicht am Montag, sondern am Mittwoch um zehn Uhr.","Wann ist der Termin?","When is the appointment?","Mittwoch, 10 Uhr","Montag, 10 Uhr","Mittwoch, 12 Uhr","Good day, here is the practice Dr Klein. Your appointment is not on Monday but on Wednesday at ten (zehn, tsayn) o'clock."],
  ["Was kostet das T-Shirt? – Das kostet neunzehn Euro neunundneunzig.","Was kostet das T-Shirt?","How much is the T-shirt?","19,99 €","9,99 €","90,99 €","What costs the T-shirt? – It costs 19.99 € (NOYN-tsayn OY-ro NOYN-oont-NOYN-tsikh)."],
  ["Liebe Kunden, heute haben wir Äpfel im Angebot: ein Kilo nur einen Euro fünfzig.","Was kostet ein Kilo Äpfel?","How much is a kilo of apples?","1,50 €","5,10 €","1,15 €","Dear customers, today we have apples on offer: a kilo only one euro fifty (FUENF-tsikh)."],
  ["Hallo, ich bin Frau Schulz. Meine Telefonnummer ist null eins sieben sechs, drei vier fünf, zwei zwei eins.","Wie ist die Telefonnummer?","What is the phone number?","0176 345 221","0167 345 221","0176 354 221","Hello, I am Mrs Schulz. My phone number is 0176 345 221."],
- ["Mein Name ist Krüger. K – R – Ü – G – E – R.","Wie heißt die Frau?","What is the woman's name?","Krüger","Kröger","Krieger","My name is Krüger, spelled K-R-Ü-G-E-R."],
+ ["Mein Name ist Krüger. K – R – Ü – G – E – R.","Wie heißt die Person?","What is the person's name?","Krüger","Kröger","Krieger","My name is Krüger, spelled K-R-Ü-G-E-R."],
  ["Der Deutschkurs beginnt nicht heute, sondern am Donnerstag.","Wann beginnt der Kurs?","When does the course start?","am Donnerstag","heute","am Dienstag","The German course starts not today but on Thursday."],
  ["Entschuldigung, wo ist die Post? – Gehen Sie geradeaus und dann die zweite Straße links.","Wo ist die Post?","Where is the post office?","zweite Straße links","erste Straße rechts","zweite Straße rechts","Excuse me, where is the post office? – Go straight ahead and then the second street left."],
  ["Ich komme heute etwas später. Mein Bus hat Verspätung. Ich bin um Viertel nach sieben da.","Wann kommt die Person?","When is the person arriving?","um 7:15 Uhr","um 6:45 Uhr","um 7:45 Uhr","I come today somewhat later. My bus is delayed. I am at quarter past seven (Viertel nach sieben = 7:15) there."],
@@ -277,7 +292,7 @@ const HOEREN=[
  ["Ich wohne in der Goethestraße, Hausnummer vierundzwanzig.","Wie ist die Hausnummer?","What is the house number?","24","42","14","I live in Goethe Street, house number 24 (vierundzwanzig — four-and-twenty)."],
  ["Mein Geburtstag ist am dritten Juli.","Wann hat die Person Geburtstag?","When is the person's birthday?","3. Juli","3. Juni","13. Juli","My birthday is on the third (dritten) of July (Juli)."],
  ["Achtung: Heute fährt die U-Bahn Linie drei nicht. Bitte nehmen Sie den Bus.","Was ist das Problem?","What is the problem?","Die U3 fährt nicht.","Der Bus fährt nicht.","Die U3 ist zu voll.","Attention: Today runs the underground line three not. Please take the bus."],
- ["Guten Tag, ich hätte gern zwei Brötchen und ein Stück Kuchen.","Was kauft die Frau?","What does the woman buy?","2 Brötchen und Kuchen","2 Brote und Kuchen","2 Stück Kuchen","Good day, I would like two (zwei) bread rolls and a piece of cake."],
+ ["Guten Tag, ich hätte gern zwei Brötchen und ein Stück Kuchen.","Was kauft die Person?","What does the person buy?","2 Brötchen und Kuchen","2 Brote und Kuchen","2 Stück Kuchen","Good day, I would like two (zwei) bread rolls and a piece of cake."],
  ["Wir sehen uns am Wochenende. Am Samstag habe ich keine Zeit, aber am Sonntag geht es.","Wann haben sie Zeit?","When do they have time?","am Sonntag","am Samstag","am Freitag","We see each other at the weekend. On Saturday I have no time, but on Sunday it works."],
  ["Das Museum ist montags geschlossen. Von Dienstag bis Sonntag ist es von zehn bis achtzehn Uhr geöffnet.","Wann ist das Museum geschlossen?","When is the museum closed?","am Montag","am Sonntag","am Dienstag","The museum is closed on Mondays. From Tuesday to Sunday it is open from ten (zehn) to eighteen (achtzehn) o'clock."],
  ["Entschuldigung, wie spät ist es? – Es ist zehn vor drei.","Wie spät ist es?","What time is it?","2:50 Uhr","3:10 Uhr","10:03 Uhr","Excuse me, what time is it? – It is ten to three (zehn vor drei = 2:50)."],
@@ -335,7 +350,7 @@ INTRO.push(
  ["Geschwister","Haben Sie Geschwister?","Ja, ich habe einen Bruder. / Nein, ich habe keine Geschwister.","Do you have brothers or sisters?"],
  ["Deutsch lernen","Warum lernen Sie Deutsch?","Ich lerne Deutsch, denn …","Why are you learning German?"],
  ["Urlaub","Wohin fahren Sie gern in Urlaub?","Ich fahre gern nach …","Where do you like to go on holiday?"],
- ["Wohnung","Wie wohnen Sie?","Ich wohne in einer Wohnung mit … Zimmern.","How do you live?"],
+ ["Wohnung","Wie wohnen Sie?","Ich wohne in einer Wohnung mit … Zimmern.","What is your home like?"],
  ["E-Mail","Haben Sie eine E-Mail-Adresse?","Ja, meine E-Mail-Adresse ist …","Do you have an e-mail address?"],
  ["Sport","Machen Sie Sport?","Ja, ich spiele … / Ich fahre gern Fahrrad.","Do you do sport?"],
  ["Arbeitszeit","Wann arbeiten Sie?","Ich arbeite von … bis …","When do you work?"]

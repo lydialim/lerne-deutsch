@@ -41,7 +41,7 @@ const TESTS={
    const opts=shuffle([t,...shuffle(TYPES.filter(x=>x!==t)).slice(0,3)]);
    return{prompt:`<span class="big" style="font-size:clamp(22px,5vw,32px)">${s.map((x,j)=>j===i?`<span class="hl">${x[0]}</span>`:x[0]).join(" ")}.</span><span class="en">${s.map(x=>x[2]).join(" · ")}</span>`,
    options:opts,label:o=>`${o} <span class="en" style="font-weight:400">(${TEN[o]})</span><br><span class="en" style="font-weight:400;font-size:13px">${TEXPL[o]}</span>`,answer:t,explain:`<b>${w}</b> (${e}) is a <b>${t}</b> (${TEN[t]}) = ${TEXPL[t]}.`}}},
- wfrage:{tag:"W-Fragen",title:"Welches Fragewort?",en:"which question word fits the answer?",kind:"choice",
+ wfrage:{enReq:true,tag:"W-Fragen",title:"Welches Fragewort?",en:"which question word fits the answer?",kind:"choice",
   gen(){const x=pick(WQ);const opts=shuffle([x[1],...shuffle(WWORDS.filter(w=>w!==x[1])).slice(0,3)]);
    return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">___ ${x[2]}?</span><span class="en">Antwort <span class="pron">(answer)</span>: <b>${x[0]}</b> · ${x[3]}</span>`,options:opts,answer:x[1],
    explain:`<b>${x[1]} ${x[2]}?</b> · ${x[4]}<br>Reminder: W-word 1st, verb 2nd.`}}},
@@ -74,14 +74,14 @@ const TESTS={
  arbeit:{tag:"Arbeit",title:"Über die Arbeit sprechen",en:"talking about work: fill the gap",kind:"choice",
   gen(){const x=pick(WORK);return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">${x[1]}</span>`,
    options:shuffle(x[2]),answer:x[3],explain:`<b>${x[0].replace("___ Freitag","Freitag").replace("___",x[3]).replace("von … bis Montag","von Montag bis").replace(/von … bis/,"von")}</b><br>${x[4]}`}}},
- verbform:{tag:"Verben",title:"Verb-Endungen",en:"choose the right verb form",kind:"choice",
+ verbform:{enReq:true,tag:"Verben",title:"Verb-Endungen",en:"choose the right verb form",kind:"choice",
   gen(){const all=[...VREG.map(x=>x[0]),...Object.keys(VIRR)];const v=pick(all);const f=forms(v);const i=rnd(0,5);const ans=f[i];
    const others=[...new Set(f.filter(x=>x!==ans))];const opts=shuffle([ans,...shuffle(others).slice(0,2)]);
    const per=i===2?pick(["er","sie","es"]):i===5?pick(["sie","Sie"]):["ich","du","","wir","ihr"][i];
    const en=VIRR[v]?VIRR[v][6]:VREG.find(x=>x[0]===v)[2];
    const note=VIRR[v]?`<b>${v}</b> is irregular: ${f.join(", ")}.`:`${["ich → -e","du → -st","er/sie/es → -t","wir → -en","ihr → -t","sie/Sie → -en"][i]}: ${v.replace(/en$/,"")}-${["e","st","t","en","t","en"][i]}.`;
    return{prompt:`<span class="big">${per} ___</span><span class="en">${v} (${en})</span>`,options:opts,answer:ans,explain:`<b>${per} ${ans}</b><br>${note}`}}},
- kein:{tag:"Fragen & Antworten",title:"nicht oder kein?",en:"say no the right way",kind:"choice",
+ kein:{enReq:true,tag:"Fragen & Antworten",title:"nicht oder kein?",en:"say no the right way",kind:"choice",
   gen(){const x=pick(KEIN);return{prompt:`<span class="en">${x[0]}</span><span class="big" style="font-size:clamp(22px,5.5vw,34px)">${x[1]}</span><span class="en">${x[2]}</span>`,
    options:shuffle(x[3]),answer:x[4],explain:`<b>${x[1].replace("___",x[4])}</b><br>${x[5]}`}}},
  antworten:{tag:"Fragen & Antworten",title:"Die richtige Antwort",en:"choose the correct answer to the question",kind:"choice",
@@ -124,14 +124,14 @@ const TESTS={
    return{prompt:`<span class="en">Bring die Wörter in die richtige Reihenfolge. <span class="pron">(Bring the words into the right order.)</span></span><span class="big" style="font-size:clamp(20px,5vw,28px)">${esc(x.en)}</span>`,
     tokens:sh.map(i=>x.toks[i]),answerTokens:x.toks,end:x.p,answer,
     explain:`${trainOf(x)}<span>${esc(x.en)}</span><br>${x.r}`}}},
- luecke:{tag:"Satzbau · Ergänzen",title:"Sätze ergänzen",en:"complete the sentence: brackets, connectors, word order",kind:"choice",
+ luecke:{enReq:true,tag:"Satzbau · Ergänzen",title:"Sätze ergänzen",en:"complete the sentence: brackets, connectors, word order",kind:"choice",
   gen(){const x=pick(GAPS);const typed=x[5]&&Math.random()<.4;
    const head=`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`;
    const ex=`<b>${esc(x[0].replace("___",x[3][0]))}</b><br><span class="en">Wort für Wort (word by word): ${esc(x[2])}</span><br>${x[4]}`;
    if(typed) return{kind:"input",prompt:head+`<span class="en">Schreib das fehlende Wort. <span class="pron">(Write the missing word.)</span></span>`,answer:x[3][0],umlauts:true,explain:ex};
    return{prompt:head,options:shuffle([...x[3]]),answer:x[3][0],explain:ex}}},
  mix:{tag:"Alle Teile",title:"Gemischter Test",en:"20 random questions from all parts",kind:"mixed",
-  gen(){const keys=Object.keys(TESTS).filter(k=>k!=="mix");const k=pick(keys);const t=TESTS[k];const r=t.ranges?pick(t.ranges):null;const q=t.gen(r);q.kind=q.kind||t.kind;q.from=t.tag;q.fromKey=k;return q;}}
+  gen(){const keys=Object.keys(TESTS).filter(k=>k!=="mix");const k=pick(keys);const t=TESTS[k];const r=t.ranges?pick(t.ranges):null;const q=t.gen(r);q.kind=q.kind||t.kind;q.enReq=t.enReq;q.from=t.tag;q.fromKey=k;return q;}}
 };
 
 const GROUPS=[

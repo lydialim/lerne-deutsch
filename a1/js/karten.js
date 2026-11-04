@@ -72,7 +72,13 @@ const KARTEN = [
 👮|der|Polizist|police officer
 👷|der|Bauarbeiter|construction worker
 🧑‍🔧|der|Mechaniker|mechanic
-🧑‍✈️|der|Pilot|pilot`],
+🧑‍✈️|der|Pilot|pilot
+🧑‍💼|der|Buchhalter|accountant
+📋|der|Projektmanager|project manager
+🍽️|der|Kellner|waiter
+🛎️|die|Kellnerin|waitress
+📐|der|Architekt|architect
+📐|die|Architektin|architect (female)`],
  ["Farben", "colours", `#d32f2f||rot|red
 #1e5bd6||blau|blue
 #2e9e4f||grün|green

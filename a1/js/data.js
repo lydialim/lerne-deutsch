@@ -47,6 +47,7 @@ function pluralNote(n){
   if(p.endsWith("s")&&!s.endsWith("s")) return "Loan word / vowel ending → -s.";
   const uml=/[äöü]/i.test(p)&&!/[äöü]/i.test(s);
   if(p.endsWith("er")&&!s.endsWith("er")) return (uml?"Umlaut + ":"")+"-er plural (typical for das words).";
+  if(/um$/.test(s)&&p.endsWith("en")) return "-um → -en: Museum → Museen. Learn this pair by heart.";
   if(p.endsWith("en")||p.endsWith("n")&&!uml) return "-n / -en plural (typical for die words).";
   if(p.endsWith("e")) return (uml?"Umlaut + ":"")+"-e plural (typical for der words).";
   if(uml) return "Only an umlaut is added.";
@@ -84,7 +85,7 @@ const SENTS=[
  [["Du","Pronomen","you"],["lernst","Verb","learn"],["auch","Adverb","also"],["Deutsch","Nomen","German"]],
  [["Die","Artikel","the"],["Lampe","Nomen","lamp"],["ist","Verb","is"],["klein","Adjektiv","small"],["aber","Konjunktion","but"],["schön","Adjektiv","beautiful"]],
  [["Ich","Pronomen","I"],["trinke","Verb","drink"],["Tee","Nomen","tea"],["oder","Konjunktion","or"],["Wasser","Nomen","water"]],
- [["Sie","Pronomen","she"],["wohnt","Verb","lives"],["hier","Adverb","here"],["mit","Präposition","with"],["ihrer","Pronomen","her"],["Familie","Nomen","family"]],
+ [["Sie","Pronomen","she"],["wohnt","Verb","lives"],["hier","Adverb","here"],["mit","Präposition","with"],["ihrer","Artikel","her"],["Familie","Nomen","family"]],
  [["Wir","Pronomen","we"],["gehen","Verb","go"],["heute","Adverb","today"],["ins","Präposition","to the"],["Kino","Nomen","cinema"]],
  [["Der","Artikel","the"],["Bahnhof","Nomen","station"],["ist","Verb","is"],["nicht","Adverb","not"],["weit","Adjektiv","far"]],
  [["Gehen","Verb","go"],["Sie","Pronomen","you"],["hier","Adverb","here"],["links","Adverb","left"]],
@@ -182,8 +183,8 @@ const WORK=[
  ["Ich arbeite ___ Siemens.","I work at Siemens.",["bei","als","in"],"bei","<b>bei</b> + company."],
  ["Ich arbeite ___ Ingenieurin.","I work as an engineer.",["als","bei","in"],"als","<b>als</b> + job, with no article."],
  ["Ich arbeite ___ Hamburg.","I work in Hamburg.",["in","bei","als"],"in","<b>in</b> + city."],
- ["Du ___ im Büro.","You work in the office.",["arbeitest","arbeitst","arbeiten"],"arbeitest","Stem ends in -t → du arbeit<b>e</b>st."],
- ["Er ___ im Homeoffice.","He works from home.",["arbeitet","arbeit","arbeitt"],"arbeitet","Stem ends in -t → er arbeit<b>e</b>t."],
+ ["Du ___ im Büro.","You work in the office.",["arbeitest","arbeitst","arbeiten"],"arbeitest","arbeit ends in -t, so add an extra <b>e</b>: du arbeit<b>e</b>st."],
+ ["Er ___ im Homeoffice.","He works from home.",["arbeitet","arbeit","arbeitt"],"arbeitet","arbeit ends in -t, so add an extra <b>e</b>: er arbeit<b>e</b>t."],
  ["Ich arbeite ___ Montag ___ Freitag.","I work from Monday to Friday.",["von … bis","bis … von","um … bis"],"von … bis","<b>von … bis</b> = from … to."],
  ["Die Besprechung ist ___ 10 Uhr.","The meeting is at 10 o'clock. (zehn Uhr = tsayn oor)",["um","von","am"],"um","<b>um</b> + clock time."],
  ["Ich komme ___ dem Fahrrad zur Arbeit.","I come to work by bike.",["mit","bei","von"],"mit","<b>mit</b> = with / by (transport)."],
@@ -255,7 +256,7 @@ const DIR=[["Gehen Sie geradeaus.","Go straight ahead."],["Gehen Sie die erste S
 function timeOff(h,m){return `${h===1?"ein":num(h)[0]} Uhr${m?" "+num(m)[0]:""}`;}
 function timeInf(h,m){const a=h%12||12,b=a%12+1,w=x=>U[x][0];
  if(m===0) return a===1?"ein Uhr":`${w(a)} Uhr`;
- return m===5?`fünf nach ${w(a)}`:m===10?`zehn nach ${w(a)}`:m===15?`Viertel nach ${w(a)}`:m===20?`zwanzig nach ${w(a)}`:m===30?`halb ${w(b)}`:m===40?`zwanzig vor ${w(b)}`:m===45?`Viertel vor ${w(b)}`:`zehn vor ${w(b)}`;}
+ return m===5?`fünf nach ${w(a)}`:m===10?`zehn nach ${w(a)}`:m===15?`Viertel nach ${w(a)}`:m===20?`zwanzig nach ${w(a)}`:m===25?`fünf vor halb ${w(b)}`:m===30?`halb ${w(b)}`:m===35?`fünf nach halb ${w(b)}`:m===40?`zwanzig vor ${w(b)}`:m===45?`Viertel vor ${w(b)}`:m===55?`fünf vor ${w(b)}`:`zehn vor ${w(b)}`;}
 function teenSwap(x){ if(x>=13&&x<=19) return (x-10)*10; if(x%10===0&&x>=30&&x<=90) return x/10+10; return x+10<100?x+10:x-10; }
 const priceFmt=(e,c)=>`${e},${String(c).padStart(2,"0")} €`;
 const priceSay=(e,c)=>`${e===1?"ein":num(e)[0]} Euro${c?" "+num(c)[0]:""}`;

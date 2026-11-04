@@ -2,6 +2,18 @@
 
 Free German practice workbooks by level: lessons with memory diagrams, a one-page cheat sheet and self-tests. Plain HTML, CSS and JavaScript: no build step, no backend.
 
+## About this project
+
+Lerne Deutsch was created as part of my own journey of learning German, together with Claude (an AI assistant). While preparing for the Goethe-Zertifikat A1, I wanted one place to put everything I was studying: short lessons, memory pictures for der/die/das, a one-page cheat sheet, flashcards and tests I could repeat until the words stuck. It grew from my own notes into a full workbook, and I'm sharing it for anyone else learning German.
+
+- **Built for self-study:** lessons are bilingual (German first, English in brackets), and every German example can be read aloud with the 🔊 button.
+- **Practice, not just reading:** tests come in rounds of 20 questions with stars, streaks and a daily goal, plus listening tests, a writing checker and speaking practice.
+- **Private by design:** no accounts, cookies or tracking. Your progress and recordings stay in your own browser.
+- **Made by a learner:** I'm not a teacher, and parts of the content were drafted with AI help, so mistakes are possible. Please check against your course or textbook. See the [disclaimer](DISCLAIMER.md).
+- **Growing level by level:** A1 is done; A2 will follow as my own learning does.
+
+Feedback and corrections are very welcome.
+
 | Level | Start page | What's inside |
 |---|---|---|
 | A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 23 numbered lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 45 tests in rounds of 20 questions, with stars, streaks and a daily goal |
@@ -63,3 +75,9 @@ lerne-deutsch/
 - **Locally:** open `index.html` in a browser.
 
 Test scores are saved only in each visitor's own browser (localStorage).
+
+## Licence and disclaimer
+
+- Code and original content: [MIT License](LICENSE), © 2026 lydialim.
+- Fonts in `assets/fonts/` keep their own SIL Open Font License (see the `OFL-*.txt` files there).
+- This is an unofficial learner project, not affiliated with the Goethe-Institut or Klett, and it may contain mistakes. Read the full [DISCLAIMER](DISCLAIMER.md).

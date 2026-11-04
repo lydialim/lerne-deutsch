@@ -130,7 +130,7 @@ const TESTS={
    const ex=`<b>${esc(x[0].replace("___",x[3][0]))}</b><br><span class="en">Wort für Wort (word by word): ${esc(x[2])}</span><br>${x[4]}`;
    if(typed) return{kind:"input",prompt:head+`<span class="en">Schreib das fehlende Wort. <span class="pron">(Write the missing word.)</span></span>`,answer:x[3][0],umlauts:true,explain:ex};
    return{prompt:head,options:shuffle([...x[3]]),answer:x[3][0],explain:ex}}},
- mix:{tag:"Alle Teile",title:"Gemischter Test",en:"10 random questions from all parts",kind:"mixed",
+ mix:{tag:"Alle Teile",title:"Gemischter Test",en:"20 random questions from all parts",kind:"mixed",
   gen(){const keys=Object.keys(TESTS).filter(k=>k!=="mix");const k=pick(keys);const t=TESTS[k];const r=t.ranges?pick(t.ranges):null;const q=t.gen(r);q.kind=q.kind||t.kind;q.from=t.tag;q.fromKey=k;return q;}}
 };
 

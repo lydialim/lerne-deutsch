@@ -4,7 +4,7 @@ Free German practice workbooks by level: lessons with memory diagrams, a one-pag
 
 | Level | Start page | What's inside |
 |---|---|---|
-| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 18 lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 42 tests in rounds of 10 questions, with stars, streaks and a daily goal |
+| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 18 lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 42 tests in rounds of 20 questions, with stars, streaks and a daily goal |
 | A2 | coming later | |
 
 Live site: https://lydialim.github.io/lerne-deutsch/

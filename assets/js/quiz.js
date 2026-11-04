@@ -5,11 +5,24 @@
    Each question: {prompt, answer, explain, kind? (overrides the test's kind), options? (choice), inputmode?, umlauts?,
      tokens + end? (order: shuffled word chips the learner taps into place; answer = tokens in order joined by spaces + end),
      say? (listening: German text read aloud with assets/js/speech.js, plays automatically), sayAfter? (read aloud from the feedback)}
-   Every test runs in rounds of 10 questions, with a progress bar, a streak counter, points and stars.
+   Every test runs in rounds of 20 questions (no repeats inside a round), with a progress bar, a streak counter, points and stars.
    Open a test directly with tests.html#<key>, e.g. tests.html#artikel or tests.html#mix. */
-const ROUND=10, GOAL=20;
+const ROUND=20, GOAL=20;
 const FLAME='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c1 3.5 5.5 6 5.5 11a5.5 5.5 0 0 1-11 0c0-2.4 1-4 2.2-5.2.2 1.6.9 2.7 2 3.2C10 8 10.5 5 12 2z"/></svg>';
 let current=null, q=null, stats=null, rangeIdx={};
+/* English hints in questions are hidden by default; the EN button toggles them (remembered per level). */
+let showEn=lstore.get("showEn",false);
+function applyEn(){ document.body.classList.toggle("hide-en",!showEn); document.querySelectorAll(".entog").forEach(b=>{b.setAttribute("aria-pressed",showEn); b.classList.toggle("on",showEn);}); }
+function toggleEn(){ showEn=!showEn; lstore.set("showEn",showEn); applyEn(); }
+const enBtn=()=>`<button class="entog" type="button" aria-pressed="${showEn}" title="Englisch zeigen/verstecken (show/hide English)">EN<span class="sr"> Englisch zeigen (show English)</span></button>`;
+/* Reset every score, star, point and streak of this level (the EN preference stays). */
+function resetProgress(){
+  if(!confirm("Alle Ergebnisse, Sterne, Punkte und Serien löschen?\n(Delete all results, stars, points and streaks? This cannot be undone.)")) return;
+  ["best","stars","xp","day","test"].forEach(k=>{ try{localStorage.removeItem(LS+k)}catch(e){} });
+  Object.keys(best).forEach(k=>delete best[k]); Object.keys(starBest).forEach(k=>delete starBest[k]);
+  xp=0; day={date:"",count:0,streak:0};
+  renderHome(); toast("Zurückgesetzt. (Reset.)");
+}
 const GROUPS_SHOWN=GROUPS.filter(g=>!(g[2].length===1&&g[2][0]==="mix")).map(g=>[g[0],g[1],g[2],g[3]||g[0].split(" · ")[0],g[4]||g[1]]);
 const RULESET=typeof RULES!=="undefined"?RULES:[];
 const best=lstore.get("best",{});
@@ -37,25 +50,51 @@ function renderHome(){
     <span title="Tagesziel (daily goal)"><b>${Math.min(cnt,GOAL)}/${GOAL}</b> heute <small>(today)</small></span>
     <span><b>${xp}</b> Punkte <small>(points)</small></span>
    </div>
-   <a class="mixbtn" href="#mix"><span><b>Gemischter Test</b><small>10 Fragen, alle Teile (10 questions, all parts)</small></span><span class="play" aria-hidden="true">▶</span></a>`;
+   <a class="mixbtn" href="#mix"><span><b>Gemischter Test</b><small>${ROUND} Fragen, alle Teile (${ROUND} questions, all parts)</small></span><span class="play" aria-hidden="true">▶</span></a>`;
   if(weak){ const [k,b]=weak; h+=`<a class="weakline" href="#${k}">Schwächstes <span class="en">(weakest)</span>: <b>${TESTS[k].title}</b> <span class="pct">${Math.round(b.ok/b.n*100)}%</span> →</a>`; }
   h+=`<div class="gtabs" role="tablist" aria-label="Testgruppen (test groups)">${GROUPS_SHOWN.map((x,i)=>`<button type="button" role="tab" data-tab="${i}" aria-selected="${i===homeTab}">${x[3]}<small>${x[4]}</small></button>`).join("")}</div>
    <div class="tlist" role="tabpanel" aria-label="${esc(g)} (${esc(ge)})">`+keys.map(k=>{const tt=TESTS[k],b=best[k],st=starBest[k]||0,pc=b?Math.round(b.ok/b.n*100):null;
     return `<a class="trow" href="#${k}"><span class="tt"><b>${tt.title}</b><small>${tt.en}</small></span><span class="tr"><span class="stars" aria-label="${st} von 3 Sternen (${st} of 3 stars)">${starStr(st)}</span>${pc===null?"":`<small>${pc}%</small>`}</span></a>`}).join("")+`</div>`;
   if(r) h+=`<div class="rday"><span class="tag">Regel des Tages · rule of the day</span><h3>${r[0]} <span class="en">(${r[1]})</span></h3><span class="ex">${r[2]}</span><span class="en">${r[3]}</span><a class="go" href="#${r[4]}">Üben (practise) →</a></div>`;
+  h+=`<div class="homefoot"><button type="button" class="btn ghost" id="resetAll">Ergebnisse zurücksetzen <span class="en">(reset scores)</span></button></div>`;
   $("#testHome").innerHTML=h+`</div>`;
+  $("#resetAll").onclick=resetProgress;
   $("#testHome").querySelectorAll("[data-tab]").forEach(btn=>btn.onclick=()=>{homeTab=+btn.dataset.tab; lstore.set("tab",homeTab); renderHome(); const f=$(`#testHome [data-tab="${homeTab}"]`); if(f) f.focus({preventScroll:true});});
   const sel=$(`#testHome [data-tab="${homeTab}"]`), strip=$("#testHome .gtabs"); if(sel&&strip) strip.scrollLeft=sel.offsetLeft-(strip.clientWidth-sel.offsetWidth)/2;
 }
 
 function showQuiz(on){ $("#testHome").hidden=on; $("#quiz").hidden=!on; document.body.classList.toggle("quizzing",on); if(!on) closeFb(); }
-function start(k){ current=k; stats={ok:0,n:0,miss:[],wrong:[],res:[],combo:0,maxCombo:0,xp:0}; lstore.set("test",k); showQuiz(true); window.scrollTo(0,0); nextQ(); }
+function start(k,skipIntro){ current=k; stats={ok:0,n:0,miss:[],wrong:[],res:[],combo:0,maxCombo:0,xp:0,seen:new Set()}; q=null; lstore.set("test",k); showQuiz(true); window.scrollTo(0,0); if(skipIntro) nextQ(); else showIntro(); }
+/* Short "how it works" screen before the first question. The English lines (class keep) always show. */
+function showIntro(){
+  closeFb();
+  const t=TESTS[current], kind=t.kind;
+  const how=kind==="input"?["⌨️","Schreibe die Antwort und drücke Enter.","Type your answer and press Enter (or tap Prüfen)."]
+    :kind==="order"?["👆","Tippe die Wörter in der richtigen Reihenfolge an.","Tap the words in the right order. Tap a word in your sentence to take it back. Then tap Prüfen."]
+    :kind==="mixed"?["👆","Tippe auf die Antwort, oder schreibe sie.","Tap an answer, or type it and press Enter. The question types change."]
+    :["👆","Tippe auf die richtige Antwort.","Tap the right answer. On a keyboard you can also press 1, 2, 3 …"];
+  $("#quiz").innerHTML=`<div class="qtop"><button class="xbtn" id="qx" type="button" aria-label="Test beenden (end test)">✕</button><span class="grow"></span>${enBtn()}</div>
+   <div class="qcard intro">
+   <div class="qhead"><span class="tag">${current==="mix"?"Alle Teile":esc(t.tag)}</span><h2 class="qtitle">${t.title} <span class="en">(${t.en})</span></h2></div>
+   <h3>So geht's <span class="keep">(how it works)</span></h3>
+   <ol class="howto">
+    <li><span class="ic">${how[0]}</span><span>${how[1]}<small class="keep">${how[2]}</small></span></li>
+    <li><span class="ic">✅</span><span>Unten siehst du: richtig oder falsch, mit Erklärung.<small class="keep">A panel at the bottom tells you right or wrong, with an explanation.</small></span></li>
+    <li><span class="ic">➡️</span><span>Tippe auf „Weiter“ oder drücke Enter.<small class="keep">Tap “Weiter” (next) or press Enter for the next question.</small></span></li>
+    <li><span class="ic">EN</span><span>Englisch ein- oder ausschalten.<small class="keep">The EN button (top right) shows or hides English hints. It is off by default.</small></span></li>
+    <li><span class="ic">✕</span><span>Mit ✕ beendest du den Test.<small class="keep">✕ (top left) ends the test. One round = ${ROUND} questions.</small></span></li>
+   </ol>
+   <div class="rbtns"><button class="btn" id="go" type="button">Los geht's <span style="font-weight:400">(start)</span> →</button><button class="btn ghost" id="intx" type="button">Zurück <span class="en">(back)</span></button></div></div>`;
+  $("#qx").onclick=exitQuiz; $("#intx").onclick=exitQuiz; $(".entog").onclick=toggleEn; applyEn();
+  $("#go").onclick=nextQ; $("#go").focus({preventScroll:true});
+}
 function exitQuiz(){ if(TESTS[decodeURIComponent(location.hash.slice(1))]){ location.hash=""; return; } current=null; showQuiz(false); renderHome(); window.scrollTo(0,0); }
 function nextQ(){
   closeFb();
   if(stats.n>=ROUND){ showResult(); return; }
   const t=TESTS[current]; const r=t.ranges?t.ranges[rangeIdx[current]||0]:null;
-  q=t.gen(r); q.done=false; draw();
+  let tries=0; do{ q=t.gen(r); tries++; }while(stats.seen.has(q.prompt+"|"+q.answer)&&tries<25);
+  stats.seen.add(q.prompt+"|"+q.answer); q.done=false; draw();
 }
 function togo(){
   const left=ROUND-stats.n;
@@ -67,7 +106,7 @@ function topBar(){
   const shown=Math.min(stats.n+1,ROUND);
   return `<div class="qtop"><button class="xbtn" id="qx" type="button" aria-label="Test beenden (end test)">✕</button>
    <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="${ROUND}" aria-valuenow="${stats.n}" aria-label="Fortschritt (progress)">${Array.from({length:ROUND},(_,i)=>`<i class="${stats.res[i]===true?"ok":stats.res[i]===false?"no":i===stats.n?"cur":""}"></i>`).join("")}</div>
-   <span class="qcount" id="qcount" aria-label="Frage ${shown} von ${ROUND} (question ${shown} of ${ROUND})">${shown}<small>/${ROUND}</small></span>
+   <span class="qcount" id="qcount" aria-label="Frage ${shown} von ${ROUND} (question ${shown} of ${ROUND})">${shown}<small>/${ROUND}</small></span>${enBtn()}
    <div class="qtogo"><span id="togo">${togo()}</span><span class="streak ${stats.combo>=3?"hot":""}" title="Richtig in Folge (correct in a row)">${FLAME}<span id="combo">${stats.combo}</span></span></div></div>`;
 }
 function draw(){
@@ -89,7 +128,8 @@ function draw(){
       <button class="btn" type="submit">Prüfen <span style="font-weight:400">(check)</span></button></form>`;
   }
   $("#quiz").innerHTML=h+`</div>`;
-  $("#qx").onclick=exitQuiz;
+  $("#qx").onclick=exitQuiz; $(".entog").onclick=toggleEn; applyEn();
+  { const qq=$("#quiz .q"), c=qq.cloneNode(true); c.querySelectorAll(".en").forEach(e=>e.remove()); if(!c.textContent.trim()) qq.classList.add("needs-en"); }
   $("#quiz").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{rangeIdx[current]=+b.dataset.r; const tt=TESTS[current]; q=tt.gen(tt.ranges[+b.dataset.r]); q.done=false; draw();});
   if(q.say){ $("#again").onclick=()=>speak(q.say); $("#slow").onclick=()=>speak(q.say,0.6); setTimeout(()=>speak(q.say),250); }
   if(kind==="order") drawOrder();
@@ -125,7 +165,7 @@ function drawOrder(){
   };
 }
 const CHEERS=["Richtig! (correct)","Super! (great)","Sehr gut! (very good)","Genau! (exactly)","Toll! (great)","Prima! (excellent)"];
-const COMBO={3:"3 in Folge! (3 in a row)",5:"5 in Folge! Weiter so! (keep it up)",7:"7 in Folge! Wow!",10:"Perfekt! 10 von 10!"};
+const COMBO={3:"3 in Folge! (3 in a row)",5:"5 in Folge! Weiter so! (keep it up)",7:"7 in Folge! Wow!",10:"10 in Folge! Super!",20:"Perfekt! 20 von 20!"};
 function answer(v,btn){
   if(q.done) return; q.done=true;
   const kind=q.kind||TESTS[current].kind;
@@ -144,7 +184,7 @@ function answer(v,btn){
   const sh=$("#fbSheet"); sh.className="fbsheet "+(ok?"ok":"no");
   sh.innerHTML=`<div class="fbin"><div class="fbtop"><span class="verdict">${ok?pick(CHEERS):"Leider falsch. (Sadly wrong.)"}</span>${ok?`<span class="gain">+${gain} ${stats.combo>=3?"🔥":""}</span>`:""}</div>
    ${ok?"":`<span class="ans">Richtig ist (correct is): ${esc(q.answer)}</span>`}<span>${q.explain}</span>
-   <div class="fbrow">${(q.say||q.sayAfter)&&typeof TTS!=="undefined"&&TTS.ok?`<button class="btn ghost" type="button" id="hearAns" aria-label="Noch einmal anhören (listen again)">🔊</button>`:""}<button class="btn" id="next" type="button">${last?'Ergebnis <span style="font-weight:400">(result)</span> →':`Weiter <span style="font-weight:400">(next) · noch ${ROUND-stats.n}</span> →`}</button></div></div>`;
+   <div class="fbrow">${(q.say||q.sayAfter)&&typeof TTS!=="undefined"&&TTS.ok?`<button class="btn ghost" type="button" id="hearAns" aria-label="Noch einmal anhören (listen again)">🔊</button>`:""}<button class="btn" id="next" type="button">${last?'Ergebnis <span style="font-weight:400">(result)</span> →':`Weiter <span style="font-weight:400">(next)</span> →`}</button></div></div>`;
   sh.hidden=false; document.body.classList.add("fbopen"); fitAboveSheet();
   $("#next").onclick=nextQ; $("#next").focus({preventScroll:true});
   if($("#hearAns")) $("#hearAns").onclick=()=>speak(q.sayAfter||q.say);
@@ -185,7 +225,7 @@ function showResult(){
   if(current==="mix"&&stats.miss.length) h+=`<div class="practice"><span>Üb das noch einmal <span class="en">(practise these again)</span></span>${stats.miss.map(k=>`<a class="go" href="#${k}">${TESTS[k].title}</a>`).join("")}</div>`;
   h+=`<div class="rbtns"><button class="btn" id="again10" type="button">Noch eine Runde <span style="font-weight:400">(one more round)</span></button><button class="btn ghost" id="home10" type="button">Übersicht <span style="font-weight:400">(overview)</span></button></div></div></div>`;
   $("#quiz").innerHTML=h; window.scrollTo(0,0);
-  $("#qx").onclick=exitQuiz; $("#again10").onclick=()=>start(current); $("#home10").onclick=exitQuiz;
+  $("#qx").onclick=exitQuiz; $(".entog").onclick=toggleEn; applyEn(); $("#again10").onclick=()=>start(current,true); $("#home10").onclick=exitQuiz;
   if(s>=2) confetti();
 }
 
@@ -216,5 +256,6 @@ document.addEventListener("click",e=>{
   if(TESTS[k]&&k===decodeURIComponent(location.hash.slice(1))){ e.preventDefault(); start(k); }
 });
 document.body.insertAdjacentHTML("beforeend",'<div class="fbsheet" id="fbSheet" hidden></div><div class="toast" id="toast" role="status" hidden></div><canvas id="confetti" aria-hidden="true"></canvas>');
+applyEn();
 renderHome();
 fromHash();

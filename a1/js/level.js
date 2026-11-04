@@ -25,6 +25,7 @@ window.LEVEL = {
       ["l-verbs", "5", "Verben im Präsens", "verbs, present tense"],
       ["l-war", "5+", "war und hatte", "was and had"],
       ["l-w", "6", "Satzbau und W-Fragen", "word order, W-questions"],
+      ["l-modal", "6+", "Modalverben", "can, must, want, may, would like"],
       ["l-qa", "7", "Fragen und Antworten", "asking and answering"],
       ["l-satz", "7+", "Längere Sätze bauen", "building longer sentences"]]],
     ["B", "Buchstaben & Zahlen", "letters & numbers", "zahlen.html", [

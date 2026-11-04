@@ -379,7 +379,7 @@ header.top .brand{display:flex;flex-direction:column;gap:4px;min-width:0}
 /* ---- quiz mode ---- */
 .quiz{display:flex;flex-direction:column;gap:14px;padding-block:4px 24px;max-width:660px;margin:0 auto}
 .qtop{display:flex;align-items:center;gap:12px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--paper);padding-block:12px;z-index:5}
-.prog{flex:1;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.prog{flex:1;display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:3px}
 .prog i{height:12px;border-radius:6px;background:var(--soft);transition:background .25s}
 .prog i.ok{background:var(--ok)}.prog i.no{background:var(--bad)}
 .prog i.cur{background:var(--line)}
@@ -593,3 +593,17 @@ header.top .voicepick{flex-basis:100%}
   .weakline{font-size:14px}
   .gtabs button{min-width:72px}
 }
+
+/* Test page: EN toggle, intro screen, reset button */
+.entog{flex:none;min-width:42px;height:34px;padding:0 10px;border-radius:17px;border:1.5px solid var(--line);background:var(--card);color:var(--muted);font-weight:800;font-family:var(--display);font-size:14px}
+.entog.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.qtop .grow{flex:1}
+body.hide-en .q:not(.needs-en) .en,body.hide-en .qtitle .en{display:none}
+.howto{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.howto li{display:flex;gap:12px;align-items:flex-start}
+.howto .ic{flex:none;width:36px;height:36px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:16px;font-weight:800;font-family:var(--display)}
+.howto small{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.intro h3{margin:0;font-family:var(--display)}
+.homefoot{display:flex;justify-content:center;padding-top:6px}
+.homefoot .btn{font-size:14px;padding:8px 14px}

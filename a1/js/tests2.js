@@ -145,8 +145,59 @@ Object.assign(TESTS,{
    explain:`${s[3]}<br><span class="en">Text in English: ${esc(t.en)}</span>`}}},
  hoerenPruefung:{tag:"🔊 Prüfung · Hören",title:"Hören: kurze Texte",en:"listen to announcements, messages and short talks",kind:"choice",
   gen(){const x=pick(HOEREN);return{say:x[0],prompt:`<span class="big">🔊</span><span class="big" style="font-size:clamp(20px,5vw,28px)">${esc(x[1])}</span><span class="en">${esc(x[2])}</span>`,options:shuffle([x[3],x[4],x[5]]),answer:x[3],
-   explain:`<b>Text:</b> ${esc(x[0])}<br><span class="en">${esc(x[6])}</span>`}}}
+   explain:`<b>Text:</b> ${esc(x[0])}<br><span class="en">${esc(x[6])}</span>`}}},
+
+ /* ---------- modal verbs ---------- */
+ modal:{tag:"Modalverben",title:"Modalverben",en:"können, müssen, wollen, dürfen, möchten: forms, meaning, word order",kind:"choice",
+  gen(){const m=Math.random();
+   if(m<.35){const v=pick(MODKEYS);const i=rnd(0,5);const f=MOD[v].slice(0,6);const ans=f[i];
+    return{prompt:`<span class="big">${PERS6[i][0]} ___</span><span class="en">${v} (${MOD[v][6]}) · ${PERS6[i][1]}</span>`,
+     options:shuffle([ans,...shuffle([...new Set(f.filter(x=>x!==ans))]).slice(0,2)]),answer:ans,
+     explain:`${v}: ${f.map((x,j)=>`${PERS6[j][0]} <b>${x}</b>`).join(", ")}<br>Trick: ich and er/sie/es are twins, with no ending.`}}
+   if(m<.7){const x=pick(MODGAP);const ans=MOD[x[3]][x[0]];
+    const opts=shuffle([ans,...shuffle(MODKEYS.filter(k=>k!==x[3])).map(k=>MOD[k][x[0]]).filter((f,j,a)=>f!==ans&&a.indexOf(f)===j).slice(0,2)]);
+    return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${x[1]}</span><span class="en">${x[2]}</span>`,options:opts,answer:ans,
+     explain:`<b>${x[1].replace("___",ans)}</b><br>${x[3]} = ${MOD[x[3]][6]}.${x[4]?" "+x[4]:""}`,sayAfter:x[1].replace("___",ans)}}
+   const x=pick(MODORD);
+   return{prompt:`<span class="en">${x[3]}</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
+    explain:`<b>${x[0]}</b><br>${x[4]}`,sayAfter:x[0]}}}
 });
+
+/* modal verb data: [ich, du, er/sie/es, wir, ihr, sie/Sie, English] */
+const MOD={"können":["kann","kannst","kann","können","könnt","können","can, to be able to"],
+ "müssen":["muss","musst","muss","müssen","müsst","müssen","must, have to"],
+ "wollen":["will","willst","will","wollen","wollt","wollen","want to"],
+ "dürfen":["darf","darfst","darf","dürfen","dürft","dürfen","may, to be allowed to"],
+ "möchten":["möchte","möchtest","möchte","möchten","möchtet","möchten","would like to"]};
+const MODKEYS=Object.keys(MOD);
+/* gap sentences: [person index, sentence with ___, English, correct modal, extra note] */
+const MODGAP=[
+ [0,"Ich ___ gut kochen.","I can cook well.","können"],
+ [0,"Ich ___ heute lange arbeiten.","I have to work long today.","müssen"],
+ [0,"Ich ___ einen Kaffee trinken.","I would like to drink a coffee (polite).","möchten"],
+ [3,"Wir ___ ins Kino gehen.","We want to go to the cinema.","wollen"],
+ [1,"___ du mir helfen?","Can you help me?","können"],
+ [0,"___ ich hier sitzen?","May I sit here?","dürfen"],
+ [2,"Das Kind ___ nicht lange fernsehen.","The child is not allowed to watch TV for long.","dürfen","nicht dürfen = forbidden."],
+ [5,"Sie ___ am Montag nicht arbeiten.","They don't have to work on Monday.","müssen","nicht müssen = don't have to."],
+ [4,"Ihr ___ leise sein.","You (all) must be quiet.","müssen"],
+ [1,"Was ___ du am Wochenende machen?","What do you want to do at the weekend?","wollen"],
+ [2,"Anna ___ sehr gut Deutsch sprechen.","Anna can speak German very well.","können"],
+ [3,"Wir ___ bitte zwei Tee haben.","We would like two teas, please.","möchten"],
+ [2,"Hier ___ man nicht rauchen.","You must not smoke here (forbidden).","dürfen","nicht dürfen = forbidden."],
+ [1,"Du ___ nicht kommen.","You don't have to come.","müssen","nicht müssen = don't have to."]
+];
+/* word order: [right, wrong, wrong, English, explanation] */
+const MODORD=[
+ ["Ich kann heute nicht kommen.","Ich kann kommen heute nicht.","Ich kommen heute nicht kann.","I can't come today.","The modal verb is in place 2, the infinitive goes to the end."],
+ ["Möchtest du einen Kaffee trinken?","Trinken möchtest du einen Kaffee?","Möchtest du trinken einen Kaffee?","Would you like to drink a coffee?","Yes/no question: modal first, infinitive last."],
+ ["Morgen muss ich früh aufstehen.","Morgen ich muss früh aufstehen.","Morgen muss ich früh stehen auf.","Tomorrow I have to get up early.","Time first: the verb stays in place 2. The separable verb stays in one piece at the end."],
+ ["Wir wollen am Samstag ins Kino gehen.","Wir wollen gehen am Samstag ins Kino.","Wir gehen wollen am Samstag ins Kino.","We want to go to the cinema on Saturday.","Everything else goes inside the sandwich; gehen is last."],
+ ["Darf ich das Fenster öffnen?","Darf ich öffnen das Fenster?","Öffnen darf ich das Fenster?","May I open the window?","Modal first, infinitive last."],
+ ["Was möchten Sie trinken?","Was Sie möchten trinken?","Was möchten trinken Sie?","What would you like to drink?","W-word 1st, modal 2nd, infinitive at the end."],
+ ["Kannst du bitte langsam sprechen?","Kannst du sprechen bitte langsam?","Sprechen kannst du bitte langsam?","Can you speak slowly, please?","bitte and langsam sit inside the sandwich."],
+ ["Er muss heute lange arbeiten.","Er musst heute lange arbeiten.","Er muss arbeiten heute lange.","He has to work long today.","er has no ending after a modal verb (muss, not musst), and arbeiten is at the end."]
+];
 /* big numbers for listening: 1000–9999 */
 function numBig(n){const t=Math.floor(n/1000),r=n%1000;return (t===1?"ein":num(t)[0])+"tausend"+(r?num(r)[0]:"");}
 
@@ -155,7 +206,7 @@ GROUPS.length=0;
 GROUPS.push(
  ["Alles","everything",["mix"]],
  ["Wörter","words: vocabulary, articles, plural",["wortschatz","artikel","ein","plural","wortart","akkusativ","possessiv"],"Wörter","words"],
- ["Sätze","sentences: verbs, word order, questions",["verbform","warHatte","satzbau","ordnen","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
+ ["Sätze","sentences: verbs, word order, questions",["verbform","warHatte","modal","satzbau","ordnen","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
  ["B · Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
  ["B · Kalender","calendar",["kalender","datum","zeitpraep"],"Kalender","calendar"],
  ["Hören","listening (turn the sound on)",["hoerenZahl","hoerenUhr","hoerenPreis","hoerenTelefon","hoerenName","hoerenPruefung"],"Hören","listening"],

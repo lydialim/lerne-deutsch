@@ -25,7 +25,7 @@
   </div>
   <nav class="tabs toptabs" aria-label="${L.title}">
     ${L.pages.map(([href, de, en]) => `<a class="tab" href="${href}"${href === here ? ' aria-current="page"' : ""}>${de}${en ? ` <small>(${en})</small>` : ""}</a>`).join("")}
-    ${L.mix ? `<a class="go" href="${L.mix}">Gemischter Test · 10 Fragen</a>` : ""}
+    ${L.mix ? `<a class="go" href="${L.mix}">Gemischter Test · 20 Fragen</a>` : ""}
   </nav>`;
 
   /* bottom tab bar for phones */

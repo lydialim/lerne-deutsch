@@ -48,6 +48,16 @@ Object.assign(TESTS,{
    const zwo=Math.random()<.4; const words=[...digits].map(d=>d==="2"&&zwo?"zwo":U[+d][0]);
    return{say:words.join(", "),prompt:`<span class="big">🔊</span><span class="en">${tel?"Telefonnummer (phone number)":"Postleitzahl (postcode)"}: type the digits.</span>`,answer:digits,inputmode:"numeric",
     explain:`<b>${digits}</b> = ${words.join(" · ")}${zwo&&digits.includes("2")?"<br><b>zwo</b> = zwei, said on the phone so it doesn't sound like drei.":""}`}}},
+ hoerenMail:{tag:"🔊 Hören · E-Mail",title:"E-Mail-Adresse hören",en:"listen and choose the right e-mail address (@ . - _)",kind:"choice",
+  gen(){const N=["maria","tom","anna","lukas","sara","jonas","lena","ben"],S=["schmidt","weber","fischer","meyer","wagner","koch","becker","wolf"],D=["web.de","gmx.de","gmail.com","mail.de"];
+   const W={".":"Punkt","_":"Unterstrich","-":Math.random()<.5?"Strich":"Bindestrich"},spoken=d=>d.replace(".", " Punkt ");
+   const n=pick(N),s=pick(S),d=pick(D),sep=pick([".","_","-"]);
+   const mk=(a,b,c,e)=>`${a}${e}${b}@${c}`, right=mk(n,s,d,sep);
+   const opts=new Set([right]); [".","_","-"].filter(x=>x!==sep).forEach(x=>opts.add(mk(n,s,d,x)));
+   opts.add(mk(n,s,pick(D.filter(x=>x!==d)),sep)); let g=0; while(opts.size<4&&g++<20) opts.add(mk(pick(N),s,d,sep));
+   const say=`${n} ${W[sep]} ${s} ät ${spoken(d)}`;
+   return{say,prompt:`<span class="big">🔊</span><span class="en">Welche E-Mail-Adresse hörst du? <span class="pron">(Which e-mail address do you hear?)</span></span>`,options:shuffle([...opts].slice(0,4).includes(right)?[...opts].slice(0,4):[right,...[...opts].slice(1,4)]),answer:right,
+    explain:`<b>${right}</b> = ${say}<br>@ = ät · . = Punkt · - = Bindestrich (auch: Strich) · _ = Unterstrich`}}},
  hoerenName:{tag:"🔊 Hören · Buchstabieren",title:"Namen hören",en:"listen to the spelled name and write it",kind:"input",
   gen(){const w=pick(SPELL);const letters=[...w.toUpperCase().replace("STRASSE","STRAßE")].map(c=>c==="ẞ"?"ß":c);
    return{say:letters.map(c=>SAY[c]||c).join(", "),prompt:`<span class="big">🔊</span><span class="en">Wie schreibt man das? <span class="pron">(How do you write that?)</span></span>`,answer:w,umlauts:true,
@@ -258,7 +268,7 @@ GROUPS.push(
  ["Sätze","sentences: verbs, word order, questions",["verbform","dusie","warHatte","modal","satzbau","ordnen","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
  ["Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
  ["Kalender","calendar",["kalender","datum","zeitpraep"],"Kalender","calendar"],
- ["Hören","listening (turn the sound on)",["hoerenZahl","hoerenUhr","hoerenPreis","hoerenTelefon","hoerenName","hoerenPruefung"],"Hören","listening"],
+ ["Hören","listening (turn the sound on)",["hoerenZahl","hoerenUhr","hoerenPreis","hoerenTelefon","hoerenName","hoerenMail","hoerenPruefung"],"Hören","listening"],
  ["Themen","topics",["vorstellen","arbeit","aktion","weg","cafe","familie","laender","farben","themen2"],"Themen","topics"],
  ["Prüfung","exam",["lesenPruefung","formular"],"Prüfung","exam"]
 );

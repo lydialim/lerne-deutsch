@@ -146,8 +146,10 @@ const KARTEN = [
 📧|die|E-Mail|e-mail
 @|das|At-Zeichen|@ sign|-|Say: „ät“ · max@web.de = „max ät web punkt de“
 .|der|Punkt|dot, full stop|Punkte|web.de = „web punkt de“
--|der|Bindestrich|hyphen, dash|Bindestriche|Anna-Maria = „Anna Bindestrich Maria“
-_|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“`],
+-|der|Bindestrich|hyphen, dash|Bindestriche|auch: Strich · Anna-Maria = „Anna Strich Maria“ oder „Anna Bindestrich Maria“
+_|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
++|das|Plus|plus|-|3 + 2 = „drei plus zwei“
+−|das|Minus|minus|-|5 − 2 = „fünf minus zwei“`],
  ["Stadt, Hotel, Post", "town, hotel, post office", `🏙️|die|Stadt|city, town
 🌳|der|Park|park
 🏛️|das|Rathaus|town hall|Rathäuser

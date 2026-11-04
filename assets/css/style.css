@@ -699,7 +699,7 @@ body.hide-en .q:not(.needs-en) .en,body.hide-en .qtitle .en{display:none}
 /* sub-lessons folded into a parent lesson */
 .lesson h3.sub{margin-top:40px;padding-top:22px;border-top:2px solid var(--line);font-size:1.35em}
 .lbl{cursor:pointer}.lbl:hover rect,.lbl:focus rect{stroke-width:3}
-.obj .w:only-child{font-size:14px}
+.obj .w:not(:has(i)){font-size:14px}
 
 /* writing checker and speaking practice */
 .wtext{width:100%;box-sizing:border-box;font:inherit;font-size:17px;line-height:1.5;padding:12px;border:2px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);resize:vertical}

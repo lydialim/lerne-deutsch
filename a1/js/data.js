@@ -54,8 +54,8 @@ function pluralNote(n){
 }
 
 /* numbers */
-const U={0:["null","nool"],1:["eins","aynss"],2:["zwei","tsvy"],3:["drei","dry"],4:["vier","feer"],5:["fünf","fünf"],6:["sechs","zeks"],7:["sieben","ZEE-ben"],8:["acht","akht"],9:["neun","noyn"],10:["zehn","tsayn"],11:["elf","elf"],12:["zwölf","tsvölf"],13:["dreizehn","DRY-tsayn"],14:["vierzehn","FEER-tsayn"],15:["fünfzehn","FÜNF-tsayn"],16:["sechzehn","ZEKH-tsayn"],17:["siebzehn","ZEEP-tsayn"],18:["achtzehn","AKHT-tsayn"],19:["neunzehn","NOYN-tsayn"]};
-const T={2:["zwanzig","TSVAN-tsikh"],3:["dreißig","DRY-sikh"],4:["vierzig","FEER-tsikh"],5:["fünfzig","FÜNF-tsikh"],6:["sechzig","ZEKH-tsikh"],7:["siebzig","ZEEP-tsikh"],8:["achtzig","AKHT-tsikh"],9:["neunzig","NOYN-tsikh"]};
+const U={0:["null","nool"],1:["eins","aynss"],2:["zwei","tsvy"],3:["drei","dry"],4:["vier","feer"],5:["fünf","fuenf"],6:["sechs","zeks"],7:["sieben","ZEE-ben"],8:["acht","akht"],9:["neun","noyn"],10:["zehn","tsayn"],11:["elf","elf"],12:["zwölf","tsvoelf"],13:["dreizehn","DRY-tsayn"],14:["vierzehn","FEER-tsayn"],15:["fünfzehn","FUENF-tsayn"],16:["sechzehn","ZEKH-tsayn"],17:["siebzehn","ZEEP-tsayn"],18:["achtzehn","AKHT-tsayn"],19:["neunzehn","NOYN-tsayn"]};
+const T={2:["zwanzig","TSVAN-tsikh"],3:["dreißig","DRY-sikh"],4:["vierzig","FEER-tsikh"],5:["fünfzig","FUENF-tsikh"],6:["sechzig","ZEKH-tsikh"],7:["siebzig","ZEEP-tsikh"],8:["achtzig","AKHT-tsikh"],9:["neunzig","NOYN-tsikh"]};
 function num(n){
   if(n<20) return U[n];
   if(n<100){const t=Math.floor(n/10),o=n%10; if(!o) return T[t];
@@ -66,7 +66,7 @@ function num(n){
 }
 
 /* alphabet */
-const ABC=[["A","ah"],["B","bay"],["C","tsay"],["D","day"],["E","ay",1],["F","eff"],["G","gay",1],["H","hah"],["I","ee",1],["J","yot",1],["K","kah"],["L","ell"],["M","emm"],["N","enn"],["O","oh"],["P","pay"],["Q","koo"],["R","err"],["S","ess"],["T","tay"],["U","oo"],["V","fow",1],["W","vay",1],["X","iks"],["Y","ÜP-see-lon",1],["Z","tset",1],["Ä","eh"],["Ö","ay + round lips",1],["Ü","ee + round lips",1],["ß","ESS-tset"]];
+const ABC=[["A","ah"],["B","bay"],["C","tsay"],["D","day"],["E","ay",1],["F","eff"],["G","gay",1],["H","hah"],["I","ee",1],["J","yot",1],["K","kah"],["L","ell"],["M","emm"],["N","enn"],["O","oh"],["P","pay"],["Q","koo"],["R","err"],["S","ess"],["T","tay"],["U","oo"],["V","fow",1],["W","vay",1],["X","iks"],["Y","UEP-see-lon",1],["Z","tset",1],["Ä","eh"],["Ö","oe"],["Ü","ue"],["ß","ESS-tset"]];
 const SAY={A:"Ah",B:"Beh",C:"Zeh",D:"Deh",E:"Eh",F:"Eff",G:"Geh",H:"Hah",I:"Ih",J:"Jott",K:"Kah",L:"Ell",M:"Emm",N:"Enn",O:"Oh",P:"Peh",Q:"Kuh",R:"Err",S:"Ess",T:"Teh",U:"Uh",V:"Fau",W:"Weh",X:"Ix",Y:"Üpsilon",Z:"Zett","Ä":"Äh","Ö":"Öh","Ü":"Üh","ß":"Eszett"};
 const CONFUSE=[["E","I","A","Ä"],["G","J","K","Y"],["V","W","F","B"],["Z","C","S","T"],["I","E","Y","Ü"],["J","G","Y","I"],["W","V","U","B"],["H","A","K","R"],["Ü","U","I","Ö"],["Ö","O","E","Ä"],["Q","K","U","C"],["R","A","H","E"],["B","P","D","T"],["D","T","B","E"],["X","S","Z","C"],["F","V","W","H"],["L","R","N","M"],["Ä","E","A","Ö"],["ß","S","Z","B"],["N","M","L","U"]];
 const SPELL=["Maria","Müller","Schmidt","Weber","Becker","Koch","Wagner","Hoffmann","Bauer","Jung","Vogel","Zimmer","Schulz","Keller","Hilde","Yvonne","Goethe","Straße","Weg","Platz","Jasmin","Viktor","Krüger","Schäfer","Jäger","Fischer","Meyer","Wolf","Lehmann","Neumann","Ziegler","Hamburg","Bahnhof","Kaffee","Quelle","Xaver"];
@@ -110,7 +110,7 @@ const WQ=[
  ["Ich spreche drei Sprachen.","Wie viele","Sprachen sprechen Sie","I speak three (drei = dry) languages.","How many languages do you speak?"],
  ["Ich arbeite bei Siemens.","Wo","arbeiten Sie","I work at Siemens.","Where do you work?"],
  ["Von 9 bis 17 Uhr.","Wann","arbeiten Sie","From 9 to 17 o'clock (neun bis siebzehn Uhr = noyn bis ZEEP-tsayn oor).","When do you work?"],
- ["Das kostet fünf Euro.","Wie viel","kostet das","That costs five (fünf: say ü as 'ee' with round lips) euros.","How much does that cost?"],
+ ["Das kostet fünf Euro.","Wie viel","kostet das","That costs five (fünf = fuenf) euros.","How much does that cost?"],
  ["Ich trinke gern Tee.","Was","trinken Sie gern","I like drinking tea.","What do you like to drink?"],
  ["Danke, gut.","Wie","geht es Ihnen","Fine, thanks.","How are you?"],
  ["Für die Arbeit.","Warum","lernen Sie Deutsch","For work.","Why do you learn German?"],
@@ -126,7 +126,7 @@ const WQ=[
  ["Nach Hause.","Wohin","gehst du","Home.","Where are you going?"],
  ["Am Wochenende.","Wann","hast du Zeit","At the weekend.","When do you have time?"],
  ["Pizza und Salat.","Was","isst du gern","Pizza and salad.","What do you like to eat?"],
- ["Zwei Euro fünfzig.","Wie viel","kostet der Kaffee","Two euros fifty. (tsvy OY-ro FÜNF-tsikh)","How much is the coffee?"],
+ ["Zwei Euro fünfzig.","Wie viel","kostet der Kaffee","Two euros fifty. (tsvy OY-ro FUENF-tsikh)","How much is the coffee?"],
  ["Er heißt Tom.","Wie","heißt dein Bruder","He is called Tom.","What is your brother called?"]
 ];
 const INTRO=[

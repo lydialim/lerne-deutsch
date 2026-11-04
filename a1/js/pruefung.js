@@ -15,7 +15,7 @@
     { id: "w2", form: "Sie", title: "Anfrage an die Sprachschule", en: "enquiry to a language school",
       de: "Sie möchten einen Deutschkurs machen. Schreiben Sie an die Sprachschule. Schreiben Sie zu allen drei Punkten: Wer sind Sie? Welcher Kurs? Preis?",
       eng: "You want to take a German course. Write to the language school: who are you, which course, price?",
-      points: [["Wer sind Sie? (your name)", /(ich heiße|mein name ist|ich bin\s+[A-ZÄÖÜ])/], ["Welcher Kurs? (which course / when)", /(kurs|abend|vormittag|nachmittag|montag|dienstag|mittwoch|donnerstag|freitag|anfänger|a1)/i], ["Preis? (price)", /(preis|kost|euro|wie viel|teuer)/i]],
+      points: [["Wer sind Sie? (your name)", /(ich heiße|mein name ist|ich bin\s+[A-ZÄÖÜ])/i], ["Welcher Kurs? (which course / when)", /(kurs|abend|vormittag|nachmittag|montag|dienstag|mittwoch|donnerstag|freitag|anfänger|a1)/i], ["Preis? (price)", /(preis|kost|euro|wie viel|teuer)/i]],
       model: "Sehr geehrte Damen und Herren,\nich heiße Tom Weber und möchte einen Deutschkurs am Abend machen. Ich bin Anfänger. Was kostet der Kurs?\nMit freundlichen Grüßen\nTom Weber" },
     { id: "w3", form: "du", title: "Absage", en: "cancelling a meeting",
       de: "Du kannst am Freitag nicht zum Treffen kommen. Schreibe an Tom. Schreibe zu allen drei Punkten: Warum? Wann hast du Zeit? Was möchtest du machen?",
@@ -29,7 +29,7 @@
 
   function check(task, text) {
     const t = text.trim(), lines = t.split(/\n+/).map(s => s.trim()).filter(Boolean), out = [];
-    const first = lines[0] || "", last2 = lines.slice(-2).join(" ");
+    const first = lines[0] || "";
     const formal = task.form === "Sie";
     const hasGreet = formal ? /^sehr geehrte/i.test(first) : /^(liebe|lieber|hallo|hi)\b/i.test(first);
     out.push([hasGreet ? "ok" : "bad", hasGreet ? "Anrede: " + esc(first.replace(/,\s*$/, "")) : formal ? "Anrede fehlt: <b>Sehr geehrte Damen und Herren,</b> <span class=\"en\">(greeting missing)</span>" : "Anrede fehlt: <b>Liebe Anna,</b> / <b>Lieber Tom,</b> <span class=\"en\">(greeting missing)</span>"]);
@@ -67,7 +67,12 @@
     if (typeof addSpeakers === "function") addSpeakers(root);
   }
   function count() { const el = $("#wText"), c = $("#wCount"); if (el && c) c.textContent = words(el.value).length + " Wörter (words) · Ziel (goal): ca. 30"; }
-  root.addEventListener("input", e => { if (e.target.id === "wText") { lstore.set("write:" + TASKS[cur].id, e.target.value); result = null; count(); } });
+  root.addEventListener("input", e => {
+    if (e.target.id !== "wText") return;
+    lstore.set("write:" + TASKS[cur].id, e.target.value);
+    if (result) { result = null; root.querySelectorAll(".checklist, .checklist + p").forEach(n => n.remove()); } /* drop stale feedback without redrawing the textarea */
+    count();
+  });
   root.addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
     if (b.dataset.task) { cur = +b.dataset.task; result = null; showModel = false; draw(); return; }
@@ -98,7 +103,7 @@
     ["Hilfe in der Prüfung", "Entschuldigung, ich verstehe das nicht. Können Sie das bitte wiederholen?", "Sorry, I don't understand. Can you repeat that, please?", "Use this if you did not hear the question: it is allowed and costs no points."],
     ["Hilfe in der Prüfung", "Bitte sprechen Sie langsamer.", "Please speak more slowly.", ""]
   ];
-  let i = Math.min(lstore.get("spkI", 0), P.length - 1), rec = null, stream = null, t0 = 0, timer = null;
+  let i = Math.min(lstore.get("spkI", 0), P.length - 1), rec = null, stream = null, t0 = 0, timer = null, starting = false;
   const clips = {}; /* index -> object URL */
   const done = lstore.get("spkDone", {});
   const can = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
@@ -117,18 +122,25 @@
     <div class="btns" style="margin-top:10px"><button type="button" class="go" data-s="prev">← zurück</button><button type="button" class="go" data-s="next">weiter →</button></div>`;
   }
   async function start() {
+    if (rec || starting) return; /* ignore a second tap while the permission prompt is open */
+    starting = true;
+    const idx = i; /* onstop fires after a phrase change, so remember which phrase this recording is for */
     try {
       stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const chunks = []; rec = new MediaRecorder(stream);
       rec.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
       rec.onstop = () => {
         stream.getTracks().forEach(t => t.stop()); clearInterval(timer);
-        if (clips[i]) URL.revokeObjectURL(clips[i]);
-        clips[i] = URL.createObjectURL(new Blob(chunks, { type: rec.mimeType || "audio/webm" })); rec = null; draw("Fertig! Play your recording, then compare it with the model.");
+        if (clips[idx]) URL.revokeObjectURL(clips[idx]);
+        clips[idx] = URL.createObjectURL(new Blob(chunks, { type: rec.mimeType || "audio/webm" })); rec = null;
+        draw(i === idx ? "Fertig! Play your recording, then compare it with the model." : undefined);
       };
-      rec.start(); t0 = Date.now(); draw("🔴 Recording … " + 0 + " s");
-      timer = setInterval(() => { const s = Math.round((Date.now() - t0) / 1000); const m = $("#spkMsg"); if (m) m.textContent = "🔴 Recording … " + s + " s"; if (s >= 25) stop(); }, 500);
-    } catch (e) { rec = null; draw("No microphone access. Allow the microphone in your browser, or use a device with a microphone."); }
+      rec.start(); t0 = Date.now(); draw("🔴 Recording … 0 s");
+      timer = setInterval(() => { const s = Math.round((Date.now() - t0) / 1000); const m = $("#spkMsg"); if (m && i === idx) m.textContent = "🔴 Recording … " + s + " s"; if (s >= 25) stop(); }, 500);
+    } catch (e) {
+      if (stream) stream.getTracks().forEach(t => t.stop()); /* release the microphone if the recorder could not start */
+      stream = null; rec = null; draw("No microphone access. Allow the microphone in your browser, or use a device with a microphone.");
+    } finally { starting = false; }
   }
   function stop() { if (rec && rec.state !== "inactive") rec.stop(); }
   root.addEventListener("change", e => { if (e.target.id === "spkSel") { if (rec) stop(); i = +e.target.value; lstore.set("spkI", i); draw(); } });

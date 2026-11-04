@@ -4,7 +4,7 @@ Free German practice workbooks by level: lessons with memory diagrams, a one-pag
 
 | Level | Start page | What's inside |
 |---|---|---|
-| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 18 lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 45 tests in rounds of 20 questions, with stars, streaks and a daily goal |
+| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 23 numbered lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 45 tests in rounds of 20 questions, with stars, streaks and a daily goal |
 | A2 | coming later | |
 
 Live site: https://lydialim.github.io/lerne-deutsch/
@@ -39,7 +39,7 @@ lerne-deutsch/
         ├── tests2.js         more tests (listening, vocabulary, calendar …) and GROUPS (one tab per group on the tests page: [title, English, keys, tab label, tab English])
         ├── karten.js         data and logic for the picture cards
         ├── pruefung.js       writing checker and speaking practice (recordings stay in the browser)
-        └── lessons.js        interactive parts of the lessons (clock, conjugation chips, word-order builder, floor plan / shop / family-tree scenes, Sprechen simulator)
+        └── lessons.js        interactive parts of the lessons (clock, conjugation chips, word-order builder, floor plan / shop / family-tree scenes, weather / clothes / transport / hotel scenes, Sprechen simulator)
 ```
 
 ## Where to change things

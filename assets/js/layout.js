@@ -94,8 +94,8 @@
   f.innerHTML = `
   <p class="love">Mit <span class="heart" aria-label="Liebe">♥</span> gemacht von <b>lydialim</b> · © 2026 Lerne Deutsch</p>
   <p>Entstanden auf meiner Deutsch-Lernreise, zusammen mit Claude. <span class="en">(Created on my German learning journey, together with Claude.)</span></p>
-  <p>Privates, nicht-kommerzielles Lernprojekt. Kein offizielles Material und nicht verbunden mit dem Goethe-Institut oder Ernst Klett Sprachen. „Goethe-Zertifikat“ und „Netzwerk neu“ sind Namen ihrer Inhaber. Von einer Lernenden erstellt: Fehler sind möglich, bitte mit Kurs oder Lehrbuch vergleichen.
+  <p>Privates, nichtkommerzielles Lernprojekt. Kein offizielles Material und ohne Verbindung zum Goethe-Institut oder zu Ernst Klett Sprachen. <span class="nb">„Goethe-Zertifikat“</span> und <span class="nb">„Netzwerk neu“</span> sind Marken ihrer jeweiligen Inhaber. Von einer Lernenden erstellt: Fehler sind möglich, bitte mit Kurs oder Lehrbuch vergleichen.
   <span class="en">(Private, non-commercial learning project. Not official material of, and not affiliated with, the Goethe-Institut or Ernst Klett Sprachen. "Goethe-Zertifikat" and "Netzwerk neu" belong to their owners. Made by a learner: mistakes are possible, so please compare with your course or textbook.)</span></p>
-  <p>Datenschutz: keine Cookies, kein Tracking, keine externen Schriften. Testergebnisse bleiben nur in deinem Browser. Gehostet bei GitHub Pages.
+  <p>Datenschutz: keine Cookies, kein Tracking, keine externen Schriftarten. Testergebnisse bleiben nur in deinem Browser. Gehostet bei GitHub Pages.
   <span class="en">(Privacy: no cookies, no tracking, no external fonts. Test results stay only in your browser. Hosted on GitHub Pages.)</span></p>`;
 })();

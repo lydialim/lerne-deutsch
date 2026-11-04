@@ -255,10 +255,11 @@ a.tcard:hover{border-color:var(--ink)}
 .ovcard ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:2px}
 .ovcard li a{color:var(--ink)}
 .foot{padding-block:24px 8px;font-size:14px;line-height:1.5;color:var(--muted);border-top:1px solid var(--line);margin-top:32px;display:flex;flex-direction:column;gap:8px}
-.foot p{max-width:80ch}
+.foot p{max-width:none;margin:0}
 .foot .love{color:var(--ink);font-size:15px}
 .foot .heart{color:var(--die)}
-.foot .en{font-size:1em}
+.foot .nb{white-space:nowrap}
+.foot .en{display:block;font-size:1em;margin-top:2px}
 .levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px;padding-block:20px}
 .levels a,.levels div{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:18px;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px}
 .levels a:hover{border-color:var(--ink)}

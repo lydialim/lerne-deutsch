@@ -3,15 +3,17 @@ window.LEVEL = {
   id: "a1",
   level: "A1",
   title: "Deutsch A1 Trainer",
+  /* Top navigation (wide screens) and footer links:
+     [href, short label, English / full name (tooltip), group "learn" | "tools", part letter] */
   pages: [
-    ["index.html", "Übersicht", "overview"],
-    ["grammatik.html", "A · Grammatik", ""],
-    ["zahlen.html", "B · Buchstaben & Zahlen", ""],
-    ["themen.html", "C · Themen", ""],
-    ["pruefung.html", "D · Prüfung", ""],
-    ["spickzettel.html", "Spickzettel", "cheat sheet"],
-    ["karten.html", "Bildkarten", "picture cards"],
-    ["tests.html", "Tests", ""]
+    ["index.html", "Übersicht", "overview", "learn", ""],
+    ["grammatik.html", "Grammatik", "Teil A · grammar", "learn", "A"],
+    ["zahlen.html", "Zahlen", "Teil B · letters & numbers", "learn", "B"],
+    ["themen.html", "Themen", "Teil C · topics", "learn", "C"],
+    ["pruefung.html", "Prüfung", "Teil D · the exam", "learn", "D"],
+    ["karten.html", "Bildkarten", "picture cards", "tools", ""],
+    ["spickzettel.html", "Spickzettel", "cheat sheet", "tools", ""],
+    ["tests.html", "Tests", "practise", "tools", ""]
   ],
   mix: "tests.html#mix",
   /* Lesson menu (bottom sheet on phones). Keep in step with the lessons on each page:

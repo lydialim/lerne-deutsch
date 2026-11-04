@@ -875,3 +875,91 @@ details.fold ul{margin-top:2px}
 .ksearch input:focus{outline:none;border-color:var(--ink)}
 .ktabs.dim button{opacity:.55}
 .fc .back small.cat{font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.8}
+
+/* ===== Bildkarten v2: compact toolbar, category sheet, Lernen mode ===== */
+.ktool{display:flex;flex-direction:column;gap:8px;padding-block:4px 6px}
+.ktool .ksearch{margin:0}
+.ktool .ksearch input{padding:10px 14px;font-size:16px}
+.kcatrow{display:flex;gap:8px}
+.kcat{flex:1;min-width:0;display:flex;align-items:center;gap:10px;min-height:52px;padding:6px 14px;border:1.5px solid var(--line);background:var(--card);border-radius:14px;text-align:left}
+.kcat .cpic{font-size:26px;line-height:1}
+.kcat .swatch,.ctile .swatch{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:inline-block;margin:0}
+.kct{display:flex;flex-direction:column;min-width:0;line-height:1.2;flex:1}
+.kct b{font-family:var(--display);font-size:17px}
+.kct small{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kdens{flex:none;min-width:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;border:1.5px solid var(--line);background:var(--card);border-radius:14px}
+.kdens b{font-family:var(--display);font-size:20px}.kdens small{font-size:11px;color:var(--muted)}
+.kseg{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:4px;background:var(--soft);border-radius:14px;padding:4px}
+.kseg button{border:none;background:none;border-radius:11px;min-height:48px;padding:4px 2px;font-weight:700;font-size:15px;line-height:1.15}
+.kseg button small{display:block;font-weight:400;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kseg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.kseg button[aria-pressed="true"] small{color:inherit;opacity:.8}
+.ktool .ktabs{display:none}
+.khint{font-size:14px;color:var(--muted);margin:2px 0 8px}
+.khint.keys{display:none;text-align:center}
+.kgrid.d3{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.kgrid.d3 .fc{aspect-ratio:1/1.1;padding:2px}
+.kgrid.d3 .fc .pic{font-size:38px}
+.kgrid.d3 .fc small{font-size:10.5px;line-height:1.2}
+.kgrid.d3 .fc .back b{font-size:16px}.kgrid.d3 .fc .back .art{font-size:14px}
+.kgrid.d3 .fc .back .ex,.kgrid.d3 .fc .back .cat{display:none}
+.fc .snd{position:absolute;top:6px;right:8px;font-size:12px;opacity:.65}
+.fc:focus-visible,.lcard:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* category sheet */
+.cattiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding-block:12px 4px}
+.ctile{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;min-height:96px;padding:12px;border:1.5px solid var(--line);background:var(--paper);border-radius:14px}
+.ctile .cpic{font-size:30px;line-height:1.1;margin-bottom:4px}
+.ctile b{font-family:var(--display);font-size:16px;line-height:1.15}
+.ctile small{color:var(--muted);font-size:13px;line-height:1.2}
+.ctile em{font-style:normal;font-size:12px;font-weight:700;color:var(--ok);margin-top:auto;padding-top:4px}
+.ctile.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.ctile.on small,.ctile.on em{color:inherit;opacity:.85}
+
+/* Lernen: one big card, judged "nochmal" or "gewusst" */
+.klearn{display:flex;flex-direction:column;gap:12px}
+.kprog{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700}
+.kprog i{display:block;height:8px;border-radius:4px;background:var(--soft);position:relative;overflow:hidden}
+.kprog i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--p);background:var(--ok);border-radius:4px;transition:width .3s}
+.lcard{position:relative;width:100%;min-height:min(46vh,300px);border:2px solid var(--line);border-radius:20px;background:var(--card);color:var(--ink);font:inherit;padding:0}
+.lcard .front,.lcard .back{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px;text-align:center}
+.lcard .back{display:none}
+.lcard.flip .front{display:none}.lcard.flip .back{display:flex}
+.lcard .pic{font-size:96px;line-height:1.05}
+.lcard .swatch{width:96px;height:96px;border-radius:50%;border:2px solid var(--line);display:inline-block}
+.lcard .front b{font-family:var(--display);font-size:24px}
+.lcard .front small{color:var(--muted);font-size:13px}
+.lcard .back b{font-family:var(--display);font-size:clamp(30px,9vw,42px);line-height:1.1;word-break:break-word}
+.lcard .back .art{font-weight:800;font-size:24px}
+.lcard .back small{font-size:15px;color:var(--muted)}
+.lcard .snd{position:absolute;top:12px;right:16px;font-size:16px;opacity:.7}
+.lcard.m.flip{background:var(--der-bg);border-color:var(--der)}.lcard.m .art{color:var(--der)}
+.lcard.f.flip{background:var(--die-bg);border-color:var(--die)}.lcard.f .art{color:var(--die)}
+.lcard.n.flip{background:var(--das-bg);border-color:var(--das)}.lcard.n .art{color:var(--das)}
+.kjudge{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:sticky;bottom:calc(76px + env(safe-area-inset-bottom,0px));padding-block:8px;background:linear-gradient(transparent,var(--paper) 18%)}
+.kjudge .btn{min-height:58px;font-size:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}
+.kjudge .btn small{font-size:12px;font-weight:400;opacity:.8}
+.kjudge .btn:not(.ghost){background:var(--ok);color:var(--card)}
+.klearn .kdone{padding-block:12px}
+
+@media (max-width:759px){
+  .part.compact{padding-top:14px}
+  .part.compact .lead{display:none}
+}
+@media (min-width:760px){
+  .kcat,.kdens{display:none}
+  .ktool .ktabs{display:flex;flex-wrap:wrap;overflow:visible;padding-bottom:0;margin:0}
+  .ktool .ktabs button{padding:5px 12px}
+  .kgrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  .kseg{align-self:flex-start;grid-template-columns:repeat(3,minmax(120px,1fr))}
+  .klearn{max-width:560px;margin-inline:auto}
+  .khint.keys{display:block}
+  .kjudge{position:static;background:none;bottom:auto}
+  .lcard{min-height:340px}
+  .cattiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (hover:none){.khint.keys{display:none}}
+.kgrid .fc{width:100%;min-width:0;height:auto}
+.ctile .swatch{width:30px;height:30px;margin-bottom:4px}
+.kgrid.d3 .fc{height:124px;aspect-ratio:auto}
+.kgrid.d3 .fc{min-height:0}

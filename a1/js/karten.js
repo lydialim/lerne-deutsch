@@ -140,6 +140,14 @@ const KARTEN = [
 🚪|die|Tür|door
 🪟|das|Fenster|window
 💻|der|Computer|computer`],
+ ["Computer und E-Mail", "computer and e-mail", `💻|der|Computer|computer
+🍽️|der|Tisch|table
+📊|die|Tabelle|table (of data)|Tabellen
+📧|die|E-Mail|e-mail
+@|das|At-Zeichen|@ sign|-|Say: „ät“ · max@web.de = „max ät web punkt de“
+.|der|Punkt|dot, full stop|Punkte|web.de = „web punkt de“
+-|der|Bindestrich|hyphen, dash|Bindestriche|Anna-Maria = „Anna Bindestrich Maria“
+_|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“`],
  ["Stadt, Hotel, Post", "town, hotel, post office", `🏙️|die|Stadt|city, town
 🌳|der|Park|park
 🏛️|das|Rathaus|town hall|Rathäuser
@@ -252,6 +260,7 @@ const extraLine = it => it.ex ? it.ex : "";
   const root = document.getElementById("karten"); if (!root) return;
   let tab = Math.min(lstore.get("kTab", 0), KARTEN.length - 1), mode = lstore.get("kMode", "cards"), query = "", keepFocus = false;
   let deck = [], pos = 0, score = 0, answered = false;
+  let known = new Set(lstore.get("kKnown", [])), dens = lstore.get("kDens", 2) === 3 ? 3 : 2, lq = null, lqTab = -1, lflip = false;
   const said = it => (it.art ? it.art + " " : "") + it.word;
   const face = it => it.pic.startsWith("#") ? `<span class="swatch" style="background:${it.pic}"></span>` : `<span class="pic" aria-hidden="true">${it.pic}</span>`;
   const cls = a => a === "der" ? "m" : a === "die" ? "f" : a === "das" ? "n" : "";
@@ -270,32 +279,74 @@ const extraLine = it => it.ex ? it.ex : "";
     }));
     return out.sort((a, b) => a.rank - b.rank);
   }
-  const card = (it, ci, ii, showCat) => `<button type="button" class="fc ${cls(it.art)}" data-c="${ci}" data-i="${ii}" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<small>${esc(it.eng)}</small></span><span class="back">${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small class="pl">${esc(plLine(it))}</small>` : ""}${it.ex ? `<small class="ex">${esc(it.ex)}</small>` : ""}${showCat ? `<small class="cat">${esc(KARTEN[ci].de)}</small>` : ""}</span></button>`;
+  const card = (it, ci, ii, showCat) => `<button type="button" class="fc ${cls(it.art)}" data-c="${ci}" data-i="${ii}" aria-pressed="false" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<small>${esc(it.eng)}</small></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small class="pl">${esc(plLine(it))}</small>` : ""}${it.ex ? `<small class="ex">${esc(it.ex)}</small>` : ""}${showCat ? `<small class="cat">${esc(KARTEN[ci].de)}</small>` : ""}</span></button>`;
+
+  /* ---- progress ("gewusst"), saved per browser ---- */
+  const kk = it => it.art + "|" + it.word;
+  const saveKnown = () => lstore.set("kKnown", [...known]);
+  const knownCount = t => KARTEN[t].items.filter(i => known.has(kk(i))).length;
+  function buildQueue() { lq = []; KARTEN[tab].items.forEach((it, i) => { if (!known.has(kk(it))) lq.push(i); }); lqTab = tab; lflip = false; }
+  const catIcon = c => { const f = c.items[0]; return f.pic.startsWith("#") ? `<span class="swatch" style="background:${f.pic}"></span>` : `<span class="cpic" aria-hidden="true">${f.pic}</span>`; };
+
+  /* ---- category sheet (phones) ---- */
+  const sheet = document.createElement("div"); sheet.className = "sheet"; sheet.id = "catSheet"; sheet.hidden = true;
+  sheet.innerHTML = `<div class="scrim" data-kclose></div><div class="sheetbox" role="dialog" aria-modal="true" aria-labelledby="catTitle"><div class="sheettop"><div class="grab" aria-hidden="true"></div><div class="sheethead"><h2 id="catTitle">Kategorie <span class="en">(category)</span></h2><button class="xbtn" type="button" data-kclose aria-label="Schließen (close)">✕</button></div></div><div class="cattiles" id="cattiles"></div></div>`;
+  document.body.appendChild(sheet);
+  let lastFocus = null;
+  function openCats() {
+    lastFocus = document.activeElement;
+    $("#cattiles").innerHTML = KARTEN.map((c, i) => `<button type="button" class="ctile${i === tab && !query.trim() ? " on" : ""}" data-pick="${i}">${catIcon(c)}<b>${esc(c.de)}</b><small>${esc(c.en)}</small><em>${knownCount(i)} / ${c.items.length} ✓</em></button>`).join("");
+    sheet.hidden = false; document.body.classList.add("sheet-open");
+    const on = sheet.querySelector(".ctile.on") || sheet.querySelector(".ctile"); if (on) { on.scrollIntoView({ block: "center" }); on.focus({ preventScroll: true }); }
+  }
+  function closeCats() { if (sheet.hidden) return; sheet.hidden = true; document.body.classList.remove("sheet-open"); if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true }); }
+  function pickCat(i) { tab = i; query = ""; lstore.set("kTab", tab); deck = []; lq = null; closeCats(); render(); const t = $(".ktool"); if (t) window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 12 }); }
+  const judge = how => {
+    if (!lq || !lq.length) return;
+    if (how === "known") { known.add(kk(KARTEN[tab].items[lq.shift()])); saveKnown(); } else lq.push(lq.shift());
+    lflip = false; render();
+  };
+  function flipL() { const b = $("#lcard"); if (!b) return; lflip = !lflip; b.classList.toggle("flip", lflip); b.setAttribute("aria-pressed", lflip); if (lflip) speak(said(KARTEN[tab].items[lq[0]])); }
 
   function render() {
     const cat = KARTEN[tab], searching = query.trim().length > 0, guessOk = cat.items.some(i => i.art);
     if (mode === "guess" && !guessOk) mode = "cards";
-    let h = `<div class="ksearch"><input type="search" id="ksearch" value="${esc(query)}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="🔍 Wort suchen … (search all categories)" aria-label="Wort suchen (search a word in all categories)"></div>
-    <div class="ktabs${searching ? " dim" : ""}" role="tablist">${KARTEN.map((c, i) => `<button type="button" role="tab" data-tab="${i}" aria-selected="${!searching && i === tab}">${c.de}<small>${c.en}</small></button>`).join("")}</div>`;
+    if (!["cards", "learn", "guess"].includes(mode)) mode = "cards";
+    const kn = knownCount(tab);
+    let h = `<div class="ktool"><div class="ksearch"><input type="search" id="ksearch" value="${esc(query)}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="🔍 Wort suchen … (search all categories)" aria-label="Wort suchen (search a word in all categories)"></div>
+    <div class="kcatrow"><button type="button" class="kcat" id="kcat" aria-haspopup="dialog">${catIcon(cat)}<span class="kct"><b>${esc(cat.de)}</b><small>${esc(cat.en)} · ${kn} / ${cat.items.length} ✓</small></span><span aria-hidden="true">▾</span></button>
+    ${!searching && mode === "cards" ? `<button type="button" class="kdens" data-dens aria-label="Karten pro Reihe wechseln (switch cards per row): ${dens}" title="2 / 3"><b>${dens}</b><small>Spalten</small></button>` : ""}</div>
+    <div class="ktabs${searching ? " dim" : ""}" role="tablist">${KARTEN.map((c, i) => `<button type="button" role="tab" data-tab="${i}" aria-selected="${!searching && i === tab}">${c.de}<small>${c.en}</small></button>`).join("")}</div>
+    ${searching ? "" : `<div class="kseg" role="group" aria-label="Übungsart (mode)"><button type="button" data-mode="cards" aria-pressed="${mode === "cards"}">🃏 Karten<small>cards</small></button><button type="button" data-mode="learn" aria-pressed="${mode === "learn"}">🧠 Lernen<small>study</small></button>${guessOk ? `<button type="button" data-mode="guess" aria-pressed="${mode === "guess"}">🎯 Raten<small>guess der/die/das</small></button>` : ""}</div>`}</div>`;
     if (searching) {
       const res = search(query);
       h += res.length ? `<p class="en">${res.length} Treffer <span>(matches)</span> in allen Kategorien. Tap a card to turn it over and hear the word.</p><div class="kgrid">${res.map(r => card(KARTEN[r.ci].items[r.ii], r.ci, r.ii, true)).join("")}</div>`
         : `<p class="en">Nichts gefunden <span>(nothing found)</span> for “${esc(query)}”. Try the English word or the German word without the article.</p>`;
-    } else {
-      h += `<div class="kmode"><button type="button" data-mode="cards" aria-pressed="${mode === "cards"}">🃏 Karten <small>(cards)</small></button>${guessOk ? `<button type="button" data-mode="guess" aria-pressed="${mode === "guess"}">🎯 der, die oder das? <small>(guess the article)</small></button>` : ""}</div>`;
-      if (mode === "cards") {
-        h += `<p class="en">Tap a card to turn it over and hear the word. Blue = der, red = die, green = das.</p><div class="kgrid">${cat.items.map((it, i) => card(it, tab, i, false)).join("")}</div>`;
+    } else if (mode === "cards") {
+      h += `<p class="khint">Tap a card to turn it over and hear the word. <span class="der">der</span> · <span class="die">die</span> · <span class="das">das</span></p><div class="kgrid d${dens}">${cat.items.map((it, i) => card(it, tab, i, false)).join("")}</div>`;
+    } else if (mode === "learn") {
+      if (!lq || lqTab !== tab) buildQueue();
+      const total = cat.items.length, pct = Math.round(kn / total * 100);
+      h += `<div class="klearn"><div class="kprog" role="progressbar" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${kn}"><span>${kn} / ${total} gewusst <span class="en">(known)</span></span><i style="--p:${pct}%"></i></div>`;
+      if (!lq.length) {
+        h += `<div class="kdone"><h3>Alle gewusst! 🎉 <span class="en">(all known)</span></h3><div class="rbtns"><button type="button" class="btn ghost" data-reset>Nochmal von vorn <small class="en">(start over)</small></button><button type="button" class="btn" data-nextcat>Nächste Kategorie <small>(next)</small></button></div></div>`;
       } else {
-        if (!deck.length || deck.some(d => !cat.items.includes(d))) newDeck();
-        if (pos >= deck.length) {
-          h += `<div class="kdone"><h3>Fertig! <span class="en">(done)</span></h3><p class="big">${score} / ${deck.length}</p><button type="button" class="go" data-again>Nochmal <span class="en">(again)</span></button></div>`;
-        } else {
-          const it = deck[pos];
-          h += `<div class="kguess"><p class="en">${pos + 1} / ${deck.length} · richtig (right): ${score}</p>
-          <div class="fcbig">${face(it)}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small></div>
-          <div class="kopts">${["der", "die", "das"].map(a => `<button type="button" class="kopt ${cls(a)}" data-a="${a}">${a}</button>`).join("")}</div>
-          <p class="kfb" id="kfb" aria-live="polite"></p><button type="button" class="go" id="knext" hidden>Weiter <span class="en">(next)</span></button></div>`;
-        }
+        const it = cat.items[lq[0]];
+        h += `<button type="button" class="lcard ${cls(it.art)}${lflip ? " flip" : ""}" id="lcard" aria-pressed="${lflip}" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<b>${esc(it.eng)}</b><small>Tippen zum Umdrehen <span>(tap to turn)</span></small></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small>${esc(plLine(it))}</small>` : ""}${it.ex ? `<small>${esc(it.ex)}</small>` : ""}</span></button>
+        <div class="kjudge"><button type="button" class="btn ghost" data-j="again">🔁 Nochmal<small>again</small></button><button type="button" class="btn" data-j="known">✅ Gewusst<small>known</small></button></div>
+        <p class="khint keys">Leertaste = umdrehen · ← nochmal · → gewusst <span class="en">(space = turn, ← again, → known)</span></p>`;
+      }
+      h += `</div>`;
+    } else {
+      if (!deck.length || deck.some(d => !cat.items.includes(d))) newDeck();
+      if (pos >= deck.length) {
+        h += `<div class="kdone"><h3>Fertig! <span class="en">(done)</span></h3><p class="big">${score} / ${deck.length}</p><button type="button" class="go" data-again>Nochmal <span class="en">(again)</span></button></div>`;
+      } else {
+        const it = deck[pos];
+        h += `<div class="kguess"><p class="en">${pos + 1} / ${deck.length} · richtig (right): ${score}</p>
+        <div class="fcbig">${face(it)}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small></div>
+        <div class="kopts">${["der", "die", "das"].map(a => `<button type="button" class="kopt ${cls(a)}" data-a="${a}">${a}</button>`).join("")}</div>
+        <p class="kfb" id="kfb" aria-live="polite"></p><button type="button" class="go" id="knext" hidden>Weiter <span class="en">(next)</span></button></div>`;
       }
     }
     root.innerHTML = h;
@@ -303,11 +354,32 @@ const extraLine = it => it.ex ? it.ex : "";
   }
   root.addEventListener("input", e => { if (e.target.id !== "ksearch") return; query = e.target.value; keepFocus = true; render(); });
   root.addEventListener("keydown", e => { if (e.key === "Escape" && e.target.id === "ksearch" && query) { query = ""; keepFocus = true; render(); } });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeCats();
+    if (mode !== "learn" || query.trim() || document.body.classList.contains("sheet-open") || /INPUT|SELECT|TEXTAREA/.test(e.target.tagName) || !lq || !lq.length) return;
+    if (e.key === "ArrowRight") { e.preventDefault(); judge("known"); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); judge("again"); }
+    else if (e.key === " " && e.target.tagName !== "BUTTON") { e.preventDefault(); flipL(); }
+  });
+  sheet.addEventListener("click", e => {
+    if (e.target.closest("[data-kclose]")) { closeCats(); return; }
+    const p = e.target.closest("[data-pick]"); if (p) pickCat(+p.dataset.pick);
+  });
   root.addEventListener("click", e => {
     const t = e.target.closest("button"); if (!t) return;
-    if (t.dataset.tab) { query = ""; tab = +t.dataset.tab; lstore.set("kTab", tab); deck = []; render(); return; }
-    if (t.dataset.mode) { mode = t.dataset.mode; lstore.set("kMode", mode); deck = []; render(); return; }
-    if (t.classList.contains("fc")) { const on = t.classList.toggle("flip"); if (on) speak(said(KARTEN[+t.dataset.c].items[+t.dataset.i])); return; }
+    if (t.id === "kcat") { openCats(); return; }
+    if (t.hasAttribute("data-dens")) { dens = dens === 2 ? 3 : 2; lstore.set("kDens", dens); render(); return; }
+    if (t.dataset.tab) { query = ""; tab = +t.dataset.tab; lstore.set("kTab", tab); deck = []; lq = null; render(); return; }
+    if (t.dataset.mode) { mode = t.dataset.mode; lstore.set("kMode", mode); deck = []; lq = null; render(); return; }
+    if (t.classList.contains("fc")) {
+      const on = t.classList.toggle("flip"), it = KARTEN[+t.dataset.c].items[+t.dataset.i];
+      t.setAttribute("aria-pressed", on); t.setAttribute("aria-label", on ? said(it) + " (" + it.eng + ")" : it.eng);
+      if (on) speak(said(it)); return;
+    }
+    if (t.id === "lcard") { flipL(); return; }
+    if (t.dataset.j) { judge(t.dataset.j); return; }
+    if (t.hasAttribute("data-reset")) { cat0().forEach(i => known.delete(kk(i))); saveKnown(); lq = null; render(); return; }
+    if (t.hasAttribute("data-nextcat")) { pickCat((tab + 1) % KARTEN.length); return; }
     if (t.hasAttribute("data-again")) { newDeck(); render(); return; }
     if (t.id === "knext") { pos++; answered = false; render(); return; }
     if (t.dataset.a && !answered) {
@@ -317,5 +389,6 @@ const extraLine = it => it.ex ? it.ex : "";
       $("#knext").hidden = false; $("#knext").focus({ preventScroll: true }); speak(said(it));
     }
   });
+  const cat0 = () => KARTEN[tab].items;
   render();
 })();

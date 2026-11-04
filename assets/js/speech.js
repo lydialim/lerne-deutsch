@@ -56,8 +56,13 @@ const TTS = (() => {
      Instead: cancel + speak in the same tick, ignore stale events from the cancelled utterance
      (generation token), and use a watchdog that retries once if Safari never starts. */
   let keep = null;                                      /* keep a reference: Safari may garbage-collect a playing utterance */
+  let lastText = "", lastAt = 0;
   function speak(text, rate, retry) {
     if (!ok || !text) return false;
+    /* ignore the same word fired twice within 0.6 s (double tap / touch + click) */
+    const now = Date.now();
+    if (!retry && text === lastText && now - lastAt < 600) return true;
+    if (!retry) { lastText = text; lastAt = now; }
     const my = ++diag.n;
     try {
       const s = speechSynthesis;
@@ -83,6 +88,8 @@ const TTS = (() => {
       /* watchdog: if nothing started after 1.5 s, the queue is stuck */
       setTimeout(() => {
         if (my !== diag.n || started) return;
+        /* Safari can play without ever firing "start": if audio is running, do not say it a second time */
+        if (s.speaking) { report("playing-without-start-event"); return; }
         report("stuck");
         if (!retry) { try { s.cancel(); s.resume(); } catch (e) {} speak(text, rate, true); }
         else note("Safari did not start the audio. Tap 🔊 again, check the silent switch and volume, or reload the page. " + diagText());

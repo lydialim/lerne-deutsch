@@ -24,10 +24,10 @@ lerne-deutsch/
 │       └── speech.js         reads German aloud (🔊 buttons, listening tests, voice picker)
 └── a1/
     ├── index.html            overview of all A1 lessons
-    ├── grammatik.html        Teil A · lessons 1–7 and 7+ (longer sentences)
-    ├── zahlen.html           Teil B · lessons 8–9
-    ├── themen.html           Teil C · lessons 10–13
-    ├── pruefung.html         Teil D · lesson 14 + study tips
+    ├── grammatik.html        Teil A · lessons 1–7 plus 3+ (mein/dein), 5+ (war/hatte), 7+ (longer sentences)
+    ├── zahlen.html           Teil B · lessons 8–9 and 9+ (calendar)
+    ├── themen.html           Teil C · lessons 10–17 (incl. food, family, flat, countries)
+    ├── pruefung.html         Teil D · lessons 18, 18+ (listening and reading) + study tips
     ├── spickzettel.html      cheat sheet
     ├── tests.html            all tests (open one directly: tests.html#artikel)
     └── js/

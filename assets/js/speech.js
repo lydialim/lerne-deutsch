@@ -65,10 +65,10 @@ function addSpeakers(root) {
   });
   root.querySelectorAll(".lesson table, .ccard table").forEach(tb => {
     const heads = [...tb.querySelectorAll("thead th")].map(th => th.textContent.trim());
-    const cols = heads.map((h, i) => /^(Beispiel|Deutsch|Satz|Wort|Fragewort|Frage|Antwort|Modalverb|Trennbares|Dialog|Sie sagen|Land|Sprache|Datum|Zahl|Tag|Monat)/i.test(h) ? i : -1).filter(i => i >= 0);
+    const cols = heads.map((h, i) => /^(Beispiel|Deutsch|Satz|Wort(?! für)|Fragewort|Frage|Antwort|Modalverb|Trennbares|Dialog|Sie sagen|Land|Sprache|Zahl|Tag|Monat)/i.test(h) && !/English|Wort für Wort/i.test(h) ? i : -1).filter(i => i >= 0);
     if (!cols.length) return;
     tb.querySelectorAll("tbody tr").forEach(tr => cols.forEach(i => {
-      const td = tr.children[i]; if (!td || td.querySelector(".spk")) return;
+      const td = tr.children[i]; if (!td || td.querySelector(".spk") || td.classList.contains("en")) return;
       const txt = sayText(td); if (!txt) return;
       td.appendChild(spkBtn(() => sayText(td)));
     }));

@@ -16,7 +16,7 @@ Feedback and corrections are very welcome.
 
 | Level | Start page | What's inside |
 |---|---|---|
-| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 23 numbered lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 45 tests in rounds of 20 questions, with stars, streaks and a daily goal |
+| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 23 numbered lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 46 tests in rounds of 20 questions, with stars, streaks and a daily goal |
 | A2 | coming later | |
 
 Live site: https://lydialim.github.io/lerne-deutsch/

@@ -179,7 +179,39 @@ Object.assign(TESTS,{
  themen2:{tag:"Neue Themen",title:"Neue Themen: Wörter",en:"weather, body, clothes, transport, hotel and post: words and phrases",kind:"choice",
   gen(){const x=pick(THEMEN2),others=shuffle(THEMEN2.filter(y=>y!==x)).slice(0,3);
    if(Math.random()<.5) return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">What does this mean?</span>`,options:shuffle([x[1],...others.map(y=>y[1])]),answer:x[1],explain:`<b>${x[0]}</b> = ${x[1]}`,sayAfter:x[0]};
-   return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German word is this?</span>`,options:shuffle([x[0],...others.map(y=>y[0])]),answer:x[0],explain:`${x[1]} = <b>${x[0]}</b>`,sayAfter:x[0]}}}
+   return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German word is this?</span>`,options:shuffle([x[0],...others.map(y=>y[0])]),answer:x[0],explain:`${x[1]} = <b>${x[0]}</b>`,sayAfter:x[0]}}},
+
+ /* ---------- picture-card words: word + article (+ plural). Data comes from the Bildkarten (js/karten.js) ---------- */
+ bildwoerter:{tag:"Bildkarten",title:"Bildwörter: Wort + Artikel",en:"picture-card words: which word, which article, which plural?",kind:"choice",
+  ranges:[["Alle",null],...KARTEN.map((c,i)=>[c.de,i])],
+  gen(r){
+   const cats=r&&r[1]!=null?[KARTEN[r[1]]]:KARTEN;
+   const pool=cats.flatMap(c=>c.items.map(it=>Object.assign({cat:c.de},it)));
+   const n=pick(pool), mine=KARTEN.find(c=>c.de===n.cat).items;
+   const pic=n.pic.startsWith("#")?`<span class="swatch" style="background:${n.pic};width:72px;height:72px;border-radius:50%;border:2px solid var(--line);display:inline-block"></span>`:`<span class="big" style="font-size:72px;line-height:1.1">${n.pic}</span>`;
+   const pl=cardPlural(n), say=(n.art?n.art+" ":"")+n.word;
+   const info=`<b>${n.art?artSpan(n.art,n.word):n.word}</b> = ${n.eng}${pl?`<br>Plural: <span class="plc">die</span> ${pl}`:""}${n.ex?`<br>${esc(n.ex)}`:""}`;
+   if(!n.art){ /* verbs, adjectives, colours: no article */
+    const words=[...new Set(mine.filter(v=>v.word!==n.word).map(v=>v.word))];
+    const opts=shuffle([n.word,...shuffle(words).slice(0,3)]);
+    if(Math.random()<.5) return{prompt:`${pic}<span class="en">Welches Wort ist das? <span class="pron">(Which word is this?)</span></span>`,options:opts,answer:n.word,explain:info,sayAfter:say};
+    return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${esc(n.eng)}</span><span class="en">Which German word is this?</span>`,options:opts,answer:n.word,explain:info,sayAfter:say};
+   }
+   const m=rnd(0,pl?3:2);
+   const nouns=mine.filter(v=>v.art&&v.word!==n.word), others=nouns.length>=2?nouns:KARTEN.flatMap(c=>c.items).filter(v=>v.art&&v.word!==n.word);
+   const right=`${n.art} ${n.word}`;
+   const full=()=>{const wrongArt=["der","die","das"].filter(a=>a!==n.art).map(a=>`${a} ${n.word}`);const o=pick(others);
+     return shuffle([...new Set([right,...wrongArt,`${o.art} ${o.word}`])]);};
+   if(m===0) return{prompt:`${pic}<span class="en">Welches Wort ist das, mit Artikel? <span class="pron">(Which word is this, with its article?)</span></span>`,options:full(),answer:right,cls:o=>"o-"+o.split(" ")[0],explain:info,sayAfter:say};
+   if(m===1) return{prompt:`<span class="big">___ ${n.word}</span><span class="en">${esc(n.eng)} · der, die oder das?</span>`,options:["der","die","das"],cls:o=>"o-"+o,answer:n.art,explain:info,sayAfter:say};
+   if(m===2) return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${esc(n.eng)}</span><span class="en">Which German word, with the right article?</span>`,options:full(),answer:right,cls:o=>"o-"+o.split(" ")[0],explain:info,sayAfter:say};
+   const s=n.word, cand=new Set([s+"e",s+"en",s+"n",s+"s",s+"er",s,s+"nen"]);
+   const um=s.replace(/a(?!.*[aou])|o(?!.*[aou])|u(?!.*[aou])/,x=>({a:"ä",o:"ö",u:"ü"}[x]));
+   if(um!==s){cand.add(um+"e");cand.add(um+"er");cand.add(um);}
+   cand.delete(pl); const wrong=shuffle([...cand].filter(c=>!/(ee|nnn|ene$)/.test(c))).slice(0,2);
+   if(wrong.length<2) return{prompt:`<span class="big">___ ${n.word}</span><span class="en">${esc(n.eng)} · der, die oder das?</span>`,options:["der","die","das"],cls:o=>"o-"+o,answer:n.art,explain:info,sayAfter:say};
+   return{prompt:`<span class="en">Singular</span><span class="big">${artSpan(n.art,s)}</span><span class="en">${esc(n.eng)} → Plural: <span class="plc">die</span> ___ ?</span>`,options:shuffle([pl,...wrong]),answer:pl,explain:info,sayAfter:say};
+  }}
 });
 
 /* modal verb data: [ich, du, er/sie/es, wir, ihr, sie/Sie, English] */
@@ -222,7 +254,7 @@ const MODORD=[
 GROUPS.length=0;
 GROUPS.push(
  ["Alles","everything",["mix"]],
- ["Wörter","words: vocabulary, articles, plural",["wortschatz","artikel","ein","plural","wortart","akkusativ","possessiv"],"Wörter","words"],
+ ["Wörter","words: vocabulary, articles, plural",["wortschatz","bildwoerter","artikel","ein","plural","wortart","akkusativ","possessiv"],"Wörter","words"],
  ["Sätze","sentences: verbs, word order, questions",["verbform","dusie","warHatte","modal","satzbau","ordnen","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
  ["Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
  ["Kalender","calendar",["kalender","datum","zeitpraep"],"Kalender","calendar"],

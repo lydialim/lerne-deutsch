@@ -861,3 +861,17 @@ details.fold ul{margin-top:2px}
 #bigGrid,#yearGrid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
 #bigGrid .numcell,#yearGrid .numcell{min-width:0}
 #bigGrid .w,#yearGrid .w,#bigGrid .pron,#yearGrid .pron{overflow-wrap:anywhere;word-break:break-word}
+
+/* picture cards: the back may carry plural + hint, so the card grows with its content */
+.fc{aspect-ratio:auto;min-height:150px;display:flex}
+.fc .front,.fc .back{position:relative;inset:auto;flex:1}
+.fc .back small.pl{font-weight:700;color:var(--ink)}
+.fc .back small.ex{line-height:1.25}
+.kgrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+
+/* picture cards: search box */
+.ksearch{margin:6px 0 4px}
+.ksearch input{width:100%;font:inherit;font-size:17px;padding:12px 14px;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink)}
+.ksearch input:focus{outline:none;border-color:var(--ink)}
+.ktabs.dim button{opacity:.55}
+.fc .back small.cat{font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.8}

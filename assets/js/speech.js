@@ -16,14 +16,29 @@ const TTS = (() => {
     fillPicker();
   }
   function voice() { return voices.find(v => v.name === pref()) || voices[0] || null; }
+  /* iOS Safari quirks handled here:
+     - the first speak() must happen inside a real tap, so we "unlock" speech on the first touch/click;
+     - cancel() directly followed by speak() is silently dropped, so cancel only when needed and wait a tick;
+     - utterances can be garbage-collected mid-speech and then never play, so keep a reference. */
+  let unlocked = false, keep = null;
+  function unlock() {
+    if (unlocked || !ok) return;
+    unlocked = true;
+    try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; speechSynthesis.speak(u); } catch (e) {}
+  }
+  ["touchstart", "touchend", "click"].forEach(ev => document.addEventListener(ev, unlock, { once: false, passive: true, capture: true }));
   function speak(text, rate) {
     if (!ok || !text) return false;
-    speechSynthesis.cancel();
+    const busy = speechSynthesis.speaking || speechSynthesis.pending;
+    if (busy) speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(String(text));
     u.lang = "de-DE";
     const v = voice(); if (v) u.voice = v;
     u.rate = rate || (slow() ? 0.65 : 0.9);
-    speechSynthesis.speak(u);
+    keep = u;
+    u.onend = u.onerror = () => { if (keep === u) keep = null; };
+    const go = () => { if (speechSynthesis.paused) speechSynthesis.resume(); speechSynthesis.speak(u); };
+    if (busy) setTimeout(go, 80); else go();
     return true;
   }
   function fillPicker() {

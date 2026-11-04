@@ -1,7 +1,8 @@
 /* Lerne Deutsch: test engine shared by every level.
    Needs TESTS and GROUPS from <level>/js/tests.js.
-   Each test: {tag, title, en, kind: "choice" | "input" | "mixed", ranges?, gen(range) -> question}
-   Each question: {prompt, answer, explain, options? (choice), inputmode?, umlauts?}
+   Each test: {tag, title, en, kind: "choice" | "input" | "order" | "mixed", ranges?, gen(range) -> question}
+   Each question: {prompt, answer, explain, kind? (overrides the test's kind), options? (choice), inputmode?, umlauts?,
+     tokens + end? (order: shuffled word chips the learner taps into place; answer = tokens in order joined by spaces + end)}
    Open a test directly with tests.html#<key>, e.g. tests.html#artikel or tests.html#mix. */
 let current = null, q = null, stats = { ok: 0, n: 0, miss: [] }, rangeIdx = {};
 const best = lstore.get("best", {});
@@ -34,7 +35,10 @@ function draw() {
   let h = `<div class="panelhead"><div><h2>${t.title}</h2><span class="en">${current === "mix" ? `Frage ${stats.n + 1} von ${MIX_LEN} · ${q.from}` : t.en}</span></div><span class="score">Richtig (correct): ${stats.ok}/${stats.n}</span></div>`;
   if (t.ranges) h += `<div class="seg" role="group" aria-label="Range">${t.ranges.map((r, i) => `<button data-r="${i}" aria-pressed="${(rangeIdx[current] || 0) === i}">${r[0]}</button>`).join("")}</div>`;
   h += `<div class="q">${q.prompt}</div>`;
-  if (kind === "choice") {
+  if (kind === "order") {
+    h += `<div class="ordline" id="built" aria-label="Dein Satz (your sentence)"></div><div class="pool" id="pool"></div>
+      <div class="controls"><button class="btn" type="button" id="chk">Prüfen <span style="font-weight:400">(check)</span></button><button class="btn ghost" type="button" id="undo">↺ Neu <span class="en">(reset)</span></button></div>`;
+  } else if (kind === "choice") {
     h += `<div class="opts">${q.options.map((o, i) => `<button class="opt ${q.cls ? q.cls(o) : ""}" data-i="${i}">${q.label ? q.label(o) : esc(o)}</button>`).join("")}</div>`;
   } else {
     h += `<form class="answerrow" id="ansForm"><input type="text" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" ${q.inputmode ? `inputmode="${q.inputmode}"` : ""} aria-label="Your answer" placeholder="Antwort (answer)">
@@ -44,7 +48,8 @@ function draw() {
   h += `<div id="fb"></div>`;
   $("#panel").innerHTML = h;
   $("#panel").querySelectorAll("[data-r]").forEach(b => b.onclick = () => { rangeIdx[current] = +b.dataset.r; nextQ(); });
-  if (kind === "choice") {
+  if (kind === "order") drawOrder();
+  else if (kind === "choice") {
     $("#panel").querySelectorAll(".opt").forEach(b => b.onclick = () => answer(q.options[+b.dataset.i], b));
   } else {
     const inp = $("#ans"); inp.focus({ preventScroll: true });
@@ -53,10 +58,35 @@ function draw() {
   }
 }
 
+/* order questions: tap a chip in the pool to add it, tap it in the sentence to take it back */
+function drawOrder() {
+  let built = [];
+  const end = q.end || "";
+  const paint = () => {
+    const inPool = q.tokens.map((_, i) => i).filter(i => !built.includes(i));
+    $("#built").innerHTML = (built.length ? built.map(i => `<button type="button" class="chipbtn" data-b="${i}">${esc(q.tokens[i])}</button>`).join("")
+      : `<span class="ph">Tippe die Wörter an. <span class="en">(Tap the words.)</span></span>`) + `<span class="endp">${esc(end)}</span>`;
+    $("#pool").innerHTML = inPool.map(i => `<button type="button" class="chipbtn" data-p="${i}">${esc(q.tokens[i])}</button>`).join("");
+    if (q.done) $("#panel").querySelectorAll(".chipbtn").forEach(b => b.disabled = true);
+    $("#pool").querySelectorAll("[data-p]").forEach(b => b.onclick = () => { if (q.done) return; built.push(+b.dataset.p); paint(); });
+    $("#built").querySelectorAll("[data-b]").forEach(b => b.onclick = () => { if (q.done) return; built = built.filter(i => i !== +b.dataset.b); paint(); });
+  };
+  paint();
+  $("#undo").onclick = () => { if (q.done) return; built = []; paint(); };
+  $("#chk").onclick = () => {
+    if (q.done) return;
+    if (built.length < q.tokens.length) { $("#fb").innerHTML = `<p class="warn">Benutze alle Wörter. (Use all the words.)</p>`; return; }
+    const v = built.map(i => q.tokens[i]).join(" ") + end;
+    answer(v);
+    $("#built").classList.add(v === q.answer ? "ok" : "no"); paint();
+    $("#chk").disabled = true; $("#undo").disabled = true;
+  };
+}
+
 function answer(v, btn) {
   if (q.done) return; q.done = true;
   const kind = q.kind || TESTS[current].kind;
-  const ok = kind === "choice" ? v === q.answer : (norm(v) === norm(q.answer) || v.trim() === q.answer);
+  const ok = kind === "choice" || kind === "order" ? v === q.answer : (norm(v) === norm(q.answer) || v.trim() === q.answer);
   stats.n++;
   if (ok) stats.ok++; else if (q.fromKey && !stats.miss.includes(q.fromKey)) stats.miss.push(q.fromKey);
   const b = best[current] || { ok: 0, n: 0 }; b.n++; if (ok) b.ok++; best[current] = b; lstore.set("best", best);

@@ -23,7 +23,7 @@ lerne-deutsch/
 │       └── quiz.js           test engine (reads TESTS and GROUPS)
 └── a1/
     ├── index.html            overview of all A1 lessons
-    ├── grammatik.html        Teil A · lessons 1–7
+    ├── grammatik.html        Teil A · lessons 1–7 and 7+ (longer sentences)
     ├── zahlen.html           Teil B · lessons 8–9
     ├── themen.html           Teil C · lessons 10–13
     ├── pruefung.html         Teil D · lesson 14 + study tips

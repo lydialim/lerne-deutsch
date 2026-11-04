@@ -13,7 +13,7 @@ const TESTS={
    options:shuffle([n.p,...wrong]),answer:n.p,explain:`<b><span class="${n.a}">${n.a}</span> ${s} → <span class="plc">die</span> ${n.p}</b>. ${pluralNote(n)}`}}},
  ein:{tag:"ein / eine",title:"ein, eine oder nichts?",en:"a / an, or no article",kind:"choice",
   gen(){const n=pick(NOUNS.filter(x=>x.w!==x.p)); const pl=Math.random()<.25;
-   if(pl) return{prompt:`<span class="big">Das sind ___ ${n.p}.</span><span class="en">Those are ___ ${n.en}s.</span>`,options:["ein","eine","— (nothing)"],answer:"— (nothing)",
+   if(pl) return{prompt:`<span class="big">Das sind ___ ${n.p}.</span><span class="en">Those are ___ (plural of “${n.en}”).</span>`,options:["ein","eine","— (nothing)"],answer:"— (nothing)",
      explain:`<b>Das sind ${n.p}.</b> In plural there is no ein/eine. Negative: <i>Das sind keine ${n.p}.</i>`};
    const a=n.a==="die"?"eine":"ein";
    return{prompt:`<span class="big">Das ist ___ ${n.w}.</span><span class="en">That is a ${n.en}.</span>`,options:["ein","eine","— (nothing)"],answer:a,
@@ -118,13 +118,25 @@ const TESTS={
      return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German verb is it?</span>`,options:shuffle([x[0],...o.map(y=>y[0])]),answer:x[0],explain:ex};}
    const x=pick(GERN);return{prompt:`<span class="en">${x[3]}</span><span class="en">Welcher Satz ist richtig? (Which sentence is correct?)</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
      explain:`<b>${x[0]}</b><br>gern comes right after the verb (and the person). Check the verb form too.`};}},
+ ordnen:{tag:"Satzbau · Ordnen",title:"Sätze ordnen",en:"put the words in the right order",kind:"order",
+  gen(){const x=pick(ARRANGE);const idx=x.toks.map((_,i)=>i);let sh=shuffle(idx),g=0;while(sh.every((v,i)=>x.toks[v]===x.toks[i])&&g++<20) sh=shuffle(idx);
+   const answer=x.toks.join(" ")+x.p;
+   return{prompt:`<span class="en">Bring die Wörter in die richtige Reihenfolge. <span class="pron">(Bring the words into the right order.)</span></span><span class="big" style="font-size:clamp(20px,5vw,28px)">${esc(x.en)}</span>`,
+    tokens:sh.map(i=>x.toks[i]),answerTokens:x.toks,end:x.p,answer,
+    explain:`${trainOf(x)}<span>${esc(x.en)}</span><br>${x.r}`}}},
+ luecke:{tag:"Satzbau · Ergänzen",title:"Sätze ergänzen",en:"complete the sentence: brackets, connectors, word order",kind:"choice",
+  gen(){const x=pick(GAPS);const typed=x[5]&&Math.random()<.4;
+   const head=`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`;
+   const ex=`<b>${esc(x[0].replace("___",x[3][0]))}</b><br><span class="en">Wort für Wort (word by word): ${esc(x[2])}</span><br>${x[4]}`;
+   if(typed) return{kind:"input",prompt:head+`<span class="en">Schreib das fehlende Wort. <span class="pron">(Write the missing word.)</span></span>`,answer:x[3][0],umlauts:true,explain:ex};
+   return{prompt:head,options:shuffle([...x[3]]),answer:x[3][0],explain:ex}}},
  mix:{tag:"Alle Teile",title:"Gemischter Test",en:"10 random questions from all parts",kind:"mixed",
-  gen(){const keys=Object.keys(TESTS).filter(k=>k!=="mix");const k=pick(keys);const t=TESTS[k];const r=t.ranges?pick(t.ranges):null;const q=t.gen(r);q.kind=t.kind;q.from=t.tag;q.fromKey=k;return q;}}
+  gen(){const keys=Object.keys(TESTS).filter(k=>k!=="mix");const k=pick(keys);const t=TESTS[k];const r=t.ranges?pick(t.ranges):null;const q=t.gen(r);q.kind=q.kind||t.kind;q.from=t.tag;q.fromKey=k;return q;}}
 };
 
 const GROUPS=[
  ["Alles","everything",["mix"]],
- ["A · Grammatik","grammar",["artikel","ein","plural","wortart","verbform","satzbau","wfrage","antworten","kein"]],
+ ["A · Grammatik","grammar",["artikel","ein","plural","wortart","verbform","satzbau","ordnen","luecke","wfrage","antworten","kein"]],
  ["B · Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"]],
  ["C + D · Themen und Prüfung","topics and exam",["vorstellen","arbeit","aktion","weg","formular"]]
 ];

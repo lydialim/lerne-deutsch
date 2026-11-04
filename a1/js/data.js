@@ -155,12 +155,20 @@ const ORDER=[
  ["Wie komme ich zum Bahnhof?","Wie ich komme zum Bahnhof?","Wie komme zum Bahnhof ich?","How do I get to the station?","W-question: W-word 1st, verb 2nd."],
  ["Gehen Sie geradeaus.","Geradeaus Sie gehen.","Sie geradeaus gehen.","Go straight ahead.","Request with Sie: verb 1st, then Sie."],
  ["Morgen arbeite ich im Homeoffice.","Morgen ich arbeite im Homeoffice.","Ich morgen arbeite im Homeoffice.","Tomorrow I work from home.","Time first → verb 2nd → ich."],
- ["Um 8 Uhr frühstücke ich.","Um 8 Uhr ich frühstücke.","Ich um 8 Uhr frühstücke.","At 8 o'clock I have breakfast.","Time first → verb 2nd → ich."],
+ ["Um 8 Uhr frühstücke ich.","Um 8 Uhr ich frühstücke.","Ich um 8 Uhr frühstücke.","At 8 (acht, akht) o'clock I have breakfast.","Time first → verb 2nd → ich."],
  ["Hast du heute Zeit?","Heute du hast Zeit?","Hast heute du Zeit?","Do you have time today?","Yes/no question: verb 1st, then the person."],
  ["Ich habe kein Auto.","Ich habe nicht Auto.","Ich kein Auto habe.","I don't have a car.","kein + noun; verb in position 2."],
  ["Das Museum ist nicht weit.","Das Museum nicht ist weit.","Das Museum ist weit nicht.","The museum is not far.","nicht comes before the adjective."],
  ["Wann beginnt der Kurs?","Wann der Kurs beginnt?","Wann beginnt Kurs der?","When does the course start?","W-word 1st, verb 2nd, then the subject."],
- ["Ich möchte bitte zwei Brötchen.","Ich bitte möchte zwei Brötchen.","Möchte ich bitte zwei Brötchen.","I would like two bread rolls, please.","Statement: verb (möchte) in position 2."]
+ ["Ich stehe um 7 Uhr auf.","Ich aufstehe um 7 Uhr.","Ich stehe auf um 7 Uhr.","I get up at 7 (sieben, ZEE-ben) o'clock.","Separable verb: stehe in position 2, auf goes to the end."],
+ ["Ich kann heute nicht kommen.","Ich kann nicht kommen heute.","Ich kommen kann heute nicht.","I can't come today.","Modal verb 2nd, infinitive at the end, nicht just before it."],
+ ["Ich muss morgen früh aufstehen.","Ich muss morgen früh stehe auf.","Ich muss aufstehen morgen früh.","I have to get up early tomorrow.","With a modal, the separable verb stays in one piece at the end."],
+ ["Wann fängt der Kurs an?","Wann anfängt der Kurs?","Wann fängt an der Kurs?","When does the course start?","Separable verb in a question: the prefix still goes to the end."],
+ ["Zuerst frühstücke ich, dann gehe ich zur Arbeit.","Zuerst ich frühstücke, dann ich gehe zur Arbeit.","Zuerst frühstücke ich, dann ich gehe zur Arbeit.","First I have breakfast, then I go to work.","zuerst and dann take place 1, so the verb comes next."],
+ ["Ich lerne Deutsch, denn ich arbeite in Deutschland.","Ich lerne Deutsch, denn arbeite ich in Deutschland.","Ich lerne Deutsch, denn ich in Deutschland arbeite.","I learn German because I work in Germany.","denn is position 0: normal word order after it."],
+ ["Ich komme aus Brasilien, aber ich wohne in Berlin.","Ich komme aus Brasilien, aber wohne ich in Berlin.","Ich komme aus Brasilien, aber ich in Berlin wohne.","I come from Brazil, but I live in Berlin.","aber is position 0: normal word order after it."],
+ ["Ich fahre morgen mit dem Bus zur Arbeit.","Ich fahre zur Arbeit mit dem Bus morgen.","Morgen ich fahre mit dem Bus zur Arbeit.","Tomorrow I'm taking the bus to work.","Verb 2nd; in the middle: when → how → where."],
+ ["Ich möchte bitte zwei Brötchen.","Ich bitte möchte zwei Brötchen.","Möchte ich bitte zwei Brötchen.","I would like two (zwei, tsvy) bread rolls, please.","Statement: verb (möchte) in position 2."]
 ];
 const FORM=[
  ["Familienname / Nachname","surname / last name"],["Vorname","first name"],["Geburtsdatum","date of birth"],["Geburtsort","place of birth"],
@@ -254,3 +262,65 @@ const priceSay=(e,c)=>`${e===1?"ein":num(e)[0]} Euro${c?" "+num(c)[0]:""}`;
 const pricePron=(e,c)=>`${e===1?"ayn":num(e)[1]} OY-ro${c?" "+num(c)[1]:""}`;
 
 const letterSay=l=>SAY[l]||l;
+
+/* sentence building: * = verb part (red car), ^ = position-0 connector. Each token has a word-by-word gloss. */
+const ARRANGE=[
+ ["Heute|*lerne|ich|Deutsch",".","Today I am learning German.","today|learn|I|German","Time first → verb stays in place 2 → ich jumps behind the verb."],
+ ["Am Wochenende|*spiele|ich|Tennis",".","At the weekend I play tennis.","at-the weekend|play|I|tennis","Time first → verb 2nd → ich."],
+ ["Wo|*wohnen|Sie","?","Where do you live?","where|live|you (formal)","W-question: W-word 1st, verb 2nd."],
+ ["*Sprechen|Sie|Englisch","?","Do you speak English?","speak|you|English","Yes/no question: the verb comes 1st."],
+ ["Was|*machst|du|am Wochenende","?","What are you doing at the weekend?","what|do|you|at-the weekend","W-question: W-word 1st, verb 2nd, then the person."],
+ ["Ich|*möchte|einen Kaffee|*trinken",".","I would like to drink a coffee.","I|would like|a coffee|drink","Bracket: möchte in place 2, the infinitive (trinken) at the end."],
+ ["*Kannst|du|mir|*helfen","?","Can you help me?","can|you|me|help","Yes/no question with a modal: modal 1st, infinitive at the end."],
+ ["Ich|*kann|heute|nicht|*kommen",".","I can't come today.","I|can|today|not|come","Bracket: kann … kommen. nicht stands just before the end verb."],
+ ["Ich|*muss|heute|lange|*arbeiten",".","I have to work late today.","I|must|today|long|work","müssen: ich muss (no ending!). Infinitive at the end."],
+ ["Ich|*stehe|um 7 Uhr|*auf",".","I get up at 7 (sieben, ZEE-ben) o'clock.","I|stand|at 7 (sieben) o'clock|up","Separable verb aufstehen: stehe in place 2, auf at the end."],
+ ["Wann|*stehst|du|*auf","?","When do you get up?","when|stand|you|up","Separable verb in a W-question: the prefix still goes to the end."],
+ ["Am Samstag|*kaufe|ich|im Supermarkt|*ein",".","On Saturday I go shopping at the supermarket.","on Saturday|shop|I|in-the supermarket|(in)","einkaufen is separable: kaufe in place 2, ein at the end."],
+ ["Ich|*rufe|dich|morgen|*an",".","I'll call you tomorrow.","I|call|you|tomorrow|(on)","anrufen is separable: rufe … an."],
+ ["Sie|*sieht|am Abend|*fern",".","She watches TV in the evening.","she|sees|in-the evening|far","fernsehen: sieht … fern. sehen is irregular: sie sieht."],
+ ["Um halb acht|*fängt|der Kurs|*an",".","The course starts at 7:30 (halb acht, halp akht).","at half eight|catches|the course|on","halb acht = 7:30 (half way to eight). anfangen: fängt … an."],
+ ["*Möchtest|du|am Sonntag|*mitkommen","?","Would you like to come along on Sunday?","would like|you|on Sunday|come along","Modal + separable verb: the separable verb stays in ONE piece at the end."],
+ ["Ich|*trinke|Kaffee|^und|du|*trinkst|Tee",".","I drink coffee and you drink tea.","I|drink|coffee|and|you|drink|tea","und = position 0: after it a normal sentence (du trinkst)."],
+ ["Ich|*komme|aus Brasilien,|^aber|ich|*wohne|in Berlin",".","I come from Brazil, but I live in Berlin.","I|come|from Brazil|but|I|live|in Berlin","aber = position 0: ich wohne (normal order). Comma before aber."],
+ ["Ich|*lerne|Deutsch,|^denn|ich|*arbeite|in Deutschland",".","I learn German because I work in Germany.","I|learn|German|because|I|work|in Germany","denn = position 0: ich arbeite (normal order). Comma before denn."],
+ ["*Trinkst|du|Kaffee|^oder|Tee","?","Do you drink coffee or tea?","drink|you|coffee|or|tea","oder joins two choices. Yes/no question: verb 1st."],
+ ["Zuerst|*frühstücke|ich,|dann|*gehe|ich|zur Arbeit",".","First I have breakfast, then I go to work.","first|breakfast|I|then|go|I|to-the work","zuerst and dann take place 1, so the verb comes next and ich goes behind it."],
+ ["Ich|*fahre|morgen|mit dem Bus|zur Arbeit",".","I'm taking the bus to work tomorrow.","I|go|tomorrow|with the bus|to-the work","Middle order: when (morgen) → how (mit dem Bus) → where (zur Arbeit)."],
+ ["Am Abend|*gehe|ich|gern|ins Kino",".","In the evening I like going to the cinema.","in-the evening|go|I|gladly|into-the cinema","gern comes right after the verb and person."],
+ ["Das Museum|*ist|nicht|weit",".","The museum is not far.","the museum|is|not|far","nicht stands before the adjective (weit)."],
+ ["Ich|*arbeite|heute|nicht",".","I'm not working today.","I|work|today|not","The whole sentence is negative → nicht at the end."],
+ ["Wir|*gehen|heute|nicht|ins Kino",".","We're not going to the cinema today.","we|go|today|not|into-the cinema","nicht stands before the place / direction (ins Kino)."],
+ ["Wie viel|*kostet|das Brot","?","How much does the bread cost?","how much|costs|the bread","'Wie viel' counts as one place; the verb comes next."],
+ ["Ich|*lerne|Deutsch,|^weil|ich|in München|*wohne",".","I learn German because I live in Munich. (A2 preview)","I|learn|German|because|I|in Munich|live","Ausblick A2: weil pulls the verb to the END (wohne)."]
+].map(([t,p,en,ww,r])=>{const raw=t.split("|");return{raw,toks:raw.map(x=>x.replace(/^[*^]/,"")),p,en,ww:ww.split("|"),r};});
+
+/* [sentence with ___, English, word by word, options (first = right), rule, typeable?] */
+const GAPS=[
+ ["Ich stehe um 7 Uhr ___.","I get up at 7 (sieben, ZEE-ben) o'clock.","I stand at 7 o'clock up.",["auf","an","ein"],"<b>auf</b>|stehen is separable: the prefix goes to the end.",1],
+ ["Ich rufe meine Mutter ___.","I call my mother.","I call my mother (on).",["an","auf","mit"],"<b>an</b>|rufen is separable: rufe … an.",1],
+ ["Am Samstag kaufe ich im Supermarkt ___.","On Saturday I shop at the supermarket.","On Saturday buy I in-the supermarket (in).",["ein","auf","an"],"<b>ein</b>|kaufen is separable: kaufe … ein.",1],
+ ["Wann fängt der Film ___?","When does the film start?","When catches the film on?",["an","auf","ein"],"<b>an</b>|fangen: fängt … an. Even in a question the prefix goes to the end.",1],
+ ["Ich möchte eine Pizza ___.","I would like to eat a pizza.","I would-like a pizza eat.",["essen","esse","isst"],"After a modal verb the 2nd verb is the <b>infinitive</b> (-en form) at the end.",1],
+ ["Kannst du gut ___?","Can you cook well?","Can you well cook?",["kochen","kochst","kocht"],"Modal (kannst) + infinitive (<b>kochen</b>) at the end.",1],
+ ["Ich ___ heute nicht kommen.","I can't come today.","I can today not come.",["kann","kanne","können"],"Modal verbs: <b>ich kann</b>, no -e ending.",0],
+ ["Er ___ gut Deutsch sprechen.","He can speak German well.","He can well German speak.",["kann","kannt","können"],"Modal verbs: <b>er kann</b>, no -t ending.",0],
+ ["Wir ___ heute Abend ins Kino gehen.","We want to go to the cinema tonight.","We want today evening into-the cinema go.",["wollen","will","wollt"],"wollen: ich will, du willst, er will, <b>wir wollen</b>.",0],
+ ["___ du mir bitte helfen?","Can you please help me?","Can you me please help?",["Kannst","Kann","Können"],"du → <b>kannst</b> (-st, like every du form).",0],
+ ["Ich muss morgen früh ___.","I have to get up early tomorrow.","I must tomorrow early get-up.",["aufstehen","stehe auf","aufstehe"],"Modal + separable verb: the separable verb stays in <b>one piece</b> at the end: aufstehen.",0],
+ ["Sie ___ am Abend fern.","She watches TV in the evening.","She sees in-the evening far.",["sieht","seht","sehen"],"fern|sehen: sehen is irregular: <b>sie sieht</b>.",0],
+ ["Um halb acht ___ der Kurs an.","The course starts at 7:30 (halb acht, halp akht).","At half eight catches the course on.",["fängt","fangt","fangen"],"anfangen: <b>er/sie/es fängt</b> (a → ä). Remember: halb acht = 7:30.",0],
+ ["Ich gehe ins Bett, ___ ich bin müde.","I'm going to bed because I'm tired.","I go into-the bed, because I am tired.",["denn","aber","oder"],"<b>denn</b> = because. Position 0: ich bin (normal order).",0],
+ ["Ich komme aus Spanien, ___ ich wohne in Berlin.","I come from Spain, but I live in Berlin.","I come from Spain, but I live in Berlin.",["aber","denn","oder"],"<b>aber</b> = but. Position 0: ich wohne (normal order).",0],
+ ["Möchtest du Tee ___ Kaffee?","Would you like tea or coffee?","Would-like you tea or coffee?",["oder","und","denn"],"<b>oder</b> = or, for a choice.",0],
+ ["Ich habe keine Zeit, ___ ich muss arbeiten.","I have no time because I have to work.","I have no time, because I must work.",["denn","oder","und"],"<b>denn</b> = because. It explains the reason.",0],
+ ["Ich wohne nicht in Berlin, ___ in München.","I don't live in Berlin but in Munich.","I live not in Berlin, but-rather in Munich.",["sondern","aber","oder"],"After a <b>nicht / kein</b> + correction use <b>sondern</b>.",0],
+ ["Zuerst frühstücke ich, dann ___ zur Arbeit.","First I have breakfast, then I go to work.","First breakfast I, then go I to-the work.",["gehe ich","ich gehe","ich gehen"],"<b>dann</b> takes place 1 → verb 2nd → <b>gehe ich</b>.",0],
+ ["Ich lerne Deutsch, denn ___ in Deutschland.","I learn German because I work in Germany.","I learn German, because I work in Germany.",["ich arbeite","arbeite ich","ich arbeiten"],"<b>denn</b> is position 0 → normal order: <b>ich arbeite</b>.",0],
+ ["Heute Abend ___ ins Kino.","Tonight we're going to the cinema.","Today evening go we into-the cinema.",["gehen wir","wir gehen","wir geht"],"Time first → verb 2nd → <b>gehen wir</b>.",0],
+ ["Ich kann heute ___ kommen.","I can't come today.","I can today not come.",["nicht","kein","keine"],"Negating a verb → <b>nicht</b>, just before the end verb.",0],
+ ["Ich fahre morgen ___ zur Arbeit.","Tomorrow I'm going to work by bike.","I go tomorrow with-the bicycle to-the work.",["mit dem Fahrrad","zur Arbeit mit","Fahrrad mit dem"],"Middle order: when (morgen) → <b>how (mit dem Fahrrad)</b> → where (zur Arbeit).",0],
+ ["Er ___ seine Freundin am Abend an.","He calls his girlfriend in the evening.","He calls his girlfriend in-the evening (on).",["ruft","rufe","rufen"],"an|rufen: <b>er ruft</b> … an.",0],
+ ["Ich lerne Deutsch, weil ___.","I learn German because I live in Munich. (A2 preview)","I learn German, because I in Munich live.",["ich in München wohne","ich wohne in München","wohne ich in München"],"Ausblick A2: <b>weil</b> pulls the verb to the end.",0]
+];
+function trainOf(x){return `<div class="train">${x.raw.map((r,i)=>`<span class="car${r[0]==="*"?" v":r[0]==="^"?" z":""}">${esc(x.toks[i])}${i===x.raw.length-1?x.p:""}<em>${esc(x.ww[i])}</em></span>`).join("")}</div>`;}

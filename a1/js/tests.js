@@ -136,7 +136,22 @@ const TESTS={
 
 const GROUPS=[
  ["Alles","everything",["mix"]],
- ["A · Grammatik","grammar",["artikel","ein","plural","wortart","verbform","satzbau","ordnen","luecke","wfrage","antworten","kein"]],
- ["B · Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"]],
- ["C + D · Themen und Prüfung","topics and exam",["vorstellen","arbeit","aktion","weg","formular"]]
+ ["Wörter","words: articles, plural",["artikel","ein","plural","wortart"],"Wörter","words"],
+ ["Sätze","sentences: verbs, word order, questions",["verbform","satzbau","ordnen","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
+ ["B · Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
+ ["C · Themen","topics",["vorstellen","arbeit","aktion","weg"],"Themen","topics"],
+ ["D · Prüfung","exam",["formular"],"Prüfung","exam"]
+];
+
+/* Rule of the day on the tests page: [German title, English, example, English word by word, test key] */
+const RULES=[
+ ["Verb an Position 2","verb in position 2","Heute <b>lerne</b> ich Deutsch.","Today learn I German. In a statement the verb is always the 2nd element.","satzbau"],
+ ["-ung, -heit, -keit, -ion → die","these endings are always die","<span class=\"die\">die</span> Zeitung, <span class=\"die\">die</span> Information","the newspaper, the information","artikel"],
+ ["-chen, -lein → das","these endings are always das","<span class=\"das\">das</span> Mädchen","the girl. Even a girl is das, because of -chen.","artikel"],
+ ["Plural → immer die","plural → always die","<span class=\"plc\">die</span> Bücher, <span class=\"plc\">die</span> Tische","the books, the tables. In the plural der, die and das all become die.","plural"],
+ ["Beruf ohne Artikel","job without an article","Ich bin Lehrerin.","I am teacher. No ein/eine before a job.","arbeit"],
+ ["kein = not a","kein replaces ein","Das ist <b>kein</b> Tisch.","That is no table. ein → kein, eine → keine.","kein"],
+ ["Zahlen: Einer zuerst","numbers: ones first","24 = vier·und·zwanzig <span class=\"pron\">(FEER-oont-TSVAN-tsikh)</span>","four-and-twenty. German says the ones before the tens.","zahlWort"],
+ ["W-Frage: Verb an Position 2","W-question: verb in position 2","Wo <b>wohnst</b> du?","Where live you? Question word first, then the verb.","wfrage"],
+ ["du-Form endet auf -st","du-form ends in -st","du wohn<b>st</b>, du lern<b>st</b>","you live, you learn","verbform"]
 ];

@@ -196,6 +196,75 @@ const INTRO=[
  {k:"Sport",q:"Machen Sie Sport?",a:"Ja, ich spiele … / Ich fahre gern Fahrrad.",qe:"Do you do sport? (lit. Make you sport?)",ke:"sport",ae:"Yes, I play … / I ride gladly bicycle. (= I like cycling.)",w:"more"},
  {k:"Arbeitszeit",q:"Wann arbeiten Sie?",a:"Ich arbeite von … bis …",qe:"When do you work?",ke:"working hours",ae:"I work from … to … (e.g. von 9 bis 17 Uhr = von neun, noyn, bis siebzehn, ZEEP-tsayn, Uhr)",w:"more"}
 ];
+/* English for the answers in ANSW (test "Die richtige Antwort") and CAFE (test "Im Café"), word by word where it helps */
+const ANSW_EN={
+ "Ich wohne in Hamburg.":"I live in Hamburg.",
+ "Ich heiße Maria.":"I am called Maria. (= My name is Maria.)",
+ "Ich komme aus Brasilien.":"I come from Brazil.",
+ "Nein, ich wohne in Hamburg.":"No, I live in Hamburg.",
+ "Mein Lieblingsessen ist Pizza.":"My favourite food is pizza.",
+ "Meine Nummer ist 0176 1234567.":"My number is 0176 1234567. (digit by digit: null, eins, sieben, sechs … = nool, aynss, ZEE-ben, zeks …)",
+ "Ja, wir haben Zeit.":"Yes, we have time.",
+ "Ja, ich spreche Englisch.":"Yes, I speak English.",
+ "Gehen Sie geradeaus und dann links.":"Go (formal) straight ahead and then left.",
+ "Ich bin Ingenieurin.":"I am engineer. (= I am an engineer; no article before a job)",
+ "Um 18 Uhr.":"At 18 o'clock. (= 6 pm; achtzehn, AKHT-tsayn)",
+ "Nein, ich habe kein Fahrrad.":"No, I have no bicycle. (= I don't have a bike.)",
+ "Ich bin 30 Jahre alt.":"I am 30 years old. (dreißig, DRY-sikh)",
+ "Ich koche und lese.":"I cook and read.",
+ "Am 12. Mai.":"On the 12th of May. (am zwölften, TSVOELF-ten)",
+ "Ja, ich habe zwei Kinder.":"Yes, I have two children. (zwei, tsvy)",
+ "Drei Euro fünfzig.":"Three euros fifty. (3,50 €; dry OY-ro FUENF-tsikh)",
+ "Ich besuche meine Eltern.":"I visit my parents.",
+ "Nein, ich bin ledig.":"No, I am single.",
+ "Ich war zu Hause.":"I was at home.",
+ "Sie ist klein, aber hell.":"It is small, but bright. (die Wohnung → sie)"
+};
+const CAFE_EN={
+ "Einen Kaffee, bitte.":"A coffee, please.",
+ "Ich nehme die Suppe.":"I take the soup. (= I'll have the soup.)",
+ "Nein, danke. Das ist alles.":"No, thanks. That is all.",
+ "Getrennt, bitte.":"Separately, please.",
+ "Hier, bitte. Stimmt so.":"Here, please. Is-right so. (= Keep the change.)",
+ "Ja, natürlich.":"Yes, of course.",
+ "(You ask for the bill.)":"",
+ "2,99 € das Kilo.":"2.99 € the kilo. (= per kilo; zwei Euro neunundneunzig, tsvy OY-ro NOYN-oont-NOYN-tsikh)",
+ "Gern. Noch etwas?":"Gladly. Still something? (= Sure. Anything else?)",
+ "Ja, wie viele möchten Sie?":"Yes, how many would you like?",
+ "Vier, bitte.":"Four, please. (vier, feer)",
+ "Da hinten, links.":"There at-the-back, left. (= Over there at the back, on the left.)",
+ "Ja, sehr gut, danke.":"Yes, very good, thanks.",
+ "Ich esse gern Fisch.":"I eat gladly fish. (= I like eating fish.)",
+ "Nein, ich mag keinen Käse.":"No, I like no cheese. (= I don't like cheese.)",
+ "Ich trinke Tee mit Milch.":"I drink tea with milk.",
+ "Gern. Hier am Fenster?":"Gladly. Here at-the window?",
+ "3,20 € das Stück.":"3.20 € the piece. (= per piece; drei Euro zwanzig, dry OY-ro TSVAN-tsikh)",
+ "Die Getränke sind da vorne.":"The drinks are there at-the-front.",
+ "Nein danke, lieber ein Wasser.":"No thanks, rather a water. (= I'd prefer water.)",
+ "Danke, gleichfalls!":"Thanks, likewise! (= You too!)",
+ "Ja, bitte kommen Sie.":"Yes, please come (this way)."
+};
+/* English for language names (test "Länder, Sprachen, Leute") */
+const LANG_EN={Deutsch:"German",Englisch:"English",Französisch:"French",Italienisch:"Italian",Spanisch:"Spanish",Polnisch:"Polish",Türkisch:"Turkish",Griechisch:"Greek",Russisch:"Russian",Ukrainisch:"Ukrainian",Chinesisch:"Chinese",Japanisch:"Japanese",Hindi:"Hindi",Malaiisch:"Malay",Vietnamesisch:"Vietnamese",Portugiesisch:"Portuguese",Persisch:"Persian",Arabisch:"Arabic"};
+const langEn=s=>s.split(", ").map(x=>LANG_EN[x]||x).join(", ");
+/* what the spelling words mean (tests "Name buchstabieren", "Namen hören"); the rest are names */
+const SPELL_EN={Straße:"street",Weg:"way, path",Platz:"square",Hamburg:"a city",Bahnhof:"train station",Kaffee:"coffee",Quelle:"spring, source",Zimmer:"room (also a surname)",Koch:"cook (also a surname)",Vogel:"bird (also a surname)",Wolf:"wolf (also a surname)",Jung:"young (also a surname)",Fischer:"fisherman (also a surname)",Keller:"cellar (also a surname)",Bauer:"farmer (also a surname)",Müller:"miller (a surname)",Schmidt:"smith (a surname)",Jäger:"hunter (a surname)",Schäfer:"shepherd (a surname)",Wagner:"cartwright (a surname)",Weber:"weaver (a surname)",Becker:"baker (a surname)",Goethe:"Germany's most famous writer (a surname)"};
+const spellEn=w=>SPELL_EN[w]||(/^(Maria|Hilde|Yvonne|Jasmin|Viktor|Xaver)$/.test(w)?"a first name":"a surname");
+/* English for a German verb form: person + verb, e.g. ("er","to live") → "he lives" */
+const PERS_EN={ich:"I",du:"you",er:"he",sie:"she",es:"it",wir:"we",ihr:"you (all)",Sie:"you (formal)"};
+function verbEn(per,en,plural){
+  const who=per==="sie"&&plural?"they":PERS_EN[per]||per, base=en.split(" / ")[0].replace(/^to /,"");
+  const third=["er","sie","es"].includes(per)&&!plural;
+  if(/^be\b/.test(base)) return `${who} ${per==="ich"?"am":third?"is":"are"}${base.slice(2)}`;
+  if(!third) return `${who} ${base}`;
+  if(/^have\b/.test(base)) return `${who} has${base.slice(4)}`;
+  const [w,...rest]=base.split(" ");
+  if(/^(would|can|must|may|will|should)$/.test(w)) return `${who} ${base}`; /* English modal verbs take no -s */
+  const s=/(s|sh|ch|x|o)$/.test(w)?w+"es":/[^aeiou]y$/.test(w)?w.slice(0,-1)+"ies":w+"s";
+  return `${who} ${[s,...rest].join(" ")}`;
+}
+/* English ordinal: 1 → 1st, 22 → 22nd */
+const ordEn=n=>n+(n%100>=11&&n%100<=13?"th":["th","st","nd","rd"][n%10]||"th");
 const ORDER=[
  ["Wo wohnen Sie?","Wo Sie wohnen?","Wohnen wo Sie?","Where do you live?","W-question: W-word 1st, verb 2nd."],
  ["Woher kommst du?","Woher du kommst?","Du woher kommst?","Where do you come from?","W-question: W-word 1st, verb 2nd."],
@@ -331,7 +400,6 @@ const ANSW=[
 ["Wann hast du Geburtstag?","When is your birthday?","Am 12. Mai.","Im 12. Mai.","Um 12. Mai.","Date → <b>am</b>: am zwölften (TSVOELF-ten) Mai."],
  ["Hast du Kinder?","Do you have children?","Ja, ich habe zwei Kinder.","Ja, ich hat zwei Kinder.","Ja, du hast zwei Kinder.","du → ich: <b>ich habe</b>. zwei = tsvy."],
  ["Wie viel kostet das?","How much does that cost?","Drei Euro fünfzig.","Drei Uhr fünfzig.","Am dritten.","Price: Euro, not Uhr. 3,50 € = dry OY-ro FUENF-tsikh."],
- ["Wann beginnt der Kurs?","When does the course start?","Um 18 Uhr.","Am 18 Uhr.","Im 18 Uhr.","Clock time → <b>um</b>. 18 = achtzehn (AKHT-tsayn)."],
  ["Was machst du am Wochenende?","What are you doing at the weekend?","Ich besuche meine Eltern.","Du besuchst meine Eltern.","Ich besuchst meine Eltern.","du → <b>ich besuche</b>."],
  ["Bist du verheiratet?","Are you married?","Nein, ich bin ledig.","Nein, ich habe ledig.","Nein, du bist ledig.","<b>ledig</b> = single. ich <b>bin</b>."],
  ["Wo warst du gestern?","Where were you yesterday?","Ich war zu Hause.","Ich bin zu Hause gestern.","Ich hatte zu Hause.","Past of sein: <b>ich war</b>."],

@@ -2,6 +2,8 @@
    TESTS: every test (the shapes are documented at the top of assets/js/quiz.js). GROUPS: the tabs and order on the tests page.
    RULES: the rule of the day. The word lists the tests draw from are in data.js. */
 const artSpan=(a,w)=>`<span class="${a}">${a}</span> ${w}`;
+/* English translation shown after a German sentence in an explanation (always visible, also when EN is off) */
+const EN=t=>t?` <span class="en">· ${t}</span>`:"";
 const fmtT=(h,m)=>`${h}:${String(m).padStart(2,"0")}`;
 /* ONE explanation layout for every noun test (artikel, plural, wortschatz, bildwoerter, mix):
    1) article + word = English   2) plural, with the rule   3) WHY this article (rule or colour tip)   4) extra note / example (optional) */
@@ -34,10 +36,10 @@ const TESTS={
  ein:{tag:"ein / eine",title:"ein, eine oder nichts?",en:"a / an, or no article",kind:"choice",
   gen(){const n=pick(NOUNS.filter(x=>x.w!==x.p)); const pl=Math.random()<.25;
    if(pl) return{prompt:`<span class="big">Das sind ___ ${n.p}.</span><span class="en">Those are ___ (plural of “${n.en}”).</span>`,options:["ein","eine","— (nothing)"],answer:"— (nothing)",
-     explain:`<b>Das sind ${n.p}.</b> In plural there is no ein/eine. Negative: <i>Das sind keine ${n.p}.</i>`};
+     explain:`<b>Das sind ${n.p}.</b>${EN(`Those are … (plural of “${n.en}”)`)}<br>In plural there is no ein/eine. Negative: <i>Das sind keine ${n.p}.</i>${EN("Those are no … / Those aren't …")}`};
    const a=n.a==="die"?"eine":"ein";
    return{prompt:`<span class="big">Das ist ___ ${n.w}.</span><span class="en">That is a ${n.en}.</span>`,options:["ein","eine","— (nothing)"],answer:a,
-     explain:`<b><span class="${n.a}">${n.a}</span> ${n.w}</b> → <b>${a} ${n.w}</b>. ${n.a==="die"?"die → eine (feminine adds -e).":"der and das → ein."}`}}},
+     explain:`<b>Das ist ${a} ${n.w}.</b>${EN(`That is a ${n.en}.`)}<br><span class="${n.a}">${n.a}</span> ${n.w} → ${a} ${n.w}: ${n.a==="die"?"die → eine (feminine adds -e).":"der and das → ein."}`}}},
  hoerZahl:{tag:"Lesen · Zahlen",title:"Wort → Zahl",en:"read the German number and type it in digits",kind:"input",ranges:[["0–20",0,20],["21–99",21,99],["0–100",0,100],["100–999",100,999],["1000–9999",1000,9999],["10.000–999.999",10000,999999],["Millionen",0,0,"mio"],["Jahre (years)",1900,2030,1]],
   gen(r){const yr=r[3]===1,mio=r[3]==="mio",n=mio?rnd(1,9)*1e6+rnd(0,9)*1e5:r[1]>=10000?rndBig(r[1],r[2]):rnd(r[1],r[2]);const [w,p]=yr?yearSay(n):num(n);
    return{prompt:`<span class="big" style="font-size:clamp(20px,5vw,34px);overflow-wrap:anywhere">${w}</span><span class="en">${yr?"Type this year in digits.":mio?"Type this number in digits. (Dots are fine: 2.500.000)":"Type this number in digits."}</span>`,answer:String(n),inputmode:"numeric",
@@ -64,7 +66,7 @@ const TESTS={
  buchstabieren:{tag:"Lesen · Buchstabieren",title:"Name buchstabieren",en:"read the spelled letters and write the word",kind:"input",
   gen(){const w=pick(SPELL);const letters=[...w.toUpperCase().replace("STRASSE","STRAßE")].map(c=>c==="ẞ"?"ß":c);
    return{prompt:`<span class="big" style="font-size:clamp(20px,5vw,30px)">${letters.map(c=>SAY[c]||c).join(" – ")}</span><span class="en">Wie schreibt man das? <span class="pron">(How do you write that?)</span> Type the word.</span>`,answer:w,umlauts:true,
-   explain:`<b>${w}</b>: ${letters.map(c=>{const f=ABC.find(x=>x[0]===c);return f?`${c} <span class="pron">(${f[1]})</span>`:c}).join(" · ")}`}}},
+   explain:`<b>${w}</b>${EN(spellEn(w))}<br>${letters.map(c=>{const f=ABC.find(x=>x[0]===c);return f?`${c} <span class="pron">(${f[1]})</span>`:c}).join(" · ")}`}}},
  wortart:{tag:"Wortarten",title:"Welche Wortart?",en:"what type of word is it?",kind:"choice",
   gen(){const s=pick(SENTS);const i=rnd(0,s.length-1);const [w,t,e]=s[i];
    const opts=shuffle([t,...shuffle(TYPES.filter(x=>x!==t)).slice(0,3)]);
@@ -76,7 +78,7 @@ const TESTS={
    explain:`<b>${x[1]} ${x[2]}?</b> · ${x[4]}<br>Reminder: W-word 1st, verb 2nd.`}}},
  satzbau:{tag:"Satzbau",title:"Welcher Satz ist richtig?",en:"which sentence has the right word order?",kind:"choice",
   gen(){const x=pick(ORDER);return{prompt:`<span class="en">${x[3]}</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
-   explain:`<b>${x[0]}</b><br>${x[4]}`}}},
+   explain:`<b>${x[0]}</b>${EN(x[3])}<br>${x[4]}`}}},
  vorstellen:{tag:"Prüfung · Sprechen 1",title:"Sich vorstellen",en:"introduce yourself: keyword, question, answer",kind:"choice",
   gen(){const x=pick(INTRO);const others=shuffle(INTRO.filter(y=>y!==x)).slice(0,3);const mode=rnd(0,1);
    const where={card:"📇 Auf der Prüfungskarte <span class=\"en\">(one of the 7 keywords on the exam card, Sprechen Teil 1)</span>",
@@ -104,20 +106,20 @@ const TESTS={
      options:shuffle([x[0],...others.map(y=>y[0])]),answer:x[0],explain:`<b>${x[0]}</b> = ${x[1]}`}}},
  arbeit:{tag:"Arbeit",title:"Über die Arbeit sprechen",en:"talking about work: fill the gap",kind:"choice",
   gen(){const x=pick(WORK);return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">${x[1]}</span>`,
-   options:shuffle(x[2]),answer:x[3],explain:`<b>${x[0].replace("___ Freitag","Freitag").replace("___",x[3]).replace("von … bis Montag","von Montag bis").replace(/von … bis/,"von")}</b><br>${x[4]}`}}},
+   options:shuffle(x[2]),answer:x[3],explain:`<b>${x[0].replace("___ Freitag","Freitag").replace("___",x[3]).replace("von … bis Montag","von Montag bis").replace(/von … bis/,"von")}</b>${EN(x[1])}<br>${x[4]}`}}},
  verbform:{enReq:true,tag:"Verben",title:"Verb-Endungen",en:"choose the right verb form",kind:"choice",
   gen(){const all=[...VREG.map(x=>x[0]),...Object.keys(VIRR)];const v=pick(all);const f=forms(v);const i=rnd(0,5);const ans=f[i];
    const others=[...new Set(f.filter(x=>x!==ans))];const opts=shuffle([ans,...shuffle(others).slice(0,2)]);
    const per=i===2?pick(["er","sie","es"]):i===5?pick(["sie","Sie"]):["ich","du","","wir","ihr"][i];
    const en=VIRR[v]?VIRR[v][6]:VREG.find(x=>x[0]===v)[2];
    const note=VIRR[v]?`<b>${v}</b> is irregular: ${f.join(", ")}.`:`${["ich → -e","du → -st","er/sie/es → -t","wir → -en","ihr → -t","sie/Sie → -en"][i]}: ${v.replace(/en$/,"")}-${["e","st","t","en","t","en"][i]}.`;
-   return{prompt:`<span class="big">${per} ___</span><span class="en">${v} (${en})</span>`,options:opts,answer:ans,explain:`<b>${per} ${ans}</b><br>${note}`}}},
+   return{prompt:`<span class="big">${per} ___</span><span class="en">${v} (${en})</span>`,options:opts,answer:ans,explain:`<b>${per} ${ans}</b>${EN(verbEn(per,en,i===5&&per==="sie"))}<br>${note}`}}},
  kein:{enReq:true,tag:"Fragen & Antworten",title:"nicht oder kein?",en:"say no the right way",kind:"choice",
   gen(){const x=pick(KEIN);return{prompt:`<span class="en">${x[0]}</span><span class="big" style="font-size:clamp(22px,5.5vw,34px)">${x[1]}</span><span class="en">${x[2]}</span>`,
-   options:shuffle(x[3]),answer:x[4],explain:`<b>${x[1].replace("___",x[4])}</b><br>${x[5]}`}}},
+   options:shuffle(x[3]),answer:x[4],explain:`<b>${x[0]} – ${x[1].replace("___",x[4])}</b>${EN(x[2])}<br>${x[5]}`}}},
  antworten:{tag:"Fragen & Antworten",title:"Die richtige Antwort",en:"choose the correct answer to the question",kind:"choice",
   gen(){const x=pick(ANSW);return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">${x[1]}</span>`,
-   options:shuffle([x[2],x[3],x[4]]),answer:x[2],explain:`<b>${x[0]} → ${x[2]}</b><br>${x[5]}`}}},
+   options:shuffle([x[2],x[3],x[4]]),answer:x[2],explain:`<b>${x[0]}</b>${EN(x[1])}<br>→ <b>${x[2]}</b>${EN(ANSW_EN[x[2]])}<br>${x[5]}`}}},
  uhrzeit:{tag:"Zahlen · Uhrzeit",title:"Wie spät ist es?",en:"what time is it? choose the words",kind:"choice",
   gen(){const h=rnd(1,23),m=pick([0,5,10,15,20,30,40,45,50]);const inf=Math.random()<.6;const f=inf?timeInf:timeOff;const ans=f(h,m);const opts=new Set([ans]);
    const tries=inf?[[h-1,m],[h+1,m],[h,m===30?0:30],[h,m===15?45:m===45?15:15],[h,60-m===60?0:60-m]]:[[h,m===55?50:m+5],[h+1,m],[h-1,m],[h,m===30?13:30]];
@@ -137,7 +139,7 @@ const TESTS={
  weg:{tag:"Wegbeschreibung",title:"Wie komme ich …?",en:"directions: words, zum / zur, sentences",kind:"choice",
   gen(){const m=rnd(0,2);
    if(m===0){const pl=pick(PLACES);const a=pl[0]==="die"?"zur":"zum";return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">Wie komme ich ___ ${pl[1]}?</span><span class="en">How do I get to the ${pl[2]}?</span>`,options:["zum","zur","zu"],answer:a,
-     explain:`<b><span class="${pl[0]}">${pl[0]}</span> ${pl[1]}</b> → <b>${a} ${pl[1]}</b>. der/das → zum, die → zur.`};}
+     explain:`<b>Wie komme ich ${a} ${pl[1]}?</b>${EN(`How do I get to the ${pl[2]}?`)}<br><span class="${pl[0]}">${pl[0]}</span> ${pl[1]} → ${a} ${pl[1]}: der/das → zum, die → zur.`};}
    if(m===1){const x=pick(ARROWS);return{prompt:`<span class="big" style="color:var(--die)">${x[0]}</span><span class="en">Which direction is this?</span>`,options:shuffle(ARROWS.map(y=>y[1])),answer:x[1],explain:`${x[0]} = <b>${x[1]}</b> (${x[2]})`};}
    const x=pick(DIR);const others=shuffle(DIR.filter(y=>y!==x)).slice(0,3);
    return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,32px)">${x[0]}</span><span class="en">What does it mean?</span>`,options:shuffle([x[1],...others.map(y=>y[1])]),answer:x[1],explain:`<b>${x[0]}</b> = ${x[1]}`}}},
@@ -148,7 +150,7 @@ const TESTS={
      if(m===0) return{prompt:`<span class="big">${x[0]}</span><span class="en">What does this verb mean?</span>`,options:shuffle([x[1],...o.map(y=>y[1])]),answer:x[1],explain:ex};
      return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German verb is it?</span>`,options:shuffle([x[0],...o.map(y=>y[0])]),answer:x[0],explain:ex};}
    const x=pick(GERN);return{prompt:`<span class="en">${x[3]}</span><span class="en">Welcher Satz ist richtig? (Which sentence is correct?)</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
-     explain:`<b>${x[0]}</b><br>gern comes right after the verb (and the person). Check the verb form too.`};}},
+     explain:`<b>${x[0]}</b>${EN(x[3])}<br>gern comes right after the verb (and the person). Check the verb form too.`};}},
  ordnen:{tag:"Satzbau · Ordnen",title:"Sätze ordnen",en:"put the words in the right order",kind:"order",
   gen(){const x=pick(ARRANGE);const idx=x.toks.map((_,i)=>i);let sh=shuffle(idx),g=0;while(sh.every((v,i)=>x.toks[v]===x.toks[i])&&g++<20) sh=shuffle(idx);
    const answer=x.toks.join(" ")+x.p;
@@ -224,7 +226,7 @@ const TESTS={
  hoerenName:{tag:"🔊 Hören · Buchstabieren",title:"Namen hören",en:"listen to the spelled name and write it",kind:"input",
   gen(){const w=pick(SPELL);const letters=[...w.toUpperCase().replace("STRASSE","STRAßE")].map(c=>c==="ẞ"?"ß":c);
    return{say:letters.map(c=>SAY[c]||c).join(", "),prompt:`<span class="big">🔊</span><span class="en">Wie schreibt man das? <span class="pron">(How do you write that?)</span></span>`,answer:w,umlauts:true,
-    explain:`<b>${w}</b>: ${letters.map(c=>{const f=ABC.find(x=>x[0]===c);return f?`${c} <span class="pron">(${f[1]})</span>`:c}).join(" · ")}`}}},
+    explain:`<b>${w}</b>${EN(spellEn(w))}<br>${letters.map(c=>{const f=ABC.find(x=>x[0]===c);return f?`${c} <span class="pron">(${f[1]})</span>`:c}).join(" · ")}`}}},
 
  /* ---------- calendar ---------- */
  kalender:{tag:"Kalender",title:"Tage, Monate, Jahreszeiten",en:"days, months, seasons and times of day",kind:"choice",
@@ -248,12 +250,12 @@ const TESTS={
    const pr=`<span class="pron">(${ordPron(d)}-uh / ${ordPron(d)}-en)</span>`;
    const why=`${d<20?"1–19: number + <b>-t-</b>":"20 and up: number + <b>-st-</b>"}${ORD_IRR[d]?` · <b>${ordBase(d)}e</b> is irregular, learn it by heart`:""}.<br><b>der</b> …<b>e</b> after "Heute ist" · <b>am</b> …<b>en</b> after "am".`;
    if(m===0){const ans=`der ${ordNom(d)} ${M[0]}`;const wr=ordWrong(d).map(w=>`der ${w}e ${M[0]}`).concat([`der ${ordDat(d)} ${M[0]}`]);
-     return{prompt:`<span class="big">Heute ist der ${d}. ${mi+1}.</span><span class="en">Today is the ${d}/${mi+1} (day/month). How do you say it?</span>`,options:opts4(ans,wr),answer:ans,explain:`<b>Heute ist ${ans}.</b> ${pr}<br>${why}`,sayAfter:`Heute ist ${ans}.`}}
+     return{prompt:`<span class="big">Heute ist der ${d}. ${mi+1}.</span><span class="en">Today is the ${d}/${mi+1} (day/month). How do you say it?</span>`,options:opts4(ans,wr),answer:ans,explain:`<b>Heute ist ${ans}.</b> ${pr}${EN(`Today is the ${ordEn(d)} of ${M[2]}.`)}<br>${why}`,sayAfter:`Heute ist ${ans}.`}}
    if(m===1){const ans=`Am ${ordDat(d)} ${M[0]}.`;const wr=[`Am ${ordNom(d)} ${M[0]}.`,`Im ${ordDat(d)} ${M[0]}.`,...ordWrong(d).map(w=>`Am ${w}en ${M[0]}.`)];
-     return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Wann hast du Geburtstag? – ${dig}</span><span class="en">When is your birthday? – On the ${d}/${mi+1}.</span>`,options:opts4(ans,wr),answer:ans,explain:`<b>${ans}</b> ${pr}<br>${why}`,sayAfter:ans}}
+     return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Wann hast du Geburtstag? – ${dig}</span><span class="en">When is your birthday? – On the ${d}/${mi+1}.</span>`,options:opts4(ans,wr),answer:ans,explain:`<b>${ans}</b> ${pr}${EN(`On the ${ordEn(d)} of ${M[2]}.`)}<br>${why}`,sayAfter:ans}}
    const ans=dig;const wr=[`${d}.${(mi+1)%12+1}.`,`${d===31?30:d+1}.${mi+1}.`,`${d>1?d-1:2}.${mi+1}.`,d<10?`${d+10}.${mi+1}.`:`${d%10||1}.${mi+1}.`];
-   if(m===2) return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,32px)">am ${ordDat(d)} ${M[0]}</span><span class="en">Which date is it? (day.month.)</span>`,options:opts4(ans,wr),answer:ans,explain:`<b>am ${ordDat(d)} ${M[0]}</b> = ${dig} ${pr}<br>${why}`,sayAfter:`am ${ordDat(d)} ${M[0]}`};
-   return{say:`am ${ordDat(d)} ${M[0]}`,prompt:`<span class="big">🔊</span><span class="en">Listen. Which date is it? (day.month.)</span>`,options:opts4(ans,wr),answer:ans,explain:`<b>am ${ordDat(d)} ${M[0]}</b> = ${dig} ${pr}<br>${why}`}}},
+   if(m===2) return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,32px)">am ${ordDat(d)} ${M[0]}</span><span class="en">Which date is it? (day.month.)</span>`,options:opts4(ans,wr),answer:ans,explain:`<b>am ${ordDat(d)} ${M[0]}</b> = ${dig} ${pr}${EN(`on the ${ordEn(d)} of ${M[2]}`)}<br>${why}`,sayAfter:`am ${ordDat(d)} ${M[0]}`};
+   return{say:`am ${ordDat(d)} ${M[0]}`,prompt:`<span class="big">🔊</span><span class="en">Listen. Which date is it? (day.month.)</span>`,options:opts4(ans,wr),answer:ans,explain:`<b>am ${ordDat(d)} ${M[0]}</b> = ${dig} ${pr}${EN(`on the ${ordEn(d)} of ${M[2]}`)}<br>${why}`}}},
  zeitpraep:{tag:"Kalender · am, um, im",title:"am, um, im, von … bis",en:"time words: when, from when, how long",kind:"choice",
   gen(){const x=pick(ZEITPRAEP);const parts=x[2][0].split(" … ");let i=0;const full=x[0].replace(/___/g,()=>parts[i++]||parts[0]);
    return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([...x[2]]),answer:x[2][0],explain:`<b>${esc(full)}</b><br>${x[3]}<br><span class="en">Trick: <b>am</b> Tag (day) · <b>um</b> Uhr (clock) · <b>im</b> Monat, Jahreszeit (month, season).</span>`,sayAfter:full}}},
@@ -263,34 +265,34 @@ const TESTS={
   gen(){const m=rnd(0,3);const pool=VOCAB.filter(v=>v.p!==""&&!v.note&&["essen","alltag","wohnung"].includes(v.t));const n=pick(pool);const v=pick(SHOPVERBS);
    const tab=`<br><span class="en">Akkusativ: der → <b>den / einen / keinen</b> · die, das, plural stay the same.</span>`;
    if(m===0){const a=n.a==="der"?"einen":n.a==="die"?"eine":"ein";return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Ich ${v[0]} ___ ${n.w}.</span><span class="en">I ${v[1]} a ${n.en}.</span>`,options:["einen","eine","ein"],answer:a,
-     explain:`<b>${artSpan(n.a,n.w)}</b> → Ich ${v[0]} <b>${a} ${n.w}</b>.${tab}`,sayAfter:`Ich ${v[0]} ${a} ${n.w}.`}}
+     explain:`<b>${artSpan(n.a,n.w)}</b> → Ich ${v[0]} <b>${a} ${n.w}</b>.${EN(`I ${v[1]} a ${n.en}.`)}${tab}`,sayAfter:`Ich ${v[0]} ${a} ${n.w}.`}}
    if(m===1){const a=n.a==="der"?"den":n.a;return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Ich ${v[0]} ___ ${n.w}.</span><span class="en">I ${v[1]} the ${n.en}.</span>`,options:["den","die","das","der"],answer:a,
-     explain:`<b>${artSpan(n.a,n.w)}</b> → Ich ${v[0]} <b>${a} ${n.w}</b>.${tab}`,sayAfter:`Ich ${v[0]} ${a} ${n.w}.`}}
+     explain:`<b>${artSpan(n.a,n.w)}</b> → Ich ${v[0]} <b>${a} ${n.w}</b>.${EN(`I ${v[1]} the ${n.en}.`)}${tab}`,sayAfter:`Ich ${v[0]} ${a} ${n.w}.`}}
    if(m===2){const a=n.a==="der"?"keinen":n.a==="die"?"keine":"kein";return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Ich habe ___ ${n.w}.</span><span class="en">I have no ${n.en}.</span>`,options:["keinen","keine","kein"],answer:a,
-     explain:`<b>${artSpan(n.a,n.w)}</b> → Ich habe <b>${a} ${n.w}</b>.${tab}`,sayAfter:`Ich habe ${a} ${n.w}.`}}
+     explain:`<b>${artSpan(n.a,n.w)}</b> → Ich habe <b>${a} ${n.w}</b>.${EN(`I have no ${n.en}.`)}${tab}`,sayAfter:`Ich habe ${a} ${n.w}.`}}
    const d=VOCAB.filter(x=>x.a==="der"&&x.p!==""&&!x.note&&["essen","wohnung","alltag"].includes(x.t));const k=pick(d);const subj=Math.random()<.5;
    const ans=subj?"der":"den";return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${subj?`___ ${k.w} ist neu.`:`Ich kaufe ___ ${k.w}.`}</span><span class="en">${subj?`The ${k.en} is new.`:`I buy the ${k.en}.`}</span>`,options:["der","den"],answer:ans,
      explain:subj?`The ${k.en} is the <b>subject</b> (who/what is new?) → Nominativ: <b>der</b> ${k.w}. Only the object changes.`:`The ${k.en} is the <b>object</b> (what do I buy?) → Akkusativ: <b>den</b> ${k.w}.`,sayAfter:subj?`Der ${k.w} ist neu.`:`Ich kaufe den ${k.w}.`}}},
  cafe:{tag:"Essen · Einkaufen",title:"Im Café und im Geschäft",en:"ordering, paying and shopping: choose the right reply",kind:"choice",
   gen(){const x=pick(CAFE);return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([x[2],x[3],x[4]]),answer:x[2],
-   explain:`<b>${esc(x[0])}</b> → <b>${esc(x[2])}</b><br>${x[5]}`,sayAfter:`${x[0]} ${x[2].startsWith("(")?"":x[2]}`}}},
+   explain:`<b>${esc(x[0])}</b>${EN(esc(x[1]))}<br>→ <b>${esc(x[2])}</b>${EN(esc(CAFE_EN[x[2]]||""))}<br>${x[5]}`,sayAfter:`${x[0]} ${x[2].startsWith("(")?"":x[2]}`}}},
 
  /* ---------- family, countries, colours ---------- */
  familie:{tag:"Familie",title:"Wer ist das?",en:"family words: who is who?",kind:"choice",
   gen(){const x=pick(FAMQ);const full=x[0].replace("___",x[2]);const v=VOCAB.find(y=>y.w===x[2]);
-   const ex2={Großeltern:"grandparents",Einzelkind:"only child",ledig:"single (not married)",geschieden:"divorced",verheiratet:"married",Nichte:"niece",Neffe:"nephew"}[x[2]];
+   const ex2={Kinder:"children",Großeltern:"grandparents",Einzelkind:"only child",ledig:"single (not married)",geschieden:"divorced",verheiratet:"married",Nichte:"niece",Neffe:"nephew"}[x[2]];
    return{prompt:`<span class="big" style="font-size:clamp(20px,5vw,30px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([x[2],x[3],x[4]]),answer:x[2],
-   explain:`<b>${esc(full)}</b><br>${x[2]} = ${v?`${artSpan(v.a,v.w)} = ${v.en}`:ex2||""}`,sayAfter:full}}},
+   explain:`<b>${esc(full)}</b>${EN(esc(x[1]).replace(/…$/,"").trim()+" "+(v?v.en:ex2||""))}<br>${v?`${artSpan(v.a,v.w)} = ${v.en}`:`${x[2]} = ${ex2||""}`}`,sayAfter:full}}},
  laender:{enReq:true,tag:"Länder · Sprachen",title:"Länder, Sprachen, Leute",en:"countries, languages and nationalities",kind:"choice",
   gen(){const c=pick(COUNTRIES);const m=rnd(0,3);const name=c[0].replace(/^(die|der) /,"");const aus=`aus ${c[1]?c[1]+" ":""}${name}`;
    if(m===0) return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Was spricht man in ${c[1]==="den"?"den USA":c[1]==="der"?"der "+name:c[1]?"im "+name:name}?</span><span class="en">What language do people speak in ${c[5]}?</span>`,
-     options:opts4(c[2],COUNTRIES.map(y=>y[2]).filter(y=>y!==c[2])),answer:c[2],explain:`<b>${c[0]}</b> <span class="pron">(${c[6]})</span> → <b>${c[2]}</b>. Languages often end in <b>-isch</b>.`,sayAfter:`In ${name} spricht man ${c[2]}.`};
+     options:opts4(c[2],COUNTRIES.map(y=>y[2]).filter(y=>y!==c[2])),answer:c[2],explain:`<b>In ${name} spricht man ${c[2]}.</b>${EN(`In ${c[5]} people speak ${langEn(c[2])}.`)}<br>${c[0]} <span class="pron">(${c[6]})</span> → ${c[2]}. Languages often end in <b>-isch</b>.`,sayAfter:`In ${name} spricht man ${c[2]}.`};
    if(m===1){const opts=c[1]?[aus,`aus ${name}`,`aus ${c[0]}`]:[aus,`aus der ${name}`,`aus dem ${name}`];
      return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Ich komme ___.</span><span class="en">I come from ${c[5]}.</span>`,options:shuffle(opts),answer:aus,
-     explain:`<b>Ich komme ${aus}.</b><br>${c[1]?`A few countries have an article: <b>die</b> Schweiz, <b>die</b> Türkei, <b>die</b> Ukraine → aus <b>der</b> …; <b>der</b> Iran → aus <b>dem</b> Iran; <b>die</b> USA → aus <b>den</b> USA.`:"Most countries have no article: aus Spanien, in Spanien."}`,sayAfter:`Ich komme ${aus}.`};}
+     explain:`<b>Ich komme ${aus}.</b>${EN(`I come from ${c[5]}.`)}<br>${c[1]?`A few countries have an article: <b>die</b> Schweiz, <b>die</b> Türkei, <b>die</b> Ukraine → aus <b>der</b> …; <b>der</b> Iran → aus <b>dem</b> Iran; <b>die</b> USA → aus <b>den</b> USA.`:"Most countries have no article: aus Spanien, in Spanien."}`,sayAfter:`Ich komme ${aus}.`};}
    if(m===2){const fem=Math.random()<.5;const ans=fem?c[4]:c[3];const o=pick(COUNTRIES.filter(y=>y!==c));
      return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${fem?"Sie":"Er"} kommt ${aus}. ${fem?"Sie":"Er"} ist ___.</span><span class="en">${fem?"She":"He"} comes from ${c[5]}. ${fem?"She":"He"} is …</span>`,
-     options:shuffle([...new Set([ans,fem?c[3]:c[4],fem?o[4]:o[3]])]),answer:ans,explain:`masculine: <b>${c[3]}</b> · feminine: <b>${c[4]}</b>. The feminine form usually adds <b>-in</b> (but: Deutsche).`,sayAfter:`${fem?"Sie":"Er"} ist ${ans}.`};}
+     options:shuffle([...new Set([ans,fem?c[3]:c[4],fem?o[4]:o[3]])]),answer:ans,explain:`<b>${fem?"Sie":"Er"} ist ${ans}.</b>${EN(`${fem?"She":"He"} is ${fem?"a woman":"a man"} from ${c[5]}.`)}<br>masculine: <b>${c[3]}</b> · feminine: <b>${c[4]}</b>. The feminine form usually adds <b>-in</b> (but: Deutsche).`,sayAfter:`${fem?"Sie":"Er"} ist ${ans}.`};}
    return{prompt:`<span class="big">${c[0]}</span><span class="en">Which country is it?</span>`,options:opts4(c[5],COUNTRIES.map(y=>y[5])),answer:c[5],explain:`<b>${c[0]}</b> <span class="pron">(${c[6]})</span> = ${c[5]}`,sayAfter:c[0]}}},
  farben:{tag:"Farben · Adjektive",title:"Farben und Adjektive",en:"colours, opposites and zu + adjective",kind:"choice",
   gen(){const m=rnd(0,3);
@@ -298,7 +300,7 @@ const TESTS={
    if(m===1){const c=pick(COLORS);return{prompt:`<span class="big"><span class="swatch" style="background:${c[2]};width:56px;height:56px;border-radius:12px"></span></span><span class="en">Welche Farbe ist das? <span class="pron">(Which colour is that?)</span></span>`,options:opts4(c[0],COLORS.map(x=>x[0])),answer:c[0],explain:`<b>${c[0]}</b> = ${c[1]}`,sayAfter:`Das ist ${c[0]}.`}}
    if(m===2){const p=pick(ADJ_PAIRS);const flip=Math.random()<.5;const [a,ae,b,be]=flip?[p[2],p[3],p[0],p[1]]:p;
      return{prompt:`<span class="big">${a}</span><span class="en">${ae} · Was ist das Gegenteil? <span class="pron">(What is the opposite?)</span></span>`,options:opts4(b,ADJ_PAIRS.flatMap(x=>[x[0],x[2]]).filter(x=>x!==a)),answer:b,explain:`<b>${a}</b> (${ae}) ↔ <b>${b}</b> (${be})`,sayAfter:`${a}, ${b}`}}
-   const x=pick(ZU);return{prompt:`<span class="big" style="font-size:clamp(20px,5vw,30px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([x[2],x[3],x[4]]),answer:x[2],explain:`<b>${esc(x[0].replace("___",x[2]))}</b><br>${x[5]}`,sayAfter:x[0].replace("___",x[2])}}},
+   const x=pick(ZU);return{prompt:`<span class="big" style="font-size:clamp(20px,5vw,30px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([x[2],x[3],x[4]]),answer:x[2],explain:`<b>${esc(x[0].replace("___",x[2]))}</b>${EN(esc(x[1]).replace(/…/,x[2]==="sehr"?"very …":x[2]))}<br>${x[5]}`,sayAfter:x[0].replace("___",x[2])}}},
 
  /* ---------- possessives, war/hatte ---------- */
  possessiv:{enReq:true,tag:"mein, dein, sein",title:"Possessivartikel",en:"my, your, his, her …: choose the right word",kind:"choice",
@@ -308,12 +310,12 @@ const TESTS={
    const de=acc?`Ich suche ___ ${nn[1]}.`:`Das ${nn[3]?"sind":"ist"} ___ ${nn[1]}.`;const en=acc?`I'm looking for ${p[2]} ${nn[2]}.`:`That ${nn[3]?"are":"is"} ${p[2]} ${nn[2]}.`;
    return{prompt:`<span class="dq">Person: <b>${p[0]}</b> <span class="en">→ ${p[2]}</span></span><span class="big" style="font-size:clamp(22px,5.5vw,34px)">${de}</span><span class="en">${en}</span>`,
     options:shuffle([ans,...[...new Set([...shuffle(wrongs).slice(0,2),oth])].filter(x=>x!==ans)].slice(0,4)),answer:ans,
-    explain:`${p[0]} → <b>${p[1]}</b> (${p[2]}) · ${artSpan(nn[0],nn[1])}${nn[3]?" (plural)":""} → <b>${ans} ${nn[1]}</b><br>Endings like ein: der / das → ${p[1]}, die / plural → ${b}e${acc&&nn[0]==="der"?`, der in Akkusativ → <b>${b}en</b>`:""}.`,sayAfter:de.replace("___",ans)}}},
+    explain:`<b>${de.replace("___",ans)}</b>${EN(en)}<br>${p[0]} → <b>${p[1]}</b> (${p[2]}) · ${artSpan(nn[0],nn[1])}${nn[3]?" (plural)":""} → <b>${ans} ${nn[1]}</b><br>Endings like ein: der / das → ${p[1]}, die / plural → ${b}e${acc&&nn[0]==="der"?`, der in Akkusativ → <b>${b}en</b>`:""}.`,sayAfter:de.replace("___",ans)}}},
  warHatte:{tag:"war / hatte",title:"war oder hatte?",en:"the past of sein (was) and haben (had)",kind:"choice",
-  gen(){if(Math.random()<.6){const x=pick(WARHATTE);return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([x[2],x[3],x[4]]),answer:x[2],explain:`<b>${esc(x[0].replace("___",x[2]))}</b><br>${x[5]}`,sayAfter:x[0].replace("___",x[2])}}
+  gen(){if(Math.random()<.6){const x=pick(WARHATTE);return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([x[2],x[3],x[4]]),answer:x[2],explain:`<b>${esc(x[0].replace("___",x[2]))}</b>${EN(esc(x[1]))}<br>${x[5]}`,sayAfter:x[0].replace("___",x[2])}}
    const v=pick(["sein","haben"]);const i=rnd(0,5);const f=PRAET[v];const ans=f[i];
    return{prompt:`<span class="big">${PERS6[i][0]} ___</span><span class="en">${PERS6[i][1]} ${v==="sein"?"was / were":"had"} (${v} → past)</span>`,options:shuffle([ans,...shuffle([...new Set(f.filter(x=>x!==ans))]).slice(0,2)]),answer:ans,
-    explain:`${v}: ${f.map((x,j)=>`${PERS6[j][0]} <b>${x}</b>`).join(", ")}<br>Trick: ich and er/sie/es are the same (war, hatte), like modal verbs.`}}},
+    explain:`<b>${PERS6[i][0]} ${ans}</b>${EN(`${PERS6[i][1]} ${v==="sein"?(i===0||i===2?"was":"were"):"had"}`)}<br>${v}: ${f.map((x,j)=>`${PERS6[j][0]} <b>${x}</b>`).join(", ")}<br>Trick: ich and er/sie/es are the same (war, hatte), like modal verbs.`}}},
 
  /* ---------- exam: reading and listening ---------- */
  lesenPruefung:{tag:"Prüfung · Lesen",title:"Lesen: richtig oder falsch?",en:"read short notes, signs and ads: true or false?",kind:"choice",
@@ -330,23 +332,24 @@ const TESTS={
    if(m<.35){const v=pick(MODKEYS);const i=rnd(0,5);const f=MOD[v].slice(0,6);const ans=f[i];
     return{prompt:`<span class="big">${PERS6[i][0]} ___</span><span class="en">${v} (${MOD[v][6]}) · ${PERS6[i][1]}</span>`,
      options:shuffle([ans,...shuffle([...new Set(f.filter(x=>x!==ans))]).slice(0,2)]),answer:ans,
-     explain:`${v}: ${f.map((x,j)=>`${PERS6[j][0]} <b>${x}</b>`).join(", ")}<br>Trick: ich and er/sie/es are twins, with no ending.`}}
+     explain:`<b>${PERS6[i][0]} ${ans}</b>${EN(`${PERS6[i][1]} ${MOD[v][6].split(",")[0]}`)}<br>${v}: ${f.map((x,j)=>`${PERS6[j][0]} <b>${x}</b>`).join(", ")}<br>Trick: ich and er/sie/es are twins, with no ending.`}}
    if(m<.7){const x=pick(MODGAP);const ans=MOD[x[3]][x[0]];
+    const s=x[1].replace("___",ans), full=s[0].toUpperCase()+s.slice(1); /* a sentence that starts with the gap: capital letter */
     const opts=shuffle([ans,...shuffle(MODKEYS.filter(k=>k!==x[3])).map(k=>MOD[k][x[0]]).filter((f,j,a)=>f!==ans&&a.indexOf(f)===j).slice(0,2)]);
     return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${x[1]}</span><span class="en">${x[2]}</span>`,options:opts,answer:ans,
-     explain:`<b>${x[1].replace("___",ans)}</b><br>${x[3]} = ${MOD[x[3]][6]}.${x[4]?" "+x[4]:""}`,sayAfter:x[1].replace("___",ans)}}
+     explain:`<b>${full}</b>${EN(x[2])}<br>${x[3]} = ${MOD[x[3]][6]}.${x[4]?" "+x[4]:""}`,sayAfter:full}}
    const x=pick(MODORD);
    return{prompt:`<span class="en">${x[3]}</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
-    explain:`<b>${x[0]}</b><br>${x[4]}`,sayAfter:x[0]}}},
+    explain:`<b>${x[0]}</b>${EN(x[3])}<br>${x[4]}`,sayAfter:x[0]}}},
 
  /* ---------- du or Sie ---------- */
  dusie:{tag:"du oder Sie",title:"du oder Sie?",en:"informal or formal you: choose the word or the verb form",kind:"choice",
   gen(){if(Math.random()<.45){const x=pick(DUSIE_SIT);
     return{prompt:`<span class="en">Which word do you use for you?</span><span class="big" style="font-size:clamp(22px,5.5vw,34px)">${x[0]}</span>`,options:["du","Sie"],answer:x[1],
-     explain:`<b>${x[1]}</b>: ${x[1]==="du"?"you know the person well, or it is a friend, family or child. Verb ending -st.":"formal: strangers, officials, doctors, bosses and letters to companies. Verb ending -en, like wir."}`}}
+     explain:`<b>${x[1]}</b> = ${x[1]==="du"?"you (informal)":"you (formal)"}. ${x[0]} → ${x[1]}.<br>${x[1]==="du"?"You know the person well, or it is a friend, family or child. Verb ending -st.":"formal: strangers, officials, doctors, bosses and letters to companies. Verb ending -en, like wir."}`}}
    const x=pick(DUSIE_GAP);
    return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${x[0]}</span><span class="en">${x[3]}</span>`,options:shuffle([x[1],...x[2]]),answer:x[1],
-    explain:`<b>${x[0].replace("___",x[1])}</b><br>${x[4]}`,sayAfter:x[0].replace("___",x[1])}}},
+    explain:`<b>${x[0].replace("___",x[1])}</b>${EN(x[3])}<br>${x[4]}`,sayAfter:x[0].replace("___",x[1])}}},
 
  /* ---------- new topics: weather, body, clothes, transport, hotel and post ---------- */
  themen2:{tag:"Neue Themen",title:"Neue Themen: Wörter",en:"weather, body, clothes, transport, hotel and post: words and phrases",kind:"choice",

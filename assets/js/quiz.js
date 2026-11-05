@@ -12,6 +12,24 @@ const FLAME='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColo
 let current=null, q=null, stats=null, rangeIdx={};
 /* English hints in questions are hidden by default; the EN button toggles them (remembered per level). */
 let showEn=lstore.get("showEn",false);
+/* English-only instructions (inside .en) → German instruction that stays visible when English is off */
+const INSTR=[
+ [/^What does this verb mean\?$/,"Was bedeutet dieses Verb?"],[/^Which German verb is it\?$/,"Welches deutsche Verb ist das?"],
+ [/^What does (this|it) mean\?$/,"Was bedeutet das?"],[/^Which German word is this\?$/,"Welches deutsche Wort ist das?"],
+ [/^Which direction is this\?$/,"Welche Richtung ist das?"],[/^Which German form field is this\?$/,"Welches deutsche Formularfeld ist das?"],
+ [/^What does this form field mean\?$/,"Was bedeutet dieses Formularfeld?"],[/^Which German day\?$/,"Welcher deutsche Tag ist das?"],
+ [/^What day is it in English\?$/,"Welcher Tag ist das auf Englisch?"],[/^Which German month\?$/,"Welcher deutsche Monat ist das?"],
+ [/^Which month is it\?$/,"Welcher Monat ist das?"],[/^This short form is on calendars and opening hours\. Which day\?$/,"Welcher Tag ist das?"],
+ [/^Which country is it\?$/,"Welches Land ist das?"],[/^Which colou?r is it\?$/,"Welche Farbe ist das?"],
+ [/^Which price is it\?$/,"Welcher Preis ist das?"],[/^How do you say this price\?$/,"Wie sagt man diesen Preis?"],
+ [/^Type this number in digits\./,"Schreib die Zahl mit Ziffern."],[/^Type this year in digits\.$/,"Schreib das Jahr mit Ziffern."],
+ [/^Type it in digits\.$/,"Schreib es mit Ziffern."],[/^Choose the German word( for this year)?\.$/,"Wähle das deutsche Wort."],
+ [/^Choose the German words\./,"Wähle die deutschen Wörter."],[/^This is the German name of a letter\. Which letter is it\?$/,"Welcher Buchstabe ist das?"],
+ [/^Which word do you use for you\?$/,"Welches Wort sagt man für „you“?"],[/^The examiner asks:$/,"Die Prüferin fragt:"],
+ [/^Which date is it\? \(day\.month\.\)$/,"Welches Datum ist das?"],[/^Listen\. Which date is it\? \(day\.month\.\)$/,"Hör zu. Welches Datum ist das?"],
+ [/^Today is the .* How do you say it\?$/,"Wie sagt man das?"]];
+/* labels such as "Hausnummer (house number)" or "Postleitzahl (postcode): type the digits." */
+const LABEL=/^(Hausnummer|Postleitzahl, PLZ|Postleitzahl|Telefonnummer) \(([^)]*)\)(: type the digits\.)?$/;
 function applyEn(){ document.body.classList.toggle("hide-en",!showEn); document.querySelectorAll(".entog").forEach(b=>{b.setAttribute("aria-pressed",showEn); b.classList.toggle("on",showEn);}); }
 function toggleEn(){ showEn=!showEn; lstore.set("showEn",showEn); applyEn(); }
 const enBtn=()=>`<button class="entog" type="button" aria-pressed="${showEn}" title="Englisch zeigen/verstecken (show/hide English)">EN<span class="sr"> Englisch zeigen (show English)</span></button>`;
@@ -133,6 +151,10 @@ function draw(){
   $("#qx").onclick=exitQuiz; $(".entog").onclick=toggleEn;
   /* German instructions stay visible when English is off: text before the first (English) .pron moves out of .en */
   $("#quiz").querySelectorAll(".q > .en").forEach(e=>{ const kids=[...e.childNodes], i=kids.findIndex(n=>n.nodeType===1&&n.classList.contains("pron")); if(i<1) return; const pre=kids.slice(0,i); if(!pre.map(n=>n.textContent).join("").trim()) return; const dq=document.createElement("span"); dq.className="dq"; e.before(dq); pre.forEach(n=>dq.appendChild(n)); dq.appendChild(document.createTextNode(" ")); dq.appendChild(e); });
+  $("#quiz").querySelectorAll(".q > .en").forEach(e=>{ const t=e.textContent.replace(/\s+/g," ").trim(); let de=null,en=t; const m=LABEL.exec(t);
+    if(m){ de=m[1]+(m[3]?": Schreib die Ziffern.":""); en="("+m[2]+")"+(m[3]?" type the digits.":""); }
+    else { const r=INSTR.find(x=>x[0].test(t)); if(r){ de=r[1]; en=t.startsWith("(")?t:"("+t+")"; } }
+    if(!de) return; const dq=document.createElement("span"); dq.className="dq"; dq.append(de+" "); const sp=document.createElement("span"); sp.className="en"; sp.textContent=en; dq.append(sp); e.replaceWith(dq); });
   applyEn();
   { const qq=$("#quiz .q"), c=qq.cloneNode(true); c.querySelectorAll(".en").forEach(e=>e.remove()); if(!c.textContent.trim()||TESTS[current].enReq||q.enReq) qq.classList.add("needs-en"); }
   $("#quiz").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{rangeIdx[current]=+b.dataset.r; const tt=TESTS[current]; q=tt.gen(tt.ranges[+b.dataset.r]); q.done=false; draw();});

@@ -1,5 +1,5 @@
 /* Bildkarten: picture flashcards (cards mode) and "guess the article" (guess mode).
-   Data: "emoji|article|word|English|plural?|extra?". plural = the plural without "die" (empty = look it up in NOUNS / VOCAB, "-" = none).
+   Data: "emoji|article|word|English|plural?|extra?". plural = the plural without "die" (empty = look it up in NOUNS / VOCAB, "-" = none, "PL" = the word itself is a plural, e.g. Schuhe: shown purple and left out of the der/die/das game).
    extra = a short hint shown on the back: a related adjective, the verb forms, an example. For colours the first field is a CSS colour starting with #. Verbs and adjectives have an empty article. */
 /* Pictures that have no emoji: "svg:<name>" in the data below. Sized by the parent's font-size. */
 const SVGPIC = {
@@ -61,7 +61,7 @@ const KARTEN = [
 🐶|der|Hund|dog
 🐱|die|Katze|cat
 🧍|die|Person|person|Personen
-👥|die|Leute|people|-|only plural: viele Leute
+👥|die|Leute|people|PL|only plural: viele Leute
 🧑‍🤝‍🧑|der|Mensch|human being, people|Menschen`],
  ["Wohnung", "home", `🏠|das|Haus|house
 🏢|die|Wohnung|flat
@@ -94,11 +94,11 @@ svg:flask|die|Thermoskanne|flask (thermos)|Thermoskannen
 👖|die|Hose|trousers
 👗|das|Kleid|dress
 🧥|die|Jacke|jacket
-👟|die|Schuhe|shoes|-|singular: der Schuh
-🧦|die|Socken|socks|-|singular: die Socke
+👟|die|Schuhe|shoes|PL|singular: der Schuh
+🧦|die|Socken|socks|PL|singular: die Socke
 🧢|die|Mütze|cap|Mützen
 🧣|der|Schal|scarf|Schals
-🧤|die|Handschuhe|gloves|-|singular: der Handschuh`],
+🧤|die|Handschuhe|gloves|PL|singular: der Handschuh`],
  ["Farben", "colours", `#d32f2f||rot|red
 #1e5bd6||blau|blue
 #2e9e4f||grün|green
@@ -250,9 +250,9 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 🤒||krank|ill||Adj. Ich bin krank.
 😊||glücklich|happy||Adj. Ich bin glücklich.
 😋||lecker|tasty||Adj. Das Essen ist lecker.`]
-].map(([de, en, raw]) => ({ de, en, items: raw.split("\n").map(l => { const [pic, art, word, eng, pl, ex] = l.split("|"); return { pic, art, word, eng, pl, ex }; }) }));
+].map(([de, en, raw]) => ({ de, en, items: raw.split("\n").map(l => { const [pic, art, word, eng, pl, ex] = l.split("|"); return pl === "PL" ? { pic, art, word, eng, pl: "-", ex, plural: true } : { pic, art, word, eng, pl, ex }; }) }));
 
-/* plurals come from the word lists of the lessons (data.js, data2.js) unless the card gives its own */
+/* plurals come from the word lists of the lessons (data.js) unless the card gives its own */
 const PLK = {};
 try { if (typeof NOUNS !== "undefined") NOUNS.forEach(n => PLK[n.w] = n.p); if (typeof VOCAB !== "undefined") VOCAB.forEach(v => { if (!(v.w in PLK)) PLK[v.w] = v.p; }); } catch (e) {}
 /* the plural of a card word ("" = none): own value, else the lesson word lists; notes in brackets are cut off */
@@ -261,6 +261,7 @@ function cardPlural(it) {
   const p = it.pl ? it.pl : PLK[it.word]; return p ? p.replace(/\s*\(.*\)$/, "") : "";
 }
 function plLine(it) {
+  if (it.plural) return "Plural: immer die (plural: always die)";
   if (!it.art || it.pl === "-") return "";
   const p = it.pl ? it.pl : PLK[it.word]; if (p === undefined) return "";
   return p === "" ? "kein Plural" : "Plural: die " + p;
@@ -269,14 +270,16 @@ const extraLine = it => it.ex ? it.ex : "";
 
 (function () {
   const root = document.getElementById("karten"); if (!root) return;
-  let tab = Math.min(lstore.get("kTab", 0), KARTEN.length - 1), mode = lstore.get("kMode", "cards"), query = "", keepFocus = false;
+  let tab = Math.min(lstore.get("kTab", 0), KARTEN.length - 1), mode = lstore.get("kMode", "cards"), query = "";
   let deck = [], pos = 0, score = 0, answered = false;
   let known = new Set(lstore.get("kKnown", [])), dens = lstore.get("kDens", 2) === 3 ? 3 : 2, lq = null, lqTab = -1, lflip = false;
   const said = it => (it.art ? it.art + " " : "") + it.word;
   const face = it => it.pic.startsWith("#") ? `<span class="swatch" style="background:${it.pic}"></span>` : `<span class="pic" aria-hidden="true">${picGlyph(it.pic)}</span>`;
   const cls = a => a === "der" ? "m" : a === "die" ? "f" : a === "das" ? "n" : "";
+  const ic = it => it.plural ? "p" : cls(it.art); /* colour of a card: plural words are purple, not red */
+  const gameable = it => it.art && !it.plural; /* der/die/das game: a plural is always die, so it would teach nothing */
   const nk = s => norm(String(s || ""));
-  function newDeck() { deck = shuffle(KARTEN[tab].items.filter(i => i.art)); pos = 0; score = 0; answered = false; }
+  function newDeck() { deck = shuffle(KARTEN[tab].items.filter(gameable)); pos = 0; score = 0; answered = false; }
 
   /* quick search over every category: German word, article + word, English, plural, hint. Same word in two categories shows once. */
   function search(q) {
@@ -290,7 +293,7 @@ const extraLine = it => it.ex ? it.ex : "";
     }));
     return out.sort((a, b) => a.rank - b.rank);
   }
-  const card = (it, ci, ii, showCat) => `<button type="button" class="fc ${cls(it.art)}" data-c="${ci}" data-i="${ii}" aria-pressed="false" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<small>${esc(it.eng)}</small></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small class="pl">${esc(plLine(it))}</small>` : ""}${it.ex ? `<small class="ex">${esc(it.ex)}</small>` : ""}${showCat ? `<small class="cat">${esc(KARTEN[ci].de)}</small>` : ""}</span></button>`;
+  const card = (it, ci, ii, showCat) => `<button type="button" class="fc ${ic(it)}" data-c="${ci}" data-i="${ii}" aria-pressed="false" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<small>${esc(it.eng)}</small></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small class="pl">${esc(plLine(it))}</small>` : ""}${it.ex ? `<small class="ex">${esc(it.ex)}</small>` : ""}${showCat ? `<small class="cat">${esc(KARTEN[ci].de)}</small>` : ""}</span></button>`;
 
   /* ---- progress ("gewusst"), saved per browser ---- */
   const kk = it => it.art + "|" + it.word;
@@ -311,7 +314,7 @@ const extraLine = it => it.ex ? it.ex : "";
     const on = sheet.querySelector(".ctile.on") || sheet.querySelector(".ctile"); if (on) { on.scrollIntoView({ block: "center" }); on.focus({ preventScroll: true }); }
   }
   function closeCats() { if (sheet.hidden) return; sheet.hidden = true; document.body.classList.remove("sheet-open"); if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true }); }
-  function pickCat(i) { tab = i; query = ""; lstore.set("kTab", tab); deck = []; lq = null; closeCats(); render(); const t = $(".ktool"); if (t) window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 12 }); }
+  function pickCat(i) { tab = i; query = ""; searchBox.value = ""; lstore.set("kTab", tab); deck = []; lq = null; closeCats(); render(); const t = $(".ktool"); if (t) window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 12 }); }
   const judge = how => {
     if (!lq || !lq.length) return;
     if (how === "known") { known.add(kk(KARTEN[tab].items[lq.shift()])); saveKnown(); } else lq.push(lq.shift());
@@ -320,21 +323,21 @@ const extraLine = it => it.ex ? it.ex : "";
   function flipL() { const b = $("#lcard"); if (!b) return; lflip = !lflip; b.classList.toggle("flip", lflip); b.setAttribute("aria-pressed", lflip); if (lflip) speak(said(KARTEN[tab].items[lq[0]])); }
 
   function render() {
-    const cat = KARTEN[tab], searching = query.trim().length > 0, guessOk = cat.items.some(i => i.art);
+    const cat = KARTEN[tab], searching = query.trim().length > 0, guessOk = cat.items.some(gameable);
     if (mode === "guess" && !guessOk) mode = "cards";
     if (!["cards", "learn", "guess"].includes(mode)) mode = "cards";
     const kn = knownCount(tab);
-    let h = `<div class="ktool"><div class="ksearch"><input type="search" id="ksearch" value="${esc(query)}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="🔍 Wort suchen … (search all categories)" aria-label="Wort suchen (search a word in all categories)"></div>
-    <div class="kcatrow"><button type="button" class="kcat" id="kcat" aria-haspopup="dialog">${catIcon(cat)}<span class="kct"><b>${esc(cat.de)}</b><small>${esc(cat.en)} · ${kn} / ${cat.items.length} ✓</small></span><span aria-hidden="true">▾</span></button>
+    let t = `<div class="kcatrow"><button type="button" class="kcat" id="kcat" aria-haspopup="dialog">${catIcon(cat)}<span class="kct"><b>${esc(cat.de)}</b><small>${esc(cat.en)} · ${kn} / ${cat.items.length} ✓</small></span><span aria-hidden="true">▾</span></button>
     ${!searching && mode === "cards" ? `<button type="button" class="kdens" data-dens aria-label="Karten pro Reihe wechseln (switch cards per row): ${dens}" title="2 / 3"><b>${dens}</b><small>Spalten</small></button>` : ""}</div>
     <div class="ktabs${searching ? " dim" : ""}" role="tablist">${KARTEN.map((c, i) => `<button type="button" role="tab" data-tab="${i}" aria-selected="${!searching && i === tab}">${c.de}<small>${c.en}</small></button>`).join("")}</div>
-    ${searching ? "" : `<div class="kseg" role="group" aria-label="Übungsart (mode)"><button type="button" data-mode="cards" aria-pressed="${mode === "cards"}">🃏 Karten<small>cards</small></button><button type="button" data-mode="learn" aria-pressed="${mode === "learn"}">🧠 Lernen<small>study</small></button>${guessOk ? `<button type="button" data-mode="guess" aria-pressed="${mode === "guess"}">🎯 Raten<small>guess der/die/das</small></button>` : ""}</div>`}</div>`;
+    ${searching ? "" : `<div class="kseg" role="group" aria-label="Übungsart (mode)"><button type="button" data-mode="cards" aria-pressed="${mode === "cards"}">🃏 Karten<small>cards</small></button><button type="button" data-mode="learn" aria-pressed="${mode === "learn"}">🧠 Lernen<small>study</small></button>${guessOk ? `<button type="button" data-mode="guess" aria-pressed="${mode === "guess"}">🎯 Raten<small>guess der/die/das</small></button>` : ""}</div>`}`;
+    let h = "";
     if (searching) {
       const res = search(query);
       h += res.length ? `<p class="en">${res.length} Treffer <span>(matches)</span> in allen Kategorien. Tap a card to turn it over and hear the word.</p><div class="kgrid">${res.map(r => card(KARTEN[r.ci].items[r.ii], r.ci, r.ii, true)).join("")}</div>`
         : `<p class="en">Nichts gefunden <span>(nothing found)</span> for “${esc(query)}”. Try the English word or the German word without the article.</p>`;
     } else if (mode === "cards") {
-      h += `<p class="khint">Tap a card to turn it over and hear the word. <span class="der">der</span> · <span class="die">die</span> · <span class="das">das</span></p><div class="kgrid d${dens}">${cat.items.map((it, i) => card(it, tab, i, false)).join("")}</div>`;
+      h += `<p class="khint">Tap a card to turn it over and hear the word. <span class="der">der</span> · <span class="die">die</span> · <span class="das">das</span> · <span class="plc">Plural</span></p><div class="kgrid d${dens}">${cat.items.map((it, i) => card(it, tab, i, false)).join("")}</div>`;
     } else if (mode === "learn") {
       if (!lq || lqTab !== tab) buildQueue();
       const total = cat.items.length, pct = Math.round(kn / total * 100);
@@ -343,7 +346,7 @@ const extraLine = it => it.ex ? it.ex : "";
         h += `<div class="kdone"><h3>Alle gewusst! 🎉 <span class="en">(all known)</span></h3><div class="rbtns"><button type="button" class="btn ghost" data-reset>Nochmal von vorn <small class="en">(start over)</small></button><button type="button" class="btn" data-nextcat>Nächste Kategorie <small>(next)</small></button></div></div>`;
       } else {
         const it = cat.items[lq[0]];
-        h += `<button type="button" class="lcard ${cls(it.art)}${lflip ? " flip" : ""}" id="lcard" aria-pressed="${lflip}" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<b>${esc(it.eng)}</b><small>Tippen zum Umdrehen <span>(tap to turn)</span></small></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small>${esc(plLine(it))}</small>` : ""}${it.ex ? `<small>${esc(it.ex)}</small>` : ""}</span></button>
+        h += `<button type="button" class="lcard ${ic(it)}${lflip ? " flip" : ""}" id="lcard" aria-pressed="${lflip}" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<b>${esc(it.eng)}</b><small>Tippen zum Umdrehen <span>(tap to turn)</span></small></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small>${esc(plLine(it))}</small>` : ""}${it.ex ? `<small>${esc(it.ex)}</small>` : ""}</span></button>
         <div class="kjudge"><button type="button" class="btn ghost" data-j="again">🔁 Nochmal<small>again</small></button><button type="button" class="btn" data-j="known">✅ Gewusst<small>known</small></button></div>
         <p class="khint keys">Leertaste = umdrehen · ← nochmal · → gewusst <span class="en">(space = turn, ← again, → known)</span></p>`;
       }
@@ -360,11 +363,17 @@ const extraLine = it => it.ex ? it.ex : "";
         <p class="kfb" id="kfb" aria-live="polite"></p><button type="button" class="go" id="knext" hidden>Weiter <span class="en">(next)</span></button></div>`;
       }
     }
-    root.innerHTML = h;
-    if (keepFocus) { const s = $("#ksearch"); s.focus(); s.setSelectionRange(s.value.length, s.value.length); keepFocus = false; }
+    $("#ktoolRest").innerHTML = t;
+    $("#kbody").innerHTML = h;
   }
-  root.addEventListener("input", e => { if (e.target.id !== "ksearch") return; query = e.target.value; keepFocus = true; render(); });
-  root.addEventListener("keydown", e => { if (e.key === "Escape" && e.target.id === "ksearch" && query) { query = ""; keepFocus = true; render(); } });
+  /* The search box stays in the page while you type. Redrawing it would cancel a half-typed umlaut
+     (dead keys such as Option+u on a Mac, or the US-International keyboard), so only the rest is redrawn. */
+  root.innerHTML = `<div class="ktool"><div class="ksearch"><input type="search" id="ksearch" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="🔍 Wort suchen … (search all categories)" aria-label="Wort suchen (search a word in all categories)"></div><div id="ktoolRest" class="ktoolrest"></div></div><div id="kbody"></div>`;
+  const searchBox = $("#ksearch");
+  const setQuery = v => { query = v; if (searchBox.value !== v) searchBox.value = v; render(); };
+  searchBox.addEventListener("input", e => { if (e.isComposing) return; setQuery(searchBox.value); });
+  searchBox.addEventListener("compositionend", () => setQuery(searchBox.value));
+  searchBox.addEventListener("keydown", e => { if (e.key === "Escape" && query) setQuery(""); });
   document.addEventListener("keydown", e => {
     if (e.key === "Escape") closeCats();
     if (mode !== "learn" || query.trim() || document.body.classList.contains("sheet-open") || /INPUT|SELECT|TEXTAREA/.test(e.target.tagName) || !lq || !lq.length) return;
@@ -380,7 +389,7 @@ const extraLine = it => it.ex ? it.ex : "";
     const t = e.target.closest("button"); if (!t) return;
     if (t.id === "kcat") { openCats(); return; }
     if (t.hasAttribute("data-dens")) { dens = dens === 2 ? 3 : 2; lstore.set("kDens", dens); render(); return; }
-    if (t.dataset.tab) { query = ""; tab = +t.dataset.tab; lstore.set("kTab", tab); deck = []; lq = null; render(); return; }
+    if (t.dataset.tab) { query = ""; searchBox.value = ""; tab = +t.dataset.tab; lstore.set("kTab", tab); deck = []; lq = null; render(); return; }
     if (t.dataset.mode) { mode = t.dataset.mode; lstore.set("kMode", mode); deck = []; lq = null; render(); return; }
     if (t.classList.contains("fc")) {
       const on = t.classList.toggle("flip"), it = KARTEN[+t.dataset.c].items[+t.dataset.i];
@@ -396,7 +405,7 @@ const extraLine = it => it.ex ? it.ex : "";
     if (t.dataset.a && !answered) {
       answered = true; const it = deck[pos], ok = t.dataset.a === it.art; if (ok) score++;
       root.querySelectorAll(".kopt").forEach(b => { b.disabled = true; if (b.dataset.a === it.art) b.classList.add("right"); else if (b === t) b.classList.add("wrong"); });
-      $("#kfb").innerHTML = `${ok ? "✅ Richtig!" : "❌ Nicht ganz."} <b class="${cls(it.art)}">${it.art} ${esc(it.word)}</b>${plLine(it) ? ` · <span class="en">${esc(plLine(it))}</span>` : ""}`;
+      $("#kfb").innerHTML = `${ok ? "✅ Richtig!" : "❌ Nicht ganz."} <b class="${ic(it)}">${it.art} ${esc(it.word)}</b>${plLine(it) ? ` · <span class="en">${esc(plLine(it))}</span>` : ""}`;
       $("#knext").hidden = false; $("#knext").focus({ preventScroll: true }); speak(said(it));
     }
   });

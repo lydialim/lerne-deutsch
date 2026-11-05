@@ -47,10 +47,8 @@ lerne-deutsch/
     ├── tests.html            all tests (open one directly: tests.html#artikel)
     └── js/
         ├── level.js          A1 menu, lesson list for the phone lesson menu (keep in step with the lessons) + storage prefix
-        ├── data.js           word lists, sentences, number and time helpers
-        ├── data2.js          vocabulary with articles, calendar, food, family, countries, exam texts
-        ├── tests.js          A1 test definitions (TESTS) + RULES (rule of the day on the tests page)
-        ├── tests2.js         more tests (listening, vocabulary, calendar …) and GROUPS (one tab per group on the tests page: [title, English, keys, tab label, tab English])
+        ├── data.js           all word lists and sentences (nouns with article and plural, calendar, topics, exam texts) + number, time and date helpers
+        ├── tests.js          every test (TESTS), the tests-page tabs (GROUPS: [title, English, keys, tab label, tab English]) and the rule of the day (RULES)
         ├── karten.js         data and logic for the picture cards
         ├── pruefung.js       writing checker and speaking practice (recordings stay in the browser)
         └── lessons.js        interactive parts of the lessons (clock, conjugation chips, word-order builder, floor plan / shop / family-tree scenes, weather / clothes / transport / hotel scenes, Sprechen simulator)
@@ -61,7 +59,7 @@ lerne-deutsch/
 - **Lesson text:** edit the page for that part (`a1/grammatik.html`, …). Each lesson is one `<section class="lesson" id="l-…">`.
 - **Audio:** every `.train`, every element with `data-say="German text"`, and table columns headed Beispiel / Deutsch / Satz / Wort … get a 🔊 button automatically. See [Audio: setup and how it works](#audio-setup-and-how-it-works).
 - **Test questions:** add items to the lists in `a1/js/data.js` (for example `NOUNS`, `WQ`, `ORDER`).
-- **A new test:** add an entry to `TESTS` in `a1/js/tests.js` or `tests2.js` and its key to `GROUPS` (in `tests2.js`). A question with `say: "…"` is read aloud (listening test). Link to it from a lesson with `<a class="go" href="tests.html#key">`.
+- **A new test:** add an entry to `TESTS` in `a1/js/tests.js` and its key to `GROUPS` (same file). A question with `say: "…"` is read aloud (listening test). Link to it from a lesson with `<a class="go" href="tests.html#key">`.
 - **Colours and fonts:** `assets/css/style.css`.
 
 ## Add a new level (for example A2)

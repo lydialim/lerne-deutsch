@@ -966,3 +966,7 @@ details.fold ul{margin-top:2px}
 .kgrid.d3 .fc{min-height:0}
 
 .psvg{width:1em;height:1em;vertical-align:-.12em;display:inline-block}
+.ktoolrest{display:contents}
+/* plural-only words (die Schuhe, die Leute): purple like every plural */
+.fc.p.flip,.lcard.p.flip{background:var(--pl-bg);border-color:var(--pl)}.fc.p .art,.lcard.p .art,.kfb .p{color:var(--pl)}
+.obj.p{border-color:var(--pl);background:var(--pl-bg)}.obj.p i{color:var(--pl)}

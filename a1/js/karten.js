@@ -1,6 +1,15 @@
 /* Bildkarten: picture flashcards (cards mode) and "guess the article" (guess mode).
    Data: "emoji|article|word|English|plural?|extra?". plural = the plural without "die" (empty = look it up in NOUNS / VOCAB, "-" = none).
    extra = a short hint shown on the back: a related adjective, the verb forms, an example. For colours the first field is a CSS colour starting with #. Verbs and adjectives have an empty article. */
+/* Pictures that have no emoji: "svg:<name>" in the data below. Sized by the parent's font-size. */
+const SVGPIC = {
+  table: '<svg class="psvg" viewBox="0 0 64 64"><rect x="6" y="20" width="52" height="8" rx="2" fill="#c68a4e"/><rect x="10" y="28" width="5" height="26" rx="1.5" fill="#a56a33"/><rect x="49" y="28" width="5" height="26" rx="1.5" fill="#a56a33"/><rect x="15" y="28" width="34" height="3" fill="#a56a33" opacity=".55"/></svg>',
+  desk: '<svg class="psvg" viewBox="0 0 64 64"><rect x="4" y="18" width="56" height="7" rx="2" fill="#c68a4e"/><rect x="8" y="25" width="4" height="29" rx="1.5" fill="#a56a33"/><rect x="38" y="25" width="18" height="29" rx="2" fill="#a56a33"/><path d="M41 34h12M41 44h12" stroke="#c68a4e" stroke-width="2"/><circle cx="47" cy="30" r="1.4" fill="#f3d9b1"/><circle cx="47" cy="39" r="1.4" fill="#f3d9b1"/><circle cx="47" cy="49" r="1.4" fill="#f3d9b1"/></svg>',
+  grid: '<svg class="psvg" viewBox="0 0 64 64"><rect x="8" y="12" width="48" height="40" rx="3" fill="#fff" stroke="#546e7a" stroke-width="2"/><rect x="8" y="12" width="48" height="10" rx="3" fill="#1e5bd6"/><path d="M8 32h48M8 42h48M24 22v30M40 22v30" stroke="#546e7a" stroke-width="2"/></svg>',
+  flask: '<svg class="psvg" viewBox="0 0 64 64"><rect x="22" y="8" width="20" height="9" rx="3" fill="#455a64"/><rect x="18" y="17" width="28" height="39" rx="7" fill="#90a4ae"/><rect x="18" y="30" width="28" height="4" fill="#607d8b"/><path d="M46 24c8 0 8 16 0 16" fill="none" stroke="#455a64" stroke-width="3"/></svg>'
+};
+const picGlyph = p => p.startsWith("svg:") ? SVGPIC[p.slice(4)] : p;
+
 const KARTEN = [
  ["Essen", "food", `🍎|der|Apfel|apple
 🍌|die|Banane|banana
@@ -33,10 +42,10 @@ const KARTEN = [
 🍫|die|Schokolade|chocolate|-`],
  ["Einkaufen", "shopping", `🛒|das|Einkaufen|shopping|-|Ich gehe einkaufen. (I go shopping.)
 🏪|der|Markt|market|Märkte
-🥖|die|Bäckerei|bakery|Bäckereien
-🛒|der|Supermarkt|supermarket|Supermärkte
+🥐|die|Bäckerei|bakery|Bäckereien
+🧺|der|Supermarkt|supermarket|Supermärkte
 🏬|das|Geschäft|shop, store|Geschäfte
-🧾|die|Kasse|checkout, till|Kassen
+💳|die|Kasse|checkout, till|Kassen
 💶|das|Geld|money|-`],
  ["Familie und Leute", "family and people", `👩|die|Mutter|mother
 👨|der|Vater|father
@@ -65,17 +74,17 @@ const KARTEN = [
 🛏|das|Bett|bed
 🛋️|das|Sofa|sofa
 🪑|der|Stuhl|chair
-🍽️|der|Tisch|table
+svg:table|der|Tisch|table
 💡|die|Lampe|lamp
 📺|der|Fernseher|television
 🧊|der|Kühlschrank|fridge
 🪞|der|Spiegel|mirror
-🖥️|der|Schreibtisch|desk|Schreibtische
+svg:desk|der|Schreibtisch|desk|Schreibtische
 🪴|die|Pflanze|plant|Pflanzen
 🔑|der|Schlüssel|key
 ⏰|die|Uhr|clock, watch`],
  ["Alltag", "everyday things", `📱|das|Handy|mobile phone
-🍶|die|Thermoskanne|flask (thermos)|Thermoskannen
+svg:flask|die|Thermoskanne|flask (thermos)|Thermoskannen
 👜|die|Tasche|bag
 👓|die|Brille|glasses
 📰|die|Zeitung|newspaper
@@ -101,7 +110,7 @@ const KARTEN = [
 #f28c00||orange|orange
 #f47fb0||rosa|pink
 #8e44ad||lila|purple`],
- ["Körper", "body", `🧠|der|Kopf|head|Köpfe
+ ["Körper", "body", `🙂|der|Kopf|head|Köpfe
 👁️|das|Auge|eye|Augen
 👂|das|Ohr|ear|Ohren
 👃|die|Nase|nose|Nasen
@@ -125,11 +134,11 @@ const KARTEN = [
 🧑‍✈️|der|Pilot|pilot|Piloten
 🧑‍💼|der|Buchhalter|accountant
 📋|der|Projektmanager|project manager
-🍽️|der|Kellner|waiter
-🛎️|die|Kellnerin|waitress
+🤵|der|Kellner|waiter
+🤵‍♀️|die|Kellnerin|waitress
 📐|der|Architekt|architect
 📐|die|Architektin|architect (female)`],
- ["Schule und Büro", "school and office", `🖥️|der|Schreibtisch|desk|Schreibtische
+ ["Schule und Büro", "school and office", `svg:desk|der|Schreibtisch|desk|Schreibtische
 ✏️|der|Bleistift|pencil|Bleistifte
 🖊️|der|Kuli|pen
 📓|das|Heft|exercise book
@@ -141,8 +150,8 @@ const KARTEN = [
 🪟|das|Fenster|window
 💻|der|Computer|computer`],
  ["Computer und E-Mail", "computer and e-mail", `💻|der|Computer|computer
-🍽️|der|Tisch|table
-📊|die|Tabelle|table (of data)|Tabellen
+svg:table|der|Tisch|table
+svg:grid|die|Tabelle|table (of data)|Tabellen
 📧|die|E-Mail|e-mail
 @|das|At-Zeichen|@ sign|-|Say: „ät“ · max@web.de = „max ät web punkt de“
 .|der|Punkt|dot, full stop|Punkte|web.de = „web punkt de“
@@ -163,7 +172,7 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 🌉|die|Brücke|bridge|Brücken
 🏥|das|Krankenhaus|hospital
 🏦|die|Bank|bank
-💊|die|Apotheke|pharmacy
+⚕️|die|Apotheke|pharmacy
 🏨|das|Hotel|hotel
 🛏️|das|Einzelzimmer|single room|Einzelzimmer
 🧳|der|Koffer|suitcase|Koffer
@@ -208,7 +217,7 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 💤|der|Mittagsschlaf|nap|-|Mittagsschlaf machen = to take a nap
 🚴|das|Radfahren|cycling|-|Verb: Rad fahren · ich fahre gern Rad
 🏊|das|Schwimmen|swimming|-|Verb: schwimmen
-⚽|der|Sport|sport|-|Adj: sportlich (sporty)
+🏃|der|Sport|sport|-|Adj: sportlich (sporty)
 🎵|die|Musik|music|-|Ich höre gern Musik.
 🎟️|die|Veranstaltung|event|Veranstaltungen
 🎤|das|Konzert|concert|Konzerte
@@ -264,7 +273,7 @@ const extraLine = it => it.ex ? it.ex : "";
   let deck = [], pos = 0, score = 0, answered = false;
   let known = new Set(lstore.get("kKnown", [])), dens = lstore.get("kDens", 2) === 3 ? 3 : 2, lq = null, lqTab = -1, lflip = false;
   const said = it => (it.art ? it.art + " " : "") + it.word;
-  const face = it => it.pic.startsWith("#") ? `<span class="swatch" style="background:${it.pic}"></span>` : `<span class="pic" aria-hidden="true">${it.pic}</span>`;
+  const face = it => it.pic.startsWith("#") ? `<span class="swatch" style="background:${it.pic}"></span>` : `<span class="pic" aria-hidden="true">${picGlyph(it.pic)}</span>`;
   const cls = a => a === "der" ? "m" : a === "die" ? "f" : a === "das" ? "n" : "";
   const nk = s => norm(String(s || ""));
   function newDeck() { deck = shuffle(KARTEN[tab].items.filter(i => i.art)); pos = 0; score = 0; answered = false; }
@@ -288,7 +297,7 @@ const extraLine = it => it.ex ? it.ex : "";
   const saveKnown = () => lstore.set("kKnown", [...known]);
   const knownCount = t => KARTEN[t].items.filter(i => known.has(kk(i))).length;
   function buildQueue() { lq = []; KARTEN[tab].items.forEach((it, i) => { if (!known.has(kk(it))) lq.push(i); }); lqTab = tab; lflip = false; }
-  const catIcon = c => { const f = c.items[0]; return f.pic.startsWith("#") ? `<span class="swatch" style="background:${f.pic}"></span>` : `<span class="cpic" aria-hidden="true">${f.pic}</span>`; };
+  const catIcon = c => { const f = c.items[0]; return f.pic.startsWith("#") ? `<span class="swatch" style="background:${f.pic}"></span>` : `<span class="cpic" aria-hidden="true">${picGlyph(f.pic)}</span>`; };
 
   /* ---- category sheet (phones) ---- */
   const sheet = document.createElement("div"); sheet.className = "sheet"; sheet.id = "catSheet"; sheet.hidden = true;

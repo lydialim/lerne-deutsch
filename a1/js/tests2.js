@@ -20,6 +20,15 @@ Object.assign(TESTS,{
      options:shuffle([`${n.a} ${n.w}`,...wrongArt,`${other.a} ${other.w}`]),answer:`${n.a} ${n.w}`,cls:o=>"o-"+o.split(" ")[0],explain:ex,sayAfter:`${n.a} ${n.w}`};}
    return{prompt:`<span class="big">___ ${n.w}</span><span class="dq">der, die oder das? <span class="en">(${n.en})</span></span>`,options:["der","die","das"],cls:o=>"o-"+o,answer:n.a,explain:ex,sayAfter:`${n.a} ${n.w}`}}},
 
+ wortliste:{enReq:false,tag:"Wortliste",title:"Verben und Wörter",en:"verbs, adjectives and little words from the official A1 word list",kind:"choice",
+  ranges:[["Alle",null],["Trennbare Verben",'vs'],["Verben",'v'],["Adjektive & Co.",'a']],
+  gen(r){const pool=r&&r[1]?WLISTE.filter(x=>x[2]===r[1]):WLISTE; const x=pick(pool);
+   const same=pool.filter(y=>y!==x&&y[1]!==x[1]).concat(pool.length<8?WLISTE.filter(y=>y[2]===x[2]&&y!==x&&y[1]!==x[1]):[]);
+   const sep=x[2]==="vs"?`<br>⚠ Separable verb: the prefix goes to the END in a main clause (${esc(x[3])}).`:"";
+   const ex=`<b>${esc(x[0])}</b> = ${esc(x[1])}<br>${esc(x[3])} <span class="en">(${esc(x[4])})</span>${sep}`;
+   if(Math.random()<.5) return{prompt:`<span class="big">${esc(x[0])}</span><span class="dq">Was bedeutet das? <span class="en">(What does that mean?)</span></span>`,options:opts4(x[1],same.map(y=>y[1])),answer:x[1],explain:ex,sayAfter:x[3]};
+   return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${esc(x[1])}</span><span class="dq">Welches deutsche Wort ist das? <span class="en">(Which German word is it?)</span></span>`,options:opts4(x[0],same.map(y=>y[0])),answer:x[0],explain:ex,sayAfter:x[3]}}},
+
  /* ---------- listening drills (read aloud by the browser) ---------- */
  hoerenZahl:{tag:"🔊 Hören · Zahlen",title:"Zahlen hören",en:"listen to the number or year and type it in digits",kind:"input",ranges:[["0–20",0,20],["21–99",21,99],["100–999",100,999],["1000–9999",1000,9999],["10.000–999.999",10000,999999],["Millionen (2,5)",0,0,"mio"],["Jahre (years)",1900,2030,1]],
   gen(r){const yr=r[3]===1,mio=r[3]==="mio";
@@ -198,7 +207,7 @@ Object.assign(TESTS,{
    const cats=r&&r[1]!=null?[KARTEN[r[1]]]:KARTEN;
    const pool=cats.flatMap(c=>c.items.map(it=>Object.assign({cat:c.de},it)));
    const n=pick(pool), mine=KARTEN.find(c=>c.de===n.cat).items;
-   const pic=n.pic.startsWith("#")?`<span class="swatch" style="background:${n.pic};width:72px;height:72px;border-radius:50%;border:2px solid var(--line);display:inline-block"></span>`:`<span class="big" style="font-size:72px;line-height:1.1">${n.pic}</span>`;
+   const pic=n.pic.startsWith("#")?`<span class="swatch" style="background:${n.pic};width:72px;height:72px;border-radius:50%;border:2px solid var(--line);display:inline-block"></span>`:`<span class="big" style="font-size:72px;line-height:1.1">${picGlyph(n.pic)}</span>`;
    const pl=cardPlural(n), say=(n.art?n.art+" ":"")+n.word;
    const rule=n.art?ruleFor({a:n.art,w:n.word}):"", realRule=rule&&!rule.startsWith("No easy rule");
    const info=`<b>${n.art?artSpan(n.art,n.word):n.word}</b> = ${n.eng}${pl?`<br>Plural: <span class="plc">die</span> ${pl} <span class="en">· ${pluralNote({w:n.word,p:pl})}</span>`:""}${n.ex?`<br>${esc(n.ex)}`:""}${n.art?`<br>💡 ${realRule?rule:`No pattern for this one. Learn it with its colour: ${n.art==="der"?"blue":n.art==="die"?"red":"green"} <b>${n.art}</b>. Always say “${n.art} ${n.word}”, never just “${n.word}”.`}`:""}`;
@@ -265,7 +274,7 @@ const MODORD=[
 GROUPS.length=0;
 GROUPS.push(
  ["Alles","everything",["mix"]],
- ["Wörter","words: vocabulary, articles, plural",["wortschatz","bildwoerter","artikel","ein","plural","wortart","akkusativ","possessiv"],"Wörter","words"],
+ ["Wörter","words: vocabulary, articles, plural",["wortschatz","wortliste","bildwoerter","artikel","ein","plural","wortart","akkusativ","possessiv"],"Wörter","words"],
  ["Sätze","sentences: verbs, word order, questions",["verbform","dusie","warHatte","modal","satzbau","ordnen","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
  ["Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
  ["Kalender","calendar",["kalender","datum","zeitpraep"],"Kalender","calendar"],

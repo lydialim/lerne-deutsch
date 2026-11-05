@@ -964,3 +964,5 @@ details.fold ul{margin-top:2px}
 .ctile .swatch{width:30px;height:30px;margin-bottom:4px}
 .kgrid.d3 .fc{height:124px;aspect-ratio:auto}
 .kgrid.d3 .fc{min-height:0}
+
+.psvg{width:1em;height:1em;vertical-align:-.12em;display:inline-block}

@@ -38,7 +38,7 @@ function ruleFor(n){
   if(/e$/.test(w)&&n.a!=="die") return "Exception: ends in -e but is "+n.a+". Learn it by heart.";
   if(["Handy","Auto","Foto","Büro","Sofa","Kino","Hotel","Restaurant"].includes(w)) return "Many loan words ending in a vowel are das.";
   if(w==="Computer") return "Many nouns ending -er (tools, machines) are der.";
-  return "No easy rule here. Learn it as one unit: "+n.a+" "+w+".";
+  return `No pattern for this one. Learn it with its colour: ${n.a==="der"?"blue":n.a==="die"?"red":"green"} <b>${n.a}</b>. Always say “${n.a} ${w}”, never just “${w}”.`;
 }
 function pluralNote(n){
   const s=n.w,p=n.p;

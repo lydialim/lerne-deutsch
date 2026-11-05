@@ -223,7 +223,11 @@ const WLISTE=[
 ];
 function vocabNote(n){
   if(n.note) return n.note;
-  const parts=n.w.match(/^(.+?)(zimmer|schrank|karte|essen|haus|nummer|aufgabe|schirm|maschine|bahn|hafen|stelle|tag)$/i);
+  return ruleOrCompound(n);
+}
+/* article rule for a noun: compound hint first, otherwise the general rule / colour tip */
+function ruleOrCompound(n){
+  const parts=n.w.match(/^(.+?)(zimmer|schrank|karte|essen|haus|nummer|aufgabe|schirm|maschine|bahn|hafen|stelle|tag|land|büro|platz|plan|wahl|jahr|frau|mann)$/i);
   if(parts&&parts[1].length>1) return `Compound noun: the LAST part decides the article (${n.a} …${parts[2].toLowerCase()}).`;
   return ruleFor(n);
 }

@@ -2,7 +2,7 @@
 const TESTS={
  artikel:{tag:"Artikel",title:"der, die oder das?",en:"the: which gender?",kind:"choice",
   gen(){const n=pick(NOUNS);return{prompt:`<span class="big">___ ${n.w}</span><span class="en">${n.en}</span>`,
-   options:["der","die","das"],cls:o=>"o-"+o,answer:n.a,explain:`<b><span class="${n.a}">${n.a}</span> ${n.w}</b>, Plural: <span class="plc">die</span> ${n.p}. ${ruleFor(n)}`}}},
+   options:["der","die","das"],cls:o=>"o-"+o,answer:n.a,explain:nounInfo(n)}}},
  plural:{tag:"Plural",title:"Singular → Plural",en:"choose the plural form",kind:"choice",
   gen(){const n=pick(NOUNS.filter(x=>!["Name","Kaffee","Tee"].includes(x.w)));const s=n.w;
    const cand=new Set([s+"e",s+"en",s+"n",s+"s",s+"er",s,s+"nen"]);
@@ -10,7 +10,7 @@ const TESTS={
    if(um!==s){cand.add(um+"e");cand.add(um+"er");cand.add(um);}
    cand.delete(n.p); const wrong=shuffle([...cand].filter(c=>!/(ee|nnn|ene$)/.test(c))).slice(0,2);
    return{prompt:`<span class="dq">Singular <span class="en">(one)</span></span><span class="big"><span class="${n.a}">${n.a}</span> ${s}</span><span class="dq">Plural: <span class="plc">die</span> ___ ? <span class="en">(${n.en}, many)</span></span>`,
-   options:shuffle([n.p,...wrong]),answer:n.p,explain:`<b><span class="${n.a}">${n.a}</span> ${s} → <span class="plc">die</span> ${n.p}</b>. ${pluralNote(n)}`}}},
+   options:shuffle([n.p,...wrong]),answer:n.p,explain:nounInfo(n)}}},
  ein:{tag:"ein / eine",title:"ein, eine oder nichts?",en:"a / an, or no article",kind:"choice",
   gen(){const n=pick(NOUNS.filter(x=>x.w!==x.p)); const pl=Math.random()<.25;
    if(pl) return{prompt:`<span class="big">Das sind ___ ${n.p}.</span><span class="en">Those are ___ (plural of “${n.en}”).</span>`,options:["ein","eine","— (nothing)"],answer:"— (nothing)",
@@ -79,7 +79,7 @@ const TESTS={
    if(Math.random()<.5) return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">What does this form field mean?</span>`,
      options:shuffle([x[1],...others.map(y=>y[1])]),answer:x[1],explain:`<b>${x[0]}</b> = ${x[1]}`};
    return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German form field is this?</span>`,
-     options:shuffle([x[0],...others.map(y=>y[0])]),answer:x[0],explain:`${x[1]} = <b>${x[0]}</b>`}}},
+     options:shuffle([x[0],...others.map(y=>y[0])]),answer:x[0],explain:`<b>${x[0]}</b> = ${x[1]}`}}},
  arbeit:{tag:"Arbeit",title:"Über die Arbeit sprechen",en:"talking about work: fill the gap",kind:"choice",
   gen(){const x=pick(WORK);return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">${x[1]}</span>`,
    options:shuffle(x[2]),answer:x[3],explain:`<b>${x[0].replace("___ Freitag","Freitag").replace("___",x[3]).replace("von … bis Montag","von Montag bis").replace(/von … bis/,"von")}</b><br>${x[4]}`}}},
@@ -122,7 +122,7 @@ const TESTS={
  aktion:{tag:"Aktivitäten",title:"Was machst du gern?",en:"action verbs and gern",kind:"choice",
   gen(){const m=rnd(0,2);
    if(m<2){const x=pick(ACT);const o=shuffle(ACT.filter(y=>y!==x)).slice(0,3);const f=forms(x[0]);
-     const ex=`<b>${x[0]}</b> = ${x[1]} · ich ${f[0]}, du ${f[1]}, er ${f[2]}`;
+     const ex=`<b>${x[0]}</b> = ${x[1]}<br>ich ${f[0]}, du ${f[1]}, er ${f[2]}`;
      if(m===0) return{prompt:`<span class="big">${x[0]}</span><span class="en">What does this verb mean?</span>`,options:shuffle([x[1],...o.map(y=>y[1])]),answer:x[1],explain:ex};
      return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German verb is it?</span>`,options:shuffle([x[0],...o.map(y=>y[0])]),answer:x[0],explain:ex};}
    const x=pick(GERN);return{prompt:`<span class="en">${x[3]}</span><span class="en">Welcher Satz ist richtig? (Which sentence is correct?)</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],

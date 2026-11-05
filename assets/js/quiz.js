@@ -130,7 +130,10 @@ function draw(){
       <button class="btn" type="submit">Prüfen <span style="font-weight:400">(check)</span></button></form>`;
   }
   $("#quiz").innerHTML=h+`</div>`;
-  $("#qx").onclick=exitQuiz; $(".entog").onclick=toggleEn; applyEn();
+  $("#qx").onclick=exitQuiz; $(".entog").onclick=toggleEn;
+  /* German instructions stay visible when English is off: text before the first (English) .pron moves out of .en */
+  $("#quiz").querySelectorAll(".q > .en").forEach(e=>{ const kids=[...e.childNodes], i=kids.findIndex(n=>n.nodeType===1&&n.classList.contains("pron")); if(i<1) return; const pre=kids.slice(0,i); if(!pre.map(n=>n.textContent).join("").trim()) return; const dq=document.createElement("span"); dq.className="dq"; e.before(dq); pre.forEach(n=>dq.appendChild(n)); dq.appendChild(document.createTextNode(" ")); dq.appendChild(e); });
+  applyEn();
   { const qq=$("#quiz .q"), c=qq.cloneNode(true); c.querySelectorAll(".en").forEach(e=>e.remove()); if(!c.textContent.trim()||TESTS[current].enReq||q.enReq) qq.classList.add("needs-en"); }
   $("#quiz").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{rangeIdx[current]=+b.dataset.r; const tt=TESTS[current]; q=tt.gen(tt.ranges[+b.dataset.r]); q.done=false; draw();});
   if(q.say){ $("#again").onclick=()=>speak(q.say); $("#slow").onclick=()=>speak(q.say,0.6); speak(q.say); }

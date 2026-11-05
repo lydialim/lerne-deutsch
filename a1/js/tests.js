@@ -9,7 +9,7 @@ const TESTS={
    const um=s.replace(/a(?!.*[aou])|o(?!.*[aou])|u(?!.*[aou])/,m=>({a:"ä",o:"ö",u:"ü"}[m]));
    if(um!==s){cand.add(um+"e");cand.add(um+"er");cand.add(um);}
    cand.delete(n.p); const wrong=shuffle([...cand].filter(c=>!/(ee|nnn|ene$)/.test(c))).slice(0,2);
-   return{prompt:`<span class="en">Singular</span><span class="big"><span class="${n.a}">${n.a}</span> ${s}</span><span class="en">${n.en} → Plural: <span class="plc">die</span> ___ ?</span>`,
+   return{prompt:`<span class="dq">Singular <span class="en">(one)</span></span><span class="big"><span class="${n.a}">${n.a}</span> ${s}</span><span class="dq">Plural: <span class="plc">die</span> ___ ? <span class="en">(${n.en}, many)</span></span>`,
    options:shuffle([n.p,...wrong]),answer:n.p,explain:`<b><span class="${n.a}">${n.a}</span> ${s} → <span class="plc">die</span> ${n.p}</b>. ${pluralNote(n)}`}}},
  ein:{tag:"ein / eine",title:"ein, eine oder nichts?",en:"a / an, or no article",kind:"choice",
   gen(){const n=pick(NOUNS.filter(x=>x.w!==x.p)); const pl=Math.random()<.25;

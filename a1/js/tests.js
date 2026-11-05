@@ -3,13 +3,19 @@
    RULES: the rule of the day. The word lists the tests draw from are in data.js. */
 const artSpan=(a,w)=>`<span class="${a}">${a}</span> ${w}`;
 const fmtT=(h,m)=>`${h}:${String(m).padStart(2,"0")}`;
+/* ONE explanation layout for every noun test (artikel, plural, wortschatz, bildwoerter, mix):
+   1) article + word = English   2) plural, with the rule   3) WHY this article (rule or colour tip)   4) extra note / example (optional) */
+function nounInfo({a,w,p,en,note,ex}){
+  const plural=p===""?"No plural.":(p===w&&a==="die"&&note)?"Plural only.":`Plural: <span class="plc">die</span> ${p} <span class="en">· ${pluralNote({w,p})}</span>`;
+  return `<b>${artSpan(a,w)}</b>${en?` = ${en}`:""}<br>${plural}<br>${ruleOrCompound({a,w})}${note&&!(p===w&&a==="die")?`<br>${note}`:""}${ex?`<br>${ex}`:""}`;
+}
 const enArt=(n)=>n.p===""?"":/^[aeiou]/i.test(n.en)?"an ":"a ";
 function opts4(right, pool, n=4){ const s=new Set([right]); for(const x of shuffle(pool)){ if(s.size>=n) break; s.add(x); } return shuffle([...s]); }
 
 const TESTS={
  artikel:{tag:"Artikel",title:"der, die oder das?",en:"the: which gender?",kind:"choice",
   gen(){const n=pick(NOUNS);return{prompt:`<span class="big">___ ${n.w}</span><span class="en">${n.en}</span>`,
-   options:["der","die","das"],cls:o=>"o-"+o,answer:n.a,explain:`<b><span class="${n.a}">${n.a}</span> ${n.w}</b>, Plural: <span class="plc">die</span> ${n.p}. ${ruleFor(n)}`}}},
+   options:["der","die","das"],cls:o=>"o-"+o,answer:n.a,explain:nounInfo(n)}}},
  plural:{tag:"Plural",title:"Singular → Plural",en:"choose the plural form",kind:"choice",
   gen(){const n=pick(NOUNS.filter(x=>!["Name","Kaffee","Tee"].includes(x.w)));const s=n.w;
    const cand=new Set([s+"e",s+"en",s+"n",s+"s",s+"er",s,s+"nen"]);
@@ -17,7 +23,7 @@ const TESTS={
    if(um!==s){cand.add(um+"e");cand.add(um+"er");cand.add(um);}
    cand.delete(n.p); const wrong=shuffle([...cand].filter(c=>!/(ee|nnn|ene$)/.test(c))).slice(0,2);
    return{prompt:`<span class="dq">Singular <span class="en">(one)</span></span><span class="big"><span class="${n.a}">${n.a}</span> ${s}</span><span class="dq">Plural: <span class="plc">die</span> ___ ? <span class="en">(${n.en}, many)</span></span>`,
-   options:shuffle([n.p,...wrong]),answer:n.p,explain:`<b><span class="${n.a}">${n.a}</span> ${s} → <span class="plc">die</span> ${n.p}</b>. ${pluralNote(n)}`}}},
+   options:shuffle([n.p,...wrong]),answer:n.p,explain:nounInfo(n)}}},
  ein:{tag:"ein / eine",title:"ein, eine oder nichts?",en:"a / an, or no article",kind:"choice",
   gen(){const n=pick(NOUNS.filter(x=>x.w!==x.p)); const pl=Math.random()<.25;
    if(pl) return{prompt:`<span class="big">Das sind ___ ${n.p}.</span><span class="en">Those are ___ (plural of “${n.en}”).</span>`,options:["ein","eine","— (nothing)"],answer:"— (nothing)",
@@ -86,7 +92,7 @@ const TESTS={
    if(Math.random()<.5) return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">What does this form field mean?</span>`,
      options:shuffle([x[1],...others.map(y=>y[1])]),answer:x[1],explain:`<b>${x[0]}</b> = ${x[1]}`};
    return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German form field is this?</span>`,
-     options:shuffle([x[0],...others.map(y=>y[0])]),answer:x[0],explain:`${x[1]} = <b>${x[0]}</b>`}}},
+     options:shuffle([x[0],...others.map(y=>y[0])]),answer:x[0],explain:`<b>${x[0]}</b> = ${x[1]}`}}},
  arbeit:{tag:"Arbeit",title:"Über die Arbeit sprechen",en:"talking about work: fill the gap",kind:"choice",
   gen(){const x=pick(WORK);return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">${x[1]}</span>`,
    options:shuffle(x[2]),answer:x[3],explain:`<b>${x[0].replace("___ Freitag","Freitag").replace("___",x[3]).replace("von … bis Montag","von Montag bis").replace(/von … bis/,"von")}</b><br>${x[4]}`}}},
@@ -129,7 +135,7 @@ const TESTS={
  aktion:{tag:"Aktivitäten",title:"Was machst du gern?",en:"action verbs and gern",kind:"choice",
   gen(){const m=rnd(0,2);
    if(m<2){const x=pick(ACT);const o=shuffle(ACT.filter(y=>y!==x)).slice(0,3);const f=forms(x[0]);
-     const ex=`<b>${x[0]}</b> = ${x[1]} · ich ${f[0]}, du ${f[1]}, er ${f[2]}`;
+     const ex=`<b>${x[0]}</b> = ${x[1]}<br>ich ${f[0]}, du ${f[1]}, er ${f[2]}`;
      if(m===0) return{prompt:`<span class="big">${x[0]}</span><span class="en">What does this verb mean?</span>`,options:shuffle([x[1],...o.map(y=>y[1])]),answer:x[1],explain:ex};
      return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German verb is it?</span>`,options:shuffle([x[0],...o.map(y=>y[0])]),answer:x[0],explain:ex};}
    const x=pick(GERN);return{prompt:`<span class="en">${x[3]}</span><span class="en">Welcher Satz ist richtig? (Which sentence is correct?)</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
@@ -150,8 +156,7 @@ const TESTS={
  wortschatz:{tag:"Wortschatz",title:"Was bedeutet das?",en:"word + article → English, and English → word with the right article",kind:"choice",
   ranges:[["Alle",null],...VTOPICS.map(t=>[t[1],t[0]])],
   gen(r){const pool=r&&r[1]?VOCAB.filter(v=>v.t===r[1]):VOCAB; const n=pick(pool); const m=rnd(0,2);
-   const pl=n.p===""?"no plural":n.p===n.w&&n.a==="die"&&n.note?"plural only":`Plural: <span class="plc">die</span> ${n.p}`;
-   const ex=`<b>${artSpan(n.a,n.w)}</b> = ${n.en} · ${pl}<br>${vocabNote(n)}`;
+   const ex=nounInfo({a:n.a,w:n.w,p:n.p,en:n.en,note:n.note});
    const same=pool.filter(v=>v!==n&&v.en!==n.en);
    if(m===0) return{prompt:`<span class="big">${artSpan(n.a,n.w)}</span><span class="en">Was bedeutet das? <span class="pron">(What does that mean?)</span></span>`,
      options:opts4(n.en,same.map(v=>v.en)),answer:n.en,explain:ex,sayAfter:`${n.a} ${n.w}`};
@@ -164,7 +169,7 @@ const TESTS={
   ranges:[["Alle",null],["Trennbare Verben",'vs'],["Verben",'v'],["Adjektive & Co.",'a']],
   gen(r){const pool=r&&r[1]?WLISTE.filter(x=>x[2]===r[1]):WLISTE; const x=pick(pool);
    const same=pool.filter(y=>y!==x&&y[1]!==x[1]).concat(pool.length<8?WLISTE.filter(y=>y[2]===x[2]&&y!==x&&y[1]!==x[1]):[]);
-   const sep=x[2]==="vs"?`<br>⚠ Separable verb: the prefix goes to the END in a main clause (${esc(x[3])}).`:"";
+   const sep=x[2]==="vs"?`<br>Separable verb: the prefix goes to the <b>end</b> of a main clause.`:"";
    const ex=`<b>${esc(x[0])}</b> = ${esc(x[1])}<br>${esc(x[3])} <span class="en">(${esc(x[4])})</span>${sep}`;
    if(Math.random()<.5) return{prompt:`<span class="big">${esc(x[0])}</span><span class="dq">Was bedeutet das? <span class="en">(What does that mean?)</span></span>`,options:opts4(x[1],same.map(y=>y[1])),answer:x[1],explain:ex,sayAfter:x[3]};
    return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${esc(x[1])}</span><span class="dq">Welches deutsche Wort ist das? <span class="en">(Which German word is it?)</span></span>`,options:opts4(x[0],same.map(y=>y[0])),answer:x[0],explain:ex,sayAfter:x[3]}}},
@@ -216,9 +221,9 @@ const TESTS={
  kalender:{tag:"Kalender",title:"Tage, Monate, Jahreszeiten",en:"days, months, seasons and times of day",kind:"choice",
   gen(){const m=rnd(0,7);
    if(m===0){const d=pick(DAYS);return{prompt:`<span class="big">${d[0]}</span><span class="en">What day is it in English?</span>`,options:opts4(d[2],DAYS.map(x=>x[2])),answer:d[2],explain:`<b>der ${d[0]}</b> <span class="pron">(${d[1]})</span> = ${d[2]} · short: ${d[3]}`,sayAfter:d[0]}}
-   if(m===1){const d=pick(DAYS);return{prompt:`<span class="big">${d[2]}</span><span class="en">Which German day?</span>`,options:opts4(d[0],DAYS.map(x=>x[0])),answer:d[0],explain:`${d[2]} = <b>der ${d[0]}</b> <span class="pron">(${d[1]})</span>`,sayAfter:d[0]}}
+   if(m===1){const d=pick(DAYS);return{prompt:`<span class="big">${d[2]}</span><span class="en">Which German day?</span>`,options:opts4(d[0],DAYS.map(x=>x[0])),answer:d[0],explain:`<b>der ${d[0]}</b> <span class="pron">(${d[1]})</span> = ${d[2]} · short: ${d[3]}`,sayAfter:d[0]}}
    if(m===2){const x=pick(MONTHS);return{prompt:`<span class="big">${x[0]}</span><span class="en">Which month is it?</span>`,options:opts4(x[2],MONTHS.map(y=>y[2])),answer:x[2],explain:`<b>der ${x[0]}</b> <span class="pron">(${x[1]})</span> = ${x[2]}`,sayAfter:x[0]}}
-   if(m===3){const x=pick(MONTHS);return{prompt:`<span class="big">${x[2]}</span><span class="en">Which German month?</span>`,options:opts4(x[0],MONTHS.map(y=>y[0])),answer:x[0],explain:`${x[2]} = <b>der ${x[0]}</b> <span class="pron">(${x[1]})</span>`,sayAfter:x[0]}}
+   if(m===3){const x=pick(MONTHS);return{prompt:`<span class="big">${x[2]}</span><span class="en">Which German month?</span>`,options:opts4(x[0],MONTHS.map(y=>y[0])),answer:x[0],explain:`<b>der ${x[0]}</b> <span class="pron">(${x[1]})</span> = ${x[2]}`,sayAfter:x[0]}}
    if(m===4){const i=rnd(0,6),next=Math.random()<.5;const a=DAYS[(i+(next?1:6))%7];
      return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">Welcher Tag kommt ${next?"nach":"vor"} ${DAYS[i][0]}?</span><span class="en">Which day comes ${next?"after":"before"} ${DAYS[i][2]}?</span>`,options:opts4(a[0],DAYS.map(x=>x[0]).filter(x=>x!==DAYS[i][0])),answer:a[0],
      explain:`${DAYS.map(x=>x[0]===a[0]?`<b>${x[0]}</b>`:x[0]).join(" → ")}<br><b>nach</b> = after, <b>vor</b> = before.`,sayAfter:a[0]}}
@@ -338,7 +343,7 @@ const TESTS={
  themen2:{tag:"Neue Themen",title:"Neue Themen: Wörter",en:"weather, body, clothes, transport, hotel and post: words and phrases",kind:"choice",
   gen(){const x=pick(THEMEN2),others=shuffle(THEMEN2.filter(y=>y!==x)).slice(0,3);
    if(Math.random()<.5) return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[0]}</span><span class="en">What does this mean?</span>`,options:shuffle([x[1],...others.map(y=>y[1])]),answer:x[1],explain:`<b>${x[0]}</b> = ${x[1]}`,sayAfter:x[0]};
-   return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German word is this?</span>`,options:shuffle([x[0],...others.map(y=>y[0])]),answer:x[0],explain:`${x[1]} = <b>${x[0]}</b>`,sayAfter:x[0]}}},
+   return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German word is this?</span>`,options:shuffle([x[0],...others.map(y=>y[0])]),answer:x[0],explain:`<b>${x[0]}</b> = ${x[1]}`,sayAfter:x[0]}}},
 
  /* ---------- picture-card words: word + article (+ plural). Data comes from the Bildkarten (js/karten.js) ---------- */
  bildwoerter:{tag:"Bildkarten",title:"Bildwörter: Wort + Artikel",en:"picture-card words: which word, which article, which plural?",kind:"choice",
@@ -349,8 +354,7 @@ const TESTS={
    const n=pick(pool), mine=KARTEN.find(c=>c.de===n.cat).items;
    const pic=n.pic.startsWith("#")?`<span class="swatch" style="background:${n.pic};width:72px;height:72px;border-radius:50%;border:2px solid var(--line);display:inline-block"></span>`:`<span class="big" style="font-size:72px;line-height:1.1">${picGlyph(n.pic)}</span>`;
    const pl=cardPlural(n), say=(n.art?n.art+" ":"")+n.word;
-   const rule=n.art?ruleFor({a:n.art,w:n.word}):"", realRule=rule&&!rule.startsWith("No easy rule");
-   const info=`<b>${n.art?artSpan(n.art,n.word):n.word}</b> = ${n.eng}${pl?`<br>Plural: <span class="plc">die</span> ${pl} <span class="en">· ${pluralNote({w:n.word,p:pl})}</span>`:""}${n.ex?`<br>${esc(n.ex)}`:""}${n.art?`<br>💡 ${realRule?rule:`No pattern for this one. Learn it with its colour: ${n.art==="der"?"blue":n.art==="die"?"red":"green"} <b>${n.art}</b>. Always say “${n.art} ${n.word}”, never just “${n.word}”.`}`:""}`;
+   const info=n.art?nounInfo({a:n.art,w:n.word,p:pl||"",en:esc(n.eng),ex:n.ex?esc(n.ex):""}):`<b>${n.word}</b> = ${esc(n.eng)}${n.ex?`<br>${esc(n.ex)}`:""}`;
    if(!n.art){ /* verbs, adjectives, colours: no article */
     const words=[...new Set(mine.filter(v=>v.word!==n.word).map(v=>v.word))];
     const opts=shuffle([n.word,...shuffle(words).slice(0,3)]);

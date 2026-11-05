@@ -39,7 +39,7 @@ function ruleFor(n){
   if(/e$/.test(w)&&n.a!=="die") return "Exception: ends in -e but is "+n.a+". Learn it by heart.";
   if(["Handy","Auto","Foto","Büro","Sofa","Kino","Hotel","Restaurant"].includes(w)) return "Many loan words ending in a vowel are das.";
   if(w==="Computer") return "Many nouns ending -er (tools, machines) are der.";
-  return "No easy rule here. Learn it as one unit: "+n.a+" "+w+".";
+  return `No pattern for this one. Learn it with its colour: ${n.a==="der"?"blue":n.a==="die"?"red":"green"} <b>${n.a}</b>. Always say “${n.a} ${w}”, never just “${w}”.`;
 }
 function pluralNote(n){
   const s=n.w,p=n.p;
@@ -629,7 +629,11 @@ const WLISTE=[
 ];
 function vocabNote(n){
   if(n.note) return n.note;
-  const parts=n.w.match(/^(.+?)(zimmer|schrank|karte|essen|haus|nummer|aufgabe|schirm|maschine|bahn|hafen|stelle|tag)$/i);
+  return ruleOrCompound(n);
+}
+/* article rule for a noun: compound hint first, otherwise the general rule / colour tip */
+function ruleOrCompound(n){
+  const parts=n.w.match(/^(.+?)(zimmer|schrank|karte|essen|haus|nummer|aufgabe|schirm|maschine|bahn|hafen|stelle|tag|land|büro|platz|plan|wahl|jahr|frau|mann)$/i);
   if(parts&&parts[1].length>1) return `Compound noun: the LAST part decides the article (${n.a} …${parts[2].toLowerCase()}).`;
   return ruleFor(n);
 }

@@ -5,9 +5,16 @@ const artSpan=(a,w)=>`<span class="${a}">${a}</span> ${w}`;
 const fmtT=(h,m)=>`${h}:${String(m).padStart(2,"0")}`;
 /* ONE explanation layout for every noun test (artikel, plural, wortschatz, bildwoerter, mix):
    1) article + word = English   2) plural, with the rule   3) WHY this article (rule or colour tip)   4) extra note / example (optional) */
-function nounInfo({a,w,p,en,note,ex}){
-  const plural=p===""?"No plural.":(p===w&&a==="die"&&note)?"Plural only.":`Plural: <span class="plc">die</span> ${p} <span class="en">· ${pluralNote({w,p})}</span>`;
-  return `<b>${artSpan(a,w)}</b>${en?` = ${en}`:""}<br>${plural}<br>${ruleOrCompound({a,w})}${note&&!(p===w&&a==="die")?`<br>${note}`:""}${ex?`<br>${ex}`:""}`;
+/* isPl: the word itself is a plural form (picture cards: die Schuhe, singular der Schuh) */
+function nounInfo({a,w,p,en,note,ex,isPl}){
+  const only=PLURAL_ONLY.includes(w), pl=only||isPl;
+  const plural=only?`Plural only: always <span class="plc">die</span> ${w}, there is no singular.`
+    :isPl?`This is the plural form, so it is always <span class="plc">die</span>.`
+    :p===""?"No plural."
+    :`Plural: <span class="plc">die</span> ${p} <span class="en">· ${pluralNote({a,w,p})}</span>`;
+  /* for a plural the reason is simply "plural → die": a singular rule (e.g. -e → die) would be wrong here */
+  const why=pl?`Every plural takes <span class="plc">die</span>, whatever the singular is.`:ruleOrCompound({a,w});
+  return `<b>${artSpan(a,w)}</b>${en?` = ${en}`:""}<br>${plural}<br>${why}${note&&!only?`<br>${note}`:""}${ex?`<br>${ex}`:""}`;
 }
 const enArt=(n)=>n.p===""?"":/^[aeiou]/i.test(n.en)?"an ":"a ";
 function opts4(right, pool, n=4){ const s=new Set([right]); for(const x of shuffle(pool)){ if(s.size>=n) break; s.add(x); } return shuffle([...s]); }
@@ -155,7 +162,7 @@ const TESTS={
  /* ---------- vocabulary with article ---------- */
  wortschatz:{tag:"Wortschatz",title:"Was bedeutet das?",en:"word + article → English, and English → word with the right article",kind:"choice",
   ranges:[["Alle",null],...VTOPICS.map(t=>[t[1],t[0]])],
-  gen(r){const pool=r&&r[1]?VOCAB.filter(v=>v.t===r[1]):VOCAB; const n=pick(pool); const m=rnd(0,2);
+  gen(r){const pool=r&&r[1]?VOCAB.filter(v=>v.t===r[1]):VOCAB; const n=pick(pool); const m=PLURAL_ONLY.includes(n.w)?rnd(0,1):rnd(0,2);
    const ex=nounInfo({a:n.a,w:n.w,p:n.p,en:n.en,note:n.note});
    const same=pool.filter(v=>v!==n&&v.en!==n.en);
    if(m===0) return{prompt:`<span class="big">${artSpan(n.a,n.w)}</span><span class="en">Was bedeutet das? <span class="pron">(What does that mean?)</span></span>`,
@@ -293,7 +300,7 @@ const TESTS={
 
  /* ---------- possessives, war/hatte ---------- */
  possessiv:{enReq:true,tag:"mein, dein, sein",title:"Possessivartikel",en:"my, your, his, her …: choose the right word",kind:"choice",
-  gen(){const p=pick(POSS);const acc=Math.random()<.3;const nn=acc?pick(POSSN.filter(n=>["Schlüssel","Handy","Tasche","Auto","Name","Telefonnummer","Adresse"].includes(n[1]))):pick(POSSN);
+  gen(){const p=pick(POSS);const acc=Math.random()<.3;const nn=acc?pick(POSSN.filter(n=>["Schlüssel","Handy","Tasche","Auto","Telefonnummer","Adresse"].includes(n[1]))):pick(POSSN);
    const ans=possForm(p[1],nn[0],nn[3],acc);const b=p[1]==="euer"?"eur":p[1];
    const wrongs=[b+"e",p[1],b+"en",b+"er"].filter(x=>x!==ans);const other=pick(POSS.filter(q=>q[1]!==p[1]));const oth=possForm(other[1],nn[0],nn[3],acc);
    const de=acc?`Ich suche ___ ${nn[1]}.`:`Das ${nn[3]?"sind":"ist"} ___ ${nn[1]}.`;const en=acc?`I'm looking for ${p[2]} ${nn[2]}.`:`That ${nn[3]?"are":"is"} ${p[2]} ${nn[2]}.`;
@@ -354,14 +361,14 @@ const TESTS={
    const n=pick(pool), mine=KARTEN.find(c=>c.de===n.cat).items;
    const pic=n.pic.startsWith("#")?`<span class="swatch" style="background:${n.pic};width:72px;height:72px;border-radius:50%;border:2px solid var(--line);display:inline-block"></span>`:`<span class="big" style="font-size:72px;line-height:1.1">${picGlyph(n.pic)}</span>`;
    const pl=cardPlural(n), say=(n.art?n.art+" ":"")+n.word;
-   const info=n.art?nounInfo({a:n.art,w:n.word,p:pl||"",en:esc(n.eng),ex:n.ex?esc(n.ex):""}):`<b>${n.word}</b> = ${esc(n.eng)}${n.ex?`<br>${esc(n.ex)}`:""}`;
+   const info=n.art?nounInfo({a:n.art,w:n.word,p:pl||"",en:esc(n.eng),ex:n.ex?esc(n.ex):"",isPl:!!n.plural}):`<b>${n.word}</b> = ${esc(n.eng)}${n.ex?`<br>${esc(n.ex)}`:""}`;
    if(!n.art){ /* verbs, adjectives, colours: no article */
     const words=[...new Set(mine.filter(v=>v.word!==n.word).map(v=>v.word))];
     const opts=shuffle([n.word,...shuffle(words).slice(0,3)]);
     if(Math.random()<.5) return{prompt:`${pic}<span class="dq">Welches Wort ist das? <span class="en">(Which word is this?)</span></span>`,options:opts,answer:n.word,explain:info,sayAfter:say};
     return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${esc(n.eng)}</span><span class="dq">Welches deutsche Wort ist das? <span class="en">(Which German word is this?)</span></span>`,options:opts,answer:n.word,explain:info,sayAfter:say};
    }
-   const m=rnd(0,pl?3:2);
+   let m=rnd(0,pl?3:2); if(m===1&&(n.plural||PLURAL_ONLY.includes(n.word))) m=pick([0,2]); /* plurals: no der/die/das question */
    const nouns=mine.filter(v=>v.art&&v.word!==n.word), others=nouns.length>=2?nouns:KARTEN.flatMap(c=>c.items).filter(v=>v.art&&v.word!==n.word);
    const right=`${n.art} ${n.word}`;
    const full=()=>{const wrongArt=["der","die","das"].filter(a=>a!==n.art).map(a=>`${a} ${n.word}`);const o=pick(others);

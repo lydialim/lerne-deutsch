@@ -62,7 +62,17 @@ const KARTEN = [
 🐱|die|Katze|cat
 🧍|die|Person|person|Personen
 👥|die|Leute|people|PL|only plural: viele Leute
-🧑‍🤝‍🧑|der|Mensch|human being, people|Menschen`],
+🧑‍🤝‍🧑|der|Mensch|human being, people|Menschen
+👪|der|Verwandte|relative|Verwandten|female: die Verwandte · der/die Verwandte (m/f)
+💑|die|Eltern|parents|PL|Mutter + Vater · only plural
+👫|die|Geschwister|siblings|PL|Bruder + Schwester · only plural
+👵🏻|die|Großmutter|grandmother|Großmütter|short: die Oma, -s
+👴🏻|der|Großvater|grandfather|Großväter|short: der Opa, -s
+🧓|die|Großeltern|grandparents|PL|Großmutter + Großvater · only plural
+👦🏽|der|Junge|boy|Jungen
+👧🏽|das|Mädchen|girl|Mädchen|-chen = always das (even for a girl!)
+🧔|der|Mann|man, husband|Männer
+👩‍🦰|die|Frau|woman, wife|Frauen`],
  ["Wohnung", "home", `🏠|das|Haus|house
 🏢|die|Wohnung|flat
 🚪|die|Tür|door
@@ -137,7 +147,24 @@ svg:flask|die|Thermoskanne|flask (thermos)|Thermoskannen
 🤵|der|Kellner|waiter
 🤵‍♀️|die|Kellnerin|waitress
 📐|der|Architekt|architect
-📐|die|Architektin|architect (female)`],
+📐|die|Architektin|architect (female)
+👮‍♀️|die|Polizistin|police officer (female)|Polizistinnen
+👩‍🎓|die|Studentin|student (female)|Studentinnen
+👩‍🔧|die|Mechanikerin|mechanic (female)|Mechanikerinnen
+🔌|der|Elektriker|electrician|Elektriker|female: die Elektrikerin, -nen
+🧑‍🍼|der|Erzieher|nursery teacher, educator|Erzieher|female: die Erzieherin, -nen
+💇|der|Friseur|hairdresser|Friseure|female: die Friseurin, -nen
+🛠️|der|Handwerker|craftsman, tradesperson|Handwerker|female: die Handwerkerin, -nen
+👨‍💻|der|Informatiker|IT specialist, computer scientist|Informatiker|female: die Informatikerin, -nen
+⚙️|der|Ingenieur|engineer|Ingenieure|female: die Ingenieurin, -nen
+🎙️|der|Journalist|journalist|Journalisten|female: die Journalistin, -nen
+⚖️|der|Jurist|lawyer|Juristen|female: die Juristin, -nen
+🎥|der|Regisseur|film director|Regisseure|female: die Regisseurin, -nen
+🗺️|der|Reiseführer|tour guide|Reiseführer|female: die Reiseführerin, -nen · also: guidebook
+🎞️|der|Schauspieler|actor|Schauspieler|female: die Schauspielerin, -nen
+🚖|der|Taxifahrer|taxi driver|Taxifahrer|female: die Taxifahrerin, -nen
+🔧|der|Techniker|technician|Techniker|female: die Technikerin, -nen
+💁|der|Verkäufer|salesperson, shop assistant|Verkäufer|female: die Verkäuferin, -nen`],
  ["Schule und Büro", "school and office", `svg:desk|der|Schreibtisch|desk|Schreibtische
 ✏️|der|Bleistift|pencil|Bleistifte
 🖊️|der|Kuli|pen
@@ -180,7 +207,14 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 ✉️|der|Brief|letter
 📮|der|Briefkasten|postbox|Briefkästen
 📦|das|Paket|parcel
-🏷️|die|Briefmarke|stamp|Briefmarken`],
+🏷️|die|Briefmarke|stamp|Briefmarken
+🎨|die|Kunsthalle|art gallery, exhibition hall|Kunsthallen
+🧁|das|Café|café|Cafés
+🍴|das|Restaurant|restaurant|Restaurants
+🩱|das|Schwimmbad|swimming pool|Schwimmbäder
+🏟️|das|Stadion|stadium|Stadien
+🎓|die|Universität|university|Universitäten|short: die Uni, -s
+🎹|das|Konzerthaus|concert hall|Konzerthäuser`],
  ["Verkehr", "transport", `🚋|die|Straßenbahn|tram
 🚇|die|U-Bahn|underground
 🚕|das|Taxi|taxi
@@ -197,7 +231,9 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 🚢|das|Schiff|ship|Schiffe
 🚲|das|Fahrrad|bicycle
 🚌|der|Bus|bus
-🚆|der|Zug|train`],
+🚆|der|Zug|train
+🚈|die|S-Bahn|suburban train|S-Bahnen|Ich fahre mit der S-Bahn.
+👣||zu Fuß gehen|to walk, to go on foot||Ich gehe zu Fuß. (no article, no "mit")`],
  ["Wetter", "weather", `☀️|die|Sonne|sun|-|Adj: sonnig (sunny)
 🌧️|der|Regen|rain|-|Es regnet. (it is raining)
 ❄️|der|Schnee|snow|-|Es schneit. (it is snowing)
@@ -249,7 +285,123 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 😴||müde|tired||Adj. Ich bin müde.
 🤒||krank|ill||Adj. Ich bin krank.
 😊||glücklich|happy||Adj. Ich bin glücklich.
-😋||lecker|tasty||Adj. Das Essen ist lecker.`]
+😋||lecker|tasty||Adj. Das Essen ist lecker.
+🏚️||alt|old||↔ neu · Das Haus ist alt.
+🆕||neu|new||↔ alt · Das Handy ist neu.
+🙇||höflich|polite||↔ unhöflich
+😤||unhöflich|rude, impolite||↔ höflich · un- = not
+🥶||kalt|cold||↔ warm · Es ist kalt.
+♨️||warm|warm||↔ kalt · Es ist warm.
+🐭||klein|small||↔ groß
+🐘||groß|big, tall||↔ klein
+🏋️||gesund|healthy||↔ krank
+🐢||langsam|slow||↔ schnell
+🐇||schnell|fast||↔ langsam
+⌚||pünktlich|on time, punctual||↔ spät · Der Zug ist pünktlich.
+🐌||spät|late||↔ früh / pünktlich · Es ist spät.
+🐓||früh|early||↔ spät · Ich stehe früh auf.
+✔️||richtig|right, correct||↔ falsch
+❌||falsch|wrong||↔ richtig
+😎||cool|cool||positiv
+🤗||herzlich|warm, cordial||Herzlich willkommen! (warmly welcome)
+🤔||interessant|interesting||Das Buch ist interessant.
+🖌️||kreativ|creative||positiv
+🥰||lieb|kind, dear||Liebe Grüße (kind regards)
+😂||lustig|funny||Der Film ist lustig.
+😀||nett|nice||Die Lehrerin ist nett.
+🌺||schön|beautiful, nice||Das Wetter ist schön.
+🙌||toll|great||Das ist toll!
+😫||stressig|stressful||negativ · Die Arbeit ist stressig.
+💎||teuer|expensive||negativ · ↔ billig (cheap)
+🏔️||hoch|high, tall||Maß (measure) · Der Berg ist hoch.
+↔️||breit|wide||Maß (measure)
+🐍||lang|long||Maß (measure) · ↔ kurz (short)
+🌟||bekannt|well-known, famous
+👌||einfach|easy, simple||Das ist einfach.
+🏁||fertig|finished, ready||Ich bin fertig.
+🥬||frisch|fresh||Das Brot ist frisch.
+🌍||international|international
+📢||laut|loud||↔ leise (quiet)
+🙋||ledig|single (not married)||↔ verheiratet
+💍||verheiratet|married||↔ ledig · Ich bin verheiratet.
+🔓||offen|open||also: geöffnet · ↔ geschlossen (closed)
+😌||satt|full (after eating)||Ich bin satt. ↔ hungrig
+🥨||typisch|typical||Brezeln sind typisch bayerisch.
+🚫||verboten|forbidden, not allowed||Rauchen verboten! (no smoking)
+👀||wach|awake||↔ müde
+❗||wichtig|important||Das ist wichtig.`],
+ ["Länder und Sprachen", "countries and languages", `🇩🇿||Algerien|Algeria||Sprache: Arabisch
+🇧🇷||Brasilien|Brazil||Sprache: Portugiesisch
+🇧🇬||Bulgarien|Bulgaria||Sprache: Bulgarisch
+🇨🇳||China|China||Sprache: Chinesisch
+🇩🇰||Dänemark|Denmark||Sprache: Dänisch
+🇩🇪||Deutschland|Germany||Sprache: Deutsch · Ich lerne Deutsch.
+🇫🇷||Frankreich|France||Sprache: Französisch
+🇬🇷||Griechenland|Greece||Sprache: Griechisch
+🇮🇩||Indonesien|Indonesia||Sprache: Indonesisch
+🇮🇶|der|Irak|Iraq|-|Sprache: Arabisch · aus dem Irak · in den Irak
+🇮🇷|der|Iran|Iran|-|Sprache: Persisch · aus dem Iran · in den Iran
+🇮🇹||Italien|Italy||Sprache: Italienisch
+🇯🇵||Japan|Japan||Sprache: Japanisch
+🇾🇪|der|Jemen|Yemen|-|Sprache: Arabisch · aus dem Jemen
+🇨🇦||Kanada|Canada||Sprachen: Englisch, Französisch
+🇱🇧|der|Libanon|Lebanon|-|Sprache: Arabisch · aus dem Libanon
+🇲🇽||Mexiko|Mexico||Sprache: Spanisch
+🇳🇿||Neuseeland|New Zealand||Sprachen: Englisch, Maori
+🇳🇱|die|Niederlande|Netherlands|PL|Sprache: Niederländisch · aus den Niederlanden
+🇦🇹||Österreich|Austria||Sprache: Deutsch
+🇵🇱||Polen|Poland||Sprache: Polnisch
+🇵🇹||Portugal|Portugal||Sprache: Portugiesisch
+🇷🇺||Russland|Russia||Sprache: Russisch
+🇨🇭|die|Schweiz|Switzerland|-|Sprachen: Deutsch, Französisch, Italienisch, Rätoromanisch · aus der Schweiz
+🇷🇸||Serbien|Serbia||Sprache: Serbisch
+🇸🇰|die|Slowakei|Slovakia|-|Sprache: Slowakisch · aus der Slowakei
+🇪🇸||Spanien|Spain||Sprache: Spanisch
+🇸🇾||Syrien|Syria||Sprache: Arabisch
+🇹🇭||Thailand|Thailand||Sprache: Thai
+🇹🇳||Tunesien|Tunisia||Sprache: Arabisch
+🇹🇷|die|Türkei|Turkey|-|Sprache: Türkisch · aus der Türkei
+🇺🇦|die|Ukraine|Ukraine|-|Sprache: Ukrainisch · aus der Ukraine
+🇭🇺||Ungarn|Hungary||Sprache: Ungarisch
+🇺🇸|die|USA|USA|PL|Sprache: Englisch · aus den USA · in die USA`],
+ ["Zeit", "time: seasons, months, days", `🌸|der|Frühling|spring|Frühlinge|im Frühling (in spring)
+🏖️|der|Sommer|summer|Sommer|im Sommer (in summer)
+🍂|der|Herbst|autumn|Herbste|im Herbst (in autumn)
+⛄|der|Winter|winter|Winter|im Winter (in winter)
+🎆|der|Januar|January|-|Monat 1 (eins) · im Januar
+💘|der|Februar|February|-|Monat 2 (zwei) · im Februar
+🌱|der|März|March|-|Monat 3 (drei) · im März
+🌦️|der|April|April|-|Monat 4 (vier) · im April
+🌷|der|Mai|May|-|Monat 5 (fünf) · im Mai
+🍒|der|Juni|June|-|Monat 6 (sechs) · im Juni
+🍦|der|Juli|July|-|Monat 7 (sieben) · im Juli
+🌻|der|August|August|-|Monat 8 (acht) · im August
+🍄|der|September|September|-|Monat 9 (neun) · im September
+🎃|der|Oktober|October|-|Monat 10 (zehn) · im Oktober
+🏮|der|November|November|-|Monat 11 (elf) · im November
+🎄|der|Dezember|December|-|Monat 12 (zwölf) · im Dezember
+1️⃣|der|Montag|Monday|Montage|Mo · am Montag (on Monday)
+2️⃣|der|Dienstag|Tuesday|Dienstage|Di · am Dienstag
+3️⃣|der|Mittwoch|Wednesday|Mittwoche|Mi · am Mittwoch
+4️⃣|der|Donnerstag|Thursday|Donnerstage|Do · am Donnerstag
+5️⃣|der|Freitag|Friday|Freitage|Fr · am Freitag
+6️⃣|der|Samstag|Saturday|Samstage|Sa · am Samstag
+7️⃣|der|Sonntag|Sunday|Sonntage|So · am Sonntag
+🎉|das|Wochenende|weekend|Wochenenden|am Wochenende (at the weekend)
+🗓️|das|Jahr|year|Jahre|12 (zwölf) Monate
+📅|der|Monat|month|Monate|4 (vier) Wochen
+📆|die|Woche|week|Wochen|7 (sieben) Tage
+🌞|der|Tag|day|Tage|24 (vierundzwanzig) Stunden · Guten Tag!
+⏳|die|Stunde|hour|Stunden|60 (sechzig) Minuten
+🕧||eine halbe Stunde|half an hour||= 30 (dreißig) Minuten
+⏱️|die|Minute|minute|Minuten|60 (sechzig) Sekunden
+⏲️|die|Sekunde|second|Sekunden
+🌅|der|Morgen|morning|Morgen|morgens (in the mornings) · Guten Morgen!
+🕙|der|Vormittag|late morning|Vormittage|vormittags · am Vormittag
+🕛|der|Mittag|midday, noon|Mittage|mittags · am Mittag
+🕒|der|Nachmittag|afternoon|Nachmittage|nachmittags · am Nachmittag
+🌆|der|Abend|evening|Abende|abends · Guten Abend!
+🌙|die|Nacht|night|Nächte|nachts · in der Nacht (not am!) · Gute Nacht!`]
 ].map(([de, en, raw]) => ({ de, en, items: raw.split("\n").map(l => { const [pic, art, word, eng, pl, ex] = l.split("|"); return pl === "PL" ? { pic, art, word, eng, pl: "-", ex, plural: true } : { pic, art, word, eng, pl, ex }; }) }));
 
 /* plurals come from the word lists of the lessons (data.js) unless the card gives its own */

@@ -1,9 +1,12 @@
 /* Lerne Deutsch: test engine shared by every level.
    Needs TESTS and GROUPS (and optional RULES) from <level>/js/tests.js, and num() from <level>/js/data.js.
    GROUPS entries: [title, english, [test keys], tabLabel?, tabEnglish?]. The tests page shows one tab per group (except the "mix" group).
-   Each test: {tag, title, en, enReq? (true = the English line is part of the exercise, so it stays visible even when EN is off), kind: "choice" | "input" | "order" | "mixed", ranges?, gen(range) -> question}
+   Each test: {tag, title, en, enReq? (true = the English line is part of the exercise, so it stays visible even when EN is off), kind: "choice" | "input" | "order" | "gap" | "tapcar" | "mixed", ranges?, gen(range) -> question}
    Each question: {prompt, answer, explain, kind? (overrides the test's kind), options? (choice), inputmode?, umlauts?,
-     tokens + end? (order: shuffled word chips the learner taps into place; answer = tokens in order joined by spaces + end),
+     tokens + end? (order: shuffled word chips the learner taps into place; answer = tokens in order joined by spaces + end;
+       optional tokV/tokZ/tokWW per token = verb (red) / connector (dashed) / word-by-word gloss, slots [{lab,v,z}] per place, lock = first n tokens fixed),
+     cars + insert + p (gap: the learner taps the gap ▾ where `insert` belongs; answer = the full sentence),
+     cars + p (tapcar: the learner taps the car that is in the wrong place; answer = that car's text),
      say? (listening: German text read aloud with assets/js/speech.js, plays automatically), sayAfter? (read aloud from the feedback)}
    Every test runs in rounds of 20 questions (no repeats inside a round), with a progress bar, a streak counter, points and stars.
    Open a test directly with tests.html#<key>, e.g. tests.html#artikel or tests.html#mix. */
@@ -12,6 +15,15 @@ const FLAME='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColo
 let current=null, q=null, stats=null, rangeIdx={};
 /* English hints in questions are hidden by default; the EN button toggles them (remembered per level). */
 let showEn=lstore.get("showEn",false);
+/* Colour hints in sentence tests (red verb, Verb label on its place). The 🎨 button switches them off for a harder round (remembered per level). */
+let showHint=lstore.get("hint",true);
+const applyHint=()=>{ document.body.classList.toggle("nohint",!showHint); document.querySelectorAll(".hinttog").forEach(b=>b.setAttribute("aria-pressed",showHint)); };
+const hintBtn=()=>`<button class="btn ghost hinttog" type="button" aria-pressed="${showHint}" title="Farbhilfe an/aus (colour hints on/off)">🎨 Hilfe <span class="en">(hints)</span></button>`;
+/* Sentence pictures, shared by every sentence test: one car per word or word group.
+   c = {t: text, v: verb (red), z: connector (dashed), ww: word-by-word English, lab: position ("E" = end), cls: extra class, after: text after the car}.
+   pos: true shows the position number above each car. wrong: true = a wrong sentence (no 🔊 button, so it is never read aloud). */
+const carHtml=(c,pos)=>`<span class="car${c.v?" v":""}${c.z?" z":""}${c.cls?" "+c.cls:""}">${pos&&c.lab?`<small class="pos">${c.lab==="E"?"Ende":c.lab}</small>`:""}${esc(c.t)}${c.ww?`<em class="en">${esc(c.ww)}</em>`:""}</span>${c.after?`<span class="endp">${esc(c.after)}</span>`:""}`;
+const carsHtml=(cars,o={})=>`<div class="${o.wrong?"cars wrong":"train cars"}${o.cls?" "+o.cls:""}">${cars.map(c=>carHtml(c,o.pos)).join("")}</div>`;
 /* English-only instructions (inside .en) → German instruction that stays visible when English is off */
 const INSTR=[
  [/^What does this verb mean\?$/,"Was bedeutet dieses Verb?"],[/^Which German verb is it\?$/,"Welches deutsche Verb ist das?"],
@@ -96,7 +108,9 @@ function showIntro(){
   closeFb();
   const t=TESTS[current], kind=t.kind;
   const how=kind==="input"?["⌨️","Schreibe die Antwort und drücke Enter.","Type your answer and press Enter (or tap Prüfen)."]
-    :kind==="order"?["👆","Tippe die Wörter in der richtigen Reihenfolge an.","Tap the words in the right order. Tap a word in your sentence to take it back. Then tap Prüfen."]
+    :kind==="order"?["👆","Tippe die Wörter an. Sie füllen die Plätze 1, 2, 3 … Rot = Verb.","Tap the words: they fill places 1, 2, 3 … in turn. Red = verb. Tap a word in your sentence to take it back, then tap Prüfen (check). 🎨 switches the colour hints off."]
+    :kind==="gap"?["▾","Tippe auf die Lücke, wo das Wort hingehört.","Tap the gap ▾ where the word belongs. Look at the places: the verb loves position 2."]
+    :kind==="tapcar"?["👆","Ein Wort steht am falschen Platz. Tippe es an.","One word is in the wrong place. Tap it. Tip: find the verb and count its position."]
     :kind==="mixed"?["👆","Tippe auf die Antwort, oder schreibe sie.","Tap an answer, or type it and press Enter. The question types change."]
     :["👆","Tippe auf die richtige Antwort.","Tap the right answer. On a keyboard you can also press 1, 2, 3 …"];
   $("#quiz").innerHTML=`<div class="qtop"><button class="xbtn" id="qx" type="button" aria-label="Test beenden (end test)">✕</button><span class="grow"></span>${enBtn()}</div>
@@ -144,8 +158,12 @@ function draw(){
   h+=`<div class="q">${q.prompt}</div>`;
   if(q.say) h+=`<div class="controls"><button class="btn ghost" type="button" id="again">▶ Anhören <span class="en">(listen)</span></button><button class="btn ghost" type="button" id="slow">🐢 Langsam <span class="en">(slow)</span></button>${typeof TTS!=="undefined"&&TTS.ok?"":`<span class="warn">Audio doesn't work in this browser. Try Chrome, Edge or Safari.</span>`}</div>`;
   if(kind==="order"){
-    h+=`<div class="ordline" id="built" aria-label="Dein Satz (your sentence)"></div><div class="pool" id="pool"></div>
-      <div class="controls"><button class="btn" type="button" id="chk">Prüfen <span style="font-weight:400">(check)</span></button><button class="btn ghost" type="button" id="undo">↺ Neu <span class="en">(reset)</span></button></div>`;
+    h+=`<div class="slots" id="built" aria-label="Dein Satz (your sentence)"></div><div class="pool" id="pool"></div>
+      <div class="controls"><button class="btn" type="button" id="chk">Prüfen <span style="font-weight:400">(check)</span></button><button class="btn ghost" type="button" id="undo">↺ Neu <span class="en">(reset)</span></button>${q.tokV?hintBtn():""}</div>`;
+  } else if(kind==="gap"){
+    h+=`<div class="gaptrain" id="gt" aria-label="Satz mit Lücken (sentence with gaps)"></div>`;
+  } else if(kind==="tapcar"){
+    h+=`<div class="tapcars" id="tc" aria-label="Tippe das falsche Wort an (tap the wrong word)">${q.cars.map((c,i)=>`<button type="button" class="car" data-c="${i}">${esc(c.t)}${c.ww?`<em class="en">${esc(c.ww)}</em>`:""}</button>`).join("")}<span class="endp">${esc(q.p||"")}</span></div>`;
   } else if(kind==="choice"){
     h+=`<div class="opts">${q.options.map((o,i)=>`<button type="button" class="opt ${q.cls?q.cls(o):""}" data-i="${i}">${i<9?`<span class="k">${i+1}</span>`:""}<span>${q.label?q.label(o):esc(o)}</span></button>`).join("")}</div>`;
   } else {
@@ -161,11 +179,16 @@ function draw(){
     if(m){ de=m[1]+(m[3]?": Schreib die Ziffern.":""); en="("+m[2]+")"+(m[3]?" type the digits.":""); }
     else { const r=INSTR.find(x=>x[0].test(t)); if(r){ de=r[1]; en=t.startsWith("(")?t:"("+t+")"; } }
     if(!de) return; const dq=document.createElement("span"); dq.className="dq"; dq.append(de+" "); const sp=document.createElement("span"); sp.className="en"; sp.textContent=en; dq.append(sp); e.replaceWith(dq); });
-  applyEn();
+  applyEn(); applyHint(); $("#quiz").querySelectorAll(".hinttog").forEach(b=>b.onclick=()=>{ showHint=!showHint; lstore.set("hint",showHint); applyHint(); });
   { const qq=$("#quiz .q"), c=qq.cloneNode(true); c.querySelectorAll(".en").forEach(e=>e.remove()); if(!c.textContent.trim()||TESTS[current].enReq||q.enReq) qq.classList.add("needs-en"); }
   $("#quiz").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{rangeIdx[current]=+b.dataset.r; const tt=TESTS[current]; q=tt.gen(tt.ranges[+b.dataset.r]); q.done=false; draw();});
   if(q.say){ $("#again").onclick=()=>speak(q.say); $("#slow").onclick=()=>speak(q.say,0.6); speak(q.say); }
   if(kind==="order") drawOrder();
+  else if(kind==="gap") drawGap();
+  else if(kind==="tapcar") $("#quiz").querySelectorAll("#tc .car").forEach(b=>b.onclick=()=>{
+    if(q.done) return; const c=q.cars[+b.dataset.c]; answer(c.t);
+    $("#quiz").querySelectorAll("#tc .car").forEach(x=>{ x.disabled=true; if(q.cars[+x.dataset.c].t===q.answer) x.classList.add("good"); });
+    if(c.t!==q.answer) b.classList.add("bad"); })
   else if(kind==="choice") $("#quiz").querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(q.options[+b.dataset.i],b));
   else {
     const inp=$("#ans"); if(matchMedia("(hover:hover)").matches) inp.focus({preventScroll:true});
@@ -173,43 +196,66 @@ function draw(){
     $("#ansForm").onsubmit=e=>{e.preventDefault(); if(q.done){nextQ();return} if(inp.value.trim()) answer(inp.value.trim());};
   }
 }
-/* order questions: tap a chip in the pool to add it, tap it in the sentence to take it back */
+/* order questions: tap a chip in the pool to fill the next place, tap it in the sentence to take it back.
+   The sentence line shows one numbered place per word (with q.slots: the grammar position, red "Verb" places, "Ende" for the end). */
 function drawOrder(){
-  let built=[];
-  const end=q.end||"";
-  const paint=()=>{
+  const lock=q.lock||0, end=q.end||"";
+  const slots=q.slots||q.tokens.map((_,i)=>({lab:String(i+1)}));
+  let built=Array.from({length:lock},(_,i)=>i);
+  const chip=(i,attr)=>`<button type="button" class="chipbtn${q.tokV&&q.tokV[i]?" v":""}${q.tokZ&&q.tokZ[i]?" z":""}" ${attr}>${esc(q.tokens[i])}${q.tokWW?`<em class="en">${esc(q.tokWW[i])}</em>`:""}</button>`;
+  const paint=checked=>{
+    $("#built").innerHTML=slots.map((s,k)=>{ const i=built[k], st=checked&&i!==undefined?(q.tokens[i]===q.answerTokens[k]?" good":" bad"):"";
+      return `<div class="slot${s.v?" v":""}${s.z?" z":""}${k<lock?" lock":""}${st}"><small class="pos">${s.lab==="E"?"Ende":s.lab}${s.v?` <b class="vt">Verb</b>`:""}</small>${i===undefined?`<span class="hole" aria-hidden="true"></span>`:chip(i,k<lock?"disabled":`data-b="${i}"`)}</div>`; }).join("")+`<span class="endp">${esc(end)}</span>`;
     const inPool=q.tokens.map((_,i)=>i).filter(i=>!built.includes(i));
-    $("#built").innerHTML=(built.length?built.map(i=>`<button type="button" class="chipbtn" data-b="${i}">${esc(q.tokens[i])}</button>`).join("")
-      :`<span class="ph">Tippe die Wörter an. <span class="en">(Tap the words.)</span></span>`)+`<span class="endp">${esc(end)}</span>`;
-    $("#pool").innerHTML=inPool.map(i=>`<button type="button" class="chipbtn" data-p="${i}">${esc(q.tokens[i])}</button>`).join("");
+    $("#pool").innerHTML=inPool.map(i=>chip(i,`data-p="${i}"`)).join("");
     if(q.done) $("#quiz").querySelectorAll(".chipbtn").forEach(b=>b.disabled=true);
     $("#pool").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{ if(q.done) return; built.push(+b.dataset.p); paint(); });
     $("#built").querySelectorAll("[data-b]").forEach(b=>b.onclick=()=>{ if(q.done) return; built=built.filter(i=>i!==+b.dataset.b); paint(); });
   };
   paint();
-  $("#undo").onclick=()=>{ if(q.done) return; built=[]; paint(); };
+  $("#undo").onclick=()=>{ if(q.done) return; built=built.slice(0,lock); paint(); };
   $("#chk").onclick=()=>{
     if(q.done) return;
     if(built.length<q.tokens.length){ toast("Benutze alle Wörter. (Use all the words.)"); return; }
     const v=built.map(i=>q.tokens[i]).join(" ")+end;
+    /* wrong: show your sentence as a picture above the right one, wrong places outlined */
+    if(v!==q.answer) q.explain=`<span class="lbl">Dein Satz <span class="en">(your sentence)</span></span>`+carsHtml(built.map((i,k)=>({t:q.tokens[i]+(k===built.length-1?end:""),v:q.tokV&&q.tokV[i],z:q.tokZ&&q.tokZ[i],cls:q.tokens[i]===q.answerTokens[k]?"":"bad"})),{wrong:true})
+      +`<span class="lbl">Richtig <span class="en">(right)</span></span>`+q.explain;
     answer(v);
-    $("#built").classList.add(v===q.answer?"ok":"no"); paint();
+    $("#built").classList.add(v===q.answer?"ok":"no"); paint(true);
     $("#chk").disabled=true; $("#undo").disabled=true;
   };
+}
+/* gap questions: a ▾ before, between and after the words; tapping one puts q.insert there */
+function drawGap(){
+  const n=q.cars.length;
+  const paint=pos=>{
+    let h="";
+    for(let i=0;i<=n;i++){
+      if(pos===undefined) h+=`<button type="button" class="gapbtn" data-g="${i}" aria-label="Lücke ${i+1} (gap ${i+1})">▾</button>`;
+      else if(pos===i) h+=carHtml({...q.insert,cls:q.done&&q.lastOk?"good":"bad"});
+      if(i<n) h+=carHtml(q.cars[i]);
+    }
+    $("#gt").innerHTML=h+`<span class="endp">${esc(q.p||"")}</span>`;
+    $("#gt").querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{
+      if(q.done) return; const g=+b.dataset.g, w=q.cars.map(c=>c.t); w.splice(g,0,q.insert.t);
+      const v=w.join(" ")+(q.p||""); q.lastOk=v===q.answer; answer(v); paint(g); });
+  };
+  paint();
 }
 const CHEERS=["Richtig! (correct)","Super! (great)","Sehr gut! (very good)","Genau! (exactly)","Toll! (great)","Prima! (excellent)"];
 const COMBO={3:"3 in Folge! (3 in a row)",5:"5 in Folge! Weiter so! (keep it up)",7:"7 in Folge! Wow!",10:"10 in Folge! Super!",20:"Perfekt! 20 von 20!"};
 function answer(v,btn){
   if(q.done) return; q.done=true;
   const kind=q.kind||TESTS[current].kind;
-  const ok = kind==="choice"||kind==="order" ? v===q.answer : (sameAnswer(v,q.answer)||numEq(v,q.answer));
+  const ok = ["choice","order","gap","tapcar"].includes(kind) ? v===q.answer : (sameAnswer(v,q.answer)||numEq(v,q.answer));
   stats.n++; stats.res.push(ok); let gain=0;
   if(ok){ stats.ok++; stats.combo++; stats.maxCombo=Math.max(stats.maxCombo,stats.combo); gain=10+(stats.combo>=3?5:0); stats.xp+=gain; xp+=gain; lstore.set("xp",xp); }
   else { stats.combo=0; if(q.from&&!stats.miss.includes(q.fromKey)) stats.miss.push(q.fromKey); stats.wrong.push({p:q.prompt,a:q.answer,e:q.explain,given:v}); }
   const b=best[current]||{ok:0,n:0}; b.n++; if(ok) b.ok++; best[current]=b; lstore.set("best",best);
   bumpDay();
   if(btn){ $("#quiz").querySelectorAll(".opt").forEach(o=>{o.disabled=true; if(q.options[+o.dataset.i]===q.answer) o.classList.add("right");}); if(!ok) btn.classList.add("wrong"); }
-  else if(kind!=="order"){ const inp=$("#ans"); if(inp) inp.readOnly=true; }
+  else if(!["order","gap","tapcar"].includes(kind)){ const inp=$("#ans"); if(inp) inp.readOnly=true; }
   const pi=$("#quiz").querySelectorAll(".prog i"); pi[stats.n-1].className=ok?"ok":"no"; $("#togo").innerHTML=togo();
   $("#combo").textContent=stats.combo; $("#quiz .streak").classList.toggle("hot",stats.combo>=3);
   if(ok&&COMBO[stats.combo]) toast(COMBO[stats.combo]);
@@ -228,7 +274,7 @@ function closeFb(){ const s=$("#fbSheet"); if(s){ s.hidden=true; s.innerHTML="";
 function fitAboveSheet(){
   const sh=$("#fbSheet"), z=$("#quiz"); if(!sh||!z) return;
   const hgt=sh.offsetHeight; z.style.paddingBottom=(hgt+16)+"px";
-  const target=z.querySelector(".opts")||z.querySelector(".answerrow")||z.querySelector(".pool"); if(!target) return;
+  const target=z.querySelector(".opts")||z.querySelector(".answerrow")||z.querySelector(".pool")||z.querySelector(".gaptrain")||z.querySelector(".tapcars"); if(!target) return;
   const over=target.getBoundingClientRect().bottom-(innerHeight-hgt-12);
   if(over>0) window.scrollBy({top:over,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
 }
@@ -289,6 +335,6 @@ document.addEventListener("click",e=>{
   if(TESTS[k]&&k===decodeURIComponent(location.hash.slice(1))){ e.preventDefault(); start(k); }
 });
 document.body.insertAdjacentHTML("beforeend",'<div class="fbsheet" id="fbSheet" hidden></div><div class="toast" id="toast" role="status" hidden></div><canvas id="confetti" aria-hidden="true"></canvas>');
-applyEn();
+applyEn(); applyHint();
 renderHome();
 fromHash();

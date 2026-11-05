@@ -970,3 +970,69 @@ details.fold ul{margin-top:2px}
 /* plural-only words (die Schuhe, die Leute): purple like every plural */
 .fc.p.flip,.lcard.p.flip{background:var(--pl-bg);border-color:var(--pl)}.fc.p .art,.lcard.p .art,.kfb .p{color:var(--pl)}
 .obj.p{border-color:var(--pl);background:var(--pl-bg)}.obj.p i{color:var(--pl)}
+
+/* Sentence tests as pictures: numbered places, red verb, gaps to tap, cars to tap.
+   Verb = --die (red, as in the lesson trains), connector (und, aber, denn) = dashed. 🎨 (body.nohint) removes the colour hints. */
+.train .car small.pos{display:block;font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.04em;line-height:1.2}
+.train .car.v small.pos{color:var(--die)}
+.car.bad,.tapcars .car.bad{outline:2.5px solid var(--bad);outline-offset:1px;position:relative}
+.car.bad::after{content:"✗";position:absolute;top:-9px;right:-7px;font-size:11px;font-weight:800;background:var(--bad);color:var(--card);border-radius:50%;width:16px;height:16px;display:grid;place-items:center}
+.car.good,.tapcars .car.good{outline:2.5px solid var(--ok);outline-offset:1px}
+.car.gap{border:2px dashed var(--die);background:var(--die-bg);color:var(--die);font-weight:800;min-width:44px;animation:gappulse 1.6s ease-in-out infinite}
+@keyframes gappulse{50%{opacity:.55}}
+@media (prefers-reduced-motion: reduce){.car.gap{animation:none}}
+.q .train .car{font-size:19px;padding:4px 10px}
+.q .gapline .car{font-size:clamp(19px,5vw,24px)}
+.train .endp{font-size:22px;font-weight:800;align-self:flex-end;margin-left:-2px}
+.opt .train{gap:3px}
+.opt .train .car{font-size:16px;padding:2px 7px;font-weight:600}
+.opt .train .car.v{font-weight:800}
+.fbsheet .lbl{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--muted);margin:6px 0 2px}
+.fbsheet .train{margin:2px 0 6px}
+
+/* order: one place per word */
+.slots{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;width:100%;min-height:80px;padding:10px;border:2px dashed var(--line);border-radius:12px}
+.slots.ok{border-style:solid;border-color:var(--ok);background:var(--das-bg)}
+.slots.no{border-style:solid;border-color:var(--bad);background:var(--die-bg)}
+.slot{display:flex;flex-direction:column;align-items:center;gap:3px}
+.slot .pos{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap}
+.slot .vt{color:var(--die);font-weight:800}
+.slot .hole{display:block;width:54px;height:44px;border:1.5px dashed var(--line);border-radius:10px;background:var(--soft)}
+.slot.v .hole{border-color:var(--die);background:var(--die-bg)}
+.slot.z .hole{border-style:dotted}
+.slot.lock .chipbtn{opacity:1;border-style:solid;background:var(--soft)}
+.slot.good .chipbtn{outline:2.5px solid var(--ok);outline-offset:1px}
+.slot.bad .chipbtn{outline:2.5px solid var(--bad);outline-offset:1px}
+.chipbtn em{display:block;font-style:normal;font-size:11.5px;font-weight:400;color:var(--muted);line-height:1.2}
+.chipbtn.v{background:var(--die-bg);border-color:var(--die);color:var(--die)}
+.chipbtn.v em{color:var(--die)}
+.chipbtn.z{border-style:dashed}
+body.nohint .chipbtn.v{background:var(--paper);border-color:var(--line);color:var(--ink)}
+body.nohint .chipbtn.v em{color:var(--muted)}
+body.nohint .chipbtn.z{border-style:solid}
+body.nohint .slot .vt{display:none}
+body.nohint .slot.v .hole{border-color:var(--line);background:var(--soft)}
+.hinttog[aria-pressed="false"]{opacity:.65;text-decoration:line-through}
+
+/* gap: tap ▾ where the word goes */
+.gapword{display:flex}
+.gapword .car{font-size:24px;padding:4px 14px}
+.gaptrain{display:flex;flex-wrap:wrap;align-items:center;gap:4px;width:100%}
+.gaptrain .car{font-size:19px;padding:4px 10px}
+.gapbtn{min-width:34px;min-height:44px;padding:0 6px;border:1.5px dashed var(--die);background:var(--die-bg);color:var(--die);border-radius:8px;font-weight:800;font-size:16px;cursor:pointer}
+.gapbtn:hover{background:var(--die);color:var(--card)}
+body.nohint .gapbtn{border-color:var(--line);background:var(--soft);color:var(--muted)}
+
+/* tapcar: tap the word in the wrong place */
+.tapcars{display:flex;flex-wrap:wrap;align-items:flex-end;gap:6px;width:100%}
+.tapcars .car{font:inherit;font-size:19px;font-weight:600;color:var(--ink);min-height:48px;cursor:pointer}
+.tapcars .car:hover:not(:disabled){border-color:var(--ink)}
+.tapcars .car:disabled{cursor:default}
+
+/* English inside pictures follows the EN button */
+body.hide-en .pool .en,body.hide-en .slots .en,body.hide-en .gaptrain .en,body.hide-en .tapcars .en{display:none}
+.cars.wrong{display:flex;flex-wrap:wrap;gap:4px;align-items:stretch;margin:2px 0 6px}
+.cars.wrong .car{opacity:.9}
+/* options that are sentence pictures get the full width */
+.opts:has(.train){grid-template-columns:1fr}
+.opt .train{padding-left:4px}

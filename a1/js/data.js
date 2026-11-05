@@ -265,37 +265,38 @@ function verbEn(per,en,plural){
 }
 /* English ordinal: 1 → 1st, 22 → 22nd */
 const ordEn=n=>n+(n%100>=11&&n%100<=13?"th":["th","st","nd","rd"][n%10]||"th");
+/* [right, wrong, wrong, English, rule, verb words (red cars, | separated, also the verb forms in the wrong options)] */
 const ORDER=[
- ["Wo wohnen Sie?","Wo Sie wohnen?","Wohnen wo Sie?","Where do you live?","W-question: W-word 1st, verb 2nd."],
- ["Woher kommst du?","Woher du kommst?","Du woher kommst?","Where do you come from?","W-question: W-word 1st, verb 2nd."],
- ["Wie alt sind Sie?","Wie alt Sie sind?","Sind wie alt Sie?","How old are you?","'Wie alt' counts as one position; the verb comes next."],
- ["Was sind Sie von Beruf?","Was Sie sind von Beruf?","Was von Beruf Sie sind?","What is your job?","W-question: W-word 1st, verb 2nd."],
- ["Ich wohne in Hamburg.","Ich in Hamburg wohne.","In Hamburg ich wohne.","I live in Hamburg.","Statement: the verb is always in position 2."],
- ["Heute lerne ich Deutsch.","Heute ich lerne Deutsch.","Ich heute lerne Deutsch.","Today I learn German.","If you start with 'heute', the verb still comes 2nd and the person moves after it."],
- ["Am Wochenende fahre ich Fahrrad.","Am Wochenende ich fahre Fahrrad.","Ich am Wochenende fahre Fahrrad.","At the weekend I ride my bike.","Time first → verb 2nd → then 'ich'."],
- ["Sprechen Sie Englisch?","Englisch Sie sprechen?","Sprechen Englisch Sie?","Do you speak English?","Yes/no question: the verb comes 1st."],
- ["Arbeiten Sie in Hamburg?","Sie in Hamburg arbeiten?","Arbeiten in Hamburg Sie?","Do you work in Hamburg?","Yes/no question: the verb comes 1st."],
- ["Ich arbeite als Ingenieurin bei Siemens.","Ich als Ingenieurin arbeite bei Siemens.","Als Ingenieurin ich arbeite bei Siemens.","I work as an engineer at Siemens.","Statement: the verb (arbeite) in position 2."],
- ["Kannst du bitte das Fenster öffnen?","Kannst du bitte öffnen das Fenster?","Kannst öffnen du bitte das Fenster?","Can you please open the window?","kannst early, the infinitive (öffnen) at the end."],
- ["Ich möchte einen Kaffee trinken.","Ich möchte trinken einen Kaffee.","Ich trinken möchte einen Kaffee.","I would like to drink a coffee.","möchte in position 2, the infinitive (trinken) at the end."],
- ["Meine Hobbys sind Lesen und Kochen.","Meine Hobbys Lesen und Kochen sind.","Sind meine Hobbys Lesen und Kochen.","My hobbies are reading and cooking.","Statement: the verb (sind) in position 2."],
- ["Wie komme ich zum Bahnhof?","Wie ich komme zum Bahnhof?","Wie komme zum Bahnhof ich?","How do I get to the station?","W-question: W-word 1st, verb 2nd."],
- ["Gehen Sie geradeaus.","Geradeaus Sie gehen.","Sie geradeaus gehen.","Go straight ahead.","Request with Sie: verb 1st, then Sie."],
- ["Morgen arbeite ich im Homeoffice.","Morgen ich arbeite im Homeoffice.","Ich morgen arbeite im Homeoffice.","Tomorrow I work from home.","Time first → verb 2nd → ich."],
- ["Um 8 Uhr frühstücke ich.","Um 8 Uhr ich frühstücke.","Ich um 8 Uhr frühstücke.","At 8 (acht, akht) o'clock I have breakfast.","Time first → verb 2nd → ich."],
- ["Hast du heute Zeit?","Heute du hast Zeit?","Hast heute du Zeit?","Do you have time today?","Yes/no question: verb 1st, then the person."],
- ["Ich habe kein Auto.","Ich habe nicht Auto.","Ich kein Auto habe.","I don't have a car.","kein + noun; verb in position 2."],
- ["Das Museum ist nicht weit.","Das Museum nicht ist weit.","Das Museum ist weit nicht.","The museum is not far.","nicht comes before the adjective."],
- ["Wann beginnt der Kurs?","Wann der Kurs beginnt?","Wann beginnt Kurs der?","When does the course start?","W-word 1st, verb 2nd, then the subject."],
- ["Ich stehe um 7 Uhr auf.","Ich aufstehe um 7 Uhr.","Ich stehe auf um 7 Uhr.","I get up at 7 (sieben, ZEE-ben) o'clock.","Separable verb: stehe in position 2, auf goes to the end."],
- ["Ich kann heute nicht kommen.","Ich kann nicht kommen heute.","Ich kommen kann heute nicht.","I can't come today.","Modal verb 2nd, infinitive at the end, nicht just before it."],
- ["Ich muss morgen früh aufstehen.","Ich muss morgen früh stehe auf.","Ich muss aufstehen morgen früh.","I have to get up early tomorrow.","With a modal, the separable verb stays in one piece at the end."],
- ["Wann fängt der Kurs an?","Wann anfängt der Kurs?","Wann fängt an der Kurs?","When does the course start?","Separable verb in a question: the prefix still goes to the end."],
- ["Zuerst frühstücke ich, dann gehe ich zur Arbeit.","Zuerst ich frühstücke, dann ich gehe zur Arbeit.","Zuerst frühstücke ich, dann ich gehe zur Arbeit.","First I have breakfast, then I go to work.","zuerst and dann take place 1, so the verb comes next."],
- ["Ich lerne Deutsch, denn ich arbeite in Deutschland.","Ich lerne Deutsch, denn arbeite ich in Deutschland.","Ich lerne Deutsch, denn ich in Deutschland arbeite.","I learn German because I work in Germany.","denn is position 0: normal word order after it."],
- ["Ich komme aus Brasilien, aber ich wohne in Berlin.","Ich komme aus Brasilien, aber wohne ich in Berlin.","Ich komme aus Brasilien, aber ich in Berlin wohne.","I come from Brazil, but I live in Berlin.","aber is position 0: normal word order after it."],
- ["Ich fahre morgen mit dem Bus zur Arbeit.","Ich fahre zur Arbeit mit dem Bus morgen.","Morgen ich fahre mit dem Bus zur Arbeit.","Tomorrow I'm taking the bus to work.","Verb 2nd; in the middle: when → how → where."],
- ["Ich möchte bitte zwei Brötchen.","Ich bitte möchte zwei Brötchen.","Möchte ich bitte zwei Brötchen.","I would like two (zwei, tsvy) bread rolls, please.","Statement: verb (möchte) in position 2."]
+ ["Wo wohnen Sie?","Wo Sie wohnen?","Wohnen wo Sie?","Where do you live?","W-question: W-word 1st, verb 2nd.","wohnen"],
+ ["Woher kommst du?","Woher du kommst?","Du woher kommst?","Where do you come from?","W-question: W-word 1st, verb 2nd.","kommst"],
+ ["Wie alt sind Sie?","Wie alt Sie sind?","Sind wie alt Sie?","How old are you?","'Wie alt' counts as one position; the verb comes next.","sind"],
+ ["Was sind Sie von Beruf?","Was Sie sind von Beruf?","Was von Beruf Sie sind?","What is your job?","W-question: W-word 1st, verb 2nd.","sind"],
+ ["Ich wohne in Hamburg.","Ich in Hamburg wohne.","In Hamburg ich wohne.","I live in Hamburg.","Statement: the verb is always in position 2.","wohne"],
+ ["Heute lerne ich Deutsch.","Heute ich lerne Deutsch.","Ich heute lerne Deutsch.","Today I learn German.","If you start with 'heute', the verb still comes 2nd and the person moves after it.","lerne"],
+ ["Am Wochenende fahre ich Fahrrad.","Am Wochenende ich fahre Fahrrad.","Ich am Wochenende fahre Fahrrad.","At the weekend I ride my bike.","Time first → verb 2nd → then 'ich'.","fahre"],
+ ["Sprechen Sie Englisch?","Englisch Sie sprechen?","Sprechen Englisch Sie?","Do you speak English?","Yes/no question: the verb comes 1st.","Sprechen"],
+ ["Arbeiten Sie in Hamburg?","Sie in Hamburg arbeiten?","Arbeiten in Hamburg Sie?","Do you work in Hamburg?","Yes/no question: the verb comes 1st.","Arbeiten"],
+ ["Ich arbeite als Ingenieurin bei Siemens.","Ich als Ingenieurin arbeite bei Siemens.","Als Ingenieurin ich arbeite bei Siemens.","I work as an engineer at Siemens.","Statement: the verb (arbeite) in position 2.","arbeite"],
+ ["Kannst du bitte das Fenster öffnen?","Kannst du bitte öffnen das Fenster?","Kannst öffnen du bitte das Fenster?","Can you please open the window?","kannst early, the infinitive (öffnen) at the end.","Kannst|öffnen"],
+ ["Ich möchte einen Kaffee trinken.","Ich möchte trinken einen Kaffee.","Ich trinken möchte einen Kaffee.","I would like to drink a coffee.","möchte in position 2, the infinitive (trinken) at the end.","möchte|trinken"],
+ ["Meine Hobbys sind Lesen und Kochen.","Meine Hobbys Lesen und Kochen sind.","Sind meine Hobbys Lesen und Kochen.","My hobbies are reading and cooking.","Statement: the verb (sind) in position 2.","sind"],
+ ["Wie komme ich zum Bahnhof?","Wie ich komme zum Bahnhof?","Wie komme zum Bahnhof ich?","How do I get to the station?","W-question: W-word 1st, verb 2nd.","komme"],
+ ["Gehen Sie geradeaus.","Geradeaus Sie gehen.","Sie geradeaus gehen.","Go straight ahead.","Request with Sie: verb 1st, then Sie.","Gehen"],
+ ["Morgen arbeite ich im Homeoffice.","Morgen ich arbeite im Homeoffice.","Ich morgen arbeite im Homeoffice.","Tomorrow I work from home.","Time first → verb 2nd → ich.","arbeite"],
+ ["Um 8 Uhr frühstücke ich.","Um 8 Uhr ich frühstücke.","Ich um 8 Uhr frühstücke.","At 8 (acht, akht) o'clock I have breakfast.","Time first → verb 2nd → ich.","frühstücke"],
+ ["Hast du heute Zeit?","Heute du hast Zeit?","Hast heute du Zeit?","Do you have time today?","Yes/no question: verb 1st, then the person.","Hast"],
+ ["Ich habe kein Auto.","Ich habe nicht Auto.","Ich kein Auto habe.","I don't have a car.","kein + noun; verb in position 2.","habe"],
+ ["Das Museum ist nicht weit.","Das Museum nicht ist weit.","Das Museum ist weit nicht.","The museum is not far.","nicht comes before the adjective.","ist"],
+ ["Wann beginnt der Kurs?","Wann der Kurs beginnt?","Wann beginnt Kurs der?","When does the course start?","W-word 1st, verb 2nd, then the subject.","beginnt"],
+ ["Ich stehe um 7 Uhr auf.","Ich aufstehe um 7 Uhr.","Ich stehe auf um 7 Uhr.","I get up at 7 (sieben, ZEE-ben) o'clock.","Separable verb: stehe in position 2, auf goes to the end.","stehe|auf|aufstehe"],
+ ["Ich kann heute nicht kommen.","Ich kann nicht kommen heute.","Ich kommen kann heute nicht.","I can't come today.","Modal verb 2nd, infinitive at the end, nicht just before it.","kann|kommen"],
+ ["Ich muss morgen früh aufstehen.","Ich muss morgen früh stehe auf.","Ich muss aufstehen morgen früh.","I have to get up early tomorrow.","With a modal, the separable verb stays in one piece at the end.","muss|aufstehen|stehe|auf"],
+ ["Wann fängt der Kurs an?","Wann anfängt der Kurs?","Wann fängt an der Kurs?","When does the course start?","Separable verb in a question: the prefix still goes to the end.","fängt|an|anfängt"],
+ ["Zuerst frühstücke ich, dann gehe ich zur Arbeit.","Zuerst ich frühstücke, dann ich gehe zur Arbeit.","Zuerst frühstücke ich, dann ich gehe zur Arbeit.","First I have breakfast, then I go to work.","zuerst and dann take place 1, so the verb comes next.","frühstücke|gehe"],
+ ["Ich lerne Deutsch, denn ich arbeite in Deutschland.","Ich lerne Deutsch, denn arbeite ich in Deutschland.","Ich lerne Deutsch, denn ich in Deutschland arbeite.","I learn German because I work in Germany.","denn is position 0: normal word order after it.","lerne|arbeite"],
+ ["Ich komme aus Brasilien, aber ich wohne in Berlin.","Ich komme aus Brasilien, aber wohne ich in Berlin.","Ich komme aus Brasilien, aber ich in Berlin wohne.","I come from Brazil, but I live in Berlin.","aber is position 0: normal word order after it.","komme|wohne"],
+ ["Ich fahre morgen mit dem Bus zur Arbeit.","Ich fahre zur Arbeit mit dem Bus morgen.","Morgen ich fahre mit dem Bus zur Arbeit.","Tomorrow I'm taking the bus to work.","Verb 2nd; in the middle: when → how → where.","fahre"],
+ ["Ich möchte bitte zwei Brötchen.","Ich bitte möchte zwei Brötchen.","Möchte ich bitte zwei Brötchen.","I would like two (zwei, tsvy) bread rolls, please.","Statement: verb (möchte) in position 2.","möchte"]
 ];
 const FORM=[
  ["Familienname / Nachname","surname / last name"],["Vorname","first name"],["Geburtsdatum","date of birth"],["Geburtsort","place of birth"],
@@ -452,6 +453,21 @@ const ARRANGE=[
  ["Ich|*arbeite|heute|nicht",".","I'm not working today.","I|work|today|not","The whole sentence is negative → nicht at the end."],
  ["Wir|*gehen|heute|nicht|ins Kino",".","We're not going to the cinema today.","we|go|today|not|into-the cinema","nicht stands before the place / direction (ins Kino)."],
  ["Wie viel|*kostet|das Brot","?","How much does the bread cost?","how much|costs|the bread","'Wie viel' counts as one place; the verb comes next."],
+ ["Morgen|*arbeite|ich|im Homeoffice",".","Tomorrow I'm working from home.","tomorrow|work|I|in-the home office","Time first → verb 2nd → ich."],
+ ["Um 8 Uhr|*frühstücke|ich",".","At 8 (acht, akht) o'clock I have breakfast.","at 8 (acht, akht) o'clock|breakfast|I","Time first → verb 2nd → ich."],
+ ["Am Sonntag|*besuche|ich|meine Eltern",".","On Sunday I visit my parents.","on-the Sunday|visit|I|my parents","Time first → verb 2nd → ich."],
+ ["Heute Abend|*gehen|wir|ins Kino",".","Tonight we're going to the cinema.","today evening|go|we|into-the cinema","Time first → verb 2nd → wir."],
+ ["Jetzt|*habe|ich|keine Zeit",".","I don't have time now.","now|have|I|no time","Time first → verb 2nd → ich. kein + noun → keine Zeit."],
+ ["Im Sommer|*fahren|wir|nach Italien",".","In summer we're going to Italy.","in-the summer|drive|we|to Italy","Time first → verb 2nd → wir."],
+ ["Woher|*kommst|du","?","Where do you come from?","where-from|come|you","W-question: W-word 1st, verb 2nd."],
+ ["Wie|*heißen|Sie","?","What is your name?","how|are-called|you (formal)","W-question: W-word 1st, verb 2nd."],
+ ["*Hast|du|heute|Zeit","?","Do you have time today?","have|you|today|time","Yes/no question: verb 1st."],
+ ["*Wohnen|Sie|in München","?","Do you live in Munich?","live|you (formal)|in Munich","Yes/no question: verb 1st."],
+ ["*Gehen|Sie|bitte|geradeaus",".","Please go straight ahead.","go|you (formal)|please|straight ahead","Request (Aufforderung) with Sie: verb 1st, then Sie."],
+ ["Wir|*müssen|am Montag|*arbeiten",".","We have to work on Monday.","we|must|on-the Monday|work","Bracket: müssen in place 2, the infinitive (arbeiten) at the end."],
+ ["Er|*ruft|seine Mutter|*an",".","He calls his mother.","he|calls|his mother|(on)","anrufen is separable: ruft … an."],
+ ["Wann|*fängt|der Film|*an","?","When does the film start?","when|catches|the film|on","Separable verb in a W-question: the prefix still goes to the end."],
+ ["Ich|*kaufe|heute|nicht|*ein",".","I'm not going shopping today.","I|buy|today|not|(in)","einkaufen: kaufe … ein. nicht comes just before the prefix."],
  ["Ich|*lerne|Deutsch,|^weil|ich|in München|*wohne",".","I learn German because I live in Munich. (A2 preview)","I|learn|German|because|I|in Munich|live","Ausblick A2: weil pulls the verb to the END (wohne)."]
 ].map(([t,p,en,ww,r])=>{const raw=t.split("|");return{raw,toks:raw.map(x=>x.replace(/^[*^]/,"")),p,en,ww:ww.split("|"),r};});
 
@@ -484,6 +500,37 @@ const GAPS=[
  ["Ich lerne Deutsch, weil ___.","I learn German because I live in Munich. (A2 preview)","I learn German, because I in Munich live.",["ich in München wohne","ich wohne in München","wohne ich in München"],"Ausblick A2: <b>weil</b> pulls the verb to the end.",0]
 ];
 function trainOf(x){return `<div class="train">${x.raw.map((r,i)=>`<span class="car${r[0]==="*"?" v":r[0]==="^"?" z":""}">${esc(x.toks[i])}${i===x.raw.length-1?x.p:""}<em>${esc(x.ww[i])}</em></span>`).join("")}</div>`;}
+
+/* ---------- sentence pictures (tests "Satzbau", "Ordnen", "Verbplatz", "Fehler", "Satzart", "Umstellen") ----------
+   posLabels: the grammar position of every token, counted per clause.
+   ^ connector = "0" (or "·" when no new clause follows), * verb after position 2 at the end of its clause = "E" (Ende, end). */
+function posLabels(raw){
+  const out=[]; let n=0;
+  raw.forEach((r,i)=>{
+    if(r[0]==="^"){ const rest=raw.slice(i+1); const clause=rest.some(x=>x[0]==="*"); out.push(clause?"0":"·"); if(clause) n=0; return; }
+    n++; const endOfClause=i===raw.length-1||/,$/.test(raw[i])||raw[i+1][0]==="^";
+    out.push(r[0]==="*"&&n>2&&endOfClause?"E":String(n));
+    if(/,$/.test(r)) n=0;
+  });
+  return out;
+}
+/* one picture "car" per token: {t, v (verb), z (connector), ww (word by word), lab (position)} */
+const carsOf=x=>{const lab=posLabels(x.raw);return x.raw.map((r,i)=>({t:x.toks[i]+(i===x.raw.length-1?x.p:""),v:r[0]==="*",z:r[0]==="^",ww:x.ww[i],lab:lab[i]}));};
+/* sentence type from the picture: verb 1st or 2nd, full stop or question mark */
+const SATZART={
+ aussage:["Aussage","statement","The verb is in position 2 and the sentence ends with a full stop."],
+ wfrage:["W-Frage","W-question","A W-word (wer, wo, wann …) in position 1, the verb in position 2, and a question mark."],
+ janein:["Ja/Nein-Frage","yes/no question","The verb is in position 1. The answer is ja or nein."],
+ bitte:["Aufforderung","request","The verb is in position 1 with Sie, and the sentence ends with a full stop (Gehen Sie …)."]};
+const satzartOf=(verbFirst,p)=>p==="?"?(verbFirst?"janein":"wfrage"):(verbFirst?"bitte":"aussage");
+/* the same sentence started from the other end: time first ↔ person first (test "Umstellen") */
+const TIMEFIRST=/^(Heute|Morgen|Jetzt|Am |Um |Im )/;
+const lc1=s=>s[0].toLowerCase()+s.slice(1), uc1=s=>s[0].toUpperCase()+s.slice(1);
+function swapStart(x){
+  const raw=[...x.raw], ww=[...x.ww];
+  [raw[0],raw[2]]=[uc1(raw[2]),lc1(raw[0])]; [ww[0],ww[2]]=[ww[2],ww[0]];
+  return{raw,toks:raw.map(r=>r.replace(/^[*^]/,"")),p:x.p,en:x.en,ww,r:x.r};
+}
 
 /* ============ vocabulary, calendar, topics, grammar extras and exam texts ============ */
 

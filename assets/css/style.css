@@ -139,7 +139,20 @@ input[type=text],input[type=number]{font:inherit;font-size:20px;padding:10px 12p
 .rule ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 .car.neg{background:var(--pl-bg);border-color:var(--pl);color:var(--pl);font-weight:800}
 .g4.two{grid-template-columns:1fr 1fr}
-.jump{display:flex;flex-wrap:wrap;gap:6px;padding-top:8px}
+.jump{display:flex;gap:6px;padding:8px 0 4px;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:5;background:var(--paper)}
+.jump::-webkit-scrollbar{display:none}
+.jump a{white-space:nowrap;flex:none;color:var(--ink);text-decoration:none}
+.jump a span{display:none}
+.toolbar{padding-top:6px}
+.dia[id]{scroll-margin-top:64px}
+.pr{border-top:1.5px dashed var(--line);margin-top:2px}
+.pr > summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;font-family:var(--display);font-weight:800;font-size:16px;color:var(--ink)}
+.pr > summary::-webkit-details-marker{display:none}
+.pr > summary::after{content:"▾";font-size:18px;color:var(--muted)}
+.pr[open] > summary::after{content:"▴"}
+.pr .rule{margin:2px 0 8px}
+.pr .practice{padding-top:2px}
+@media (min-width:700px){.jump a span{display:inline}.jump{flex-wrap:wrap;overflow:visible}}
 .jump a{border:1.5px solid var(--ink);background:var(--card);border-radius:999px;padding:6px 12px;font-weight:700;font-size:15px}
 .jump a:hover{background:var(--ink);color:var(--paper)}
 .rules{padding-top:20px;display:flex;flex-direction:column;gap:8px}

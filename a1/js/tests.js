@@ -79,12 +79,14 @@ const TESTS={
    explain:`<b>${x[0]}</b><br>${x[4]}`}}},
  vorstellen:{tag:"Prüfung · Sprechen 1",title:"Sich vorstellen",en:"introduce yourself: keyword, question, answer",kind:"choice",
   gen(){const x=pick(INTRO);const others=shuffle(INTRO.filter(y=>y!==x)).slice(0,3);const mode=rnd(0,1);
-   if(mode===0) return{prompt:`<span class="en">Prüfungskarte <span class="pron">(exam card)</span>: which question asks about…</span><span class="big">${x[0]}?</span>`,
-     options:shuffle([x[1],...others.map(y=>y[1])]),answer:x[1],say:null,
-     explain:`<b>${x[0]}</b> → <b>${x[1]}</b> <span class="en">(${x[3]})</span><br>Answer: <i>${x[2]}</i>`};
-   return{prompt:`<span class="en">The examiner asks:</span><span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">${x[3]} · How do you start your answer?</span>`,
-     options:shuffle([x[2],...others.map(y=>y[2])]),answer:x[2],
-     explain:`<b>${x[1]}</b> → <b>${x[2]}</b>`}}},
+   const where={card:"📇 Auf der Prüfungskarte <span class=\"en\">(one of the 7 keywords on the exam card, Sprechen Teil 1)</span>",
+     ask:"🗣 Die Prüferin fragt das nach deiner Vorstellung <span class=\"en\">(the examiner asks this after you have introduced yourself)</span>",
+     more:"💬 Nicht auf der Karte, aber eine typische Frage <span class=\"en\">(not on the card, but a common question in Sprechen Teil 2 and in everyday talk)</span>"}[x.w];
+   const ex=`<b>Frage</b> <span class="en">(question)</span>: ${esc(x.q)} <span class="en">· ${esc(x.qe)}</span><br><b>Antwort</b> <span class="en">(answer)</span>: ${esc(x.a)} <span class="en">· ${esc(x.ae)}</span><br>${where}`;
+   if(mode===0) return{prompt:`<span class="dq">${x.w==="card"?"Prüfungskarte":"Stichwort"}: Welche Frage passt? <span class="en">(${x.w==="card"?"exam card":"keyword"}: which question asks about this?)</span></span><span class="big">${esc(x.k)}?</span><span class="en">${esc(x.ke)}</span>`,
+     options:shuffle([x.q,...others.map(y=>y.q)]),answer:x.q,explain:`<b>${esc(x.k)}</b> <span class="en">(${esc(x.ke)})</span> → ${ex}`,sayAfter:x.q};
+   return{prompt:`<span class="dq">${x.w==="more"?"Jemand fragt":"Die Prüferin fragt"}: <span class="en">(${x.w==="more"?"someone asks":"the examiner asks"})</span></span><span class="big" style="font-size:clamp(24px,6vw,36px)">${esc(x.q)}</span><span class="dq">Wie beginnt deine Antwort? <span class="en">(${esc(x.qe)} · how do you start your answer?)</span></span>`,
+     options:shuffle([x.a,...others.map(y=>y.a)]),answer:x.a,explain:ex,sayAfter:x.q}}},
  telefon:{tag:"Lesen · Prüfung",title:"Telefon, PLZ, Hausnummer",en:"read exam-style numbers and type them in digits",kind:"input",
   gen(){const m=rnd(0,2);const zwo=Math.random()<.4;let digits,label,words,ex;
    const dw=d=>d==="2"&&zwo?"zwo":U[+d][0];

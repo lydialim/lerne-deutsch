@@ -169,27 +169,32 @@ const WQ=[
  ["Zwei Euro fünfzig.","Wie viel","kostet der Kaffee","Two euros fifty. (tsvy OY-ro FUENF-tsikh)","How much is the coffee?"],
  ["Er heißt Tom.","Wie","heißt dein Bruder","He is called Tom.","What is your brother called?"]
 ];
+/* Sprechen Teil 1, sich vorstellen. Every row: keyword, question, answer start, English of the question,
+   English of the keyword, English of the answer (word by word, then the meaning), where it comes up:
+   "card" = one of the 7 keywords on the exam card, "ask" = the examiner asks it after your introduction,
+   "more" = not on the card, but a common question in Sprechen Teil 2 and in everyday talk. */
 const INTRO=[
- ["Name","Wie heißen Sie?","Ich heiße …","What is your name?"],
- ["Alter","Wie alt sind Sie?","Ich bin … Jahre alt.","How old are you?"],
- ["Land","Woher kommen Sie?","Ich komme aus …","Where are you from?"],
- ["Wohnort","Wo wohnen Sie?","Ich wohne in …","Where do you live?"],
- ["Sprachen","Welche Sprachen sprechen Sie?","Ich spreche …","Which languages do you speak?"],
- ["Beruf","Was sind Sie von Beruf?","Ich bin … von Beruf.","What is your job?"],
- ["Hobby","Was sind Ihre Hobbys?","Meine Hobbys sind …","What are your hobbies?"],
-["Telefonnummer","Wie ist Ihre Telefonnummer?","Meine Telefonnummer ist …","What is your phone number?"],
- ["Geburtstag","Wann haben Sie Geburtstag?","Ich habe am … Geburtstag.","When is your birthday?"],
- ["Familie","Haben Sie Familie?","Ja, ich bin verheiratet und habe …","Do you have a family?"],
- ["Adresse","Wie ist Ihre Adresse?","Meine Adresse ist … Straße …","What is your address?"],
- ["Lieblingsessen","Was essen Sie gern?","Ich esse gern …","What do you like to eat?"],
- ["Wochenende","Was machen Sie am Wochenende?","Am Wochenende …","What do you do at the weekend?"],
- ["Geschwister","Haben Sie Geschwister?","Ja, ich habe einen Bruder. / Nein, ich habe keine Geschwister.","Do you have brothers or sisters?"],
- ["Deutsch lernen","Warum lernen Sie Deutsch?","Ich lerne Deutsch, denn …","Why are you learning German?"],
- ["Urlaub","Wohin fahren Sie gern in Urlaub?","Ich fahre gern nach …","Where do you like to go on holiday?"],
- ["Wohnung","Wie wohnen Sie?","Ich wohne in einer Wohnung mit … Zimmern.","What is your home like?"],
- ["E-Mail","Haben Sie eine E-Mail-Adresse?","Ja, meine E-Mail-Adresse ist …","Do you have an e-mail address?"],
- ["Sport","Machen Sie Sport?","Ja, ich spiele … / Ich fahre gern Fahrrad.","Do you do sport?"],
- ["Arbeitszeit","Wann arbeiten Sie?","Ich arbeite von … bis …","When do you work?"]
+ {k:"Name",q:"Wie heißen Sie?",a:"Ich heiße …",qe:"What is your name? (lit. How are you called?)",ke:"name",ae:"I am called … (= My name is …)",w:"card"},
+ {k:"Alter",q:"Wie alt sind Sie?",a:"Ich bin … Jahre alt.",qe:"How old are you?",ke:"age",ae:"I am … years old. (e.g. dreißig, DRY-sikh = 30)",w:"card"},
+ {k:"Land",q:"Woher kommen Sie?",a:"Ich komme aus …",qe:"Where are you from? (lit. Where-from come you?)",ke:"country",ae:"I come from … (aus + country: aus Malaysia)",w:"card"},
+ {k:"Wohnort",q:"Wo wohnen Sie?",a:"Ich wohne in …",qe:"Where do you live?",ke:"place where you live",ae:"I live in … (in + town: in München)",w:"card"},
+ {k:"Sprachen",q:"Welche Sprachen sprechen Sie?",a:"Ich spreche …",qe:"Which languages do you speak? (lit. Which languages speak you?)",ke:"languages",ae:"I speak … (e.g. Englisch und ein bisschen Deutsch = English and a little German)",w:"card"},
+ {k:"Beruf",q:"Was sind Sie von Beruf?",a:"Ich bin … von Beruf.",qe:"What is your job? (lit. What are you by profession?)",ke:"job",ae:"I am … by profession. (no article: Ich bin Ingenieurin.)",w:"card"},
+ {k:"Hobby",q:"Was sind Ihre Hobbys?",a:"Meine Hobbys sind …",qe:"What are your hobbies?",ke:"hobby",ae:"My hobbies are … (e.g. Lesen und Kochen = reading and cooking)",w:"card"},
+ {k:"Buchstabieren",q:"Können Sie das bitte buchstabieren?",a:"Ja: M – A – R – I – A.",qe:"Can you spell that, please? (lit. Can you that please spell?)",ke:"spelling",ae:"Yes: M – A – R – I – A. (Emm – Ah – Err – Ih – Ah)",w:"ask"},
+ {k:"Telefonnummer",q:"Wie ist Ihre Telefonnummer?",a:"Meine Telefonnummer ist …",qe:"What is your phone number? (lit. How is your phone number?)",ke:"phone number",ae:"My phone number is … (digit by digit: null, eins, sieben = nool, aynss, ZEE-ben)",w:"ask"},
+ {k:"Geburtstag",q:"Wann haben Sie Geburtstag?",a:"Ich habe am … Geburtstag.",qe:"When is your birthday? (lit. When have you birthday?)",ke:"birthday",ae:"I have on-the … birthday. (= My birthday is on the …, e.g. am dritten Mai, DRIT-en = on 3 May)",w:"more"},
+ {k:"Familie",q:"Haben Sie Familie?",a:"Ja, ich bin verheiratet und habe … Kinder. / Nein, ich bin ledig.",qe:"Do you have a family? (lit. Have you family?)",ke:"family",ae:"Yes, I am married and have … children. / No, I am single. (e.g. zwei Kinder, tsvy = two children)",w:"more"},
+ {k:"Adresse",q:"Wie ist Ihre Adresse?",a:"Meine Adresse ist … Straße …",qe:"What is your address? (lit. How is your address?)",ke:"address",ae:"My address is … Street … (street first, then the number: Goethestraße 12, zwölf = tsvoelf)",w:"more"},
+ {k:"Lieblingsessen",q:"Was essen Sie gern?",a:"Ich esse gern …",qe:"What do you like to eat? (lit. What eat you gladly?)",ke:"favourite food",ae:"I eat gladly … (= I like eating …)",w:"more"},
+ {k:"Wochenende",q:"Was machen Sie am Wochenende?",a:"Am Wochenende …",qe:"What do you do at the weekend? (lit. What make you at-the weekend?)",ke:"weekend",ae:"At-the weekend … (the verb comes next: Am Wochenende fahre ich Fahrrad = at the weekend I ride my bike)",w:"more"},
+ {k:"Geschwister",q:"Haben Sie Geschwister?",a:"Ja, ich habe einen Bruder. / Nein, ich habe keine Geschwister.",qe:"Do you have brothers or sisters? (lit. Have you siblings?)",ke:"brothers and sisters",ae:"Yes, I have a brother. / No, I have no siblings.",w:"more"},
+ {k:"Deutsch lernen",q:"Warum lernen Sie Deutsch?",a:"Ich lerne Deutsch, denn …",qe:"Why are you learning German? (lit. Why learn you German?)",ke:"learning German",ae:"I learn German, because … (after denn: normal word order, e.g. denn ich arbeite hier = because I work here)",w:"more"},
+ {k:"Urlaub",q:"Wohin fahren Sie gern in Urlaub?",a:"Ich fahre gern nach …",qe:"Where do you like to go on holiday? (lit. Where-to drive you gladly in holiday?)",ke:"holiday",ae:"I drive gladly to … (= I like going to …; nach + country or town)",w:"more"},
+ {k:"Wohnung",q:"Wie wohnen Sie?",a:"Ich wohne in einer Wohnung mit … Zimmern.",qe:"How do you live? (= What is your home like?)",ke:"flat / home",ae:"I live in a flat with … rooms. (e.g. drei Zimmern, dry = three rooms)",w:"more"},
+ {k:"E-Mail",q:"Haben Sie eine E-Mail-Adresse?",a:"Ja, meine E-Mail-Adresse ist …",qe:"Do you have an e-mail address? (lit. Have you an e-mail address?)",ke:"e-mail",ae:"Yes, my e-mail address is … (@ = ät, . = Punkt)",w:"more"},
+ {k:"Sport",q:"Machen Sie Sport?",a:"Ja, ich spiele … / Ich fahre gern Fahrrad.",qe:"Do you do sport? (lit. Make you sport?)",ke:"sport",ae:"Yes, I play … / I ride gladly bicycle. (= I like cycling.)",w:"more"},
+ {k:"Arbeitszeit",q:"Wann arbeiten Sie?",a:"Ich arbeite von … bis …",qe:"When do you work?",ke:"working hours",ae:"I work from … to … (e.g. von 9 bis 17 Uhr = von neun, noyn, bis siebzehn, ZEEP-tsayn, Uhr)",w:"more"}
 ];
 const ORDER=[
  ["Wo wohnen Sie?","Wo Sie wohnen?","Wohnen wo Sie?","Where do you live?","W-question: W-word 1st, verb 2nd."],

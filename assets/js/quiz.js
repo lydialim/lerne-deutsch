@@ -7,23 +7,59 @@
        optional tokV/tokZ/tokWW per token = verb (red) / connector (dashed) / word-by-word gloss, slots [{lab,v,z}] per place, lock = first n tokens fixed),
      cars + insert + p (gap: the learner taps the gap ▾ where `insert` belongs; answer = the full sentence),
      cars + p (tapcar: the learner taps the car that is in the wrong place; answer = that car's text),
+     wrongView? (function(given, q) -> html: "your sentence" picture shown above the explanation after a wrong answer),
+     slots/cars may carry role ("Wer", "Wann" …) and br ("s0"/"e0" = start/end of a Satzklammer arc, see drawBrackets),
+     TESTS[key].hint (true = sentence test: 🎨 hint button with auto-fade after HINT_FADE correct answers, legend above the first question),
      say? (listening: German text read aloud with assets/js/speech.js, plays automatically), sayAfter? (read aloud from the feedback)}
    Every test runs in rounds of 20 questions (no repeats inside a round), with a progress bar, a streak counter, points and stars.
    Open a test directly with tests.html#<key>, e.g. tests.html#artikel or tests.html#mix. */
-const ROUND=20, GOAL=20;
+const ROUND=LEVEL.round, GOAL=20;
+/* the test key in the URL hash (tests.html#artikel → "artikel"); a malformed %-sequence must not throw */
+function hashKey(){ try{ return decodeURIComponent(location.hash.slice(1)); }catch(e){ return location.hash.slice(1); } }
 const FLAME='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c1 3.5 5.5 6 5.5 11a5.5 5.5 0 0 1-11 0c0-2.4 1-4 2.2-5.2.2 1.6.9 2.7 2 3.2C10 8 10.5 5 12 2z"/></svg>';
-let current=null, q=null, stats=null, rangeIdx={};
+let current=null, currentQ=null, stats=null, rangeIdx={};
 /* English hints in questions are hidden by default; the EN button toggles them (remembered per level). */
-let showEn=lstore.get("showEn",false);
+let showEn=levelStore.get("showEn",false);
 /* Colour hints in sentence tests (red verb, Verb label on its place). The 🎨 button switches them off for a harder round (remembered per level). */
-let showHint=lstore.get("hint",true);
-const applyHint=()=>{ document.body.classList.toggle("nohint",!showHint); document.querySelectorAll(".hinttog").forEach(b=>b.setAttribute("aria-pressed",showHint)); };
-const hintBtn=()=>`<button class="btn ghost hinttog" type="button" aria-pressed="${showHint}" title="Farbhilfe an/aus (colour hints on/off)">🎨 Hilfe <span class="en">(hints)</span></button>`;
+/* Three modes: auto (hints fade after HINT_FADE correct sentence answers in a row and come back after a mistake), an (always on), aus (always off). */
+const HINT_FADE=5, HINT_MODES=["auto","an","aus"];
+let hintMode=levelStore.get("hintMode",levelStore.get("hint",true)===false?"aus":"auto");
+let hintStreak=levelStore.get("hintStreak",0);
+const hintsOn=()=>hintMode==="an"||(hintMode==="auto"&&hintStreak<HINT_FADE);
+const hintLabel=()=>({auto:["auto","auto"],an:["an","on"],aus:["aus","off"]})[hintMode];
+const applyHint=()=>{ document.body.classList.toggle("nohint",!hintsOn()); document.querySelectorAll(".hinttog").forEach(b=>{ b.setAttribute("aria-pressed",hintsOn()); b.innerHTML=hintBtnText(); }); };
+const hintBtnText=()=>{ const l=hintLabel(); return `🎨 Hilfe: ${l[0]} <span class="en">(hints: ${l[1]})</span>`; };
+const hintBtn=()=>`<button class="btn ghost hinttog" type="button" aria-pressed="${hintsOn()}" title="Farbhilfe: auto, an, aus (colour hints: auto, on, off)">${hintBtnText()}</button>`;
+/* does the current question belong to a sentence test (TESTS[key].hint)? */
+const hasHint=()=>{ const t=TESTS[current==="mix"&&currentQ?currentQ.fromKey:current]; return !!(t&&t.hint); };
+/* legend for the sentence pictures, shown above the first sentence question until dismissed */
+const legendHtml=()=>`<div class="legend" id="legend"><span class="lgi"><span class="car v">Verb</span> rot = Verb <span class="en">(red = verb)</span></span><span class="lgi"><span class="car z">und</span> gestrichelt = Verbindung / 2. Teil <span class="en">(dashed = connector)</span></span><span class="lgi"><small class="pos">2</small> Platz im Satz <span class="en">(place)</span></span><span class="lgi"><small class="role">Wer</small> Rolle: Wer, Wann, Wo, Wie, Was <span class="en">(role)</span></span><span class="lgi"><svg class="lgarc" viewBox="0 0 40 14" aria-hidden="true"><path d="M2 13 Q20 -6 38 13" fill="none" stroke="currentColor" stroke-width="2"/></svg> Satzklammer: Verb … Ende <span class="en">(bracket)</span></span><button class="xbtn" id="legx" type="button" aria-label="Legende schließen (close legend)">✕</button></div>`;
 /* Sentence pictures, shared by every sentence test: one car per word or word group.
    c = {t: text, v: verb (red), z: connector (dashed), ww: word-by-word English, lab: position ("E" = end), cls: extra class, after: text after the car}.
    pos: true shows the position number above each car. wrong: true = a wrong sentence (no 🔊 button, so it is never read aloud). */
-const carHtml=(c,pos)=>`<span class="car${c.v?" v":""}${c.z?" z":""}${c.cls?" "+c.cls:""}">${pos&&c.lab?`<small class="pos">${c.lab==="E"?"Ende":c.lab}</small>`:""}${esc(c.t)}${c.ww?`<em class="en">${esc(c.ww)}</em>`:""}</span>${c.after?`<span class="endp">${esc(c.after)}</span>`:""}`;
-const carsHtml=(cars,o={})=>`<div class="${o.wrong?"cars wrong":"train cars"}${o.cls?" "+o.cls:""}">${cars.map(c=>carHtml(c,o.pos)).join("")}</div>`;
+const carHtml=(c,pos,role)=>`<span class="car${c.v?" v":""}${c.z?" z":""}${c.cls?" "+c.cls:""}"${c.br?` data-br="${c.br}"`:""}>${pos&&c.lab?`<small class="pos">${c.lab==="E"?"Ende":c.lab}</small>`:""}${role&&c.role?`<small class="role">${esc(c.role)}</small>`:""}${esc(c.t)}${c.ww?`<em class="en">${esc(c.ww)}</em>`:""}</span>${c.after?`<span class="endp">${esc(c.after)}</span>`:""}`;
+const carsHtml=(cars,o={})=>`<div class="${o.wrong?"cars wrong":"train cars"}${o.cls?" "+o.cls:""}">${cars.map(c=>carHtml(c,o.pos,o.role)).join("")}</div>`;
+/* Satzklammer arc: for every pair of cars/places marked data-br="s0" … "e0" on the same row, draw an arc over the words between them.
+   (c.br = "s0" start / "e0" end of bracket 0; in the same row only, so a wrapped sentence just shows the dashed end car.) */
+function drawBrackets(root){
+  (root||document).querySelectorAll(".train,.cars,.slots,.gaptrain").forEach(box=>{
+    box.querySelectorAll(":scope > .brk").forEach(e=>e.remove());
+    const marks=box.querySelectorAll("[data-br]"); if(!marks.length) return;
+    box.classList.add("hasbr");
+    const cr=box.getBoundingClientRect(), pairs={};
+    marks.forEach(e=>{ const b=e.dataset.br; (pairs[b.slice(1)]=pairs[b.slice(1)]||{})[b[0]]=e; });
+    Object.values(pairs).forEach(p=>{
+      if(!p.s||!p.e) return;
+      const a=p.s.getBoundingClientRect(), b=p.e.getBoundingClientRect(); if(Math.abs(a.top-b.top)>6||!cr.width) return;
+      const x1=a.left+a.width/2-cr.left, x2=b.left+b.width/2-cr.left, y=Math.min(a.top,b.top)-cr.top, w=x2-x1; if(w<20) return;
+      const s=document.createElementNS("http://www.w3.org/2000/svg","svg"); s.setAttribute("class","brk"); s.setAttribute("aria-hidden","true");
+      s.setAttribute("width",w); s.setAttribute("height",20); s.style.left=x1+"px"; s.style.top=(y-19)+"px";
+      s.innerHTML=`<path d="M0 19 Q${w/2} -8 ${w} 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 5"/><path d="M${w-7} 13 L${w} 19 L${w-8} 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>`;
+      box.appendChild(s);
+    });
+  });
+}
+{ let rt; addEventListener("resize",()=>{ clearTimeout(rt); rt=setTimeout(()=>drawBrackets(),120); }); }
 /* English-only instructions (inside .en) → German instruction that stays visible when English is off */
 const INSTR=[
  [/^What does this verb mean\?$/,"Was bedeutet dieses Verb?"],[/^Which German verb is it\?$/,"Welches deutsche Verb ist das?"],
@@ -43,25 +79,25 @@ const INSTR=[
 /* labels such as "Hausnummer (house number)" or "Postleitzahl (postcode): type the digits." */
 const LABEL=/^(Hausnummer|Postleitzahl, PLZ|Postleitzahl|Telefonnummer) \(([^)]*)\)(: type the digits\.)?$/;
 function applyEn(){ document.body.classList.toggle("hide-en",!showEn); document.querySelectorAll(".entog").forEach(b=>{b.setAttribute("aria-pressed",showEn); b.classList.toggle("on",showEn);}); }
-function toggleEn(){ showEn=!showEn; lstore.set("showEn",showEn); applyEn(); }
+function toggleEn(){ showEn=!showEn; levelStore.set("showEn",showEn); applyEn(); }
 const enBtn=()=>`<button class="entog" type="button" aria-pressed="${showEn}" title="Englisch zeigen/verstecken (show/hide English)">EN<span class="sr"> Englisch zeigen (show English)</span></button>`;
 /* Reset every score, star, point and streak of this level (the EN preference stays). */
 function resetProgress(){
   if(!confirm("Alle Ergebnisse, Sterne, Punkte und Serien löschen?\n(Delete all results, stars, points and streaks? This cannot be undone.)")) return;
-  ["best","stars","xp","day","test"].forEach(k=>{ try{localStorage.removeItem(LS+k)}catch(e){} });
+  ["best","stars","xp","day","test"].forEach(k=>{ try{localStorage.removeItem(storagePrefix+k)}catch(e){} });
   Object.keys(best).forEach(k=>delete best[k]); Object.keys(starBest).forEach(k=>delete starBest[k]);
   xp=0; day={date:"",count:0,streak:0};
   renderHome(); toast("Zurückgesetzt. (Reset.)");
 }
 const GROUPS_SHOWN=GROUPS.filter(g=>!(g[2].length===1&&g[2][0]==="mix")).map(g=>[g[0],g[1],g[2],g[3]||g[0].split(" · ")[0],g[4]||g[1]]);
 const RULESET=typeof RULES!=="undefined"?RULES:[];
-const best=lstore.get("best",{});
-const starBest=lstore.get("stars",{});
-let xp=lstore.get("xp",0);
-let day=lstore.get("day",{date:"",count:0,streak:0});
+const best=levelStore.get("best",{});
+const starBest=levelStore.get("stars",{});
+let xp=levelStore.get("xp",0);
+let day=levelStore.get("day",{date:"",count:0,streak:0});
 const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const today=()=>ymd(new Date()), yesterday=()=>ymd(new Date(Date.now()-864e5));
-function bumpDay(){ const t=today(); if(day.date!==t){ day.streak=day.date===yesterday()?day.streak+1:1; day.date=t; day.count=0; } day.count++; lstore.set("day",day); }
+function bumpDay(){ const t=today(); if(day.date!==t){ day.streak=day.date===yesterday()?day.streak+1:1; day.date=t; day.count=0; } day.count++; levelStore.set("day",day); }
 /* numbers: spaces are fine (0176 1234567), a dot only as a thousands dot (62.000, not 4.7 for 47),
    and a decimal point for a decimal comma (2.5 for 2,5, also with "Mio." or "Millionen" after it) */
 const numEq=(v,a)=>{
@@ -74,7 +110,7 @@ const numSay=n=>typeof num==="function"?`${num(n)[0]} <span class="pron">(${num(
 const starStr=s=>"★".repeat(s)+"☆".repeat(3-s);
 
 /* Tests overview: one screen. Slim stats line, one start button, group tabs, compact test list. */
-let homeTab=lstore.get("tab",0);
+let homeTab=levelStore.get("tab",0);
 function renderHome(){
   const t=today(), streak=(day.date===t||day.date===yesterday())?day.streak:0, cnt=day.date===t?day.count:0;
   const r=RULESET.length?RULESET[Math.floor(Date.now()/864e5)%RULESET.length]:null;
@@ -97,12 +133,12 @@ function renderHome(){
   h+=`<div class="homefoot"><button type="button" class="btn ghost" id="resetAll">Ergebnisse zurücksetzen <span class="en">(reset scores)</span></button></div>`;
   $("#testHome").innerHTML=h+`</div>`;
   $("#resetAll").onclick=resetProgress;
-  $("#testHome").querySelectorAll("[data-tab]").forEach(btn=>btn.onclick=()=>{homeTab=+btn.dataset.tab; lstore.set("tab",homeTab); renderHome(); const f=$(`#testHome [data-tab="${homeTab}"]`); if(f) f.focus({preventScroll:true});});
+  $("#testHome").querySelectorAll("[data-tab]").forEach(btn=>btn.onclick=()=>{homeTab=+btn.dataset.tab; levelStore.set("tab",homeTab); renderHome(); const f=$(`#testHome [data-tab="${homeTab}"]`); if(f) f.focus({preventScroll:true});});
   const sel=$(`#testHome [data-tab="${homeTab}"]`), strip=$("#testHome .gtabs"); if(sel&&strip) strip.scrollLeft=sel.offsetLeft-(strip.clientWidth-sel.offsetWidth)/2;
 }
 
 function showQuiz(on){ $("#testHome").hidden=on; $("#quiz").hidden=!on; document.body.classList.toggle("quizzing",on); if(!on) closeFb(); }
-function start(k,skipIntro){ current=k; stats={ok:0,n:0,miss:[],wrong:[],res:[],combo:0,maxCombo:0,xp:0,seen:new Set()}; q=null; lstore.set("test",k); showQuiz(true); window.scrollTo(0,0); if(skipIntro) nextQ(); else showIntro(); }
+function start(k,skipIntro){ current=k; stats={ok:0,n:0,miss:[],wrong:[],res:[],combo:0,maxCombo:0,xp:0,seen:new Set()}; currentQ=null; levelStore.set("test",k); showQuiz(true); window.scrollTo(0,0); if(skipIntro) nextQ(); else showIntro(); }
 /* Short "how it works" screen before the first question. The English lines (class keep) always show. */
 function showIntro(){
   closeFb();
@@ -128,145 +164,158 @@ function showIntro(){
   $("#qx").onclick=exitQuiz; $("#intx").onclick=exitQuiz; $(".entog").onclick=toggleEn; applyEn();
   $("#go").onclick=nextQ; $("#go").focus({preventScroll:true});
 }
-function exitQuiz(){ if(TESTS[decodeURIComponent(location.hash.slice(1))]){ location.hash=""; return; } current=null; showQuiz(false); renderHome(); window.scrollTo(0,0); }
+function exitQuiz(){ if(TESTS[hashKey()]){ location.hash=""; return; } current=null; showQuiz(false); renderHome(); window.scrollTo(0,0); }
 function nextQ(){
   closeFb();
   if(stats.n>=ROUND){ showResult(); return; }
   const t=TESTS[current]; const r=t.ranges?t.ranges[rangeIdx[current]||0]:null;
-  let tries=0; do{ q=t.gen(r); tries++; }while(stats.seen.has(q.prompt+"|"+q.answer)&&tries<25);
-  stats.seen.add(q.prompt+"|"+q.answer); q.done=false; draw();
+  let tries=0; do{ currentQ=t.gen(r); tries++; }while(stats.seen.has(currentQ.prompt+"|"+currentQ.answer)&&tries<25);
+  stats.seen.add(currentQ.prompt+"|"+currentQ.answer); currentQ.done=false; renderQuestion();
 }
-function togo(){
+function remainingText(){
   const left=ROUND-stats.n;
   if(left<=0) return `<b>Fertig!</b> (done) Alle ${numSay(ROUND)} Fragen beantwortet (all questions answered)`;
   if(left===1) return `<b>Letzte Frage!</b> (last question)`;
   return `<b>Noch ${left} Fragen</b> (${left} questions to go) · ${numSay(left)}`;
 }
-function topBar(){
+function renderHeader(){
   const shown=Math.min(stats.n+1,ROUND);
   return `<div class="qtop"><button class="xbtn" id="qx" type="button" aria-label="Test beenden (end test)">✕</button>
    <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="${ROUND}" aria-valuenow="${stats.n}" aria-label="Fortschritt (progress)">${Array.from({length:ROUND},(_,i)=>`<i class="${stats.res[i]===true?"ok":stats.res[i]===false?"no":i===stats.n?"cur":""}"></i>`).join("")}</div>
    <span class="qcount" id="qcount" aria-label="Frage ${shown} von ${ROUND} (question ${shown} of ${ROUND})">${shown}<small>/${ROUND}</small></span>${enBtn()}
-   <div class="qtogo"><span id="togo">${togo()}</span><span class="streak ${stats.combo>=3?"hot":""}" title="Richtig in Folge (correct in a row)">${FLAME}<span id="combo">${stats.combo}</span></span></div></div>`;
+   <div class="qtogo"><span id="togo">${remainingText()}</span><span class="streak ${stats.combo>=3?"hot":""}" title="Richtig in Folge (correct in a row)">${FLAME}<span id="combo">${stats.combo}</span></span></div></div>`;
 }
-function draw(){
-  const t=TESTS[current], kind=q.kind||t.kind;
+function renderQuestion(){
+  const t=TESTS[current], kind=currentQ.kind||t.kind;
   window.scrollTo(0,0);
-  let h=topBar()+`<div class="qcard">
-   <div class="qhead"><span class="tag">${current==="mix"?esc(q.from):esc(t.tag)}</span><h2 class="qtitle">${t.title} <span class="en">(${t.en})</span></h2></div>`;
+  let h=renderHeader()+`<div class="qcard">
+   <div class="qhead"><span class="tag">${current==="mix"?esc(currentQ.from):esc(t.tag)}</span><h2 class="qtitle">${t.title} <span class="en">(${t.en})</span></h2></div>`;
   if(t.ranges) h+=`<div class="seg" role="group" aria-label="Bereich (range)">${t.ranges.map((r,i)=>`<button type="button" data-r="${i}" aria-pressed="${(rangeIdx[current]||0)===i}">${r[0]}</button>`).join("")}</div>`;
-  h+=`<div class="q">${q.prompt}</div>`;
-  if(q.say) h+=`<div class="controls"><button class="btn ghost" type="button" id="again">▶ Anhören <span class="en">(listen)</span></button><button class="btn ghost" type="button" id="slow">🐢 Langsam <span class="en">(slow)</span></button>${typeof TTS!=="undefined"&&TTS.ok?"":`<span class="warn">Audio doesn't work in this browser. Try Chrome, Edge or Safari.</span>`}</div>`;
+  const sentence=hasHint();
+  if(sentence&&!levelStore.get("legendSeen",false)) h+=legendHtml();
+  h+=`<div class="q">${currentQ.prompt}</div>`;
+  if(currentQ.say) h+=`<div class="controls"><button class="btn ghost" type="button" id="again">▶ Anhören <span class="en">(listen)</span></button><button class="btn ghost" type="button" id="slow">🐢 Langsam <span class="en">(slow)</span></button>${typeof TTS!=="undefined"&&TTS.ok?"":`<span class="warn">Audio doesn't work in this browser. Try Chrome, Edge or Safari.</span>`}</div>`;
   if(kind==="order"){
     h+=`<div class="slots" id="built" aria-label="Dein Satz (your sentence)"></div><div class="pool" id="pool"></div>
-      <div class="controls"><button class="btn" type="button" id="chk">Prüfen <span style="font-weight:400">(check)</span></button><button class="btn ghost" type="button" id="undo">↺ Neu <span class="en">(reset)</span></button>${q.tokV?hintBtn():""}</div>`;
+      <div class="controls"><button class="btn" type="button" id="chk">Prüfen <span style="font-weight:400">(check)</span></button><button class="btn ghost" type="button" id="undo">↺ Neu <span class="en">(reset)</span></button>${currentQ.tokV?hintBtn():""}</div>`;
   } else if(kind==="gap"){
     h+=`<div class="gaptrain" id="gt" aria-label="Satz mit Lücken (sentence with gaps)"></div>`;
   } else if(kind==="tapcar"){
-    h+=`<div class="tapcars" id="tc" aria-label="Tippe das falsche Wort an (tap the wrong word)">${q.cars.map((c,i)=>`<button type="button" class="car" data-c="${i}">${esc(c.t)}${c.ww?`<em class="en">${esc(c.ww)}</em>`:""}</button>`).join("")}<span class="endp">${esc(q.p||"")}</span></div>`;
+    h+=`<div class="tapcars" id="tc" aria-label="Tippe das falsche Wort an (tap the wrong word)">${currentQ.cars.map((c,i)=>`<button type="button" class="car" data-c="${i}">${esc(c.t)}${c.ww?`<em class="en">${esc(c.ww)}</em>`:""}</button>`).join("")}<span class="endp">${esc(currentQ.p||"")}</span></div>`;
   } else if(kind==="choice"){
-    h+=`<div class="opts">${q.options.map((o,i)=>`<button type="button" class="opt ${q.cls?q.cls(o):""}" data-i="${i}">${i<9?`<span class="k">${i+1}</span>`:""}<span>${q.label?q.label(o):esc(o)}</span></button>`).join("")}</div>`;
+    h+=`<div class="opts">${currentQ.options.map((o,i)=>`<button type="button" class="opt ${currentQ.cls?currentQ.cls(o):""}" data-i="${i}">${i<9?`<span class="k">${i+1}</span>`:""}<span>${currentQ.label?currentQ.label(o):esc(o)}</span></button>`).join("")}</div>`;
   } else {
-    h+=`<form class="answerrow" id="ansForm"><input type="text" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" ${q.inputmode?`inputmode="${q.inputmode}"`:""} aria-label="Deine Antwort (your answer)" placeholder="Antwort (answer)">
-      ${q.umlauts?`<div class="umlauts">${["ä","ö","ü","ß"].map(c=>`<button type="button" data-ch="${c}">${c}</button>`).join("")}</div>`:""}
+    h+=`<form class="answerrow" id="ansForm"><input type="text" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" ${currentQ.inputmode?`inputmode="${currentQ.inputmode}"`:""} aria-label="Deine Antwort (your answer)" placeholder="Antwort (answer)">
+      ${currentQ.umlauts?`<div class="umlauts">${["ä","ö","ü","ß"].map(c=>`<button type="button" data-ch="${c}">${c}</button>`).join("")}</div>`:""}
       <button class="btn" type="submit">Prüfen <span style="font-weight:400">(check)</span></button></form>`;
   }
+  if(sentence&&kind!=="order") h+=`<div class="controls hintrow">${hintBtn()}</div>`;
   $("#quiz").innerHTML=h+`</div>`;
   $("#qx").onclick=exitQuiz; $(".entog").onclick=toggleEn;
+  if($("#legx")) $("#legx").onclick=()=>{ levelStore.set("legendSeen",true); $("#legend").remove(); };
   /* German instructions stay visible when English is off: text before the first (English) .pron moves out of .en */
   $("#quiz").querySelectorAll(".q > .en").forEach(e=>{ const kids=[...e.childNodes], i=kids.findIndex(n=>n.nodeType===1&&n.classList.contains("pron")); if(i<1) return; const pre=kids.slice(0,i); if(!pre.map(n=>n.textContent).join("").trim()) return; const dq=document.createElement("span"); dq.className="dq"; e.before(dq); pre.forEach(n=>dq.appendChild(n)); dq.appendChild(document.createTextNode(" ")); dq.appendChild(e); });
   $("#quiz").querySelectorAll(".q > .en").forEach(e=>{ const t=e.textContent.replace(/\s+/g," ").trim(); let de=null,en=t; const m=LABEL.exec(t);
     if(m){ de=m[1]+(m[3]?": Schreib die Ziffern.":""); en="("+m[2]+")"+(m[3]?" type the digits.":""); }
     else { const r=INSTR.find(x=>x[0].test(t)); if(r){ de=r[1]; en=t.startsWith("(")?t:"("+t+")"; } }
     if(!de) return; const dq=document.createElement("span"); dq.className="dq"; dq.append(de+" "); const sp=document.createElement("span"); sp.className="en"; sp.textContent=en; dq.append(sp); e.replaceWith(dq); });
-  applyEn(); applyHint(); $("#quiz").querySelectorAll(".hinttog").forEach(b=>b.onclick=()=>{ showHint=!showHint; lstore.set("hint",showHint); applyHint(); });
-  { const qq=$("#quiz .q"), c=qq.cloneNode(true); c.querySelectorAll(".en").forEach(e=>e.remove()); if(!c.textContent.trim()||TESTS[current].enReq||q.enReq) qq.classList.add("needs-en"); }
-  $("#quiz").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{rangeIdx[current]=+b.dataset.r; const tt=TESTS[current]; q=tt.gen(tt.ranges[+b.dataset.r]); q.done=false; draw();});
-  if(q.say){ $("#again").onclick=()=>speak(q.say); $("#slow").onclick=()=>speak(q.say,0.6); speak(q.say); }
+  applyEn(); applyHint(); $("#quiz").querySelectorAll(".hinttog").forEach(b=>b.onclick=()=>{ hintMode=HINT_MODES[(HINT_MODES.indexOf(hintMode)+1)%3]; levelStore.set("hintMode",hintMode); applyHint(); drawBrackets($("#quiz")); });
+  { const qq=$("#quiz .q"), c=qq.cloneNode(true); c.querySelectorAll(".en").forEach(e=>e.remove()); if(!c.textContent.trim()||TESTS[current].enReq||currentQ.enReq) qq.classList.add("needs-en"); }
+  $("#quiz").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{rangeIdx[current]=+b.dataset.r; const tt=TESTS[current]; currentQ=tt.gen(tt.ranges[+b.dataset.r]); currentQ.done=false; renderQuestion();});
+  if(currentQ.say){ $("#again").onclick=()=>speak(currentQ.say); $("#slow").onclick=()=>speak(currentQ.say,{rate:0.6}); speak(currentQ.say); }
+  drawBrackets($("#quiz")); requestAnimationFrame(()=>drawBrackets($("#quiz"))); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>drawBrackets($("#quiz")));
   if(kind==="order") drawOrder();
   else if(kind==="gap") drawGap();
   else if(kind==="tapcar") $("#quiz").querySelectorAll("#tc .car").forEach(b=>b.onclick=()=>{
-    if(q.done) return; const c=q.cars[+b.dataset.c]; answer(c.t);
-    $("#quiz").querySelectorAll("#tc .car").forEach(x=>{ x.disabled=true; if(q.cars[+x.dataset.c].t===q.answer) x.classList.add("good"); });
-    if(c.t!==q.answer) b.classList.add("bad"); })
-  else if(kind==="choice") $("#quiz").querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(q.options[+b.dataset.i],b));
+    if(currentQ.done) return; const c=currentQ.cars[+b.dataset.c]; checkAnswer(c.t);
+    $("#quiz").querySelectorAll("#tc .car").forEach(x=>{ x.disabled=true; if(currentQ.cars[+x.dataset.c].t===currentQ.answer) x.classList.add("good"); });
+    if(c.t!==currentQ.answer) b.classList.add("bad"); })
+  else if(kind==="choice") $("#quiz").querySelectorAll(".opt").forEach(b=>b.onclick=()=>checkAnswer(currentQ.options[+b.dataset.i],b));
   else {
     const inp=$("#ans"); if(matchMedia("(hover:hover)").matches) inp.focus({preventScroll:true});
     $("#quiz").querySelectorAll("[data-ch]").forEach(b=>b.onclick=()=>{inp.value+=b.dataset.ch; inp.focus();});
-    $("#ansForm").onsubmit=e=>{e.preventDefault(); if(q.done){nextQ();return} if(inp.value.trim()) answer(inp.value.trim());};
+    $("#ansForm").onsubmit=e=>{e.preventDefault(); if(currentQ.done){nextQ();return} if(inp.value.trim()) checkAnswer(inp.value.trim());};
   }
 }
+/* wrong answer in a sentence test: your sentence as a picture (moved or wrong cars outlined), then the right one (the explanation) below.
+   A question can define wrongView(given, q) -> html; checkAnswer adds it above the explanation. */
+const wrongStack=cars=>`<span class="lbl">Dein Satz <span class="en">(your sentence)</span></span>`+carsHtml(cars,{wrong:true})+`<span class="lbl">Richtig <span class="en">(right)</span></span>`;
 /* order questions: tap a chip in the pool to fill the next place, tap it in the sentence to take it back.
-   The sentence line shows one numbered place per word (with q.slots: the grammar position, red "Verb" places, "Ende" for the end). */
+   The sentence line shows one numbered place per word (with currentQ.slots: the grammar position, red "Verb" places, "Ende" for the end). */
 function drawOrder(){
-  const lock=q.lock||0, end=q.end||"";
-  const slots=q.slots||q.tokens.map((_,i)=>({lab:String(i+1)}));
+  const lock=currentQ.lock||0, end=currentQ.end||"";
+  const slots=currentQ.slots||currentQ.tokens.map((_,i)=>({lab:String(i+1)}));
   let built=Array.from({length:lock},(_,i)=>i);
-  const chip=(i,attr)=>`<button type="button" class="chipbtn${q.tokV&&q.tokV[i]?" v":""}${q.tokZ&&q.tokZ[i]?" z":""}" ${attr}>${esc(q.tokens[i])}${q.tokWW?`<em class="en">${esc(q.tokWW[i])}</em>`:""}</button>`;
+  const chip=(i,attr)=>`<button type="button" class="chipbtn${currentQ.tokV&&currentQ.tokV[i]?" v":""}${currentQ.tokZ&&currentQ.tokZ[i]?" z":""}" ${attr}>${esc(currentQ.tokens[i])}${currentQ.tokWW?`<em class="en">${esc(currentQ.tokWW[i])}</em>`:""}</button>`;
   const paint=checked=>{
-    $("#built").innerHTML=slots.map((s,k)=>{ const i=built[k], st=checked&&i!==undefined?(q.tokens[i]===q.answerTokens[k]?" good":" bad"):"";
-      return `<div class="slot${s.v?" v":""}${s.z?" z":""}${k<lock?" lock":""}${st}"><small class="pos">${s.lab==="E"?"Ende":s.lab}${s.v?` <b class="vt">Verb</b>`:""}</small>${i===undefined?`<span class="hole" aria-hidden="true"></span>`:chip(i,k<lock?"disabled":`data-b="${i}"`)}</div>`; }).join("")+`<span class="endp">${esc(end)}</span>`;
-    const inPool=q.tokens.map((_,i)=>i).filter(i=>!built.includes(i));
+    $("#built").innerHTML=slots.map((s,k)=>{ const i=built[k], st=checked&&i!==undefined?(currentQ.tokens[i]===currentQ.answerTokens[k]?" good":" bad"):"";
+      return `<div class="slot${s.v?" v":""}${s.z?" z":""}${k<lock?" lock":""}${st}"${s.br?` data-br="${s.br}"`:""}><small class="pos">${s.lab==="E"?"Ende":s.lab}${s.v?` <b class="vt">Verb</b>`:""}</small>${s.role&&!s.v&&!s.z?`<small class="role">${esc(s.role)}</small>`:""}${i===undefined?`<span class="hole" aria-hidden="true"></span>`:chip(i,k<lock?"disabled":`data-b="${i}"`)}</div>`; }).join("")+`<span class="endp">${esc(end)}</span>`;
+    const inPool=currentQ.tokens.map((_,i)=>i).filter(i=>!built.includes(i));
     $("#pool").innerHTML=inPool.map(i=>chip(i,`data-p="${i}"`)).join("");
-    if(q.done) $("#quiz").querySelectorAll(".chipbtn").forEach(b=>b.disabled=true);
-    $("#pool").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{ if(q.done) return; built.push(+b.dataset.p); paint(); });
-    $("#built").querySelectorAll("[data-b]").forEach(b=>b.onclick=()=>{ if(q.done) return; built=built.filter(i=>i!==+b.dataset.b); paint(); });
+    if(currentQ.done) $("#quiz").querySelectorAll(".chipbtn").forEach(b=>b.disabled=true);
+    $("#pool").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{ if(currentQ.done) return; built.push(+b.dataset.p); paint(); });
+    $("#built").querySelectorAll("[data-b]").forEach(b=>b.onclick=()=>{ if(currentQ.done) return; built=built.filter(i=>i!==+b.dataset.b); paint(); });
+    drawBrackets($("#quiz"));
   };
   paint();
-  $("#undo").onclick=()=>{ if(q.done) return; built=built.slice(0,lock); paint(); };
+  $("#undo").onclick=()=>{ if(currentQ.done) return; built=built.slice(0,lock); paint(); };
   $("#chk").onclick=()=>{
-    if(q.done) return;
-    if(built.length<q.tokens.length){ toast("Benutze alle Wörter. (Use all the words.)"); return; }
-    const v=built.map(i=>q.tokens[i]).join(" ")+end;
+    if(currentQ.done) return;
+    if(built.length<currentQ.tokens.length){ toast("Benutze alle Wörter. (Use all the words.)"); return; }
+    const v=built.map(i=>currentQ.tokens[i]).join(" ")+end;
     /* wrong: show your sentence as a picture above the right one, wrong places outlined */
-    if(v!==q.answer) q.explain=`<span class="lbl">Dein Satz <span class="en">(your sentence)</span></span>`+carsHtml(built.map((i,k)=>({t:q.tokens[i]+(k===built.length-1?end:""),v:q.tokV&&q.tokV[i],z:q.tokZ&&q.tokZ[i],cls:q.tokens[i]===q.answerTokens[k]?"":"bad"})),{wrong:true})
-      +`<span class="lbl">Richtig <span class="en">(right)</span></span>`+q.explain;
-    answer(v);
-    $("#built").classList.add(v===q.answer?"ok":"no"); paint(true);
+    if(v!==currentQ.answer) currentQ.explain=wrongStack(built.map((i,k)=>({t:currentQ.tokens[i]+(k===built.length-1?end:""),v:currentQ.tokV&&currentQ.tokV[i],z:currentQ.tokZ&&currentQ.tokZ[i],cls:currentQ.tokens[i]===currentQ.answerTokens[k]?"":"bad"})))+currentQ.explain;
+    checkAnswer(v);
+    $("#built").classList.add(v===currentQ.answer?"ok":"no"); paint(true);
     $("#chk").disabled=true; $("#undo").disabled=true;
   };
 }
-/* gap questions: a ▾ before, between and after the words; tapping one puts q.insert there */
+/* gap questions: a ▾ before, between and after the words; tapping one puts currentQ.insert there */
 function drawGap(){
-  const n=q.cars.length;
+  const n=currentQ.cars.length;
   const paint=pos=>{
     let h="";
     for(let i=0;i<=n;i++){
       if(pos===undefined) h+=`<button type="button" class="gapbtn" data-g="${i}" aria-label="Lücke ${i+1} (gap ${i+1})">▾</button>`;
-      else if(pos===i) h+=carHtml({...q.insert,cls:q.done&&q.lastOk?"good":"bad"});
-      if(i<n) h+=carHtml(q.cars[i]);
+      else if(pos===i) h+=carHtml({...currentQ.insert,cls:currentQ.done&&currentQ.lastOk?"good":"bad"});
+      if(i<n) h+=carHtml(currentQ.cars[i]);
     }
-    $("#gt").innerHTML=h+`<span class="endp">${esc(q.p||"")}</span>`;
+    $("#gt").innerHTML=h+`<span class="endp">${esc(currentQ.p||"")}</span>`;
     $("#gt").querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{
-      if(q.done) return; const g=+b.dataset.g, w=q.cars.map(c=>c.t); w.splice(g,0,q.insert.t);
-      const v=w.join(" ")+(q.p||""); q.lastOk=v===q.answer; answer(v); paint(g); });
+      if(currentQ.done) return; const g=+b.dataset.g, w=currentQ.cars.map(c=>c.t); w.splice(g,0,currentQ.insert.t);
+      const v=w.join(" ")+(currentQ.p||""); currentQ.lastOk=v===currentQ.answer; currentQ.lastGap=g; checkAnswer(v); paint(g); });
   };
   paint();
 }
 const CHEERS=["Richtig! (correct)","Super! (great)","Sehr gut! (very good)","Genau! (exactly)","Toll! (great)","Prima! (excellent)"];
 const COMBO={3:"3 in Folge! (3 in a row)",5:"5 in Folge! Weiter so! (keep it up)",7:"7 in Folge! Wow!",10:"10 in Folge! Super!",20:"Perfekt! 20 von 20!"};
-function answer(v,btn){
-  if(q.done) return; q.done=true;
-  const kind=q.kind||TESTS[current].kind;
-  const ok = ["choice","order","gap","tapcar"].includes(kind) ? v===q.answer : (sameAnswer(v,q.answer)||numEq(v,q.answer));
+function checkAnswer(v,btn){
+  if(currentQ.done) return; currentQ.done=true;
+  const kind=currentQ.kind||TESTS[current].kind;
+  const ok = ["choice","order","gap","tapcar"].includes(kind) ? v===currentQ.answer : (sameAnswer(v,currentQ.answer)||numEq(v,currentQ.answer));
+  if(!ok&&currentQ.wrongView) currentQ.explain=currentQ.wrongView(v,currentQ)+currentQ.explain;
+  if(hasHint()){
+    const before=hintsOn(); hintStreak=ok?hintStreak+1:0; levelStore.set("hintStreak",hintStreak);
+    if(hintMode==="auto"&&before!==hintsOn()) setTimeout(()=>toast(hintsOn()?"Farbhilfe wieder an. (Hints are back.)":"Farbhilfe aus: du schaffst das! (Hints off: you've got this!)"),1600);
+  }
   stats.n++; stats.res.push(ok); let gain=0;
-  if(ok){ stats.ok++; stats.combo++; stats.maxCombo=Math.max(stats.maxCombo,stats.combo); gain=10+(stats.combo>=3?5:0); stats.xp+=gain; xp+=gain; lstore.set("xp",xp); }
-  else { stats.combo=0; if(q.from&&!stats.miss.includes(q.fromKey)) stats.miss.push(q.fromKey); stats.wrong.push({p:q.prompt,a:q.answer,e:q.explain,given:v}); }
-  const b=best[current]||{ok:0,n:0}; b.n++; if(ok) b.ok++; best[current]=b; lstore.set("best",best);
+  if(ok){ stats.ok++; stats.combo++; stats.maxCombo=Math.max(stats.maxCombo,stats.combo); gain=10+(stats.combo>=3?5:0); stats.xp+=gain; xp+=gain; levelStore.set("xp",xp); }
+  else { stats.combo=0; if(currentQ.from&&!stats.miss.includes(currentQ.fromKey)) stats.miss.push(currentQ.fromKey); stats.wrong.push({p:currentQ.prompt,a:currentQ.answer,e:currentQ.explain,given:v}); }
+  const b=best[current]||{ok:0,n:0}; b.n++; if(ok) b.ok++; best[current]=b; levelStore.set("best",best);
   bumpDay();
-  if(btn){ $("#quiz").querySelectorAll(".opt").forEach(o=>{o.disabled=true; if(q.options[+o.dataset.i]===q.answer) o.classList.add("right");}); if(!ok) btn.classList.add("wrong"); }
+  if(btn){ $("#quiz").querySelectorAll(".opt").forEach(o=>{o.disabled=true; if(currentQ.options[+o.dataset.i]===currentQ.answer) o.classList.add("right");}); if(!ok) btn.classList.add("wrong"); }
   else if(!["order","gap","tapcar"].includes(kind)){ const inp=$("#ans"); if(inp) inp.readOnly=true; }
-  const pi=$("#quiz").querySelectorAll(".prog i"); pi[stats.n-1].className=ok?"ok":"no"; $("#togo").innerHTML=togo();
+  const pi=$("#quiz").querySelectorAll(".prog i"); pi[stats.n-1].className=ok?"ok":"no"; $("#togo").innerHTML=remainingText();
   $("#combo").textContent=stats.combo; $("#quiz .streak").classList.toggle("hot",stats.combo>=3);
   if(ok&&COMBO[stats.combo]) toast(COMBO[stats.combo]);
   const last=stats.n>=ROUND;
   const sh=$("#fbSheet"); sh.className="fbsheet "+(ok?"ok":"no");
   sh.innerHTML=`<div class="fbin"><div class="fbtop"><span class="verdict">${ok?pick(CHEERS):"Leider falsch. (Sadly wrong.)"}</span>${ok?`<span class="gain">+${gain} ${stats.combo>=3?"🔥":""}</span>`:""}</div>
-   ${ok?"":`<span class="ans">Richtig ist (correct is): ${esc(q.answer)}</span>`}<span>${q.explain}</span>
-   <div class="fbrow">${(q.say||q.sayAfter)&&typeof TTS!=="undefined"&&TTS.ok?`<button class="btn ghost" type="button" id="hearAns" aria-label="Noch einmal anhören (listen again)">🔊</button>`:""}<button class="btn" id="next" type="button">${last?'Ergebnis <span style="font-weight:400">(result)</span> →':`Weiter <span style="font-weight:400">(next)</span> →`}</button></div></div>`;
-  sh.hidden=false; document.body.classList.add("fbopen"); fitAboveSheet();
+   ${ok?"":`<span class="ans">Richtig ist (correct is): ${esc(currentQ.answer)}</span>`}<span>${currentQ.explain}</span>
+   <div class="fbrow">${(currentQ.say||currentQ.sayAfter)&&typeof TTS!=="undefined"&&TTS.ok?`<button class="btn ghost" type="button" id="hearAns" aria-label="Noch einmal anhören (listen again)">🔊</button>`:""}<button class="btn" id="next" type="button">${last?'Ergebnis <span style="font-weight:400">(result)</span> →':`Weiter <span style="font-weight:400">(next)</span> →`}</button></div></div>`;
+  sh.hidden=false; document.body.classList.add("fbopen"); drawBrackets(sh); fitAboveSheet();
   $("#next").onclick=nextQ; $("#next").focus({preventScroll:true});
-  if($("#hearAns")) $("#hearAns").onclick=()=>speak(q.sayAfter||q.say);
+  if($("#hearAns")) $("#hearAns").onclick=()=>speak(currentQ.sayAfter||currentQ.say);
   if(typeof addSpeakers==="function") addSpeakers(sh);
 }
 function closeFb(){ const s=$("#fbSheet"); if(s){ s.hidden=true; s.innerHTML=""; } document.body.classList.remove("fbopen"); const z=$("#quiz"); if(z) z.style.paddingBottom=""; }
@@ -282,7 +331,7 @@ let toastT=null;
 function toast(msg){ const el=$("#toast"); el.textContent=msg; el.hidden=false; el.style.animation="none"; void el.offsetWidth; el.style.animation=""; clearTimeout(toastT); toastT=setTimeout(()=>el.hidden=true,1500); }
 
 document.addEventListener("keydown",e=>{
-  if(!document.body.classList.contains("quizzing")||!q||q.done) return;
+  if(!document.body.classList.contains("quizzing")||!currentQ||currentQ.done) return;
   if(e.target.matches("input,textarea,select")) return;
   const n=parseInt(e.key,10); if(!n) return;
   const o=$("#quiz").querySelectorAll(".opt")[n-1]; if(o){ e.preventDefault(); o.click(); }
@@ -291,10 +340,10 @@ document.addEventListener("keydown",e=>{
 function showResult(){
   closeFb();
   const pct=Math.round(stats.ok/stats.n*100), s=pct===100?3:pct>=80?2:pct>=60?1:0;
-  const newBest=s>(starBest[current]||0); if(newBest){ starBest[current]=s; lstore.set("stars",starBest); }
+  const newBest=s>(starBest[current]||0); if(newBest){ starBest[current]=s; levelStore.set("stars",starBest); }
   const msg=pct===100?"Perfekt! Alles richtig. (Perfect! All correct.)":pct>=80?"Super! Sehr gut. (Great! Very good.)":pct>=60?"Bestanden! (Passed!) 60% is the pass mark in the exam.":"Weiter üben! (Keep practising!) You will get there.";
   const t=TESTS[current];
-  let h=topBar()+`<div class="qcard"><div class="result">
+  let h=renderHeader()+`<div class="qcard"><div class="result">
    <div class="bigstars" aria-label="${s} von 3 Sternen (${s} of 3 stars)">${[0,1,2].map(i=>`<span class="${i<s?"on":""}">★</span>`).join("")}</div>
    <div class="rscore">${stats.ok} / ${stats.n}</div>
    <span class="en">${numSay(stats.ok)} von <span class="pron">(fon)</span> ${numSay(stats.n)}</span>
@@ -322,7 +371,7 @@ function confetti(){
 /* Hash routing: tests.html#artikel opens that test, tests.html shows the overview.
    The browser's back button leaves a running test. */
 function fromHash(){
-  const k=decodeURIComponent(location.hash.slice(1));
+  const k=hashKey();
   if(TESTS[k]){ start(k); return true; }
   if(current){ current=null; showQuiz(false); renderHome(); window.scrollTo(0,0); }
   return false;
@@ -332,7 +381,7 @@ document.addEventListener("click",e=>{
   const a=e.target.closest('a[href^="#"]'); if(!a) return;
   const k=a.getAttribute("href").slice(1);
   if(a.hasAttribute("data-scroll")){ e.preventDefault(); const el=document.getElementById(k); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); return; }
-  if(TESTS[k]&&k===decodeURIComponent(location.hash.slice(1))){ e.preventDefault(); start(k); }
+  if(TESTS[k]&&k===hashKey()){ e.preventDefault(); start(k); }
 });
 document.body.insertAdjacentHTML("beforeend",'<div class="fbsheet" id="fbSheet" hidden></div><div class="toast" id="toast" role="status" hidden></div><canvas id="confetti" aria-hidden="true"></canvas>');
 applyEn(); applyHint();

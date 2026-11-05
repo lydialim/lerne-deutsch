@@ -39,7 +39,7 @@
   </div>
   <nav class="tabs toptabs" aria-label="${L.title}">
     ${learn.map(tab).join("")}<span class="sep" aria-hidden="true"></span>${tools.map(tab).join("")}
-    ${L.mix ? `<a class="go" href="${L.mix}">Gemischter Test <small>· 20</small></a>` : ""}
+    ${L.mix ? `<a class="go" href="${L.mix}">Gemischter Test <small>· ${L.round}</small></a>` : ""}
   </nav>`;
 
   /* bottom tab bar for phones: the five places you go back to most */
@@ -74,24 +74,19 @@
   <button class="totop" type="button" id="toTop" aria-label="Nach oben (back to top)" title="Nach oben">${svg("up")}<span>Nach oben</span></button>`);
 
   const sheet = document.getElementById("lessonSheet");
-  let lastFocus = null;
-  function openSheet() {
-    lastFocus = document.activeElement; sheet.hidden = false; document.body.classList.add("sheet-open");
-    const on = sheet.querySelector(".litem.on") || sheet.querySelector(".litem");
-    if (on) { on.scrollIntoView({ block: "center" }); on.focus({ preventScroll: true }); }
+  function openLessonMenu() {
+    showSheet(sheet, sheet.querySelector(".litem.on") || sheet.querySelector(".litem"));
   }
-  function closeSheet() { if (sheet.hidden) return; sheet.hidden = true; document.body.classList.remove("sheet-open"); if (lastFocus) lastFocus.focus({ preventScroll: true }); }
-  window.closeLessonSheet = closeSheet;
   document.addEventListener("click", e => {
-    if (e.target.closest("[data-sheet]")) { e.preventDefault(); openSheet(); return; }
-    if (e.target.closest("[data-close]")) { closeSheet(); return; }
+    if (e.target.closest("[data-sheet]")) { e.preventDefault(); openLessonMenu(); return; }
+    if (e.target.closest("[data-close]")) { hideSheet(sheet); return; }
     const j = e.target.closest("[data-jump]");
     if (j) { const g = document.getElementById(j.dataset.jump), box = sheet.querySelector(".sheetbox"), top = sheet.querySelector(".sheettop");
       if (g) box.scrollTo({ top: g.offsetTop - top.offsetHeight + 8, behavior: reduce() ? "auto" : "smooth" }); return; }
     const a = e.target.closest(".sheet .litem");
-    if (a && a.getAttribute("href").startsWith("#")) { closeSheet(); }
+    if (a && a.getAttribute("href").startsWith("#")) { hideSheet(sheet); }
   });
-  document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") hideSheet(sheet); });
   function reduce() { return window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches; }
 
   /* back-to-top: appears after about one screen of scrolling */
@@ -146,7 +141,7 @@
   const link = ([href, de, en]) => `<a href="${href}">${de}${en ? ` <small>${en.replace(/^Teil [A-D] · /, "")}</small>` : ""}</a>`;
   const cols = L
     ? `<nav class="fcol" aria-label="Lernen"><h2>Lernen <span>learn</span></h2>${L.pages.filter(p => p[3] !== "tools").map(link).join("")}</nav>
-       <nav class="fcol" aria-label="Üben und Nachschlagen"><h2>Üben <span>practise &amp; look up</span></h2>${L.pages.filter(p => p[3] === "tools").map(link).join("")}${L.mix ? `<a href="${L.mix}">Gemischter Test <small>20 questions</small></a>` : ""}</nav>`
+       <nav class="fcol" aria-label="Üben und Nachschlagen"><h2>Üben <span>practise &amp; look up</span></h2>${L.pages.filter(p => p[3] === "tools").map(link).join("")}${L.mix ? `<a href="${L.mix}">Gemischter Test <small>${L.round} questions</small></a>` : ""}</nav>`
     : `<nav class="fcol" aria-label="Level"><h2>Level</h2><a href="a1/index.html">A1 <small>Deutsch A1 Trainer</small></a></nav>`;
   f.innerHTML = `
   <div class="fgrid">

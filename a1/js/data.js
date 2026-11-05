@@ -515,7 +515,31 @@ function posLabels(raw){
   return out;
 }
 /* one picture "car" per token: {t, v (verb), z (connector), ww (word by word), lab (position)} */
-const carsOf=x=>{const lab=posLabels(x.raw);return x.raw.map((r,i)=>({t:x.toks[i]+(i===x.raw.length-1?x.p:""),v:r[0]==="*",z:r[0]==="^",ww:x.ww[i],lab:lab[i]}));};
+/* Satzklammer: pairs each end verb ("E") with the verb of its own clause. "s0"/"e0" = start/end of bracket 0 (quiz.js draws the arc). */
+function brOf(raw){
+  const lab=posLabels(raw), out=raw.map(()=>null); let g=0;
+  lab.forEach((l,i)=>{ if(l!=="E") return; let s=i-1; while(s>=0&&raw[s][0]!=="^"&&!(raw[s][0]==="*"&&lab[s]!=="E")) s--;
+    if(s>=0&&raw[s][0]==="*"){ out[s]="s"+g; out[i]="e"+g; g++; } });
+  return out;
+}
+/* role of every token as a small caption: Frage (question word), Wer (subject), Wann, Wo, Wie, Was, Verb. No new colours: roles are text only. */
+function rolesOf(raw){
+  const lab=posLabels(raw);
+  return raw.map((r,i)=>{
+    if(r[0]==="^") return "";
+    if(r[0]==="*") return lab[i]==="E"?"Verb 2":"Verb";
+    const t=r.replace(/[.,?]$/,"");
+    if(i===0&&/^(wo|was|wann|wie|woher|wohin|wer|warum|wie viel)$/i.test(t)) return "Frage";
+    if(/^(ich|du|sie|wir|er|ihr|es)$/i.test(t)||/^(der|die|das) /i.test(t)) return "Wer";
+    if(/^(heute|morgen|jetzt|dann|zuerst|am |um |im (sommer|winter|frühling|herbst))/i.test(t)) return "Wann";
+    if(/^(mit |gern|nicht|bitte|geradeaus|lange)/i.test(t)) return "Wie";
+    if(/^(in |im |ins |zur |zum |nach |aus )/i.test(t)) return "Wo";
+    return "Was";
+  });
+}
+const carsOf=x=>{const lab=posLabels(x.raw), br=brOf(x.raw), role=rolesOf(x.raw);return x.raw.map((r,i)=>({t:x.toks[i]+(i===x.raw.length-1?x.p:""),v:r[0]==="*",z:r[0]==="^",ww:x.ww[i],lab:lab[i],role:role[i],br:br[i]}));};
+/* verb that opens the bracket in a gap sentence (test "Ergänzen"): the ___ at the end closes it */
+const GAPBR={"Ich stehe um 7 Uhr ___.":"stehe","Ich rufe meine Mutter ___.":"rufe","Am Samstag kaufe ich im Supermarkt ___.":"kaufe","Wann fängt der Film ___?":"fängt","Ich möchte eine Pizza ___.":"möchte","Kannst du gut ___?":"Kannst","Ich muss morgen früh ___.":"muss"};
 /* sentence type from the picture: verb 1st or 2nd, full stop or question mark */
 const SATZART={
  aussage:["Aussage","statement","The verb is in position 2 and the sentence ends with a full stop."],

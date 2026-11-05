@@ -3,6 +3,8 @@ window.LEVEL = {
   id: "a1",
   level: "A1",
   title: "Deutsch A1 Trainer",
+  /* questions per test round (the mixed test, the header button and the footer all read this) */
+  round: 20,
   /* Top navigation (wide screens) and footer links:
      [href, short label, English / full name (tooltip), group "learn" | "tools", part letter] */
   pages: [

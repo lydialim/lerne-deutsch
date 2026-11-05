@@ -1036,3 +1036,25 @@ body.hide-en .pool .en,body.hide-en .slots .en,body.hide-en .gaptrain .en,body.h
 /* options that are sentence pictures get the full width */
 .opts:has(.train){grid-template-columns:1fr}
 .opt .train{padding-left:4px}
+
+/* Satzklammer arc, role captions, hint legend, hint fading.
+   Roles are text only (no new colours: blue/red/green already mean gender). */
+.hasbr{position:relative;padding-top:24px}
+.brk{position:absolute;pointer-events:none;color:var(--die);overflow:visible}
+.car[data-br^="e"],.slot[data-br^="e"] .chipbtn,.slot[data-br^="e"] .hole{border-color:var(--die);border-style:dashed}
+.car small.role,.slot small.role{display:block;font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--muted);font-style:italic;line-height:1.2;letter-spacing:.02em}
+.car.v small.role{color:var(--die)}
+.legend{position:relative;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;margin:0 0 12px;padding:8px 40px 8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--soft);font-size:14px}
+.legend .lgi{display:inline-flex;align-items:center;gap:6px}
+.legend .car{padding:1px 8px;font-size:14px}
+.legend small.pos,.legend small.role{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:0 5px}
+.legend .lgarc{width:34px;height:12px;color:var(--die)}
+.legend .xbtn{position:absolute;top:4px;right:4px}
+.hintrow{margin-top:10px}
+/* hints off (button or auto-fade): no red verb, no places, no roles, no arcs inside the question */
+body.nohint .q .car.v,body.nohint .opt .car.v{background:var(--paper);border-color:var(--line);color:var(--ink);font-weight:600}
+body.nohint .q .car small.pos,body.nohint .q .car small.role,body.nohint .slot small.role,body.nohint .slots .brk,body.nohint .gapline .brk,body.nohint .gaptrain .brk{display:none}
+body.nohint .slots.hasbr,body.nohint .gapline.hasbr{padding-top:0}
+body.nohint .q .car.gap{border-color:var(--line);background:var(--soft);color:var(--muted)}
+body.nohint .q .car[data-br^="e"],body.nohint .slot[data-br^="e"] .hole{border-color:var(--line)}
+@media (max-width:520px){.legend{font-size:13px;gap:4px 12px;padding:6px 36px 6px 10px}.legend .car{font-size:13px}}

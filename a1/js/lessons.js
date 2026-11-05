@@ -6,13 +6,20 @@ if($("#demoSent")) $("#demoSent").innerHTML=SENTS[1].map(([w,t,e])=>`<span class
 ;
 
 
-/* Lesson 9: number grid and number explorer */
+/* Lesson 9: number grid */
 if($("#numGrid")){
 const gridNums=[...Array(21).keys(),21,22,25,30,40,47,50,60,70,74,80,90,99,100,101,250];
 $("#numGrid").innerHTML=gridNums.map(n=>{const [w,p]=num(n);return `<div class="numcell" data-tap-say="${w}"><span class="d">${n}</span><span class="w">${w}</span><span class="pron">${p}</span></div>`}).join("");
-function explore(){ const v=parseInt($("#explIn").value,10); if(isNaN(v)||v<0||v>999999999){$("#explOut").innerHTML='<span class="en">Enter a number from 0 to 999,999,999.</span>';return}
+}
+
+/* Lesson 9: number explorer. One input handler writes the words, the year reading and the tens-and-ones blocks. */
+if($("#explIn")){
+function explore(){
+  const v=parseInt($("#explIn").value,10);
+  if(isNaN(v)||v<0||v>999999999){$("#explOut").innerHTML='<span class="en">Enter a number from 0 to 999,999,999.</span>';return}
   const [w,p]=num(v); let h=`<b>${w}</b><br><span class="pron">${p}</span>`;
   if(v>=1100&&v<=2099){const [yw,yp]=yearSay(v); if(yw!==w) h+=`<br><span class="en">As a year (als Jahr):</span> <b>${yw}</b><br><span class="pron">${yp}</span>`; else h+=`<br><span class="en">As a year it sounds the same.</span>`;}
+  h+=numBlocks(v);
   $("#explOut").innerHTML=h; }
 $("#explIn").addEventListener("input",explore); explore();
 }
@@ -27,9 +34,9 @@ if($("#abcGrid")) $("#abcGrid").innerHTML=ABC.map(([l,p,t])=>`<div class="abcc${
 /* Lesson 10: introduce yourself (text builder, saved in this browser) */
 if($("#builder")){
 const BF=["b-name","b-alter","b-land","b-ort","b-spr","b-beruf","b-hobby","b-tel"];
-const saved=lstore.get("intro",{}); BF.forEach(id=>{ if(saved[id]!=null) document.getElementById(id).value=saved[id]; });
+const saved=levelStore.get("intro",{}); BF.forEach(id=>{ if(saved[id]!=null) document.getElementById(id).value=saved[id]; });
 function buildIntro(){
-  const g=id=>document.getElementById(id).value.trim(); const v={}; BF.forEach(id=>v[id]=g(id)); lstore.set("intro",v);
+  const g=id=>document.getElementById(id).value.trim(); const v={}; BF.forEach(id=>v[id]=g(id)); levelStore.set("intro",v);
   const name=v["b-name"]||"…", land=esc(v["b-land"]||"…"), ort=esc(v["b-ort"]||"…"), spr=esc(v["b-spr"]||"…"), beruf=esc(v["b-beruf"]||"…"), hob=esc(v["b-hobby"]||"…");
   const a=parseInt(v["b-alter"],10), aOk=!isNaN(a)&&a>=0&&a<1000;
   const letters=[...name.toUpperCase()].filter(c=>/[A-ZÄÖÜß]/.test(c));
@@ -145,7 +152,6 @@ function numBlocks(v){ if(v<11||v>999) return "";
  const grp=(cls,n,label)=>n?`<div><div class="grp">${Array.from({length:n},()=>`<span class="${cls}"></span>`).join("")}</div><small>${label}</small></div>`:"";
  const ones=o?`<div><div class="o2">${Array.from({length:o},()=>'<span class="o"></span>').join("")}</div><small>${o} Einer (ones): said FIRST</small></div>`:"";
  return `<div class="blocks" aria-hidden="true">${grp("h",h,h+" Hunderter")}${grp("t",t,t+" Zehner (tens)")}${ones}</div>`; }
-if($("#explIn")){ const upd=()=>{const v=parseInt($("#explIn").value,10); if(!isNaN(v)&&v>=0&&v<=999) $("#explOut").insertAdjacentHTML("beforeend",numBlocks(v));}; $("#explIn").addEventListener("input",upd); upd(); }
 
 /* Sprechen card simulator */
 if($("#sprechSim")){

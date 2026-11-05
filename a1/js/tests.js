@@ -7,16 +7,16 @@ const EN=t=>t?` <span class="en">· ${t}</span>`:"";
 const fmtT=(h,m)=>`${h}:${String(m).padStart(2,"0")}`;
 /* ---------- sentence tests: shared pieces (carsHtml/carHtml are in assets/js/quiz.js, posLabels/carsOf/swapStart in data.js) ---------- */
 /* an ORDER sentence as cars, one per word, verb words red */
-const wordCars=(s,verbs)=>{const vs=new Set(verbs.toLowerCase().split("|"));return carsHtml(s.split(" ").map(w=>({t:w,v:vs.has(w.replace(/[.,?]$/,"").toLowerCase())})));};
+const wordCars=(s,verbs,right,o)=>{const vs=new Set(verbs.toLowerCase().split("|")), r=right?right.split(" "):null;return carsHtml(s.split(" ").map((w,k)=>({t:w,v:vs.has(w.replace(/[.,?]$/,"").toLowerCase()),cls:r&&w!==r[k]?"bad":""})),o);};
 /* a sentence picture with the right word order, position numbers on top */
-const rightTrain=x=>carsHtml(carsOf(x),{pos:true});
+const rightTrain=x=>carsHtml(carsOf(x),{pos:true,role:true});
 /* an ARRANGE sentence as an order question; lock = how many words at the start are already in place */
 function orderQ(x,lock,head){
   const idx=x.toks.map((_,i)=>i), free=idx.slice(lock);
   let sh=shuffle(free),g=0; while(sh.every((v,i)=>x.toks[v]===x.toks[free[i]])&&g++<20) sh=shuffle(free);
-  const ord=[...idx.slice(0,lock),...sh], lab=posLabels(x.raw);
+  const ord=[...idx.slice(0,lock),...sh], lab=posLabels(x.raw), role=rolesOf(x.raw), br=brOf(x.raw);
   return{prompt:head,tokens:ord.map(i=>x.toks[i]),tokV:ord.map(i=>x.raw[i][0]==="*"),tokZ:ord.map(i=>x.raw[i][0]==="^"),tokWW:ord.map(i=>x.ww[i]),
-   lock,slots:x.raw.map((r,i)=>({lab:lab[i],v:r[0]==="*",z:r[0]==="^"})),answerTokens:x.toks,end:x.p,answer:x.toks.join(" ")+x.p,
+   lock,slots:x.raw.map((r,i)=>({lab:lab[i],v:r[0]==="*",z:r[0]==="^",role:role[i],br:br[i]})),answerTokens:x.toks,end:x.p,answer:x.toks.join(" ")+x.p,
    explain:`${rightTrain(x)}<span class="en">${esc(x.en)}</span><br>${x.r}`};
 }
 const isRequest=x=>x.p==="."&&x.raw[0][0]==="*";
@@ -91,26 +91,28 @@ const TESTS={
   gen(){const x=pick(WQ);const opts=shuffle([x[1],...shuffle(WWORDS.filter(w=>w!==x[1])).slice(0,3)]);
    return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">___ ${x[2]}?</span><span class="en">Antwort <span class="pron">(answer)</span>: <b>${x[0]}</b> · ${x[3]}</span>`,options:opts,answer:x[1],
    explain:`<b>${x[1]} ${x[2]}?</b> · ${x[4]}<br>Reminder: W-word 1st, verb 2nd.`}}},
- satzbau:{enReq:true,tag:"Satzbau",title:"Welcher Satz ist richtig?",en:"which sentence has the right word order? Look where the red verb stands",kind:"choice",
+ satzbau:{hint:true,enReq:true,tag:"Satzbau",title:"Welcher Satz ist richtig?",en:"which sentence has the right word order? Look where the red verb stands",kind:"choice",
   gen(){const x=pick(ORDER);return{prompt:`<span class="en">${x[3]}</span>`,
    options:shuffle([x[0],x[1],x[2]]),label:o=>wordCars(o,x[5]),answer:x[0],
+   wrongView:v=>`<span class="lbl">Dein Satz <span class="en">(your sentence)</span></span>${wordCars(v,x[5],x[0],{wrong:true})}<span class="lbl">Richtig <span class="en">(right)</span></span>`,
    explain:`${wordCars(x[0],x[5])}${EN(x[3])}<br>${x[4]}`}}},
- satzart:{tag:"Satzbau · Satzart",title:"Was für ein Satz?",en:"statement, W-question, yes/no question or request? Look at the verb's place",kind:"choice",
+ satzart:{hint:true,tag:"Satzbau · Satzart",title:"Was für ein Satz?",en:"statement, W-question, yes/no question or request? Look at the verb's place",kind:"choice",
   gen(){const x=pick(ARRANGE), k=satzartOf(x.raw[0][0]==="*",x.p), cars=carsOf(x);
    cars[cars.length-1]={...cars[cars.length-1],t:x.toks[x.toks.length-1]};
    const names=Object.values(SATZART).map(v=>v[0]), en=Object.fromEntries(Object.values(SATZART).map(v=>[v[0],v[1]]));
    return{prompt:`<span class="dq">Was für ein Satz ist das? <span class="en">(What kind of sentence is this? The . or ? is hidden.)</span></span>${carsHtml(cars,{pos:true})}`,
     options:names,label:o=>`${o} <span class="en" style="font-weight:400">(${en[o]})</span>`,answer:SATZART[k][0],
     explain:`${rightTrain(x)}<b>${SATZART[k][0]}</b> (${SATZART[k][1]}): ${SATZART[k][2]}${EN(esc(x.en))}`}}},
- verbplatz:{tag:"Satzbau · Verbplatz",title:"Wohin kommt das Verb?",en:"tap the gap where the verb goes: position 1, 2 or the end",kind:"gap",
+ verbplatz:{hint:true,tag:"Satzbau · Verbplatz",title:"Wohin kommt das Verb?",en:"tap the gap where the verb goes: position 1, 2 or the end",kind:"gap",
   gen(){const x=pick(ARRANGE.filter(x=>!isRequest(x))), lab=posLabels(x.raw), vi=x.raw.findIndex(r=>r[0]==="*"), ei=lab.indexOf("E");
    const i=ei>=0&&Math.random()<.5?ei:vi, isEnd=i===ei;
    const insert={t:x.toks[i],v:true,ww:x.ww[i]};
    const cars=x.raw.map((r,j)=>({t:x.toks[j],v:r[0]==="*",z:r[0]==="^",ww:x.ww[j]})).filter((_,j)=>j!==i);
    return{prompt:`<span class="dq">Wohin kommt das Wort? <span class="en">(Where does this word go? Tap the gap ▾.)</span></span><span class="gapword">${carHtml(insert)}</span><span class="en">${esc(x.en)}</span>`,
     cars,insert,p:x.p,answer:x.toks.join(" ")+x.p,
+    wrongView:(v,qq)=>{const c=[...cars];c.splice(qq.lastGap,0,{t:insert.t,v:true,cls:"bad"});return wrongStack(c.map((k,n)=>n===c.length-1?{...k,t:k.t+x.p}:k));},
     explain:`${rightTrain(x)}<span class="en">${esc(x.en)}</span><br>${isEnd?"<b>Satzklammer</b> (sentence bracket): the 2nd verb part goes to the end. ":""}${x.r}`}}},
- fehler:{tag:"Satzbau · Fehler",title:"Wo ist der Fehler?",en:"one word is in the wrong place: tap it",kind:"tapcar",
+ fehler:{hint:true,tag:"Satzbau · Fehler",title:"Wo ist der Fehler?",en:"one word is in the wrong place: tap it",kind:"tapcar",
   gen(){const x=pick(ARRANGE.filter(x=>!isRequest(x)&&!x.toks.some(t=>/,$/.test(t))));
    const vi=x.raw.findIndex(r=>r[0]==="*"), z=x.raw.findIndex(r=>r[0]==="^"), ei=posLabels(x.raw).indexOf("E"), end=ei>=0?ei:z<0?x.raw.length:z, cand=[];
    for(let j=0;j<end;j++){ if(j===vi||(x.p==="."&&j===0)||(vi===0&&j<2)) continue; cand.push(j); }
@@ -193,21 +195,22 @@ const TESTS={
      return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${x[1]}</span><span class="en">Which German verb is it?</span>`,options:shuffle([x[0],...o.map(y=>y[0])]),answer:x[0],explain:ex};}
    const x=pick(GERN);return{prompt:`<span class="en">${x[3]}</span><span class="en">Welcher Satz ist richtig? (Which sentence is correct?)</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
      explain:`<b>${x[0]}</b>${EN(x[3])}<br>gern comes right after the verb (and the person). Check the verb form too.`};}},
- ordnen:{tag:"Satzbau · Ordnen",title:"Sätze ordnen",en:"put the words in the right order",kind:"order",
+ ordnen:{hint:true,tag:"Satzbau · Ordnen",title:"Sätze ordnen",en:"put the words in the right order",kind:"order",
   gen(){const x=pick(ARRANGE);
    return orderQ(x,0,`<span class="en">Bring die Wörter in die richtige Reihenfolge. <span class="pron">(Bring the words into the right order.)</span></span><span class="big" style="font-size:clamp(20px,5vw,28px)">${esc(x.en)}</span>`)}},
- umstellen:{tag:"Satzbau · Umstellen",title:"Satz umstellen",en:"start the sentence with another word: the verb stays in position 2",kind:"order",
+ umstellen:{hint:true,tag:"Satzbau · Umstellen",title:"Satz umstellen",en:"start the sentence with another word: the verb stays in position 2",kind:"order",
   gen(){const t=pick(ARRANGE.filter(x=>TIMEFIRST.test(x.raw[0])&&x.raw[1][0]==="*"&&!x.raw.some(r=>r[0]==="^"||/,$/.test(r))));
    const s=swapStart(t), toTime=Math.random()<.5, from=toTime?s:t, to=toTime?t:s;
    const q=orderQ(to,1,`<span class="dq">Fang mit „${esc(to.toks[0])}“ an. <span class="en">(Start with “${esc(to.ww[0])}”.)</span></span>${rightTrain(from)}<span class="en">${esc(t.en)}</span>`);
    q.explain=`${rightTrain(from)}${rightTrain(to)}<span class="en">${esc(t.en)}</span><br>A new word in position 1, but the verb (<b>${esc(to.toks[1])}</b>) stays in position 2. ${toTime?"The person moves behind the verb.":"The time moves behind the verb."}`;
    return q;}},
- luecke:{enReq:true,tag:"Satzbau · Ergänzen",title:"Sätze ergänzen",en:"complete the sentence: brackets, connectors, word order",kind:"choice",
-  gen(){const x=pick(GAPS);const typed=x[5]&&Math.random()<.4;
-   const head=carsHtml(x[0].split(" ").map(w=>{const m=/^___([.,?]?)$/.exec(w);return m?{t:"?",cls:"gap",after:m[1]}:{t:w};}),{cls:"gapline"})+`<span class="en">${esc(x[1])}</span>`;
+ luecke:{hint:true,enReq:true,tag:"Satzbau · Ergänzen",title:"Sätze ergänzen",en:"complete the sentence: brackets, connectors, word order",kind:"choice",
+  gen(){const x=pick(GAPS);const typed=x[5]&&Math.random()<.4, bv=GAPBR[x[0]];
+   const wrongView=v=>wrongStack(x[0].split(" ").map(w=>{const m=/^___([.,?]?)$/.exec(w);return m?{t:v,cls:"bad",after:m[1]}:{t:w};}));
+   const head=carsHtml(x[0].split(" ").map(w=>{const m=/^___([.,?]?)$/.exec(w);return m?{t:"?",cls:"gap",after:m[1],br:bv?"e0":undefined}:{t:w,v:!!bv&&w===bv,br:bv&&w===bv?"s0":undefined};}),{cls:"gapline"})+`<span class="en">${esc(x[1])}</span>`;
    const ex=`<b>${esc(x[0].replace("___",x[3][0]))}</b><br><span class="en">Wort für Wort (word by word): ${esc(x[2])}</span><br>${x[4]}`;
-   if(typed) return{kind:"input",prompt:head+`<span class="en">Schreib das fehlende Wort. <span class="pron">(Write the missing word.)</span></span>`,answer:x[3][0],umlauts:true,explain:ex};
-   return{prompt:head,options:shuffle([...x[3]]),answer:x[3][0],explain:ex}}},
+   if(typed) return{kind:"input",prompt:head+`<span class="en">Schreib das fehlende Wort. <span class="pron">(Write the missing word.)</span></span>`,answer:x[3][0],umlauts:true,wrongView,explain:ex};
+   return{prompt:head,options:shuffle([...x[3]]),answer:x[3][0],wrongView,explain:ex}}},
  /* ---------- vocabulary with article ---------- */
  wortschatz:{tag:"Wortschatz",title:"Was bedeutet das?",en:"word + article → English, and English → word with the right article",kind:"choice",
   ranges:[["Alle",null],...VTOPICS.map(t=>[t[1],t[0]])],
@@ -433,7 +436,7 @@ const TESTS={
    if(wrong.length<2) return{prompt:`<span class="big">___ ${n.word}</span><span class="dq">der, die oder das? <span class="en">(${esc(n.eng)})</span></span>`,options:["der","die","das"],cls:o=>"o-"+o,answer:n.art,explain:info,sayAfter:say};
    return{prompt:`<span class="dq">Singular <span class="en">(one)</span></span><span class="big">${artSpan(n.art,s)}</span><span class="dq">Plural: <span class="plc">die</span> ___ ? <span class="en">(${esc(n.eng)}, many)</span></span>`,options:shuffle([pl,...wrong]),answer:pl,explain:info,sayAfter:say};
   }},
- mix:{tag:"Alle Teile",title:"Gemischter Test",en:"20 random questions from all parts",kind:"mixed",
+ mix:{tag:"Alle Teile",title:"Gemischter Test",en:`${LEVEL.round} random questions from all parts`,kind:"mixed",
   gen(){const keys=Object.keys(TESTS).filter(k=>k!=="mix");const k=pick(keys);const t=TESTS[k];const r=t.ranges?pick(t.ranges):null;const q=t.gen(r);q.kind=q.kind||t.kind;q.enReq=t.enReq;q.from=t.tag;q.fromKey=k;return q;}}
 };
 

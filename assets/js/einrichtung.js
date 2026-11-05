@@ -9,7 +9,7 @@
   const detect = () => /Android/i.test(ua) ? "android" : (/iPhone|iPad|iPod/i.test(ua) || touchMac) ? "ios" : /Win/i.test(plat + ua) ? "windows" : /Mac/i.test(plat + ua) ? "mac" : "other";
   const browser = () => /Edg\//.test(ua) ? "Edge" : /OPR\//.test(ua) ? "Opera" : /Firefox|FxiOS/.test(ua) ? "Firefox" : /Chrome|CriOS/.test(ua) ? "Chrome" : /Safari/.test(ua) ? "Safari" : "browser";
   const found = detect();
-  let dev = lstore.get("dev", "") === "" ? found : lstore.get("dev", found);
+  let dev = levelStore.get("dev", "") === "" ? found : levelStore.get("dev", found);
   if (!DEV.some(d => d[0] === dev)) dev = found;
 
   function show() {
@@ -20,7 +20,7 @@
   }
   document.getElementById("devtabs").addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
-    dev = b.dataset.dev; lstore.set("dev", dev === found ? "" : dev); show();
+    dev = b.dataset.dev; levelStore.set("dev", dev === found ? "" : dev); show();
   });
   show();
 
@@ -28,7 +28,7 @@
   const vs = document.getElementById("voiceStatus"), vl = document.getElementById("voiceList"), vt = document.getElementById("voiceTest");
   function voiceInfo() {
     if (!TTS.ok) { vs.innerHTML = `❌ This browser can't speak. Try <b>Chrome</b>, <b>Edge</b> or <b>Safari</b>.`; vt.disabled = true; return; }
-    const v = speechSynthesis.getVoices().filter(x => /^de(-|_|$)/i.test(x.lang));
+    const v = TTS.germanVoices();
     if (v.length) { vs.innerHTML = `✅ ${v.length} German voice${v.length > 1 ? "s" : ""} found. Press play and listen.`; vl.textContent = v.slice(0, 6).map(x => x.name).join(" · "); }
     else { vs.innerHTML = `⚠️ No German voice found yet. Follow the steps below, or press play anyway (some devices load voices only when they speak).`; vl.textContent = ""; }
   }

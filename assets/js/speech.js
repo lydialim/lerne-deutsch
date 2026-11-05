@@ -7,8 +7,11 @@
 const TTS = (() => {
   const ok = typeof window !== "undefined" && "speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined";
   let voices = [];
-  const pref = () => store.get("voice", "");
-  const slow = () => store.get("slow", false);
+  const pref = () => localStore.get("voice", "");
+  const slow = () => localStore.get("slow", false);
+  /* a German voice: the language code starts with de (de-DE, de_DE or plain de) */
+  const isGermanVoice = v => /^de(-|_|$)/i.test(v.lang);
+  const germanVoices = () => ok ? speechSynthesis.getVoices().filter(isGermanVoice) : [];
 
   /* ---- diagnostics: what Safari actually did (shown under the voice picker, also in the console) ---- */
   const diag = { voices: 0, last: "idle", err: "", n: 0 };
@@ -35,7 +38,7 @@ const TTS = (() => {
   /* ---- voices: iOS fills the list late (or only after the first tap), so keep retrying ---- */
   function load() {
     if (!ok) return;
-    voices = speechSynthesis.getVoices().filter(v => /^de(-|_|$)/i.test(v.lang));
+    voices = germanVoices();
     voices.sort((a, b) => (b.lang === "de-DE") - (a.lang === "de-DE") || (/google|natural|premium|enhanced/i.test(b.name)) - (/google|natural|premium|enhanced/i.test(a.name)));
     diag.voices = voices.length;
     fillPicker();
@@ -57,8 +60,9 @@ const TTS = (() => {
      (generation token), and use a watchdog that retries once if Safari never starts. */
   let keep = null;                                      /* keep a reference: Safari may garbage-collect a playing utterance */
   let lastText = "", lastAt = 0;
-  /* done (optional) runs once when the sentence has finished, so a caller can play something right after it */
-  function speak(text, rate, retry, done) {
+  /* speak(text, options): options = {rate?: 0.6 (slow), done?: called once the sentence has finished, retry?: internal} */
+  function speak(text, options) {
+    const { rate, done, retry } = options || {};
     if (!ok || !text) return false;
     /* ignore the same word fired twice within 0.6 s (double tap / touch + click) */
     const now = Date.now();
@@ -93,7 +97,7 @@ const TTS = (() => {
         /* Safari can play without ever firing "start": if audio is running, do not say it a second time */
         if (s.speaking) { report("playing-without-start-event"); return; }
         report("stuck");
-        if (!retry) { try { s.cancel(); s.resume(); } catch (e) {} speak(text, rate, true, done); }
+        if (!retry) { try { s.cancel(); s.resume(); } catch (e) {} speak(text, { rate, done, retry: true }); }
         else note("Safari did not start the audio. Tap 🔊 again, check the silent switch and volume, or reload the page. " + diagText());
       }, 1500);
     } catch (e) { report("exception", e.message); note("Audio failed: " + e.message); return false; }
@@ -113,9 +117,10 @@ const TTS = (() => {
     /* first tap: iOS often only exposes voices after a user gesture */
     document.addEventListener("touchstart", () => { if (!voices.length) pollVoices(10); }, { once: true, passive: true });
   }
-  return { ok, speak, load, fillPicker, slow, diagText, report };
+  return { ok, speak, load, fillPicker, slow, germanVoices, diagText, report };
 })();
-const speak = (t, r, done) => TTS.speak(t, r, false, done);
+/* the shorthand used by lessons and tests: speak(text) or speak(text, {rate: 0.6, done: fn}) */
+const speak = (text, options) => TTS.speak(text, options);
 
 /* text of an element without the English help, pronunciation hints and word-by-word glosses */
 function sayText(el) {
@@ -144,7 +149,8 @@ function addSpeakers(root) {
   });
   root.querySelectorAll(".lesson table, .ccard table").forEach(tb => {
     const heads = [...tb.querySelectorAll("thead th")].map(th => th.textContent.trim());
-    const cols = heads.map((h, i) => /^(Beispiel|Deutsch|Satz|Wort(?! für)|Fragewort|Frage|Antwort|Modalverb|Trennbares|Dialog|Sie sagen|Land|Sprache|Zahl|Tag|Monat)/i.test(h) && !/English|Wort für Wort/i.test(h) ? i : -1).filter(i => i >= 0);
+    /* the header must start with one of these words as a whole word: "Wortart" or "Tagesablauf" are not speech columns */
+    const cols = heads.map((h, i) => /^(Beispiel|Deutsch|Satz|Wort(?! für)|Fragewort|Frage|Antwort|Modalverb|Trennbares|Dialog|Sie sagen|Land|Sprache|Zahl|Tag|Monat)(?=$|[\s(:,/])/i.test(h) && !/English|Wort für Wort/i.test(h) ? i : -1).filter(i => i >= 0);
     if (!cols.length) return;
     tb.querySelectorAll("tbody tr").forEach(tr => cols.forEach(i => {
       const td = tr.children[i]; if (!td || td.querySelector(".spk") || td.classList.contains("en")) return;
@@ -173,8 +179,8 @@ function voicePicker() {
   h.appendChild(box);
   if (!TTS.ok) return;
   TTS.fillPicker(); TTS.report("idle");
-  $("#voiceSel").onchange = e => { store.set("voice", e.target.value); speak("Hallo! Ich spreche Deutsch."); };
-  $("#slowChk").onchange = e => store.set("slow", e.target.checked);
+  $("#voiceSel").onchange = e => { localStore.set("voice", e.target.value); speak("Hallo! Ich spreche Deutsch."); };
+  $("#slowChk").onchange = e => localStore.set("slow", e.target.checked);
   $("#voiceTest").onclick = () => speak("Hallo! Ich heiße Anna. Ich wohne in München. Meine Nummer ist null, eins, sieben, sechs.");
 }
 document.addEventListener("DOMContentLoaded", () => { voicePicker(); addSpeakers(); });

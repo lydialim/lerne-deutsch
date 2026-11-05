@@ -131,6 +131,7 @@ input[type=text],input[type=number]{font:inherit;font-size:20px;padding:10px 12p
 .g4 .gcard{padding:10px 12px;gap:2px}
 .g4 .gcard .big{font-size:26px}
 .wt{margin:0;padding-left:18px;font-size:15px;display:flex;flex-direction:column;gap:3px}
+.car.wt-x{background:var(--soft)}
 .car.wt-p{background:var(--pl-bg);border-color:var(--pl)}
 .car.wt-a{background:var(--der-bg);border-color:var(--der)}
 .car.wt-n{background:var(--das-bg);border-color:var(--das)}

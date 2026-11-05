@@ -5,8 +5,8 @@ const fmtT=(h,m)=>`${h}:${String(m).padStart(2,"0")}`;
 /* ONE explanation layout for every noun test (artikel, plural, wortschatz, bildwoerter, mix):
    1) article + word = English   2) plural, with the rule   3) WHY this article (rule or colour tip)   4) extra note / example (optional) */
 function nounInfo({a,w,p,en,note,ex}){
-  const plural=p===""?"No plural.":(p===w&&a==="die"&&note)?"Plural only.":`Plural: <span class="plc">die</span> ${p} <span class="en">· ${pluralNote({w,p})}</span>`;
-  return `<b>${artSpan(a,w)}</b>${en?` = ${en}`:""}<br>${plural}<br>${ruleOrCompound({a,w})}${note&&!(p===w&&a==="die")?`<br>${note}`:""}${ex?`<br>${ex}`:""}`;
+  const plural=p===""?"No plural.":PLURAL_ONLY.includes(w)?`Plural only: always <span class="plc">die</span> ${w}, there is no singular.`:`Plural: <span class="plc">die</span> ${p} <span class="en">· ${pluralNote({a,w,p})}</span>`;
+  return `<b>${artSpan(a,w)}</b>${en?` = ${en}`:""}<br>${plural}<br>${ruleOrCompound({a,w})}${note&&!PLURAL_ONLY.includes(w)?`<br>${note}`:""}${ex?`<br>${ex}`:""}`;
 }
 const enArt=(n)=>n.p===""?"":/^[aeiou]/i.test(n.en)?"an ":"a ";
 function opts4(right, pool, n=4){ const s=new Set([right]); for(const x of shuffle(pool)){ if(s.size>=n) break; s.add(x); } return shuffle([...s]); }
@@ -153,7 +153,7 @@ Object.assign(TESTS,{
 
  /* ---------- possessives, war/hatte ---------- */
  possessiv:{enReq:true,tag:"mein, dein, sein",title:"Possessivartikel",en:"my, your, his, her …: choose the right word",kind:"choice",
-  gen(){const p=pick(POSS);const acc=Math.random()<.3;const nn=acc?pick(POSSN.filter(n=>["Schlüssel","Handy","Tasche","Auto","Name","Telefonnummer","Adresse"].includes(n[1]))):pick(POSSN);
+  gen(){const p=pick(POSS);const acc=Math.random()<.3;const nn=acc?pick(POSSN.filter(n=>["Schlüssel","Handy","Tasche","Auto","Telefonnummer","Adresse"].includes(n[1]))):pick(POSSN);
    const ans=possForm(p[1],nn[0],nn[3],acc);const b=p[1]==="euer"?"eur":p[1];
    const wrongs=[b+"e",p[1],b+"en",b+"er"].filter(x=>x!==ans);const other=pick(POSS.filter(q=>q[1]!==p[1]));const oth=possForm(other[1],nn[0],nn[3],acc);
    const de=acc?`Ich suche ___ ${nn[1]}.`:`Das ${nn[3]?"sind":"ist"} ___ ${nn[1]}.`;const en=acc?`I'm looking for ${p[2]} ${nn[2]}.`:`That ${nn[3]?"are":"is"} ${p[2]} ${nn[2]}.`;

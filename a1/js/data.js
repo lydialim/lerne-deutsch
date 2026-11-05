@@ -28,6 +28,7 @@ const NOUNS = [
 
 function ruleFor(n){
   const w=n.w;
+  if(w==="Kuchen") return "Exception: Kuchen ends in -chen but is der. It is not a diminutive (the -chen words that mean “little …” are das).";
   if(/chen$|lein$/.test(w)) return "Nouns ending -chen/-lein are always das.";
   if(/um$/.test(w)&&n.a==="das") return "Nouns ending -um are das.";
   if(/(ung|heit|keit|ion)$/.test(w)) return "Nouns ending -ung, -heit, -keit, -ion are always die.";
@@ -40,16 +41,22 @@ function ruleFor(n){
   if(w==="Computer") return "Many nouns ending -er (tools, machines) are der.";
   return `No pattern for this one. Learn it with its colour: ${n.a==="der"?"blue":n.a==="die"?"red":"green"} <b>${n.a}</b>. Always say “${n.a} ${w}”, never just “${w}”.`;
 }
+/* nouns that exist only in the plural */
+const PLURAL_ONLY=["Eltern","Geschwister","Möbel","Lebensmittel","Pommes frites","Leute"];
 function pluralNote(n){
-  const s=n.w,p=n.p;
+  const s=n.w,p=n.p,a=n.a;
   if(s===p) return "No ending added: "+s+" stays "+p+".";
   if(p.endsWith("nnen")) return "Feminine -in → -innen.";
   if(p.endsWith("s")&&!s.endsWith("s")) return "Loan word / vowel ending → -s.";
   const uml=/[äöü]/i.test(p)&&!/[äöü]/i.test(s);
-  if(p.endsWith("er")&&!s.endsWith("er")) return (uml?"Umlaut + ":"")+"-er plural (typical for das words).";
+  const noUml=p.replace(/[äöü]/g,m=>({"ä":"a","ö":"o","ü":"u"}[m]));
+  if(uml&&noUml===s) return "Only an umlaut is added.";
+  const U=uml?"Umlaut + ":"";
+  if(/um$/.test(s)&&p.endsWith("a")) return "-um → -a: Praktikum → Praktika. Learn this pair by heart.";
   if(/um$/.test(s)&&p.endsWith("en")) return "-um → -en: Museum → Museen. Learn this pair by heart.";
-  if(p.endsWith("en")||p.endsWith("n")&&!uml) return "-n / -en plural (typical for die words).";
-  if(p.endsWith("e")) return (uml?"Umlaut + ":"")+"-e plural (typical for der words).";
+  if(p.endsWith("er")&&!s.endsWith("er")) return U+"-er plural "+(a==="das"?"(typical for das words).":"(mostly das words; a few der words, e.g. der Mann → Männer).");
+  if(p.endsWith("en")||p.endsWith("n")&&!uml) return "-n / -en plural "+(a==="die"?"(typical for die words).":a==="der"?"(der words: often weak nouns like der Name → Namen).":"(less common for das words, e.g. das Bett → Betten).");
+  if(p.endsWith("e")) return U+"-e plural "+(a==="die"?"(only a few die words, e.g. die Stadt → Städte).":a==="der"?"(typical for der words).":"(common for das words too).");
   if(uml) return "Only an umlaut is added.";
   return "Learn the plural with the noun.";
 }

@@ -16,9 +16,9 @@ Object.assign(TESTS,{
    if(m===0) return{prompt:`<span class="big">${artSpan(n.a,n.w)}</span><span class="en">Was bedeutet das? <span class="pron">(What does that mean?)</span></span>`,
      options:opts4(n.en,same.map(v=>v.en)),answer:n.en,explain:ex,sayAfter:`${n.a} ${n.w}`};
    if(m===1){const wrongArt=["der","die","das"].filter(a=>a!==n.a).map(a=>`${a} ${n.w}`);const other=pick(same);
-     return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${enArt(n)}${n.en}</span><span class="en">Which German word, with the right article?</span>`,
+     return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${enArt(n)}${n.en}</span><span class="dq">Welches deutsche Wort, mit Artikel? <span class="en">(Which German word, with the right article?)</span></span>`,
      options:shuffle([`${n.a} ${n.w}`,...wrongArt,`${other.a} ${other.w}`]),answer:`${n.a} ${n.w}`,cls:o=>"o-"+o.split(" ")[0],explain:ex,sayAfter:`${n.a} ${n.w}`};}
-   return{prompt:`<span class="big">___ ${n.w}</span><span class="en">${n.en} · der, die oder das?</span>`,options:["der","die","das"],cls:o=>"o-"+o,answer:n.a,explain:ex,sayAfter:`${n.a} ${n.w}`}}},
+   return{prompt:`<span class="big">___ ${n.w}</span><span class="dq">der, die oder das? <span class="en">(${n.en})</span></span>`,options:["der","die","das"],cls:o=>"o-"+o,answer:n.a,explain:ex,sayAfter:`${n.a} ${n.w}`}}},
 
  /* ---------- listening drills (read aloud by the browser) ---------- */
  hoerenZahl:{tag:"🔊 Hören · Zahlen",title:"Zahlen hören",en:"listen to the number or year and type it in digits",kind:"input",ranges:[["0–20",0,20],["21–99",21,99],["100–999",100,999],["1000–9999",1000,9999],["10.000–999.999",10000,999999],["Millionen (2,5)",0,0,"mio"],["Jahre (years)",1900,2030,1]],
@@ -143,7 +143,7 @@ Object.assign(TESTS,{
    const ans=possForm(p[1],nn[0],nn[3],acc);const b=p[1]==="euer"?"eur":p[1];
    const wrongs=[b+"e",p[1],b+"en",b+"er"].filter(x=>x!==ans);const other=pick(POSS.filter(q=>q[1]!==p[1]));const oth=possForm(other[1],nn[0],nn[3],acc);
    const de=acc?`Ich suche ___ ${nn[1]}.`:`Das ${nn[3]?"sind":"ist"} ___ ${nn[1]}.`;const en=acc?`I'm looking for ${p[2]} ${nn[2]}.`:`That ${nn[3]?"are":"is"} ${p[2]} ${nn[2]}.`;
-   return{prompt:`<span class="en">Person: <b>${p[0]}</b> → ${p[2]}</span><span class="big" style="font-size:clamp(22px,5.5vw,34px)">${de}</span><span class="en">${en}</span>`,
+   return{prompt:`<span class="dq">Person: <b>${p[0]}</b> <span class="en">→ ${p[2]}</span></span><span class="big" style="font-size:clamp(22px,5.5vw,34px)">${de}</span><span class="en">${en}</span>`,
     options:shuffle([ans,...[...new Set([...shuffle(wrongs).slice(0,2),oth])].filter(x=>x!==ans)].slice(0,4)),answer:ans,
     explain:`${p[0]} → <b>${p[1]}</b> (${p[2]}) · ${artSpan(nn[0],nn[1])}${nn[3]?" (plural)":""} → <b>${ans} ${nn[1]}</b><br>Endings like ein: der / das → ${p[1]}, die / plural → ${b}e${acc&&nn[0]==="der"?`, der in Akkusativ → <b>${b}en</b>`:""}.`,sayAfter:de.replace("___",ans)}}},
  warHatte:{tag:"war / hatte",title:"war oder hatte?",en:"the past of sein (was) and haben (had)",kind:"choice",
@@ -200,27 +200,28 @@ Object.assign(TESTS,{
    const n=pick(pool), mine=KARTEN.find(c=>c.de===n.cat).items;
    const pic=n.pic.startsWith("#")?`<span class="swatch" style="background:${n.pic};width:72px;height:72px;border-radius:50%;border:2px solid var(--line);display:inline-block"></span>`:`<span class="big" style="font-size:72px;line-height:1.1">${n.pic}</span>`;
    const pl=cardPlural(n), say=(n.art?n.art+" ":"")+n.word;
-   const info=`<b>${n.art?artSpan(n.art,n.word):n.word}</b> = ${n.eng}${pl?`<br>Plural: <span class="plc">die</span> ${pl}`:""}${n.ex?`<br>${esc(n.ex)}`:""}`;
+   const rule=n.art?ruleFor({a:n.art,w:n.word}):"", realRule=rule&&!rule.startsWith("No easy rule");
+   const info=`<b>${n.art?artSpan(n.art,n.word):n.word}</b> = ${n.eng}${pl?`<br>Plural: <span class="plc">die</span> ${pl} <span class="en">· ${pluralNote({w:n.word,p:pl})}</span>`:""}${n.ex?`<br>${esc(n.ex)}`:""}${n.art?`<br>💡 ${realRule?rule:`No pattern for this one. Learn it with its colour: ${n.art==="der"?"blue":n.art==="die"?"red":"green"} <b>${n.art}</b>. Always say “${n.art} ${n.word}”, never just “${n.word}”.`}`:""}`;
    if(!n.art){ /* verbs, adjectives, colours: no article */
     const words=[...new Set(mine.filter(v=>v.word!==n.word).map(v=>v.word))];
     const opts=shuffle([n.word,...shuffle(words).slice(0,3)]);
-    if(Math.random()<.5) return{prompt:`${pic}<span class="en">Welches Wort ist das? <span class="pron">(Which word is this?)</span></span>`,options:opts,answer:n.word,explain:info,sayAfter:say};
-    return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${esc(n.eng)}</span><span class="en">Which German word is this?</span>`,options:opts,answer:n.word,explain:info,sayAfter:say};
+    if(Math.random()<.5) return{prompt:`${pic}<span class="dq">Welches Wort ist das? <span class="en">(Which word is this?)</span></span>`,options:opts,answer:n.word,explain:info,sayAfter:say};
+    return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${esc(n.eng)}</span><span class="dq">Welches deutsche Wort ist das? <span class="en">(Which German word is this?)</span></span>`,options:opts,answer:n.word,explain:info,sayAfter:say};
    }
    const m=rnd(0,pl?3:2);
    const nouns=mine.filter(v=>v.art&&v.word!==n.word), others=nouns.length>=2?nouns:KARTEN.flatMap(c=>c.items).filter(v=>v.art&&v.word!==n.word);
    const right=`${n.art} ${n.word}`;
    const full=()=>{const wrongArt=["der","die","das"].filter(a=>a!==n.art).map(a=>`${a} ${n.word}`);const o=pick(others);
      return shuffle([...new Set([right,...wrongArt,`${o.art} ${o.word}`])]);};
-   if(m===0) return{prompt:`${pic}<span class="en">Welches Wort ist das, mit Artikel? <span class="pron">(Which word is this, with its article?)</span></span>`,options:full(),answer:right,cls:o=>"o-"+o.split(" ")[0],explain:info,sayAfter:say};
-   if(m===1) return{prompt:`<span class="big">___ ${n.word}</span><span class="en">${esc(n.eng)} · der, die oder das?</span>`,options:["der","die","das"],cls:o=>"o-"+o,answer:n.art,explain:info,sayAfter:say};
-   if(m===2) return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${esc(n.eng)}</span><span class="en">Which German word, with the right article?</span>`,options:full(),answer:right,cls:o=>"o-"+o.split(" ")[0],explain:info,sayAfter:say};
+   if(m===0) return{prompt:`${pic}<span class="dq">Welches Wort ist das, mit Artikel? <span class="en">(Which word is this, with its article?)</span></span>`,options:full(),answer:right,cls:o=>"o-"+o.split(" ")[0],explain:info,sayAfter:say};
+   if(m===1) return{prompt:`<span class="big">___ ${n.word}</span><span class="dq">der, die oder das? <span class="en">(${esc(n.eng)})</span></span>`,options:["der","die","das"],cls:o=>"o-"+o,answer:n.art,explain:info,sayAfter:say};
+   if(m===2) return{prompt:`<span class="big" style="font-size:clamp(24px,6vw,36px)">${esc(n.eng)}</span><span class="dq">Welches deutsche Wort, mit Artikel? <span class="en">(Which German word, with the right article?)</span></span>`,options:full(),answer:right,cls:o=>"o-"+o.split(" ")[0],explain:info,sayAfter:say};
    const s=n.word, cand=new Set([s+"e",s+"en",s+"n",s+"s",s+"er",s,s+"nen"]);
    const um=s.replace(/a(?!.*[aou])|o(?!.*[aou])|u(?!.*[aou])/,x=>({a:"ä",o:"ö",u:"ü"}[x]));
    if(um!==s){cand.add(um+"e");cand.add(um+"er");cand.add(um);}
    cand.delete(pl); const wrong=shuffle([...cand].filter(c=>!/(ee|nnn|ene$)/.test(c))).slice(0,2);
-   if(wrong.length<2) return{prompt:`<span class="big">___ ${n.word}</span><span class="en">${esc(n.eng)} · der, die oder das?</span>`,options:["der","die","das"],cls:o=>"o-"+o,answer:n.art,explain:info,sayAfter:say};
-   return{prompt:`<span class="en">Singular</span><span class="big">${artSpan(n.art,s)}</span><span class="en">${esc(n.eng)} → Plural: <span class="plc">die</span> ___ ?</span>`,options:shuffle([pl,...wrong]),answer:pl,explain:info,sayAfter:say};
+   if(wrong.length<2) return{prompt:`<span class="big">___ ${n.word}</span><span class="dq">der, die oder das? <span class="en">(${esc(n.eng)})</span></span>`,options:["der","die","das"],cls:o=>"o-"+o,answer:n.art,explain:info,sayAfter:say};
+   return{prompt:`<span class="dq">Singular <span class="en">(one)</span></span><span class="big">${artSpan(n.art,s)}</span><span class="dq">Plural: <span class="plc">die</span> ___ ? <span class="en">(${esc(n.eng)}, many)</span></span>`,options:shuffle([pl,...wrong]),answer:pl,explain:info,sayAfter:say};
   }}
 });
 

@@ -6,6 +6,9 @@ const SVGPIC = {
   table: '<svg class="psvg" viewBox="0 0 64 64"><rect x="6" y="20" width="52" height="8" rx="2" fill="#c68a4e"/><rect x="10" y="28" width="5" height="26" rx="1.5" fill="#a56a33"/><rect x="49" y="28" width="5" height="26" rx="1.5" fill="#a56a33"/><rect x="15" y="28" width="34" height="3" fill="#a56a33" opacity=".55"/></svg>',
   desk: '<svg class="psvg" viewBox="0 0 64 64"><rect x="4" y="18" width="56" height="7" rx="2" fill="#c68a4e"/><rect x="8" y="25" width="4" height="29" rx="1.5" fill="#a56a33"/><rect x="38" y="25" width="18" height="29" rx="2" fill="#a56a33"/><path d="M41 34h12M41 44h12" stroke="#c68a4e" stroke-width="2"/><circle cx="47" cy="30" r="1.4" fill="#f3d9b1"/><circle cx="47" cy="39" r="1.4" fill="#f3d9b1"/><circle cx="47" cy="49" r="1.4" fill="#f3d9b1"/></svg>',
   grid: '<svg class="psvg" viewBox="0 0 64 64"><rect x="8" y="12" width="48" height="40" rx="3" fill="#fff" stroke="#546e7a" stroke-width="2"/><rect x="8" y="12" width="48" height="10" rx="3" fill="#1e5bd6"/><path d="M8 32h48M8 42h48M24 22v30M40 22v30" stroke="#546e7a" stroke-width="2"/></svg>',
+  oven: '<svg class="psvg" viewBox="0 0 64 64"><rect x="8" y="8" width="48" height="50" rx="4" fill="#cfd8dc" stroke="#546e7a" stroke-width="2"/><circle cx="18" cy="16" r="3" fill="#546e7a"/><circle cx="28" cy="16" r="3" fill="#546e7a"/><rect x="14" y="26" width="36" height="26" rx="3" fill="#37474f"/><rect x="18" y="30" width="28" height="18" rx="2" fill="#ff8f00" opacity=".75"/><rect x="20" y="22" width="24" height="3" rx="1.5" fill="#546e7a"/></svg>',
+  pepper: '<svg class="psvg" viewBox="0 0 64 64"><circle cx="32" cy="9" r="4" fill="#5d4037"/><rect x="30" y="11" width="4" height="6" fill="#5d4037"/><path d="M22 17h20l-3 12 5 25H20l5-25z" fill="#8d6e63" stroke="#5d4037" stroke-width="2"/><rect x="20" y="52" width="24" height="5" rx="2" fill="#5d4037"/><circle cx="12" cy="56" r="2" fill="#3e2723"/><circle cx="52" cy="55" r="2" fill="#3e2723"/><circle cx="48" cy="59" r="1.6" fill="#3e2723"/></svg>',
+  vinegar: '<svg class="psvg" viewBox="0 0 64 64"><rect x="27" y="4" width="10" height="7" rx="2" fill="#6d4c41"/><path d="M28 11h8v9c8 4 10 10 10 16v20a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V36c0-6 2-12 10-16z" fill="#8d2b2b" opacity=".85" stroke="#4e1a1a" stroke-width="2"/><rect x="22" y="36" width="20" height="13" rx="2" fill="#fff8e1"/><path d="M26 41h12M26 45h8" stroke="#8d2b2b" stroke-width="2"/></svg>',
   flask: '<svg class="psvg" viewBox="0 0 64 64"><rect x="22" y="8" width="20" height="9" rx="3" fill="#455a64"/><rect x="18" y="17" width="28" height="39" rx="7" fill="#90a4ae"/><rect x="18" y="30" width="28" height="4" fill="#607d8b"/><path d="M46 24c8 0 8 16 0 16" fill="none" stroke="#455a64" stroke-width="3"/></svg>'
 };
 const picGlyph = p => p.startsWith("svg:") ? SVGPIC[p.slice(4)] : p;
@@ -39,7 +42,24 @@ const KARTEN = [
 🍗|das|Hähnchen|chicken
 🐟|der|Fisch|fish
 🍰|der|Kuchen|cake
-🍫|die|Schokolade|chocolate|-`],
+🍫|die|Schokolade|chocolate|-
+🍐|die|Birne|pear|Birnen|also: light bulb
+🍋|die|Zitrone|lemon|Zitronen|Adj: sauer · Die Zitrone ist sauer.
+🥒|die|Gurke|cucumber|Gurken
+🧅|die|Zwiebel|onion|Zwiebeln
+🥐|das|Gebäck|pastries, baked goods|-|no plural: das Gebäck = all pastries together
+🍦|die|Sahne|cream|-|die Schlagsahne = whipped cream · Kaffee mit Sahne
+🧂|das|Salz|salt|-|Adj: salzig (salty)
+svg:pepper|der|Pfeffer|pepper (spice)|-|Salz und Pfeffer · the vegetable = die Paprika
+🫒|das|Öl|oil|Öle|das Olivenöl = olive oil
+svg:vinegar|der|Essig|vinegar|-|Öl und Essig (for the salad)
+🍖|der|Grill|grill, barbecue|Grills|Verb: grillen · Am Wochenende grillen wir.
+svg:oven|der|Ofen|oven|Öfen|also: der Backofen · Verb: backen
+🎉|die|Party|party|Partys|English word, plural -s (not -ies!) · eine Party machen
+🍬||süß|sweet||Adj. Die Schokolade ist süß.
+😖||sauer|sour||Adj. Die Zitrone ist sauer. (also: annoyed – Ich bin sauer!)
+😣||bitter|bitter||Adj. Der Kaffee ist bitter.
+🌶️||scharf|spicy, hot||Adj. Das Curry ist sehr scharf. (not heiß = hot temperature)`],
  ["Einkaufen", "shopping", `🛒|das|Einkaufen|shopping|-|Ich gehe einkaufen. (I go shopping.)
 🏪|der|Markt|market|Märkte
 🥐|die|Bäckerei|bakery|Bäckereien

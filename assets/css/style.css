@@ -137,6 +137,8 @@ input[type=text],input[type=number]{font:inherit;font-size:20px;padding:10px 12p
 .rule{border-left:4px solid var(--ink);background:var(--soft);border-radius:0 8px 8px 0;padding:8px 12px;font-size:15px;line-height:1.5}
 .rule > b{display:block;font-family:var(--display);margin-bottom:2px}
 .rule ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.car.neg{background:var(--pl-bg);border-color:var(--pl);color:var(--pl);font-weight:800}
+.g4.two{grid-template-columns:1fr 1fr}
 .jump{display:flex;flex-wrap:wrap;gap:6px;padding-top:8px}
 .jump a{border:1.5px solid var(--ink);background:var(--card);border-radius:999px;padding:6px 12px;font-weight:700;font-size:15px}
 .jump a:hover{background:var(--ink);color:var(--paper)}

@@ -144,7 +144,7 @@ input[type=text],input[type=number]{font:inherit;font-size:20px;padding:10px 12p
 .cat{padding-top:18px}
 .cathead{font-size:24px;padding-bottom:6px;border-bottom:3px solid var(--ink);margin-bottom:10px}
 .cat > .cheat{padding-block:0}
-.jump{display:flex;gap:6px;padding:8px 0 4px;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:5;background:var(--paper)}
+.jump{display:flex;flex-wrap:wrap;gap:6px;padding:8px 0 4px;scrollbar-width:none}
 .jump::-webkit-scrollbar{display:none}
 .jump a{white-space:nowrap;flex:none;color:var(--ink);text-decoration:none}
 .jump a span{display:none}

@@ -9,6 +9,7 @@ const SVGPIC = {
   oven: '<svg class="psvg" viewBox="0 0 64 64"><rect x="8" y="8" width="48" height="50" rx="4" fill="#cfd8dc" stroke="#546e7a" stroke-width="2"/><circle cx="18" cy="16" r="3" fill="#546e7a"/><circle cx="28" cy="16" r="3" fill="#546e7a"/><rect x="14" y="26" width="36" height="26" rx="3" fill="#37474f"/><rect x="18" y="30" width="28" height="18" rx="2" fill="#ff8f00" opacity=".75"/><rect x="20" y="22" width="24" height="3" rx="1.5" fill="#546e7a"/></svg>',
   pepper: '<svg class="psvg" viewBox="0 0 64 64"><circle cx="32" cy="9" r="4" fill="#5d4037"/><rect x="30" y="11" width="4" height="6" fill="#5d4037"/><path d="M22 17h20l-3 12 5 25H20l5-25z" fill="#8d6e63" stroke="#5d4037" stroke-width="2"/><rect x="20" y="52" width="24" height="5" rx="2" fill="#5d4037"/><circle cx="12" cy="56" r="2" fill="#3e2723"/><circle cx="52" cy="55" r="2" fill="#3e2723"/><circle cx="48" cy="59" r="1.6" fill="#3e2723"/></svg>',
   vinegar: '<svg class="psvg" viewBox="0 0 64 64"><rect x="27" y="4" width="10" height="7" rx="2" fill="#6d4c41"/><path d="M28 11h8v9c8 4 10 10 10 16v20a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V36c0-6 2-12 10-16z" fill="#8d2b2b" opacity=".85" stroke="#4e1a1a" stroke-width="2"/><rect x="22" y="36" width="20" height="13" rx="2" fill="#fff8e1"/><path d="M26 41h12M26 45h8" stroke="#8d2b2b" stroke-width="2"/></svg>',
+  cocoa: '<svg class="psvg" viewBox="0 0 64 64"><path d="M24 10c-3 4 3 6 0 10M32 8c-3 4 3 6 0 10M40 10c-3 4 3 6 0 10" fill="none" stroke="#bcaaa4" stroke-width="2.5" stroke-linecap="round"/><path d="M12 24h36v18a14 14 0 0 1-14 14h-8a14 14 0 0 1-14-14z" fill="#e57373" stroke="#b71c1c" stroke-width="2"/><ellipse cx="30" cy="25" rx="17" ry="4" fill="#6d4c41"/><path d="M48 30c9 0 9 14-1 14" fill="none" stroke="#b71c1c" stroke-width="3.5"/></svg>',
   flask: '<svg class="psvg" viewBox="0 0 64 64"><rect x="22" y="8" width="20" height="9" rx="3" fill="#455a64"/><rect x="18" y="17" width="28" height="39" rx="7" fill="#90a4ae"/><rect x="18" y="30" width="28" height="4" fill="#607d8b"/><path d="M46 24c8 0 8 16 0 16" fill="none" stroke="#455a64" stroke-width="3"/></svg>'
 };
 const picGlyph = p => p.startsWith("svg:") ? SVGPIC[p.slice(4)] : p;
@@ -39,10 +40,19 @@ const KARTEN = [
 🥗|der|Salat|salad
 🍕|die|Pizza|pizza|Pizzen
 🥩|das|Fleisch|meat
-🍗|das|Hähnchen|chicken
+🍗|das|Hähnchen|chicken|-|das Huhn, Hühner = chicken (the animal)
+🐖|das|Schweinefleisch|pork|-|das Schwein (pig) + das Fleisch (meat)
+🥓|der|Schinken|ham|Schinken|ein Brot mit Schinken
 🐟|der|Fisch|fish
 🍰|der|Kuchen|cake
 🍫|die|Schokolade|chocolate|-
+🥦|das|Gemüse|vegetables|-|no plural: das Gemüse = all vegetables together
+🍉|das|Obst|fruit|-|no plural: Äpfel, Birnen, Bananen … = Obst
+🥜|die|Nuss|nut|Nüsse|die Erdnuss = peanut · die Walnuss = walnut
+🎃|der|Kürbis|pumpkin|Kürbisse|die Kürbissuppe = pumpkin soup
+svg:cocoa|der|Kakao|cocoa, hot chocolate|-|Ich trinke einen Kakao.
+🥤|die|Cola|cola|Colas|in Bavaria & Austria also: das Cola
+🍹|die|Getränke|drinks|PL|singular: das Getränk · Was möchten Sie trinken?
 🍐|die|Birne|pear|Birnen|also: light bulb
 🍋|die|Zitrone|lemon|Zitronen|Adj: sauer · Die Zitrone ist sauer.
 🥒|die|Gurke|cucumber|Gurken
@@ -195,7 +205,8 @@ svg:flask|die|Thermoskanne|flask (thermos)|Thermoskannen
 🏫|die|Schule|school
 🚪|die|Tür|door
 🪟|das|Fenster|window
-💻|der|Computer|computer`],
+💻|der|Computer|computer
+🔤|das|Wort|word|Wörter|das Wörterbuch = dictionary`],
  ["Computer und E-Mail", "computer and e-mail", `💻|der|Computer|computer
 svg:table|der|Tisch|table
 svg:grid|die|Tabelle|table (of data)|Tabellen
@@ -349,7 +360,9 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 🥨||typisch|typical||Brezeln sind typisch bayerisch.
 🚫||verboten|forbidden, not allowed||Rauchen verboten! (no smoking)
 👀||wach|awake||↔ müde
-❗||wichtig|important||Das ist wichtig.`],
+❗||wichtig|important||Das ist wichtig.
+♂️||männlich|male||Adj. der Mann → männlich · on forms: m
+♀️||weiblich|female||Adj. das Weib → weiblich · on forms: w`],
  ["Länder und Sprachen", "countries and languages", `🇩🇿||Algerien|Algeria||Sprache: Arabisch
 🇧🇷||Brasilien|Brazil||Sprache: Portugiesisch
 🇧🇬||Bulgarien|Bulgaria||Sprache: Bulgarisch

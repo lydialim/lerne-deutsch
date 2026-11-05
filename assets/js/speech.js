@@ -57,7 +57,8 @@ const TTS = (() => {
      (generation token), and use a watchdog that retries once if Safari never starts. */
   let keep = null;                                      /* keep a reference: Safari may garbage-collect a playing utterance */
   let lastText = "", lastAt = 0;
-  function speak(text, rate, retry) {
+  /* done (optional) runs once when the sentence has finished, so a caller can play something right after it */
+  function speak(text, rate, retry, done) {
     if (!ok || !text) return false;
     /* ignore the same word fired twice within 0.6 s (double tap / touch + click) */
     const now = Date.now();
@@ -75,12 +76,13 @@ const TTS = (() => {
       keep = u;
       let started = false;
       u.onstart = () => { if (my !== diag.n) return; started = true; report("started"); };
-      u.onend = () => { if (my !== diag.n) return; keep = null; report(started ? "finished" : "ended-without-start"); };
+      u.onend = () => { if (my !== diag.n) return; keep = null; report(started ? "finished" : "ended-without-start"); if (done) done(); };
       u.onerror = e => {
         if (my !== diag.n) return;                      /* error from a cancelled, older utterance */
         keep = null;
         const code = (e && e.error) || "unknown";
         report("error", code);
+        if (!/canceled|interrupted/.test(code) && done) done();
         if (!/canceled|interrupted/.test(code)) note("Audio error: " + code + ". Check the silent switch, volume and the German voice (see Einrichtung).");
       };
       s.speak(u);
@@ -91,7 +93,7 @@ const TTS = (() => {
         /* Safari can play without ever firing "start": if audio is running, do not say it a second time */
         if (s.speaking) { report("playing-without-start-event"); return; }
         report("stuck");
-        if (!retry) { try { s.cancel(); s.resume(); } catch (e) {} speak(text, rate, true); }
+        if (!retry) { try { s.cancel(); s.resume(); } catch (e) {} speak(text, rate, true, done); }
         else note("Safari did not start the audio. Tap 🔊 again, check the silent switch and volume, or reload the page. " + diagText());
       }, 1500);
     } catch (e) { report("exception", e.message); note("Audio failed: " + e.message); return false; }
@@ -113,7 +115,7 @@ const TTS = (() => {
   }
   return { ok, speak, load, fillPicker, slow, diagText, report };
 })();
-const speak = (t, r) => TTS.speak(t, r);
+const speak = (t, r, done) => TTS.speak(t, r, false, done);
 
 /* text of an element without the English help, pronunciation hints and word-by-word glosses */
 function sayText(el) {

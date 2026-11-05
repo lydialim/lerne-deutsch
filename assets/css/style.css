@@ -125,7 +125,7 @@ input[type=text],input[type=number]{font:inherit;font-size:20px;padding:10px 12p
 .tabs .go{margin-left:auto;align-self:center}
 /* cheat sheet */
 .basics{display:flex;flex-direction:column;gap:12px;padding-top:12px}
-.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px;align-items:start}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:10px;align-items:start}
 .kasus{grid-column:1/-1}
 .g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
 .g4 .gcard{padding:10px 12px;gap:2px}
@@ -137,6 +137,25 @@ input[type=text],input[type=number]{font:inherit;font-size:20px;padding:10px 12p
 .rule{border-left:4px solid var(--ink);background:var(--soft);border-radius:0 8px 8px 0;padding:8px 12px;font-size:15px;line-height:1.5}
 .rule > b{display:block;font-family:var(--display);margin-bottom:2px}
 .rule ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.jump{display:flex;flex-wrap:wrap;gap:6px;padding-top:8px}
+.jump a{border:1.5px solid var(--ink);background:var(--card);border-radius:999px;padding:6px 12px;font-weight:700;font-size:15px}
+.jump a:hover{background:var(--ink);color:var(--paper)}
+.rules{padding-top:20px;display:flex;flex-direction:column;gap:8px}
+.rules h2{font-size:24px}
+.acc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0 14px}
+.acc > summary{cursor:pointer;font-family:var(--display);font-weight:800;font-size:17px;padding:12px 0;list-style:none}
+.acc > summary::before{content:"▸ ";color:var(--muted)}
+.acc[open] > summary::before{content:"▾ "}
+.acc[open]{padding-bottom:12px}
+.acc .rule{margin-bottom:8px}
+.acc .rule > b{display:none}
+.acc.more{margin-top:12px}
+.acc.more .cheat{padding-block:0 8px}
+.dia .tablebox{overflow:visible}
+.dia table.mini{min-width:0;width:100%;font-size:14px;table-layout:auto}
+.mini td,.mini th{padding:4px 3px}
+.jump a{text-decoration:none}
+.basics{padding-top:8px}
 .detailhead{padding-top:28px;font-size:24px}
 .kasus .tablebox td{vertical-align:top}
 .cheat{columns:3 270px;column-gap:12px;padding-block:20px}

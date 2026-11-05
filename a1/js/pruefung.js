@@ -151,7 +151,12 @@
     if (s === "hear") speak(P[i][1]);
     else if (s === "slow") speak(P[i][1], 0.6);
     else if (s === "rec") { rec ? stop() : start(); }
-    else if (s === "cmp") { speak(P[i][1]); const a = root.querySelector("audio"); if (a) { const onEnd = () => { }; setTimeout(() => { a.currentTime = 0; a.play(); }, 100 + P[i][1].length * 85); } }
+    else if (s === "cmp") {
+      /* model first, then my recording as soon as the model has finished. The timer is only a fallback for browsers that never report the end. */
+      const a = root.querySelector("audio"); if (!a) return;
+      let played = false; const play = () => { if (played) return; played = true; a.currentTime = 0; a.play(); };
+      if (!speak(P[i][1], undefined, () => setTimeout(play, 250))) play(); else setTimeout(play, 2500 + P[i][1].length * 110);
+    }
     else if (s === "next" || s === "prev") { if (rec) stop(); i = (i + (s === "next" ? 1 : P.length - 1)) % P.length; lstore.set("spkI", i); draw(); }
   });
   draw();

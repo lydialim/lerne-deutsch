@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Shared code (`assets/`) vs per-level code (`a1/`).** `assets/js/*` and `assets/css/style.css` serve every level. Everything level-specific sits in `<level>/js/` and is wired in through globals, with no modules or imports. Script load order in each HTML page therefore matters.
 
 - `a1/js/level.js` sets `window.LEVEL` (id, title, top-nav `pages`, and `parts`, the lesson list for the phone lesson menu). `assets/js/common.js` reads `LEVEL.id` to prefix every localStorage key (`lstore`, e.g. `a1:best`). `assets/js/layout.js` builds the header, tabs, bottom bar and lesson sheet into `<header id="site-header">` and `<footer id="site-footer">`. The footer text for all pages lives in `layout.js`.
-- `a1/js/tests.js` and `tests2.js` define the globals `TESTS`, `GROUPS` and `RULES`, which `assets/js/quiz.js` consumes. The `quiz.js` header comment documents the test and question object shapes (`kind` choice/input/order/mixed, `say` for listening, and so on). `tests.html#<key>` opens a test directly. `data.js` and `data2.js` hold the word lists that the test `gen()` functions draw from. `lessons.js` drives the interactive widgets inside lessons.
+- `a1/js/tests.js` defines the globals `TESTS`, `GROUPS` and `RULES`, which `assets/js/quiz.js` consumes. The `quiz.js` header comment documents the test and question object shapes (`kind` choice/input/order/mixed, `say` for listening, and so on). `tests.html#<key>` opens a test directly. `data.js` holds all the word lists that the test `gen()` functions, the picture cards and the lessons draw from. `lessons.js` drives the interactive widgets inside lessons.
 - `assets/js/speech.js` adds 🔊 buttons automatically to `.train`, `[data-say]` and table columns headed Beispiel/Deutsch/Satz/Wort.
 
 **Lessons are hand-written HTML.** Each lesson is a `<section class="lesson" id="l-…">` in one of `grammatik.html`, `zahlen.html`, `themen.html` or `pruefung.html`. Each lesson page also has its own `<nav class="subnav">` of anchors.
@@ -29,7 +29,7 @@ Adding, renaming or reordering a lesson means updating all of these:
 3. `parts` in `a1/js/level.js` (the phone lesson menu).
 4. `a1/index.html` (the overview) and the lesson counts in `README.md`.
 
-Adding a test means adding it to `TESTS` and its key to `GROUPS` in `tests2.js`, otherwise it won't show up on the tests page.
+Adding a test means adding it to `TESTS` and its key to `GROUPS` in `tests.js`, otherwise it won't show up on the tests page.
 
 ## New level
 

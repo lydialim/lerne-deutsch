@@ -12,10 +12,11 @@
 <div class="wrap">
 <header id="site-header"></header>
 <main>
-<div class="cheathead"><h2>Spickzettel <span class="en">(cheat sheet)</span></h2><p class="lead">8 pictures = A1 grammar. Tap <b>Regel erklärt</b> in a card for the rule.</p></div>
-<nav class="jump" aria-label="Panels"><a href="#p1">1<span> Wortarten</span></a><a href="#p2">2<span> der/die/das</span></a><a href="#p3">3<span> Artikel</span></a><a href="#kasus">4<span> Nom./Akk.</span></a><a href="#p5">5<span> Pronomen</span></a><a href="#p6">6<span> Verben</span></a><a href="#p7">7<span> Satzbau</span></a><a href="#p8">8<span> nicht/kein</span></a><a href="#karten">+<span> Karten</span></a></nav>
+<div class="cheathead"><h2>Spickzettel <span class="en">(cheat sheet)</span></h2><p class="lead">One picture per lesson. Tap <b>Regel erklärt</b> in a card for the rule and practice.</p></div>
+<nav class="jump" aria-label="Categories"><a href="#sec-a">A<span> Grammatik</span></a><a href="#sec-b">B<span> Zahlen</span></a><a href="#sec-c">C<span> Themen</span></a><a href="#sec-d">D<span> Prüfung</span></a></nav>
 <div class="toolbar"><button type="button" id="toggle-rules" class="go">▾ Alle Regeln öffnen <span class="en">(open all rules)</span></button></div>
-<section class="basics" id="basics">
+<section class="basics cat" id="sec-a">
+<h2 class="cathead">A · Grammatik <span class="en">(grammar · lessons 1–7)</span></h2>
 <div class="bgrid">
 
 <div class="dia" id="p1"><div class="cap">1 · Wortarten <small>(word types)</small></div>
@@ -79,7 +80,29 @@
   </details>
 </div>
 
-<div class="dia kasus" id="kasus"><div class="cap">4 · Nominativ &amp; Akkusativ <small>(who does it · what gets it)</small></div>
+<div class="dia" id="s-plural"><div class="cap">4 · Plural <small>(one → many · lesson 4)</small></div>
+  <div class="tablebox"><table class="mini"><thead><tr><th>Ending</th><th>Typical</th><th>Example</th></tr></thead><tbody>
+<tr><td><b>-n / -en</b></td><td class="die">die-words</td><td>Lampe → Lampe<b>n</b></td></tr>
+<tr><td><b>-nen</b></td><td class="die">-in</td><td>Freundin → Freundin<b>nen</b></td></tr>
+<tr><td><b>-e / ¨e</b></td><td class="der">der-words</td><td>Tisch → Tisch<b>e</b> · Stuhl → St<b>ü</b>hl<b>e</b></td></tr>
+<tr><td><b>-er / ¨er</b></td><td class="das">das-words</td><td>Kind → Kind<b>er</b> · Buch → B<b>ü</b>ch<b>er</b></td></tr>
+<tr><td><b>-s</b></td><td>loan words</td><td>Handy → Handy<b>s</b></td></tr>
+<tr><td><b>– / ¨</b></td><td>-er, -el, -chen</td><td>Computer · Apfel → <b>Ä</b>pfel</td></tr>
+</tbody></table></div>
+  <p class="trick"><b>Plural article = always <span class="plc">die</span></b> · learn it with the noun: <i>der Tisch, -e</i></p>
+  <details class="pr"><summary>Regel erklärt <span class="en">(rule explained)</span></summary>
+<div class="rule"><ol>
+<li>There is <b>no single rule</b> for the plural. Learn the plural together with the noun (dictionary: <i>Tisch, der, -e</i>).</li>
+<li>¨ means the vowel gets an <b>umlaut</b>: a → ä, o → ö, u → ü.</li>
+<li>The article in the plural is <b>die</b> for every gender: <i>der Tisch, das Buch, die Lampe → <b>die</b> Tische, Bücher, Lampen</i>.</li>
+<li>No plural article for "a": <i>ein Kind → Kinder</i> (no article), <i>kein Kind → keine Kinder</i>.</li>
+<li>Most <i>die</i>-words add <b>-n/-en</b>; many <i>der</i>-words add <b>-e</b>; many <i>das</i>-words add <b>-er</b>.</li>
+</ol></div>
+<p class="practice"><span>Üben <span class="en">(practise)</span></span><a class="go" href="tests.html#plural">Plural</a></p>
+  </details>
+</div>
+
+<div class="dia kasus" id="kasus"><div class="cap">5 · Nominativ &amp; Akkusativ <small>(who does it · what gets it)</small></div>
   <svg viewBox="0 0 560 230" role="img" aria-label="Der Mann kauft den Salat: der Mann is Nominativ, kauft is the verb, den Salat is Akkusativ">
     <text x="280" y="18" text-anchor="middle" class="mut" font-size="16">Who does it? → the action → what gets it?</text>
     <rect x="10" y="34" width="170" height="74" rx="12" class="bder"/>
@@ -131,7 +154,7 @@
   </details>
 </div>
 
-<div class="dia" id="p5"><div class="cap">5 · Pronomen <small>(I · me)</small></div>
+<div class="dia" id="p5"><div class="cap">6 · Pronomen <small>(I · me)</small></div>
   <div class="tablebox"><table class="mini">
     <thead><tr><th>Nom.</th><th>Akk.</th><th class="en">English</th></tr></thead>
     <tbody>
@@ -155,7 +178,7 @@
   </details>
 </div>
 
-<div class="dia" id="p6"><div class="cap">6 · Verben <small>(verbs)</small></div>
+<div class="dia" id="p6"><div class="cap">7 · Verben <small>(verbs)</small></div>
   <div class="tablebox"><table class="mini">
     <thead><tr><th></th><th>wohnen</th><th>sein</th><th>haben</th></tr></thead>
     <tbody>
@@ -167,7 +190,7 @@
       <tr><td>sie/Sie</td><td>wohn<b>en</b></td><td>sind</td><td>haben</td></tr>
     </tbody>
   </table></div>
-  <p class="trick"><b>e – st – t – en – t – en</b></p>
+  <p class="trick"><b>e – st – t – en – t – en</b> · <b>du</b> = friends · <b>Sie</b> = formal (verb like wir) · ich <b>war</b> / <b>hatte</b> = I was / had</p>
   <details class="pr"><summary>Regel erklärt <span class="en">(rule explained)</span></summary>
 <div class="rule"><ol>
 <li>The <b>infinitive</b> (dictionary form) ends in <b>-en</b>: <i>wohnen</i> → to live.</li>
@@ -175,12 +198,37 @@
 <li>Stem ends in <b>-t/-d</b> → add an extra <b>e</b>: <i>du arbeit<b>e</b>st, er arbeit<b>e</b>t</i>.</li>
 <li>Stem ends in <b>-s/-ß/-z</b> → du only gets <b>-t</b>: <i>du heißt, du tanzt</i>.</li>
 <li><b>sein</b> and <b>haben</b> are irregular: learn them by heart. Modal verbs (<i>können, möchten, müssen</i>) have no ending for ich/er: <i>ich kann, er kann</i>.</li>
+<li><b>du or Sie?</b> du = friends, family, children · Sie = strangers, the examiner, letters (capital S). Sie uses the same verb form as wir.</li>
+<li><b>Past:</b> ich/er <b>war</b>, <b>hatte</b> · du <b>warst</b>, <b>hattest</b> · wir/sie <b>waren</b>, <b>hatten</b> · ihr <b>wart</b>, <b>hattet</b>. <i>Gestern war ich krank.</i> → Yesterday I was ill.</li>
 </ol></div>
-<p class="practice"><span>Üben <span class="en">(practise)</span></span><a class="go" href="tests.html#verbform">Verbform</a></p>
+<p class="practice"><span>Üben <span class="en">(practise)</span></span><a class="go" href="tests.html#verbform">Verbform</a><a class="go" href="tests.html#dusie">du oder Sie?</a><a class="go" href="tests.html#warHatte">war · hatte</a></p>
   </details>
 </div>
 
-<div class="dia" id="p7"><div class="cap">7 · Satzbau <small>(word order: the verb is the boss)</small></div>
+<div class="dia" id="s-modal"><div class="cap">8 · Modalverben <small>(can · must · want · may · would like)</small></div>
+  <div class="tablebox"><table class="mini tiny"><thead><tr><th></th><th>ich · er</th><th>du</th><th>wir · Sie</th><th>ihr</th></tr></thead><tbody>
+<tr><td><b>können</b> <span class="en">can</span></td><td>kann</td><td>kannst</td><td>können</td><td>könnt</td></tr>
+<tr><td><b>müssen</b> <span class="en">must</span></td><td>muss</td><td>musst</td><td>müssen</td><td>müsst</td></tr>
+<tr><td><b>wollen</b> <span class="en">want</span></td><td>will</td><td>willst</td><td>wollen</td><td>wollt</td></tr>
+<tr><td><b>dürfen</b> <span class="en">may</span></td><td>darf</td><td>darfst</td><td>dürfen</td><td>dürft</td></tr>
+<tr><td><b>möchten</b> <span class="en">would like</span></td><td>möchte</td><td>möchtest</td><td>möchten</td><td>möchtet</td></tr>
+</tbody></table></div>
+  <div class="trainrow"><span class="lbl">Bracket: modal 2nd · other verb at the END</span><div class="train"><span class="car">Ich<small>I</small></span><span class="car v">kann<small>can</small></span><span class="car">gut<small>well</small></span><span class="car v">kochen.<small>to cook</small></span></div></div>
+  <p class="trick"><b>ich = er/sie/es</b>: no ending. · nicht müssen = don't have to · nicht dürfen = must not</p>
+  <details class="pr"><summary>Regel erklärt <span class="en">(rule explained)</span></summary>
+<div class="rule"><ol>
+<li>A <b>modal verb</b> says <i>can / must / want / may / would like</i>. It stands in <b>position 2</b>.</li>
+<li>The second verb is in the <b>infinitive</b> and goes to the <b>very end</b>: <i>Kannst du mir helfen?</i> → Can you help me?</li>
+<li><b>ich</b> and <b>er/sie/es</b> have the same form and <b>no ending</b>: ich kann, er kann.</li>
+<li><b>möchten</b> = polite "would like": <i>Ich möchte einen Kaffee.</i> (no 2nd verb needed.)</li>
+<li>Separable verb + modal stays in one piece: <i>Ich muss früh aufstehen.</i> → I have to get up early.</li>
+<li><i>Du musst nicht kommen</i> = you don't have to · <i>Hier darfst du nicht rauchen</i> = you must not.</li>
+</ol></div>
+<p class="practice"><span>Üben <span class="en">(practise)</span></span><a class="go" href="tests.html#modal">Modalverben</a></p>
+  </details>
+</div>
+
+<div class="dia" id="p7"><div class="cap">9 · Satzbau <small>(word order: the verb is the boss)</small></div>
   <div class="trainrow"><span class="lbl">Statement: verb 2nd</span><div class="train"><span class="car">Ich<small>I</small></span><span class="car v">kaufe<small>buy</small></span><span class="car">Brot.<small>bread</small></span></div></div>
   <div class="trainrow"><span class="lbl">Time first: verb still 2nd</span><div class="train"><span class="car">Heute<small>today</small></span><span class="car v">kaufe<small>buy</small></span><span class="car">ich<small>I</small></span><span class="car">Brot.<small>bread</small></span></div></div>
   <div class="trainrow"><span class="lbl">W-question: verb 2nd</span><div class="train"><span class="car">Was<small>what</small></span><span class="car v">kaufst<small>buy</small></span><span class="car">du?<small>you</small></span></div></div>
@@ -199,8 +247,36 @@
   </details>
 </div>
 
+<div class="dia" id="s-w"><div class="cap">10 · W-Fragen <small>(question words)</small></div>
+  <div class="tablebox"><table class="mini"><thead><tr><th>W-Wort</th><th>English</th><th>Beispiel</th></tr></thead><tbody>
+<tr><td><b>Wer?</b></td><td class="en">who</td><td>Wer ist das?</td></tr>
+<tr><td><b>Was?</b></td><td class="en">what</td><td>Was machst du?</td></tr>
+<tr><td><b>Wo?</b></td><td class="en">where (at)</td><td>Wo wohnst du?</td></tr>
+<tr><td><b>Woher?</b></td><td class="en">from where</td><td>Woher kommst du?</td></tr>
+<tr><td><b>Wohin?</b></td><td class="en">to where</td><td>Wohin fährst du?</td></tr>
+<tr><td><b>Wann?</b></td><td class="en">when</td><td>Wann beginnt der Kurs?</td></tr>
+<tr><td><b>Wie?</b></td><td class="en">how</td><td>Wie heißt du?</td></tr>
+<tr><td><b>Wie alt?</b></td><td class="en">how old</td><td>Wie alt bist du?</td></tr>
+<tr><td><b>Wie viel(e)?</b></td><td class="en">how much/many</td><td>Wie viel kostet das?</td></tr>
+<tr><td><b>Wie spät?</b></td><td class="en">what time</td><td>Wie spät ist es?</td></tr>
+<tr><td><b>Welche?</b></td><td class="en">which</td><td>Welche Sprachen sprichst du?</td></tr>
+<tr><td><b>Warum?</b></td><td class="en">why</td><td>Warum lernst du Deutsch?</td></tr>
+</tbody></table></div>
+  <div class="trainrow"><span class="lbl">W-question: W-word 1st · verb 2nd</span><div class="train"><span class="car">Woher<small>from where</small></span><span class="car v">kommst<small>come</small></span><span class="car">du?<small>you</small></span></div></div>
+  <div class="trainrow"><span class="lbl">Yes/no question: verb 1st</span><div class="train"><span class="car v">Kommst<small>come</small></span><span class="car">du<small>you</small></span><span class="car">aus Spanien?<small>from Spain</small></span></div></div>
+  <details class="pr"><summary>Regel erklärt <span class="en">(rule explained)</span></summary>
+<div class="rule"><ol>
+<li>A <b>W-question</b> asks for new information. The W-word is in <b>position 1</b>, the verb in <b>position 2</b>: <i>Wo <b>wohnst</b> du?</i></li>
+<li>A <b>yes/no question</b> has no W-word. The verb goes to <b>position 1</b>: <i><b>Wohnst</b> du in Berlin?</i> → Ja / Nein.</li>
+<li><b>Wo</b> = where you are · <b>Woher</b> = where you come from · <b>Wohin</b> = where you go to.</li>
+<li><b>Wie</b> + word: <i>wie alt</i> (how old), <i>wie viel</i> (how much), <i>wie spät</i> (what time), <i>wie lange</i> (how long).</li>
+<li>Answer with the matching person: <i>Wo wohnst <b>du</b>? → <b>Ich</b> wohne in Hamburg.</i></li>
+</ol></div>
+<p class="practice"><span>Üben <span class="en">(practise)</span></span><a class="go" href="tests.html#wfrage">Welches Fragewort?</a><a class="go" href="tests.html#antworten">Die richtige Antwort</a><a class="go" href="tests.html#satzart">Was für ein Satz?</a></p>
+  </details>
+</div>
 
-<div class="dia" id="p8"><div class="cap">8 · Nein sagen <small>(saying no: kein or nicht?)</small></div>
+<div class="dia" id="p8"><div class="cap">11 · Nein sagen <small>(saying no: kein or nicht?)</small></div>
   <div class="g4 two">
     <div class="gcard f"><span class="big die">kein</span><b>before a NOUN</b><span class="en">replaces ein / no article</span><span>Ich habe <b>kein</b> Auto.<br>Ich habe <b>keine</b> Zeit.</span></div>
     <div class="gcard m"><span class="big der">nicht</span><b>everything else</b><span class="en">verb · adjective · place · name</span><span>Ich arbeite <b>nicht</b>.<br>Das ist <b>nicht</b> weit.</span></div>
@@ -224,126 +300,109 @@
   </details>
 </div>
 
+<div class="dia" id="s-lang"><div class="cap">12 · Lange Sätze &amp; Antworten <small>(longer sentences · answering)</small></div>
+  <div class="trainrow"><span class="lbl">ADUSO = position 0 (normal order after)</span><div class="train"><span class="car">aber<small>but</small></span><span class="car">denn<small>because</small></span><span class="car">und<small>and</small></span><span class="car">sondern<small>but rather</small></span><span class="car">oder<small>or</small></span></div></div>
+  <div class="trainrow"><span class="lbl">In the middle: wann → wie → wo</span><div class="train"><span class="car">Ich<small>I</small></span><span class="car v">fahre<small>go</small></span><span class="car">morgen<small>when</small></span><span class="car">mit dem Bus<small>how</small></span><span class="car">zur Arbeit.<small>where</small></span></div></div>
+  <div class="trainrow"><span class="lbl">Answer: du/Sie → ich</span><div class="train"><span class="car">Wo wohnst du?<small>where live you</small></span><span class="car">→<small></small></span><span class="car">Ich wohne in Hamburg.<small>I live in Hamburg</small></span></div></div>
+  <p class="trick"><b>ADUSO:</b> <b>A</b>ber · <b>D</b>enn · <b>U</b>nd · <b>S</b>ondern · <b>O</b>der → they don't change the word order.</p>
+  <details class="pr"><summary>Regel erklärt <span class="en">(rule explained)</span></summary>
+<div class="rule"><ol>
+<li><b>aber, denn, und, sondern, oder</b> join two sentences but do not count as a place. After them: normal order: <i>Ich lerne Deutsch, denn ich <b>wohne</b> hier.</i></li>
+<li><b>dann / zuerst / heute</b> take place 1, so the verb stays 2nd: <i>Dann <b>gehe</b> ich zur Arbeit.</i></li>
+<li>Middle of the sentence: <b>when → how → where</b>: <i>Ich fahre morgen mit dem Bus zur Arbeit.</i></li>
+<li><b>Answering:</b> du/Sie → <b>ich</b>, ihr → <b>wir</b>, dein/Ihr → <b>mein</b>: <i>Wie heißt du? → <b>Ich</b> heiße Lim. <b>Mein</b> Name ist Lim.</i></li>
+<li>In the exam answer with a <b>full sentence</b> (<i>Ich komme aus Malaysia.</i>), not only <i>Aus Malaysia.</i></li>
+</ol></div>
+<p class="practice"><span>Üben <span class="en">(practise)</span></span><a class="go" href="tests.html#satzbau">Satzbau</a><a class="go" href="tests.html#ordnen">Satz ordnen</a><a class="go" href="tests.html#luecke">Lücke füllen</a><a class="go" href="tests.html#antworten">Die richtige Antwort</a></p>
+  </details>
+</div>
+
 </div>
 </section>
 
-<details class="acc more" id="karten">
-<summary>③ Weitere Karten <span class="en">(more cards: numbers, time, café, polite phrases …)</span></summary>
+<section class="basics cat" id="sec-b">
+<h2 class="cathead">B · Buchstaben &amp; Zahlen <span class="en">(letters &amp; numbers · lessons 8–9)</span></h2>
+<div class="bgrid">
+
+<div class="dia" id="s-abc"><div class="cap">13 · Das Alphabet <small>(the alphabet · lesson 8)</small></div>
+  <div class="train"><span class="car">E<small>ay</small></span><span class="car">I<small>ee</small></span><span class="car">J<small>yot</small></span><span class="car">V<small>fow</small></span><span class="car">W<small>vay</small></span><span class="car">Z<small>tset</small></span><span class="car">Y<small>ÜP-see-lon</small></span><span class="car">ß<small>ESS-tset</small></span></div>
+  <p class="trick"><b>ei</b> = "eye" (drei) · <b>ie</b> = "ee" (vier) · <b>W</b> sounds v · <b>V</b> sounds f · <b>Z</b> sounds ts · <b>J</b> sounds y</p>
+  <details class="pr"><summary>Regel erklärt <span class="en">(rule explained)</span></summary>
+<div class="rule"><ol>
+<li>Say the <b>second letter</b> of a pair: <i>ei</i> → "eye" (<i>drei</i>, dry), <i>ie</i> → "ee" (<i>vier</i>, feer).</li>
+<li>The tricky letters are the ones that look English but sound different: <b>E</b> = ay, <b>I</b> = ee, <b>J</b> = yot, <b>V</b> = fow, <b>W</b> = vay, <b>Z</b> = tset.</li>
+<li><b>ä ö ü</b> are umlauts (ae, oe, ue). <b>ß</b> = double s.</li>
+<li>Exam, Sprechen Teil 1: you may need to <b>spell your name</b> (<i>Wie schreibt man das?</i>). Practise it aloud with the letter names.</li>
+</ol></div>
+<p class="practice"><span>Üben <span class="en">(practise)</span></span><a class="go" href="tests.html#hoerBuchstabe">Buchstaben hören</a><a class="go" href="tests.html#buchstabieren">Buchstabieren</a></p>
+  </details>
+</div>
+
+<div class="dia" id="s-zahl"><div class="cap">14 · Zahlen <small>(numbers · lesson 9)</small></div>
+  <div class="tablebox"><table class="mini"><tbody>
+<tr><td>1 eins <span class="k">aynss</span></td><td>2 zwei <span class="k">tsvy</span></td><td>3 drei <span class="k">dry</span></td></tr>
+<tr><td>4 vier <span class="k">feer</span></td><td>5 fünf <span class="k">fünf</span></td><td>6 sechs <span class="k">zeks</span></td></tr>
+<tr><td>7 sieben <span class="k">ZEE-ben</span></td><td>8 acht <span class="k">akht</span></td><td>9 neun <span class="k">noyn</span></td></tr>
+<tr><td>10 zehn <span class="k">tsayn</span></td><td>11 elf <span class="k">elf</span></td><td>12 zwölf <span class="k">tsvölf</span></td></tr>
+</tbody></table></div>
+  <div class="trainrow"><span class="lbl">47: ones first!</span><div class="train"><span class="car">sieben<small>7</small></span><span class="car">und<small>and</small></span><span class="car">vierzig<small>40</small></span></div></div>
+  <p class="trick"><b>13–19: -zehn</b> · <b>20–90: -zig</b> · 100 hundert <span class="k">HOON-dert</span> · 1000 tausend <span class="k">TOW-zent</span></p>
+  <details class="pr"><summary>Regel erklärt <span class="en">(rule explained)</span></summary>
+<div class="rule"><ol>
+<li><b>13–19</b> = number + <b>-zehn</b>: dreizehn (DRY-tsayn). <b>20–90</b> = number + <b>-zig</b>: vierzig (FEER-tsikh). Exceptions: zwan<b>zig</b> (TSVAN-tsikh), drei<b>ßig</b> (DRY-sikh), sech<b>zig</b> (ZEKH-tsikh), sieb<b>zig</b> (ZEEP-tsikh).</li>
+<li><b>21–99: ones first</b>, then <i>und</i>, then tens: 47 = sieben·und·vierzig (ZEE-ben-oont-FEER-tsikh).</li>
+<li>Careful: fünf<b>zehn</b> (15, FÜNF-tsayn) ≠ fünf<b>zig</b> (50, FÜNF-tsikh).</li>
+<li>After hundert / tausend there is <b>no "und"</b>: 293.300 = zweihundertdreiundneunzig·tausend·dreihundert.</li>
+<li>Years: 1990 = <b>neunzehn·hundert·neunzig</b> · 2026 = <b>zwei·tausend·sechs·und·zwanzig</b> (tsvy-TOW-zent-zeks-oont-TSVAN-tsikh).</li>
+<li>Phone numbers are said digit by digit; <i>zwo</i> = zwei (so it doesn't sound like drei).</li>
+</ol></div>
+<p class="practice"><span>Üben <span class="en">(practise)</span></span><a class="go" href="tests.html#hoerZahl">Zahlen hören</a><a class="go" href="tests.html#zahlWort">Zahl oder Wort</a><a class="go" href="tests.html#telefon">Telefonnummern</a></p>
+  </details>
+</div>
+
+<div class="dia" id="s-uhr"><div class="cap">15 · Uhrzeit &amp; Preise <small>(time · prices)</small></div>
+  <div class="tablebox"><table class="mini"><thead><tr><th></th><th>Deutsch</th><th>Sound</th></tr></thead><tbody>
+<tr><td>8:15</td><td>Viertel nach acht</td><td class="k">FIR-tel nakh akht</td></tr>
+<tr><td>8:30</td><td><b>halb</b> neun</td><td class="k">hulp noyn</td></tr>
+<tr><td>8:45</td><td>Viertel vor neun</td><td class="k">FIR-tel for noyn</td></tr>
+<tr><td>14:30</td><td>vierzehn Uhr dreißig</td><td class="k">FEER-tsayn oor DRY-sikh</td></tr>
+<tr><td>2,50 €</td><td>zwei Euro fünfzig</td><td class="k">tsvy OY-ro FÜNF-tsikh</td></tr>
+</tbody></table></div>
+  <p class="trick"><b>halb looks forward:</b> halb neun = half <i>to</i> nine = 8:30.</p>
+  <details class="pr"><summary>Regel erklärt <span class="en">(rule explained)</span></summary>
+<div class="rule"><ol>
+<li><b>Official</b> (trains, exam, radio): 24 hours: <i>vierzehn Uhr dreißig</i> = 14:30.</li>
+<li><b>Everyday</b>: 12 hours: <i>halb drei</i> = 2:30. <b>halb</b> points to the <b>next</b> hour: half <i>to</i> three.</li>
+<li><i>Viertel nach</i> = quarter past · <i>Viertel vor</i> = quarter to · <i>fünf nach</i> / <i>zehn vor</i> = five past / ten to.</li>
+<li>Asking: <i>Wie spät ist es?</i> / <i>Wie viel Uhr ist es?</i> → What time is it? Saying when: <b>um</b> 8 Uhr (at 8).</li>
+<li><b>Prices:</b> euro, then cent: 2,50 € = zwei Euro fünfzig (the comma is said <i>Euro</i>, no "Komma").</li>
+</ol></div>
+<p class="practice"><span>Üben <span class="en">(practise)</span></span><a class="go" href="tests.html#uhrzeit">Wie spät ist es?</a><a class="go" href="tests.html#preis">Was kostet das?</a><a class="go" href="tests.html#hoerenUhr">Uhrzeit hören</a><a class="go" href="tests.html#hoerenPreis">Preise hören</a></p>
+  </details>
+</div>
+
+<div class="dia" id="s-kal"><div class="cap">16 · Kalender <small>(calendar)</small></div>
+  <div class="train"><span class="car der">Mo</span><span class="car der">Di</span><span class="car der">Mi</span><span class="car der">Do</span><span class="car der">Fr</span><span class="car der">Sa</span><span class="car der">So</span></div>
+  <div class="g4 three"><div class="gcard m"><span class="big der">am</span><span>am Montag<br>am 3. Mai</span><span class="en">day · date</span></div><div class="gcard n"><span class="big das">um</span><span>um 8 Uhr <span class="k">(oom akht oor)</span></span><span class="en">clock time</span></div><div class="gcard f"><span class="big die">im</span><span>im Mai<br>im Sommer</span><span class="en">month · season</span></div></div>
+  <p class="trick">All days, months, seasons = <span class="der">der</span> (but <span class="die">die</span> Nacht)</p>
+  <details class="pr"><summary>Regel erklärt <span class="en">(rule explained)</span></summary>
+<div class="rule"><ol>
+<li>Days (Montag … Sonntag), months (Januar … Dezember) and seasons are all <b>der</b>.</li>
+<li><b>am</b> + day or date · <b>um</b> + clock time · <b>im</b> + month or season.</li>
+<li><b>Dates</b> use ordinal numbers: 1. <i>erste</i>, 3. <i>dritte</i>, 7. <i>siebte</i>, 8. <i>achte</i>; 1–19 add <b>-te</b>, 20+ add <b>-ste</b>. After <i>am</i> add <b>-n</b>: <i>am dritten Mai</i>.</li>
+<li>Written date: <b>day.month.</b> → 3.5. = 3 May (not 5 March).</li>
+</ol></div>
+<p class="practice"><span>Üben <span class="en">(practise)</span></span><a class="go" href="tests.html#kalender">Kalender</a><a class="go" href="tests.html#datum">Datum</a><a class="go" href="tests.html#zeitpraep">am, um, im</a></p>
+  </details>
+</div>
+
+</div>
+</section>
+
+<section class="cat" id="sec-c">
+<h2 class="cathead">C · Themen <span class="en">(topics · lessons 10–22)</span></h2>
 <div class="cheat">
-  <div class="ccard"><h3>der · die · das <a href="grammatik.html#l-articles">Lektion 2</a></h3>
-    <div><span class="der">der</span> masculine people, days, months, -er, -ling</div>
-    <div><span class="die">die</span> feminine people, most -e, -ung, -heit, -keit, -ion, -in</div>
-    <div><span class="das">das</span> -chen, -lein, -um, verb as noun, many loan words</div>
-    <div><span class="plc">die</span> = every plural</div></div>
-
-  <div class="ccard"><h3>ein · kein <a href="grammatik.html#l-ein">Lektion 3</a></h3>
-    <table><tbody>
-      <tr><td class="der">der</td><td>ein</td><td>kein</td><td class="en">Akk: einen</td></tr>
-      <tr><td class="das">das</td><td>ein</td><td>kein</td><td class="en">ein</td></tr>
-      <tr><td class="die">die</td><td>eine</td><td>keine</td><td class="en">eine</td></tr>
-      <tr><td class="plc">Pl.</td><td>—</td><td>keine</td><td class="en">—</td></tr>
-    </tbody></table>
-    <div class="en">der + das = ein. Only der changes in Akkusativ (after haben, möchten).</div></div>
-
-  <div class="ccard"><h3>mein · dein · sein <a href="grammatik.html#l-poss">Lektion 3</a></h3>
-    <div>ich <b>mein</b> · du <b>dein</b> · er/es <b>sein</b> · sie <b>ihr</b> · wir <b>unser</b> · ihr <b>euer</b> · sie <b>ihr</b> · Sie <b>Ihr</b></div>
-    <div>Endings like ein: mein Bruder, mein<b>e</b> Schwester, mein Kind, mein<b>e</b> Eltern · Akk.: mein<b>en</b> Bruder</div></div>
-
-  <div class="ccard"><h3>Akkusativ <a href="#kasus">↑ overview</a></h3>
-    <div>Only <span class="der">der</span> changes: de<b>n</b> · eine<b>n</b> · keine<b>n</b> · meine<b>n</b></div>
-    <div>Ich nehme <b>einen</b> Kaffee, eine Suppe, ein Brot.</div></div>
-
-  <div class="ccard"><h3>Verben <a href="grammatik.html#l-verbs">Lektion 5</a></h3>
-    <table><thead><tr><th></th><th>wohnen</th><th>sein</th><th>haben</th></tr></thead><tbody>
-      <tr><td>ich</td><td>wohn<b>e</b></td><td>bin</td><td>habe</td></tr>
-      <tr><td>du</td><td>wohn<b>st</b></td><td>bist</td><td>hast</td></tr>
-      <tr><td>er/sie/es</td><td>wohn<b>t</b></td><td>ist</td><td>hat</td></tr>
-      <tr><td>wir</td><td>wohn<b>en</b></td><td>sind</td><td>haben</td></tr>
-      <tr><td>ihr</td><td>wohn<b>t</b></td><td>seid</td><td>habt</td></tr>
-      <tr><td>sie/Sie</td><td>wohn<b>en</b></td><td>sind</td><td>haben</td></tr>
-    </tbody></table>
-    <div class="en">du heiß<b>t</b> (-s/-ß/-z) · du arbeit<b>e</b>st (-t/-d) · du f<b>ä</b>hrst, du i<b>ss</b>t, du spr<b>i</b>chst</div></div>
-
-  <div class="ccard"><h3>du oder Sie <a href="grammatik.html#l-dusie">Lektion 5</a></h3>
-    <ul>
-      <li><b>du</b> = friends, family, partner: wohn<b>st</b>, kannst, dein</li>
-      <li><b>Sie</b> = strangers, examiner, doctor, letters (capital S): wohn<b>en</b>, können, Ihr</li>
-      <li>Sie uses the same verb form as wir. sie kommt = she · sie kommen = they · Sie kommen = you (formal).</li>
-    </ul></div>
-
-  <div class="ccard"><h3>war · hatte <a href="grammatik.html#l-war">Lektion 5</a></h3>
-    <div>ich/er <b>war · hatte</b> · du <b>warst · hattest</b> · wir/sie <b>waren · hatten</b> · ihr <b>wart · hattet</b></div>
-    <div>Gestern <u>war</u> ich krank. Letzte Woche <u>hatte</u> ich keine Zeit.</div></div>
-
-  <div class="ccard"><h3>Satzbau <a href="grammatik.html#l-w">Lektion 6</a></h3>
-    <ul>
-      <li>Statement: verb <b>2nd</b>: Ich <u>wohne</u> hier. Heute <u>wohne</u> ich hier.</li>
-      <li>W-question: verb <b>2nd</b>: Wo <u>wohnst</u> du?</li>
-      <li>Yes/no question: verb <b>1st</b>: <u>Wohnst</u> du hier?</li>
-      <li>Request (Sie): verb <b>1st</b>: <u>Gehen</u> Sie links.</li>
-      <li>Two verbs: 2nd verb at the <b>end</b>: Ich möchte Kaffee <u>trinken</u>.</li>
-    </ul></div>
-
-  <div class="ccard"><h3>Modalverben <a href="grammatik.html#l-modal">Lektion 6</a></h3>
-    <ul>
-      <li><b>können</b> can · <b>müssen</b> must · <b>wollen</b> want · <b>dürfen</b> may · <b>möchten</b> would like</li>
-      <li>ich = er/sie/es, no ending: ich <b>kann</b>, er <b>kann</b>, du <b>kannst</b>, wir <b>können</b></li>
-      <li>Modal in place 2, 2nd verb at the end: Ich <u>kann</u> gut <u>kochen</u>. <u>Kannst</u> du mir <u>helfen</u>?</li>
-      <li>nicht müssen = don't have to · nicht dürfen = must not</li>
-    </ul></div>
-
-  <div class="ccard"><h3>Lange Sätze <a href="grammatik.html#l-satz">Lektion 7</a></h3>
-    <ul>
-      <li>Bracket: Ich <u>kann</u> heute nicht <u>kommen</u>. Ich <u>stehe</u> um 7 <span class="pron">(sieben, ZEE-ben)</span> Uhr <u>auf</u>.</li>
-      <li>Modal + separable: Ich muss früh <u>aufstehen</u> (one piece).</li>
-      <li><b>ADUSO</b> = position 0: aber, denn, und, sondern, oder → normal order after.</li>
-      <li>dann / zuerst = place 1: dann <u>gehe</u> ich …</li>
-      <li>Middle: wann → wie → wo: morgen · mit dem Bus · zur Arbeit.</li>
-      <li>nicht: as far back as possible, but before the end verb.</li>
-    </ul></div>
-
-  <div class="ccard"><h3>W-Wörter <a href="grammatik.html#l-w">Lektion 6</a></h3>
-    <div>Wer <span class="en">who</span> · Was <span class="en">what</span> · Wo <span class="en">where</span> · Woher <span class="en">from where</span> · Wohin <span class="en">to where</span> · Wie <span class="en">how</span> · Wie alt <span class="en">how old</span> · Wie viel(e) <span class="en">how much/many</span> · Wann <span class="en">when</span> · Welche <span class="en">which</span> · Warum <span class="en">why</span> · Wie spät <span class="en">what time</span></div></div>
-
-  <div class="ccard"><h3>Antworten <a href="grammatik.html#l-qa">Lektion 7</a></h3>
-    <div>du / Sie → <b>ich</b> · ihr → <b>wir</b> · dein / Ihr → <b>mein</b></div>
-    <div>Wo wohnst du? → <b>Ich</b> wohn<b>e</b> in Hamburg.</div>
-    <div><b>kein</b> = instead of ein / no article: Ich habe kein Auto.</div>
-    <div><b>nicht</b> = everything else: Das ist nicht weit.</div></div>
-
-  <div class="ccard"><h3>Alphabet <a href="zahlen.html#l-abc">Lektion 8</a></h3>
-    <div>E <span class="k">ay</span> · I <span class="k">ee</span> · J <span class="k">yot</span> · V <span class="k">fow</span> · W <span class="k">vay</span> · Z <span class="k">tset</span> · Y <span class="k">ÜP-see-lon</span> · ß <span class="k">ESS-tset</span></div>
-    <div><b>ei</b> = "eye" (drei) · <b>ie</b> = "ee" (vier): say the 2nd letter</div>
-    <div>W sounds v · V sounds f · Z sounds ts · J sounds y</div></div>
-
-  <div class="ccard"><h3>Zahlen <a href="zahlen.html#l-numbers">Lektion 9</a></h3>
-    <table><tbody>
-      <tr><td>1 eins <span class="k">aynss</span></td><td>2 zwei <span class="k">tsvy</span></td><td>3 drei <span class="k">dry</span></td></tr>
-      <tr><td>4 vier <span class="k">feer</span></td><td>5 fünf <span class="k">fünf</span></td><td>6 sechs <span class="k">zeks</span></td></tr>
-      <tr><td>7 sieben <span class="k">ZEE-ben</span></td><td>8 acht <span class="k">akht</span></td><td>9 neun <span class="k">noyn</span></td></tr>
-      <tr><td>10 zehn <span class="k">tsayn</span></td><td>11 elf <span class="k">elf</span></td><td>12 zwölf <span class="k">tsvölf</span></td></tr>
-    </tbody></table>
-    <div>13–19: <b>-zehn</b> (dreizehn) · 20–90: <b>-zig</b> (vierzig) · but zwan<b>zig</b>, drei<b>ßig</b>, sech<b>zig</b>, sieb<b>zig</b></div>
-    <div>47 = <b>sieben</b>-und-<b>vierzig</b> <span class="k">ZEE-ben-oont-FEER-tsikh</span>: ones first!</div>
-    <div>100 hundert <span class="k">HOON-dert</span> · 1000 tausend <span class="k">TOW-zent</span> · no “und” after hundert / tausend</div>
-    <div>62.000 = zweiundsechzig·tausend · 293.300 = 293 · tausend · 300 · 1.000.000 = eine Million · 2,5 Mio. = zwei Komma fünf Millionen</div>
-    <div>Years: 1990 = <b>neunzehn·hundert·neunzig</b> · 2026 = <b>zwei·tausend·sechs·und·zwanzig</b></div>
-    <div>phone numbers digit by digit · zwo = zwei</div></div>
-
-  <div class="ccard"><h3>Uhrzeit und Preise <a href="zahlen.html#l-numbers">Lektion 9</a></h3>
-    <div>14:30 = vierzehn Uhr dreißig = <b>halb drei</b> <span class="k">hulp dry</span></div>
-    <div>Viertel nach acht <span class="en">8:15</span> · Viertel vor neun <span class="en">8:45</span></div>
-    <div><b>halb</b> looks forward: halb neun = 8:30</div>
-    <div>2,50 € = zwei Euro fünfzig <span class="k">tsvy OY-ro FÜNF-tsikh</span></div>
-    <div>fünf<b>zehn</b> 15 ≠ fünf<b>zig</b> 50</div></div>
-
-  <div class="ccard"><h3>Kalender <a href="zahlen.html#l-cal">Lektion 9</a></h3>
-    <div>Mo Di Mi Do Fr Sa So · all days, months, seasons = <span class="der">der</span> (but <span class="die">die</span> Nacht)</div>
-    <div><b>am</b> Montag / am 3. Mai · <b>um</b> 8 Uhr · <b>im</b> Mai / im Sommer</div>
-    <div>1. erste · 3. dritte · 7. siebte · 8. achte · 1–19 <b>-te</b> · 20+ <b>-ste</b> · am …<b>en</b></div>
-    <div>3.5. = 3 May (day.month)</div></div>
-
-  <div class="ccard"><h3>Über mich <a href="themen.html#l-me">Lektion 10</a></h3>
+<div class="ccard"><h3>Über mich <a href="themen.html#l-me">Lektion 10</a></h3>
     <div>Ich heiße … · Ich bin … Jahre alt.</div>
     <div>Ich komme aus … · Ich wohne in …</div>
     <div>Ich spreche … · Ich bin … von Beruf.</div>
@@ -389,16 +448,37 @@
       <li><b>Verkehr:</b> Eine Fahrkarte nach …, bitte. Einfach oder hin und zurück? Von Gleis 4.</li>
       <li><b>Hotel · Post:</b> Ich habe ein Zimmer reserviert. Eine Briefmarke, bitte. PLZ vor dem Ort.</li>
     </ul></div>
+</div>
+</section>
 
-  <div class="ccard"><h3>Hören und Lesen <a href="pruefung.html#l-hl">Lektion 23</a></h3>
-    <div>Read the question first, hunt for one detail.</div>
-    <div>Traps: nicht … <b>sondern</b> · leider · später · Verspätung · geschlossen ≠ geöffnet</div></div>
+<section class="basics cat" id="sec-d">
+<h2 class="cathead">D · Prüfung <span class="en">(the exam · lesson 23)</span></h2>
+<div class="bgrid">
+
+<div class="dia" id="s-exam"><div class="cap">17 · Goethe-Zertifikat A1 <small>(the exam · lesson 23)</small></div>
+  <div class="tablebox"><table class="mini"><thead><tr><th>Teil</th><th>Time</th><th>What</th></tr></thead><tbody>
+<tr><td><b>Hören</b> <span class="en">listening</span></td><td>~20 min</td><td>announcements, phone messages</td></tr>
+<tr><td><b>Lesen</b> <span class="en">reading</span></td><td>~25 min</td><td>emails, signs, ads</td></tr>
+<tr><td><b>Schreiben</b> <span class="en">writing</span></td><td>~20 min</td><td>form + ~30-word message</td></tr>
+<tr><td><b>Sprechen</b> <span class="en">speaking</span></td><td>~15 min</td><td>introduce · ask · request</td></tr>
+</tbody></table></div>
+  <p class="trick"><b>Pass = 60 of 100 points</b> <span class="k">(sechzig ZEKH-tsikh von hundert HOON-dert)</span></p>
+  <details class="pr"><summary>Regel erklärt <span class="en">(rule explained)</span></summary>
+<div class="rule"><ol>
+<li><b>Hören:</b> listen for numbers, times, prices, days. Second listening: only check. Guess if unsure: no minus points.</li>
+<li><b>Lesen:</b> read the question first, then hunt for one detail. Traps: <i>nicht … sondern</i>, <i>leider</i>, <i>später</i>, <i>Verspätung</i>, <i>geschlossen ≠ geöffnet</i>.</li>
+<li><b>Schreiben:</b> Teil 1 fill in a form · Teil 2 about 30 words, answer <b>all three points</b>, add greeting and closing.</li>
+<li><b>Sprechen:</b> Teil 1 <i>Sich vorstellen</i> (introduce yourself, spell your name, phone number) · Teil 2 ask and answer with a card word · Teil 3 make requests (<i>Können Sie …?</i>) and react.</li>
+</ol></div>
+<p class="practice"><span>Üben <span class="en">(practise)</span></span><a class="go" href="tests.html#lesenPruefung">Lesen</a><a class="go" href="tests.html#hoerenPruefung">Hören</a><a class="go" href="tests.html#formular">Formular</a><a class="go" href="pruefung.html">Prüfung-Seite</a></p>
+  </details></div>
 
 </div>
-</details>
+</section>
+
 </main>
 <footer class="foot" id="site-footer"></footer>
-</div>
+
 <script>
 (function(){
   var rules=[].slice.call(document.querySelectorAll('details.pr')),btn=document.getElementById('toggle-rules');

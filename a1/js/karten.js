@@ -66,17 +66,32 @@ svg:vinegar|der|Essig|vinegar|-|Öl und Essig (for the salad)
 🍖|der|Grill|grill, barbecue|Grills|Verb: grillen · Am Wochenende grillen wir.
 svg:oven|der|Ofen|oven|Öfen|also: der Backofen · Verb: backen
 🎉|die|Party|party|Partys|English word, plural -s (not -ies!) · eine Party machen
+🌭|das|Würstchen|small sausage|Würstchen|die Wurst (sausage) + -chen = always das · Grillwürstchen
+🍽️|der|Appetit|appetite|-|Guten Appetit! = Enjoy your meal! · Danke, gleichfalls! = Thanks, same to you!
+🤧|die|Allergie|allergy|Allergien|Ich habe eine Allergie. · Adj: allergisch
+🥗|die|Diät|diet (to lose weight)|Diäten|Ich mache eine Diät. · eating habits in general = die Ernährung
+🍏|die|Ernährung|nutrition, diet (what you eat)|-|gesunde Ernährung = healthy diet · no plural
+😍|das|Lieblingsessen|favourite food|Lieblingsessen|Lieblings- + Essen = das Lieblingsessen · Mein Lieblingsessen ist Pizza. (not "Lieblingessen")
 🍬||süß|sweet||Adj. Die Schokolade ist süß.
 😖||sauer|sour||Adj. Die Zitrone ist sauer. (also: annoyed – Ich bin sauer!)
 😣||bitter|bitter||Adj. Der Kaffee ist bitter.
-🌶️||scharf|spicy, hot||Adj. Das Curry ist sehr scharf. (not heiß = hot temperature)`],
+🌶️||scharf|spicy, hot||Adj. Das Curry ist sehr scharf. (not heiß = hot temperature)
+🌱||vegan|vegan||Adj. Ich esse vegan. · no animal products at all
+🥦||vegetarisch|vegetarian||Adj. Ich esse vegetarisch. · person: der Vegetarier / die Vegetarierin`],
  ["Einkaufen", "shopping", `🛒|das|Einkaufen|shopping|-|Ich gehe einkaufen. (I go shopping.)
 🏪|der|Markt|market|Märkte
 🥐|die|Bäckerei|bakery|Bäckereien
 🧺|der|Supermarkt|supermarket|Supermärkte
 🏬|das|Geschäft|shop, store|Geschäfte
 💳|die|Kasse|checkout, till|Kassen
-💶|das|Geld|money|-`],
+💶|das|Geld|money|-
+🛍️|die|Tüte|bag (paper/plastic)|Tüten|eine Tüte Tomaten = a bag of tomatoes (no "of" in German)
+🍫|die|Tafel|bar, tablet|Tafeln|eine Tafel Schokolade = a bar of chocolate · also: blackboard
+🥛|der|Becher|cup, tub|Becher|ein Becher Joghurt · plural stays Becher
+🧾|der|Kassenzettel|receipt|Kassenzettel|Brauchen Sie den Kassenzettel? · die Kasse (till) + der Zettel (slip)
+🛒|der|Einkaufswagen|shopping trolley|Einkaufswagen|needs a 1-Euro coin · Ich brauche einen Euro für den Einkaufswagen.
+🗄️|das|Regal|shelf|Regale|Wo finde ich Reis? – Dort im Regal.
+🥩|die|Theke|counter (deli, cheese)|Theken|die Käsetheke = cheese counter · Wer kommt dran? = Who's next?`],
  ["Familie und Leute", "family and people", `👩|die|Mutter|mother
 👨|der|Vater|father
 👨‍👩‍👧|die|Familie|family
@@ -362,7 +377,10 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 👀||wach|awake||↔ müde
 ❗||wichtig|important||Das ist wichtig.
 ♂️||männlich|male||Adj. der Mann → männlich · on forms: m
-♀️||weiblich|female||Adj. das Weib → weiblich · on forms: w`],
+♀️||weiblich|female||Adj. das Weib → weiblich · on forms: w
+🤝||zusammen|together||Adv. Wir kochen zusammen. · Zusammen oder getrennt? (together or separate bill?)
+🙂||gern|gladly, like doing||Adv. after the verb: Ich esse gern Pizza. · nicht gern = don't like
+👋||Das war's.|That's it. / That's all.||Said when finishing: Das war's! · Sonst noch etwas? – Nein, das war's.`],
  ["Länder und Sprachen", "countries and languages", `🇩🇿||Algerien|Algeria||Sprache: Arabisch
 🇧🇷||Brasilien|Brazil||Sprache: Portugiesisch
 🇧🇬||Bulgarien|Bulgaria||Sprache: Bulgarisch

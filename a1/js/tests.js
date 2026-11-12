@@ -324,6 +324,41 @@ const TESTS={
  cafe:{tag:"Essen · Einkaufen",title:"Im Café und im Geschäft",en:"ordering, paying and shopping: choose the right reply",kind:"choice",
   gen(){const x=pick(CAFE);return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([x[2],x[3],x[4]]),answer:x[2],
    explain:`<b>${esc(x[0])}</b>${EN(esc(x[1]))}<br>→ <b>${esc(x[2])}</b>${EN(esc(CAFE_EN[x[2]]||""))}<br>${x[5]}`,sayAfter:`${x[0]} ${x[2].startsWith("(")?"":x[2]}`}}},
+ essverben:{enReq:true,tag:"Essen · Verben",title:"möchten, mögen, nehmen, essen",en:"the right verb form and einen / eine / ein / kein",kind:"choice",
+  gen(){const m=rnd(0,4);const big=t=>`<span class="big" style="font-size:clamp(20px,5.2vw,32px)">${esc(t)}</span>`;
+   const sub=pick(EV_PERS), fi=sub[2];
+   const tab=v=>{const V=EV_VERBS[v];return `<br><span class="en">${V[0]}: ich ${V[2][0]} · du ${V[2][1]} · er/sie/es ${V[2][2]} · wir ${V[2][3]} · ihr ${V[2][4]} · sie/Sie ${V[2][5]}</span>`;};
+   const indef=a=>a==="der"?"einen":a==="die"?"eine":"ein", aEn=w=>(/^[aeiou]/i.test(w)?"an ":"a ")+w;
+   if(m===0||m===1){ /* verb form */
+    const vk=pick(["möchten","nehmen","essen","mögen"]), V=EV_VERBS[vk];
+    let obj,objEn;
+    if(vk==="mögen"){const k=pick(EV_KEIN.filter(x=>x[0]==="pl"||["Käse","Fisch","Kaffee","Schokolade","Fleisch","Obst","Gemüse","Reis","Milch"].includes(x[1])));obj=k[1];objEn=k[2];}
+    else{const f=pick(EV_FOOD.filter(x=>vk!=="essen"||x[3]==="e"));obj=`${indef(f[0])} ${f[1]}`;objEn=aEn(f[2]);}
+    const ans=V[2][fi], sent=`${sub[0]} ${ans} ${obj}.`;
+    return{prompt:`${big(`${sub[0]} ___ ${obj}.`)}<span class="en">(${V[0]}) ${sub[1]} ${V[1]} ${objEn}.</span>`,options:shuffle([...new Set(V[2])]),answer:ans,
+     explain:`<b>${esc(sent)}</b>${EN(`${sub[1]} ${V[1]} ${objEn}.`)}<br>${V[3]}${tab(vk)}`,sayAfter:sent};}
+   if(m===2){ /* ein / eine / ein with the gender */
+    const vk=pick(["möchten","nehmen","essen"]), V=EV_VERBS[vk], f=pick(EV_FOOD.filter(x=>vk!=="essen"||x[3]==="e")), ans=indef(f[0]), verb=V[2][fi], sent=`${sub[0]} ${verb} ${ans} ${f[1]}.`;
+    return{prompt:`${big(`${sub[0]} ${verb} ___ ${f[1]}.`)}<span class="en">${sub[1]} ${V[1]} ${aEn(f[2])}.</span>`,options:["einen","eine","ein"],answer:ans,
+     explain:`<b>${artSpan(f[0],f[1])}</b> → <b>${esc(sent)}</b>${EN(`${sub[1]} ${V[1]} ${aEn(f[2])}.`)}<br>Akkusativ: only <span class="der">der</span> changes: der → <b>einen</b>. <span class="die">die</span> → eine, <span class="das">das</span> → ein stay.`,sayAfter:sent};}
+   if(m===3){ /* kein */
+    const k=pick(EV_KEIN), ans=k[0]==="der"?"keinen":k[0]==="das"?"kein":"keine", vk=pick(["mögen","essen"]), V=EV_VERBS[vk], verb=V[2][fi];
+    if(vk==="essen"&&["Kaffee","Bier","Milch"].includes(k[1])) return this.gen();
+    const sent=`${sub[0]} ${verb} ${ans} ${k[1]}.`, g=k[0]==="pl"?`<span class="plc">die</span> ${k[1]} (plural)`:artSpan(k[0],k[1]);
+    return{prompt:`${big(`${sub[0]} ${verb} ___ ${k[1]}.`)}<span class="en">${sub[1]} ${vk==="mögen"?"like(s)":"eat(s)"} no ${k[2]}.</span>`,options:["keinen","keine","kein"],answer:ans,
+     explain:`<b>${g}</b> → <b>${esc(sent)}</b>${EN(`${sub[1]} ${vk==="mögen"?"like(s)":"eat(s)"} no ${k[2]}.`)}<br>kein works like ein: der → <b>keinen</b>, die → keine, das → kein, plural → <b>keine</b>.`,sayAfter:sent};}
+   const x=pick(EV_LIKE);
+   return{prompt:`<span class="dq">${esc(x[0])}</span><span class="en">Welcher Satz passt? (Which sentence fits?)</span>`,options:shuffle([x[1],x[2],x[3]]),answer:x[1],
+    explain:`<b>${esc(x[1])}</b><br>${x[4]}<br><span class="en">❤️ mag = like (always) · 🙏 möchte = would like (now) · 😊 verb + gern = like doing</span>`,sayAfter:x[1]};}},
+ mahlzeit:{hint:true,tag:"Essen · Mahlzeiten",title:"Frühstück, Mittag, Abend",en:"breakfast, lunch, dinner: build the sentence",kind:"choice",
+  gen(){const m=rnd(0,2);
+   if(m===0){const x=pick(MEALGAP), full=x[0].replace("___",x[3][0]);
+    return{prompt:`<span class="big" style="font-size:clamp(20px,5.2vw,32px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([...x[3]]),answer:x[3][0],
+     explain:`<b>${esc(full)}</b>${EN(esc(x[2]))}<br>${x[4]}`,sayAfter:full};}
+   if(m===1){const x=pick(MEAL_ARRANGE);const q=orderQ(x,0,`<span class="en">Bring die Wörter in die richtige Reihenfolge. <span class="pron">(Bring the words into the right order.)</span></span><span class="big" style="font-size:clamp(20px,5vw,28px)">${esc(x.en)}</span>`);q.kind="order";return q;}
+   const t=pick(MEALTIME), n=num(t[0]), ans=t[1], say=`Um ${n[0]} Uhr`;
+   return{prompt:`<span class="big">🕒 ${t[0]}:00</span><span class="en">Um ${t[0]} Uhr (um ${n[0]} Uhr, oom ${n[1]} oor) … What do you usually do?</span>`,options:shuffle(["Ich frühstücke.","Ich esse zu Mittag.","Ich esse zu Abend."]),answer:ans,
+    explain:`<b>${say} ${ans.replace(/^Ich (\S+)/,(a,v)=>v+" ich")}</b> <span class="pron">(${t[0]} = ${n[0]}, ${n[1]})</span>${EN(`At ${t[0]} o'clock ${t[2].replace(/^I /,"I ")}`)}<br>Time first → the verb stays in place 2 → ich moves behind it. <span class="en">Frühstück 6–9 · Mittagessen 12–14 · Abendessen 18–20</span>`,sayAfter:`${say} ${ans.replace(/^Ich (\S+)/,(a,v)=>v+" ich")}`};}},
 
  /* ---------- family, countries, colours ---------- */
  familie:{tag:"Familie",title:"Wer ist das?",en:"family words: who is who?",kind:"choice",
@@ -448,7 +483,7 @@ const GROUPS=[
  ["Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
  ["Kalender","calendar",["kalender","datum","zeitpraep"],"Kalender","calendar"],
  ["Hören","listening (turn the sound on)",["hoerenZahl","hoerenUhr","hoerenPreis","hoerenTelefon","hoerenName","hoerenMail","hoerenPruefung"],"Hören","listening"],
- ["Themen","topics",["vorstellen","arbeit","aktion","weg","cafe","familie","laender","farben","themen2"],"Themen","topics"],
+ ["Themen","topics",["vorstellen","arbeit","aktion","weg","cafe","essverben","mahlzeit","familie","laender","farben","themen2"],"Themen","topics"],
  ["Prüfung","exam",["lesenPruefung","formular"],"Prüfung","exam"]
 ];
 
@@ -465,5 +500,8 @@ const RULES=[
  ["kein = not a","kein replaces ein","Das ist <b>kein</b> Tisch.","That is no table. ein → kein, eine → keine.","kein"],
  ["Zahlen: Einer zuerst","numbers: ones first","24 = vier·und·zwanzig <span class=\"pron\">(FEER-oont-TSVAN-tsikh)</span>","four-and-twenty. German says the ones before the tens.","zahlWort"],
  ["W-Frage: Verb an Position 2","W-question: verb in position 2","Wo <b>wohnst</b> du?","Where live you? Question word first, then the verb.","wfrage"],
+ ["mag, möchte, gern","like, would like, like doing","Ich <b>mag</b> Kaffee. · Ich <b>möchte</b> einen Kaffee. · Ich trinke <b>gern</b> Kaffee.","I like coffee (always). · I would-like a coffee (now). · I drink gladly coffee.","essverben"],
+ ["nehmen, essen: e → i","only du and er/sie/es change","du <b>nimmst</b>, er <b>nimmt</b> · du <b>isst</b>, er <b>isst</b>","you take, he takes · you eat, he eats. ich nehme, ich esse stay.","essverben"],
+ ["zum Frühstück · zu Mittag","for breakfast · at lunch","Was isst du <b>zum</b> Frühstück? · Ich esse um 12 Uhr <b>zu Mittag</b>.","What eat you for-the breakfast? · I eat at 12 (zwölf, tsvoelf) o'clock at midday.","mahlzeit"],
  ["du-Form endet auf -st","du-form ends in -st","du wohn<b>st</b>, du lern<b>st</b>","you live, you learn","verbform"]
 ];

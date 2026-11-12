@@ -861,6 +861,75 @@ const CAFE=[
 ];
 const SHOPVERBS=[["nehme","take"],["möchte","would like"],["kaufe","buy"],["brauche","need"],["suche","am looking for"],["habe","have"]];
 
+/* ---------- möchten, mögen, nehmen, essen (themen.html#l-essverben, test "essverben") ---------- */
+/* person: [German, English, form index 0–5 (ich, du, er/sie/es, wir, ihr, sie/Sie)] */
+const EV_PERS=[["Ich","I",0],["Du","you",1],["Er","he",2],["Sie","she",2],["Wir","we",3],["Ihr","you (all)",4],["Sie","you (formal)",5],["Meine Freunde","my friends",5],["Mein Mann","my husband",2],["Die Kinder","the children",5]];
+/* verb: [infinitive, English, [ich, du, er, wir, ihr, sie], rule] */
+const EV_VERBS={
+ möchten:["möchten","would like",["möchte","möchtest","möchte","möchten","möchtet","möchten"],"möchten: ich = er (<b>möchte</b>, no -t), du möchte<b>st</b>, ihr möchte<b>t</b>."],
+ mögen:["mögen","like",["mag","magst","mag","mögen","mögt","mögen"],"mögen: <b>ö → a</b> for ich, du, er: ich <b>mag</b>, du <b>magst</b>, er <b>mag</b> (ich = er, no -t)."],
+ nehmen:["nehmen","take",["nehme","nimmst","nimmt","nehmen","nehmt","nehmen"],"nehmen: <b>e → i</b> and double m for du and er: du <b>nimmst</b>, er <b>nimmt</b>. ich nehme stays."],
+ essen:["essen","eat",["esse","isst","isst","essen","esst","essen"],"essen: <b>e → i</b> for du and er: du <b>isst</b>, er <b>isst</b> (same form!). ich esse stays."]
+};
+/* food: [article, noun, English, e = eat / d = drink] (singular you can count or order: "einen Kaffee", "ein Wasser") */
+const EV_FOOD=[["der","Apfel","apple","e"],["der","Kuchen","cake","e"],["der","Salat","salad","e"],["der","Fisch","fish","e"],["der","Burger","burger","e"],["der","Joghurt","yoghurt","e"],["der","Kaffee","coffee","d"],["der","Tee","tea","d"],["der","Saft","juice","d"],["der","Wein","wine","d"],
+ ["die","Banane","banana","e"],["die","Suppe","soup","e"],["die","Pizza","pizza","e"],["die","Wurst","sausage","e"],["die","Birne","pear","e"],["die","Cola","cola","d"],["die","Limonade","lemonade","d"],
+ ["das","Brot","bread","e"],["das","Brötchen","bread roll","e"],["das","Ei","egg","e"],["das","Eis","ice cream","e"],["das","Hähnchen","chicken","e"],["das","Schnitzel","schnitzel","e"],["das","Wasser","water","d"],["das","Bier","beer","d"],["das","Glas Milch","glass of milk","d"]];
+/* kein: food you like or don't like in general. [article ("pl" = plural), noun, English] */
+const EV_KEIN=[["der","Käse","cheese"],["der","Fisch","fish"],["der","Kaffee","coffee"],["der","Reis","rice"],["der","Knoblauch","garlic"],["der","Zucker","sugar"],
+ ["die","Milch","milk"],["die","Wurst","sausage"],["die","Schokolade","chocolate"],["die","Butter","butter"],["die","Sahne","cream"],
+ ["das","Fleisch","meat"],["das","Obst","fruit"],["das","Gemüse","vegetables"],["das","Bier","beer"],["das","Brot","bread"],
+ ["pl","Tomaten","tomatoes"],["pl","Nudeln","noodles"],["pl","Kartoffeln","potatoes"],["pl","Äpfel","apples"],["pl","Pilze","mushrooms"],["pl","Eier","eggs"]];
+/* mögen, möchten or gern: [situation (English), right, wrong, wrong, why] */
+const EV_LIKE=[
+ ["In a café you order a tea.","Ich möchte einen Tee, bitte.","Ich mag einen Tee, bitte.","Ich trinke gern einen Tee, bitte.","Ordering now = <b>möchte</b>."],
+ ["You say chocolate is always your favourite.","Ich mag Schokolade.","Ich möchte Schokolade.","Ich gern Schokolade.","In general, always = <b>mag</b>."],
+ ["You like eating fish (doing).","Ich esse gern Fisch.","Ich gern esse Fisch.","Ich mag gern Fisch.","Verb + <b>gern</b>: gern comes right after the verb."],
+ ["You ask a friend if she likes coffee (in general).","Magst du Kaffee?","Möchtest du Kaffee mag?","Mag du Kaffee?","mögen: du <b>magst</b>."],
+ ["The waiter asks what you would like.","Was möchten Sie?","Was mögen Sie?","Was gern Sie?","Asking for an order = <b>möchten</b>."],
+ ["You say you don't like meat at all.","Ich mag kein Fleisch.","Ich mag nicht Fleisch.","Ich möchte nicht kein Fleisch.","No article in front → <b>kein</b>. das Fleisch → kein."],
+ ["You tell the waiter you would like to eat a pizza.","Ich möchte eine Pizza essen.","Ich möchte essen eine Pizza.","Ich mag eine Pizza essen.","möchte in place 2, <b>essen at the end</b>."],
+ ["Your husband likes cooking.","Mein Mann kocht gern.","Mein Mann mag kochen gern.","Mein Mann möchte gern.","Verb + gern: er <b>kocht gern</b>."],
+ ["You ask a friend what she would like to drink.","Was möchtest du trinken?","Was magst du trinken?","Was möchtest du trinkst?","möchte<b>st</b> du … trink<b>en</b> (infinitive at the end)."],
+ ["Your daughter doesn't like tomatoes.","Sie mag keine Tomaten.","Sie mögt keine Tomaten.","Sie mag keinen Tomaten.","er/sie <b>mag</b>. Plural → <b>keine</b>."],
+ ["You order the soup (die Suppe).","Ich nehme die Suppe.","Ich nimm die Suppe.","Ich nehme den Suppe.","ich <b>nehme</b>. die Suppe stays die."],
+ ["You ask a colleague (du) what he is taking.","Was nimmst du?","Was nehmst du?","Was nimmt du?","nehmen: du <b>nimmst</b> (e → i, mm)."]
+];
+
+/* ---------- Frühstück, Mittagessen, Abendessen (themen.html#l-mahlzeiten, test "mahlzeit") ---------- */
+/* [sentence with ___, English, word by word, options (first = right), rule] */
+const MEALGAP=[
+ ["Was isst du ___ Frühstück?","What do you eat for breakfast?","What eat you for-the breakfast?",["zum","zur","am"],"das Frühstück → zu + dem = <b>zum</b>."],
+ ["___ Mittagessen nehme ich einen Salat.","For lunch I have a salad.","For-the lunch take I a salad.",["Zum","Zur","Im"],"das Mittagessen → <b>zum</b> Mittagessen."],
+ ["Wir essen um 19 Uhr zu ___.","We have dinner at 7 pm (neunzehn Uhr, NOYN-tsayn oor).","We eat at 19 o'clock at evening.",["Abend","Abendessen","Abends"],"<b>zu Abend essen</b> = to have dinner. No article, no -essen."],
+ ["Ich esse um 12 Uhr zu ___.","I have lunch at 12 (zwölf, tsvoelf) o'clock.","I eat at 12 o'clock at midday.",["Mittag","Mittagessen","Mittags"],"<b>zu Mittag essen</b> = to have lunch."],
+ ["Ich ___ um 7 Uhr.","I have breakfast at 7 (sieben, ZEE-ben) o'clock.","I breakfast at 7 o'clock.",["frühstücke","frühstückt","Frühstück"],"<b>frühstücken</b> is a verb: ich frühstück<b>e</b>."],
+ ["Um 8 Uhr ___ ich.","At 8 (acht, akht) o'clock I have breakfast.","At 8 o'clock breakfast I.",["frühstücke","frühstückst","frühstücken"],"Time first → verb in place 2 → ich after the verb."],
+ ["Wann ___ du?","When do you have breakfast?","When breakfast you?",["frühstückst","frühstücke","frühstückt"],"du → <b>-st</b>: du frühstück<b>st</b>."],
+ ["Zum Frühstück ___ ich Kaffee.","For breakfast I drink coffee.","For-the breakfast drink I coffee.",["trinke","ich trinke","trinkt"],"zum Frühstück is place 1 → verb 2nd: <b>trinke ich</b>."],
+ ["Was ___ dein Mann zum Abendessen?","What does your husband eat for dinner?","What eats your husband for-the dinner?",["isst","esst","esse"],"essen: er <b>isst</b> (e → i)."],
+ ["Mittags esse ich in ___ Kantine.","At lunchtime I eat in the canteen.","At-middays eat I in the canteen.",["der","die","den"],"in + die Kantine (Wo? where) → in <b>der</b> Kantine. Learn it as a phrase."],
+ ["Am Wochenende frühstücke ich ___.","At the weekend I have a long breakfast.","At-the weekend breakfast I long.",["lange","lang Frühstück","Frühstück lange"],"frühstücken + <b>lange</b> = take your time over breakfast."],
+ ["Ich möchte heute Abend Pizza ___.","I would like to eat pizza tonight.","I would-like today evening pizza eat.",["essen","esse","isst"],"möchte in place 2 → <b>infinitive at the end</b>."],
+ ["Das Mittagessen ___ lecker.","The lunch is tasty.","The lunch is tasty.",["ist","sind","hat"],"das Mittagessen (one thing) → <b>ist</b>."],
+ ["___ Abend esse ich nur ein Brot.","In the evening I only eat a slice of bread.","At-the evening eat I only a bread.",["Am","Um","Zum"],"<b>am</b> Abend = in the evening (time of day). <b>um</b> is only for clock times."]
+];
+/* order sentences: same format as ARRANGE */
+const MEAL_ARRANGE=[
+ ["Ich|*frühstücke|um 7 Uhr",".","I have breakfast at 7 (sieben, ZEE-ben) o'clock.","I|breakfast|at 7 (sieben) o'clock","Verb in place 2."],
+ ["Um 7 Uhr|*frühstücke|ich",".","At 7 (sieben, ZEE-ben) o'clock I have breakfast.","at 7 (sieben) o'clock|breakfast|I","Time first → verb 2nd → ich."],
+ ["Zum Frühstück|*esse|ich|ein Brötchen",".","For breakfast I eat a bread roll.","for-the breakfast|eat|I|a roll","zum Frühstück in place 1 → verb 2nd → ich."],
+ ["Was|*isst|du|zum Abendessen","?","What do you eat for dinner?","what|eat|you|for-the dinner","W-question: W-word 1st, verb 2nd."],
+ ["Ich|*esse|um 12 Uhr|zu Mittag",".","I have lunch at 12 (zwölf, tsvoelf) o'clock.","I|eat|at 12 (zwölf) o'clock|at midday","zu Mittag goes to the end."],
+ ["Wir|*essen|um 19 Uhr|zu Abend",".","We have dinner at 7 pm (neunzehn Uhr, NOYN-tsayn oor).","we|eat|at 19 (neunzehn) o'clock|at evening","zu Abend goes to the end."],
+ ["Zum Mittagessen|*nehme|ich|einen Salat",".","For lunch I'll have a salad.","for-the lunch|take|I|a salad","der Salat → einen Salat (Akkusativ)."],
+ ["Ich|*möchte|heute Abend|Fisch|*essen",".","I would like to eat fish tonight.","I|would like|today evening|fish|eat","Bracket: möchte in place 2, essen at the end."],
+ ["*Frühstückst|du|am Wochenende|lange","?","Do you have a long breakfast at the weekend?","breakfast|you|at-the weekend|long","Yes/no question: verb 1st."],
+ ["Mittags|*isst|er|in der Kantine",".","At lunchtime he eats in the canteen.","at-middays|eats|he|in the canteen","Time first → verb 2nd → er. essen: er isst."]
+].map(([t,p,en,ww,r])=>{const raw=t.split("|");return{raw,toks:raw.map(x=>x.replace(/^[*^]/,"")),p,en,ww:ww.split("|"),r};});
+/* meal times: [hour, meal sentence (right), English, other options] */
+const MEALTIME=[[7,"Ich frühstücke.","I have breakfast."],[8,"Ich frühstücke.","I have breakfast."],[6,"Ich frühstücke.","I have breakfast."],[12,"Ich esse zu Mittag.","I have lunch."],[13,"Ich esse zu Mittag.","I have lunch."],[18,"Ich esse zu Abend.","I have dinner."],[19,"Ich esse zu Abend.","I have dinner."],[20,"Ich esse zu Abend.","I have dinner."]];
+
 /* ---------- family riddles: [question, English, right, wrong, wrong] ---------- */
 const FAMQ=[
  ["Die Mutter von meiner Mutter ist meine ___.","My mother's mother is my …","Großmutter","Tante","Schwester"],

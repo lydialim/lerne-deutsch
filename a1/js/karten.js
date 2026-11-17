@@ -25,13 +25,6 @@ const KARTEN = [
 🧈|die|Butter|butter
 🧀|der|Käse|cheese
 🥚|das|Ei|egg
-🥛|die|Milch|milk
-☕|der|Kaffee|coffee
-🍵|der|Tee|tea
-🧃|der|Saft|juice
-💧|das|Wasser|water
-🍺|das|Bier|beer
-🍷|der|Wein|wine
 🍚|der|Reis|rice
 🍝|die|Nudeln|noodles, pasta|-|only plural (singular: die Nudel)
 🥔|die|Kartoffel|potato
@@ -50,23 +43,30 @@ const KARTEN = [
 🍉|das|Obst|fruit|-|no plural: Äpfel, Birnen, Bananen … = Obst
 🥜|die|Nuss|nut|Nüsse|die Erdnuss = peanut · die Walnuss = walnut
 🎃|der|Kürbis|pumpkin|Kürbisse|die Kürbissuppe = pumpkin soup
-svg:cocoa|der|Kakao|cocoa, hot chocolate|-|Ich trinke einen Kakao.
-🥤|die|Cola|cola|Colas|in Bavaria & Austria also: das Cola
-🍹|die|Getränke|drinks|PL|singular: das Getränk · Was möchten Sie trinken?
 🍐|die|Birne|pear|Birnen|also: light bulb
 🍋|die|Zitrone|lemon|Zitronen|Adj: sauer · Die Zitrone ist sauer.
 🥒|die|Gurke|cucumber|Gurken
 🧅|die|Zwiebel|onion|Zwiebeln
 🥐|das|Gebäck|pastries, baked goods|-|no plural: das Gebäck = all pastries together
 🍦|die|Sahne|cream|-|die Schlagsahne = whipped cream · Kaffee mit Sahne
-🧂|das|Salz|salt|-|Adj: salzig (salty)
+🌭|das|Würstchen|small sausage|Würstchen|die Wurst (sausage) + -chen = always das · Grillwürstchen`],
+ ["Getränke", "drinks", `🥛|die|Milch|milk
+☕|der|Kaffee|coffee
+🍵|der|Tee|tea
+🧃|der|Saft|juice
+💧|das|Wasser|water
+🍺|das|Bier|beer
+🍷|der|Wein|wine
+svg:cocoa|der|Kakao|cocoa, hot chocolate|-|Ich trinke einen Kakao.
+🥤|die|Cola|cola|Colas|in Bavaria & Austria also: das Cola
+🍹|die|Getränke|drinks|PL|singular: das Getränk · Was möchten Sie trinken?`],
+ ["Kochen und Geschmack", "cooking, taste, diet", `🧂|das|Salz|salt|-|Adj: salzig (salty)
 svg:pepper|der|Pfeffer|pepper (spice)|-|Salz und Pfeffer · the vegetable = die Paprika
 🫒|das|Öl|oil|Öle|das Olivenöl = olive oil
 svg:vinegar|der|Essig|vinegar|-|Öl und Essig (for the salad)
 🍖|der|Grill|grill, barbecue|Grills|Verb: grillen · Am Wochenende grillen wir.
 svg:oven|der|Ofen|oven|Öfen|also: der Backofen · Verb: backen
 🎉|die|Party|party|Partys|English word, plural -s (not -ies!) · eine Party machen
-🌭|das|Würstchen|small sausage|Würstchen|die Wurst (sausage) + -chen = always das · Grillwürstchen
 🍽️|der|Appetit|appetite|-|Guten Appetit! = Enjoy your meal! · Danke, gleichfalls! = Thanks, same to you!
 🤧|die|Allergie|allergy|Allergien|Ich habe eine Allergie. · Adj: allergisch
 🥗|die|Diät|diet (to lose weight)|Diäten|Ich mache eine Diät. · eating habits in general = die Ernährung
@@ -77,7 +77,10 @@ svg:oven|der|Ofen|oven|Öfen|also: der Backofen · Verb: backen
 😣||bitter|bitter||Adj. Der Kaffee ist bitter.
 🌶️||scharf|spicy, hot||Adj. Das Curry ist sehr scharf. (not heiß = hot temperature)
 🌱||vegan|vegan||Adj. Ich esse vegan. · no animal products at all
-🥦||vegetarisch|vegetarian||Adj. Ich esse vegetarisch. · person: der Vegetarier / die Vegetarierin`],
+🥦||vegetarisch|vegetarian||Adj. Ich esse vegetarisch. · person: der Vegetarier / die Vegetarierin
+😋||lecker|tasty||Adj. Das Essen ist lecker.
+🥬||frisch|fresh||Das Brot ist frisch.
+😌||satt|full (after eating)||Ich bin satt. ↔ hungrig`],
  ["Einkaufen", "shopping", `🛒|das|Einkaufen|shopping|-|Ich gehe einkaufen. (I go shopping.)
 🏪|der|Markt|market|Märkte
 🥐|die|Bäckerei|bakery|Bäckereien
@@ -213,22 +216,17 @@ svg:flask|die|Thermoskanne|flask (thermos)|Thermoskannen
 🔧|der|Techniker|technician|Techniker|female: die Technikerin, -nen
 💁|der|Verkäufer|salesperson, shop assistant|Verkäufer|female: die Verkäuferin, -nen
 🧑‍🌾|die|Landwirtin|farmer (female)|Landwirtinnen|male: der Landwirt · Sie ist Landwirtin. (no article before a job)`],
- ["Schule und Büro", "school and office", `svg:desk|der|Schreibtisch|desk|Schreibtische
-✏️|der|Bleistift|pencil|Bleistifte
+ ["Schule und Büro", "school and office", `✏️|der|Bleistift|pencil|Bleistifte
 🖊️|der|Kuli|pen
 📓|das|Heft|exercise book
-📖|das|Buch|book
+📖|das|Buch|book|Bücher|Ich lese gern Bücher.
 📏|das|Lineal|ruler|Lineale
 🎒|die|Schultasche|school bag|Schultaschen
 🏫|die|Schule|school
-🚪|die|Tür|door
-🪟|das|Fenster|window
-💻|der|Computer|computer
 🔤|das|Wort|word|Wörter|das Wörterbuch = dictionary
 📚|die|Bibliothek|library|Bibliotheken|Er lernt in der Bibliothek. · in der = in + die
 🍽️|die|Mensa|university canteen|Mensen|plural: die Mensen (not Mensas) · Ich esse in der Mensa.`],
  ["Computer und E-Mail", "computer and e-mail", `💻|der|Computer|computer
-svg:table|der|Tisch|table
 svg:grid|die|Tabelle|table (of data)|Tabellen
 📧|die|E-Mail|e-mail
 @|das|At-Zeichen|@ sign|-|Say: „ät“ · max@web.de = „max ät web punkt de“
@@ -298,7 +296,6 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 ⚽|der|Fußball|football|Fußbälle (the balls)|Ich spiele gern Fußball.
 📷|das|Fotografieren|photography (taking photos)|-|Mein Hobby ist Fotografieren.
 🖼️|das|Foto|photo|Fotos
-📚|das|Buch|book|Bücher|Ich lese gern Bücher.
 🥾|das|Wandern|hiking|-|Verb: wandern · ich wandere gern
 😴|das|Schlafen|sleeping|-|Verb: schlafen · ich schlafe gern lange
 💤|der|Mittagsschlaf|nap|-|Mittagsschlaf machen = to take a nap
@@ -334,15 +331,12 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 🛋️||besuchen|to visit||ich besuche · du besuchst · er besucht · Er besucht seine Oma. (be- is NOT separable)
 🏃||joggen|to jog||ich jogge · du joggst · er joggt
 ⏳||dauern|to last, to take (time)||Das dauert zwei Stunden. · only es/das + -t`],
- ["Adjektive, Adverbien", "adjectives, adverbs", `🔁||immer|always||Adv. Ich trinke immer Kaffee.
-✅||sicher|certainly, sure||Adv. Sicher! = Certainly!
-👍||gut|good||Adj. Wie geht's? – Gut!
+ ["Adjektive", "adjectives", `👍||gut|good||Adj. Wie geht's? – Gut!
 👎||schlecht|bad||Adj. Das ist schlecht.
 🤩||super|great||Adj. Das ist super!
 😴||müde|tired||Adj. Ich bin müde.
 🤒||krank|ill||Adj. Ich bin krank.
 😊||glücklich|happy||Adj. Ich bin glücklich.
-😋||lecker|tasty||Adj. Das Essen ist lecker.
 🏚️||alt|old||↔ neu · Das Haus ist alt.
 🆕||neu|new||↔ alt · Das Handy ist neu.
 🙇||höflich|polite||↔ unhöflich
@@ -376,19 +370,19 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 🌟||bekannt|well-known, famous
 👌||einfach|easy, simple||Das ist einfach.
 🏁||fertig|finished, ready||Ich bin fertig.
-🥬||frisch|fresh||Das Brot ist frisch.
 🌍||international|international
 📢||laut|loud||↔ leise (quiet)
 🙋||ledig|single (not married)||↔ verheiratet
 💍||verheiratet|married||↔ ledig · Ich bin verheiratet.
 🔓||offen|open||also: geöffnet · ↔ geschlossen (closed)
-😌||satt|full (after eating)||Ich bin satt. ↔ hungrig
 🥨||typisch|typical||Brezeln sind typisch bayerisch.
 🚫||verboten|forbidden, not allowed||Rauchen verboten! (no smoking)
 👀||wach|awake||↔ müde
 ❗||wichtig|important||Das ist wichtig.
 ♂️||männlich|male||Adj. der Mann → männlich · on forms: m
-♀️||weiblich|female||Adj. das Weib → weiblich · on forms: w
+♀️||weiblich|female||Adj. das Weib → weiblich · on forms: w`],
+ ["Adverbien und Wendungen", "adverbs and phrases", `🔁||immer|always||Adv. Ich trinke immer Kaffee.
+✅||sicher|certainly, sure||Adv. Sicher! = Certainly!
 🤝||zusammen|together||Adv. Wir kochen zusammen. · Zusammen oder getrennt? (together or separate bill?)
 🙂||gern|gladly, like doing||Adv. after the verb: Ich esse gern Pizza. · nicht gern = don't like
 👋||Das war's.|That's it. / That's all.||Said when finishing: Das war's! · Sonst noch etwas? – Nein, das war's.

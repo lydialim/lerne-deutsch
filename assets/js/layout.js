@@ -68,6 +68,7 @@
         <a class="litem more" href="tests.html"><span class="n">${svg("target")}</span><span class="t"><b>Alle Tests</b><small>all tests</small></span></a>
         <a class="litem more" href="karten.html"><span class="n">${svg("cards")}</span><span class="t"><b>Bildkarten</b><small>picture cards</small></span></a>
         <a class="litem more" href="spickzettel.html"><span class="n">${svg("note")}</span><span class="t"><b>Spickzettel</b><small>cheat sheet</small></span></a>
+        <a class="litem more" href="buchseiten.html"><span class="n">${svg("book")}</span><span class="t"><b>Buchseiten</b><small>workbook pages</small></span></a>
       </div>
     </div>
   </div>

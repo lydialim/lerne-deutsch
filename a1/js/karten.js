@@ -91,7 +91,8 @@ svg:oven|der|Ofen|oven|Öfen|also: der Backofen · Verb: backen
 🧾|der|Kassenzettel|receipt|Kassenzettel|Brauchen Sie den Kassenzettel? · die Kasse (till) + der Zettel (slip)
 🛒|der|Einkaufswagen|shopping trolley|Einkaufswagen|needs a 1-Euro coin · Ich brauche einen Euro für den Einkaufswagen.
 🗄️|das|Regal|shelf|Regale|Wo finde ich Reis? – Dort im Regal.
-🥩|die|Theke|counter (deli, cheese)|Theken|die Käsetheke = cheese counter · Wer kommt dran? = Who's next?`],
+🥩|die|Theke|counter (deli, cheese)|Theken|die Käsetheke = cheese counter · Wer kommt dran? = Who's next?
+🥕|der|Wochenmarkt|weekly market|Wochenmärkte|die Woche + der Markt · auf dem Markt (on the market) · dreimal in der Woche = three times a week`],
  ["Familie und Leute", "family and people", `👩|die|Mutter|mother
 👨|der|Vater|father
 👨‍👩‍👧|die|Familie|family
@@ -143,7 +144,8 @@ svg:flask|die|Thermoskanne|flask (thermos)|Thermoskannen
 👜|die|Tasche|bag
 👓|die|Brille|glasses
 📰|die|Zeitung|newspaper
-☂️|der|Regenschirm|umbrella`],
+☂️|der|Regenschirm|umbrella
+📰|die|Nachrichten|news|PL|always plural: die Nachrichten lesen · one message = die Nachricht`],
  ["Kleidung", "clothes", `👕|das|T-Shirt|T-shirt|T-Shirts
 👔|das|Hemd|shirt
 👖|die|Hose|trousers
@@ -209,7 +211,8 @@ svg:flask|die|Thermoskanne|flask (thermos)|Thermoskannen
 🎞️|der|Schauspieler|actor|Schauspieler|female: die Schauspielerin, -nen
 🚖|der|Taxifahrer|taxi driver|Taxifahrer|female: die Taxifahrerin, -nen
 🔧|der|Techniker|technician|Techniker|female: die Technikerin, -nen
-💁|der|Verkäufer|salesperson, shop assistant|Verkäufer|female: die Verkäuferin, -nen`],
+💁|der|Verkäufer|salesperson, shop assistant|Verkäufer|female: die Verkäuferin, -nen
+🧑‍🌾|die|Landwirtin|farmer (female)|Landwirtinnen|male: der Landwirt · Sie ist Landwirtin. (no article before a job)`],
  ["Schule und Büro", "school and office", `svg:desk|der|Schreibtisch|desk|Schreibtische
 ✏️|der|Bleistift|pencil|Bleistifte
 🖊️|der|Kuli|pen
@@ -221,7 +224,9 @@ svg:flask|die|Thermoskanne|flask (thermos)|Thermoskannen
 🚪|die|Tür|door
 🪟|das|Fenster|window
 💻|der|Computer|computer
-🔤|das|Wort|word|Wörter|das Wörterbuch = dictionary`],
+🔤|das|Wort|word|Wörter|das Wörterbuch = dictionary
+📚|die|Bibliothek|library|Bibliotheken|Er lernt in der Bibliothek. · in der = in + die
+🍽️|die|Mensa|university canteen|Mensen|plural: die Mensen (not Mensas) · Ich esse in der Mensa.`],
  ["Computer und E-Mail", "computer and e-mail", `💻|der|Computer|computer
 svg:table|der|Tisch|table
 svg:grid|die|Tabelle|table (of data)|Tabellen
@@ -322,7 +327,13 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 🛑||halten|to stop, to hold||ich halte · du hältst · er hält
 🤲||brauchen|to need||ich brauche · du brauchst · er braucht
 💳||kaufen|to buy||ich kaufe · du kaufst · er kauft
-🛍️||einkaufen|to shop||ich kaufe ein · du kaufst ein · er kauft ein`],
+🛍️||einkaufen|to shop||ich kaufe ein · du kaufst ein · er kauft ein
+🚿||duschen|to shower||ich dusche · du duschst · er duscht
+🥣||frühstücken|to have breakfast||ich frühstücke · du frühstückst · er frühstückt · das Frühstück
+🧑‍🤝‍🧑||treffen|to meet||ich treffe · du triffst · er trifft (e → i) · Er trifft Marie.
+🛋️||besuchen|to visit||ich besuche · du besuchst · er besucht · Er besucht seine Oma. (be- is NOT separable)
+🏃||joggen|to jog||ich jogge · du joggst · er joggt
+⏳||dauern|to last, to take (time)||Das dauert zwei Stunden. · only es/das + -t`],
  ["Adjektive, Adverbien", "adjectives, adverbs", `🔁||immer|always||Adv. Ich trinke immer Kaffee.
 ✅||sicher|certainly, sure||Adv. Sicher! = Certainly!
 👍||gut|good||Adj. Wie geht's? – Gut!
@@ -380,7 +391,11 @@ _|der|Unterstrich|underscore|Unterstriche|max_koch = „max Unterstrich koch“
 ♀️||weiblich|female||Adj. das Weib → weiblich · on forms: w
 🤝||zusammen|together||Adv. Wir kochen zusammen. · Zusammen oder getrennt? (together or separate bill?)
 🙂||gern|gladly, like doing||Adv. after the verb: Ich esse gern Pizza. · nicht gern = don't like
-👋||Das war's.|That's it. / That's all.||Said when finishing: Das war's! · Sonst noch etwas? – Nein, das war's.`],
+👋||Das war's.|That's it. / That's all.||Said when finishing: Das war's! · Sonst noch etwas? – Nein, das war's.
+🕰️||manchmal|sometimes||Adv. Manchmal esse ich in der Mensa. · often = oft
+🔂||oft|often||Adv. Das dauert oft drei Stunden. · oft ≠ off!
+🛋️||zu Hause|at home (being there)||Adv. Ich bin zu Hause. · Abends esse ich zu Hause.
+🚪||nach Hause|(going) home||Adv. Ich gehe nach Hause. · zu Hause = there · nach Hause = on the way`],
  ["Länder und Sprachen", "countries and languages", `🇩🇿||Algerien|Algeria||Sprache: Arabisch
 🇧🇷||Brasilien|Brazil||Sprache: Portugiesisch
 🇧🇬||Bulgarien|Bulgaria||Sprache: Bulgarisch

@@ -31,6 +31,10 @@ Adding, renaming or reordering a lesson means updating all of these:
 
 Adding a test means adding it to `TESTS` and its key to `GROUPS` in `tests.js`, otherwise it won't show up on the tests page.
 
+## Last updated date
+
+The footer shows a "last updated" date. When you change content, bump the `UPDATED` constant (YYYY-MM-DD) in the footer block of `assets/js/layout.js`.
+
 ## New level
 
 Copy `a1/` to `a2/`, then edit `level.js` (`id`, `level`, `title`, menu), replace the content files, and add the level to the root `index.html` and the README table. `assets/` stays shared.

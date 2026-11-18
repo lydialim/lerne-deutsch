@@ -139,6 +139,11 @@
   const f = document.getElementById("site-footer");
   if (!f) return;
   const L = window.LEVEL;
+  /* Last-updated date shown in the footer. Change this one line (YYYY-MM-DD) whenever content changes. */
+  const UPDATED = "2026-11-18";
+  const [uy, um, ud] = UPDATED.split("-").map(Number);
+  const MON_DE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+  const MON_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const link = ([href, de, en]) => `<a href="${href}">${de}${en ? ` <small>${en.replace(/^Teil [A-D] · /, "")}</small>` : ""}</a>`;
   const cols = L
     ? `<nav class="fcol" aria-label="Lernen"><h2>Lernen <span>learn</span></h2>${L.pages.filter(p => p[3] !== "tools").map(link).join("")}</nav>
@@ -155,6 +160,7 @@
   </div>
   <div class="fbar">
     <p class="love">Mit <span class="heart" aria-label="Liebe">♥</span> gemacht von <b>lydialim</b> · © 2026 Lerne Deutsch</p>
+    <p class="updated">Zuletzt aktualisiert: <time datetime="${UPDATED}">${ud}. ${MON_DE[um - 1]} ${uy}</time> <span class="en">(Last updated: ${ud} ${MON_EN[um - 1]} ${uy})</span></p>
     <p>Entstanden auf meiner Deutsch-Lernreise, zusammen mit Claude. <span class="en">(Built while learning German, with help from Claude.)</span></p>
     <p>Privates Lernprojekt, nicht verbunden mit dem Goethe-Institut oder Klett. Keine Cookies, kein Tracking. <span class="en">(Private project, not affiliated with the Goethe-Institut or Klett. No cookies, no tracking.)</span></p>
   </div>

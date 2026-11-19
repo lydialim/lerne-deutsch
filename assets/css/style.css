@@ -1119,7 +1119,7 @@ body.nohint .q .car[data-br^="e"],body.nohint .slot[data-br^="e"] .hole{border-c
 @media (max-width:520px){.legend{font-size:13px;gap:4px 12px;padding:6px 36px 6px 10px}.legend .car{font-size:13px}}
 
 /* Stories and dialogues (geschichten.html, dialoge.html) */
-.vb{border-bottom:2px dotted var(--muted)}
+.vb{background:color-mix(in srgb,var(--ink) 9%,transparent);border-radius:4px;padding:0 3px}
 .der sup,.die sup,.das sup{font-size:.55em;font-weight:700;margin-left:1px;opacity:.8}
 .textnav{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
 .textnav a{background:var(--soft);border-radius:999px;padding:6px 12px;font-weight:700;font-size:14px;text-decoration:none;color:var(--ink)}
@@ -1150,3 +1150,32 @@ body.nohint .q .car[data-br^="e"],body.nohint .slot[data-br^="e"] .hole{border-c
 .bub small{font-weight:700;color:var(--muted)}
 .bub.hide:not(.shown) .bt p{filter:blur(6px);user-select:none;cursor:pointer}
 .bub.hide:not(.shown) .bt::after{content:"👆 tippen (tap to reveal)";font-size:12px;color:var(--muted)}
+
+/* Lesson menu sheet: two tabs (Lektionen | Mehr) */
+.sheettabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--soft);border-radius:12px;padding:4px;margin-bottom:8px}
+.sheettabs button{border:none;background:none;border-radius:9px;padding:8px 6px;font-weight:800;font-family:var(--display);min-height:40px;color:var(--ink)}
+.sheettabs .en{font-family:var(--body);font-weight:400;font-size:.8em}
+.sheettabs button[aria-selected="true"]{background:var(--card);box-shadow:0 1px 3px rgb(20 28 48 / .12)}
+.sheet[data-pane="more"] .partchips,.sheet[data-pane="more"] .sheetgrid{display:none}
+.sheet:not([data-pane="more"]) .sheetmore{display:none}
+.sheetmore{display:flex;flex-direction:column;gap:14px;border-top:none;margin-top:6px;padding-top:0}
+.mgroup h3{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:6px 0 2px}
+.mgroup h3 span{text-transform:none;letter-spacing:0;font-weight:400}
+.litem[aria-current="page"]{background:var(--soft);border-radius:10px}
+@media (min-width:760px){.sheetmore{display:grid;grid-template-columns:1fr 1fr;column-gap:36px}.sheet:not([data-pane="more"]) .sheetmore{display:none}}
+
+/* Overview tiles: whole tile is one tap target, two per row on phones */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding-block:6px 14px}
+.tiles.tall{grid-template-columns:1fr}
+.tile{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;min-height:64px;color:var(--ink);text-decoration:none;min-width:0}
+.tile:hover{border-color:var(--ink)}
+.tile .ti{flex:none;width:44px;height:44px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:24px;font-family:var(--display);font-weight:800}
+.tile b.ti{background:var(--ink);color:var(--paper);font-size:20px}
+.tile .tt{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.tile .tt b{font-family:var(--display);font-size:17px}
+.tile .tt .en{font-size:13px}
+.tiles:not(.tall) .tile{flex-direction:column;align-items:flex-start;gap:8px}
+.quickgo{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 24px}
+@media (min-width:760px){.tiles{grid-template-columns:repeat(3,minmax(0,1fr))}.tiles.tall{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+@media (max-width:759px){.dia .tablebox{overflow-x:auto}}

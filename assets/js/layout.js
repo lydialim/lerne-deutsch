@@ -8,6 +8,9 @@
   const here = location.pathname.split("/").pop() || "index.html";
   const parts = L.parts || [];
   const onPartPage = parts.some(p => p[3] === here);
+  /* pages reached through the "Mehr" tab of the bottom bar */
+  const MORE_PAGES = ["spickzettel.html", "geschichten.html", "dialoge.html", "buchseiten.html"];
+  const onMorePage = MORE_PAGES.includes(here);
   const ICON = {
     home: '<path d="M4 11.5 12 5l8 6.5V20h-5v-5H9v5H4z"/>',
     book: '<path d="M4 5.5C6.5 4 9.5 4 12 6c2.5-2 5.5-2 8-.5V19c-2.5-1.5-5.5-1.5-8 .5-2.5-2-5.5-2-8-.5z"/><path d="M12 6v13.5"/>',
@@ -17,7 +20,8 @@
     menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
     up: '<path d="M12 19V6M6 11.5 12 5.5l6 6"/>',
     arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
-    back: '<path d="M19 12H5M11 6l-6 6 6 6"/>'
+    back: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+    more: '<circle cx="5.5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18.5" cy="12" r="1.4"/>'
   };
   const svg = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[k]}</svg>`;
 
@@ -47,10 +51,10 @@
   document.body.insertAdjacentHTML("beforeend", `
   <nav class="bnav" aria-label="Menü (menu)">
     <a class="btab" href="index.html"${cur("index.html")}>${svg("home")}Start<small>overview</small></a>
-    <button class="btab" type="button" data-sheet${onPartPage ? ' aria-current="page"' : ""}>${svg("book")}Lektionen<small>lessons</small></button>
+    <button class="btab" type="button" data-sheet="lessons"${onPartPage ? ' aria-current="page"' : ""}>${svg("book")}Lektionen<small>lessons</small></button>
     <a class="btab" href="karten.html"${cur("karten.html")}>${svg("cards")}Karten<small>cards</small></a>
-    <a class="btab" href="spickzettel.html"${cur("spickzettel.html")}>${svg("note")}Spickzettel<small>cheat sheet</small></a>
     <a class="btab" href="tests.html"${cur("tests.html")}>${svg("target")}Tests<small>practise</small></a>
+    <button class="btab" type="button" data-sheet="more"${onMorePage ? ' aria-current="page"' : ""}>${svg("more")}Mehr<small>more</small></button>
   </nav>
   <div class="sheet" id="lessonSheet" hidden>
     <div class="scrim" data-close></div>
@@ -58,6 +62,7 @@
       <div class="sheettop">
         <div class="grab" aria-hidden="true"></div>
         <div class="sheethead"><h2 id="sheetTitle">Alle Lektionen <span class="en">(all lessons)</span></h2><button class="xbtn" type="button" data-close aria-label="Schließen (close)">✕</button></div>
+        <div class="sheettabs" role="tablist"><button type="button" role="tab" data-pane="lessons">Lektionen <span class="en">(lessons)</span></button><button type="button" role="tab" data-pane="more">Mehr <span class="en">(more)</span></button></div>
         <div class="partchips" role="group" aria-label="Teil wählen (jump to part)">${parts.map(p => `<button type="button" class="pchip" data-jump="g-${p[0]}"><b>${p[0]}</b> ${p[1].split(" & ").pop()}</button>`).join("")}</div>
       </div>
       <div class="sheetgrid">
@@ -65,23 +70,31 @@
         ls.map(([id, n, lde, len]) => `<a class="litem" href="${page === here ? "" : page}#${id}" data-id="${id}"><span class="n">${n}</span><span class="t"><b>${lde}</b><small>${len}</small></span></a>`).join("") + `</div>`).join("")}
       </div>
       <div class="sheetmore">
-        <a class="litem more" href="tests.html"><span class="n">${svg("target")}</span><span class="t"><b>Alle Tests</b><small>all tests</small></span></a>
-        <a class="litem more" href="karten.html"><span class="n">${svg("cards")}</span><span class="t"><b>Bildkarten</b><small>picture cards</small></span></a>
-        <a class="litem more" href="spickzettel.html"><span class="n">${svg("note")}</span><span class="t"><b>Spickzettel</b><small>cheat sheet</small></span></a>
-        <a class="litem more" href="geschichten.html"><span class="n">${svg("book")}</span><span class="t"><b>Geschichten</b><small>short stories</small></span></a>
-        <a class="litem more" href="dialoge.html"><span class="n">${svg("cards")}</span><span class="t"><b>Dialoge</b><small>typical conversations</small></span></a>
-        <a class="litem more" href="buchseiten.html"><span class="n">${svg("book")}</span><span class="t"><b>Buchseiten</b><small>workbook pages</small></span></a>
+        ${[["Lesen & Sprechen", "read & speak", [["geschichten.html", "book", "Geschichten", "short stories"], ["dialoge.html", "cards", "Dialoge", "typical conversations"]]],
+           ["Nachschlagen", "look up", [["spickzettel.html", "note", "Spickzettel", "cheat sheet"], ["buchseiten.html", "book", "Buchseiten", "workbook pages"]]],
+           ["Üben", "practise", [["karten.html", "cards", "Bildkarten", "picture cards"], ["tests.html", "target", "Alle Tests", "all tests"]]],
+           ["Hilfe", "help", [["../einrichtung.html", "menu", "Stimme & Mikrofon", "voice & microphone setup"]]]].map(([de, en, items]) => `<div class="mgroup"><h3>${de} <span>(${en})</span></h3>${
+          items.map(([href, ic, t, sm]) => `<a class="litem more" href="${href}"${href === here ? ' aria-current="page"' : ""}><span class="n">${svg(ic)}</span><span class="t"><b>${t}</b><small>${sm}</small></span></a>`).join("")}</div>`).join("")}
       </div>
     </div>
   </div>
   <button class="totop" type="button" id="toTop" aria-label="Nach oben (back to top)" title="Nach oben">${svg("up")}<span>Nach oben</span></button>`);
 
   const sheet = document.getElementById("lessonSheet");
-  function openLessonMenu() {
-    showSheet(sheet, sheet.querySelector(".litem.on") || sheet.querySelector(".litem"));
+  function setPane(p) {
+    sheet.dataset.pane = p;
+    document.getElementById("sheetTitle").innerHTML = p === "more" ? 'Menü <span class="en">(menu)</span>' : 'Alle Lektionen <span class="en">(all lessons)</span>';
+    sheet.querySelectorAll("[data-pane]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.pane === p)));
+  }
+  function openLessonMenu(pane) {
+    setPane(pane);
+    showSheet(sheet, pane === "more" ? sheet.querySelector(".sheetmore .litem") : sheet.querySelector(".litem.on") || sheet.querySelector(".litem"));
   }
   document.addEventListener("click", e => {
-    if (e.target.closest("[data-sheet]")) { e.preventDefault(); openLessonMenu(); return; }
+    const sb = e.target.closest("[data-sheet]");
+    if (sb) { e.preventDefault(); openLessonMenu(sb.dataset.sheet || "lessons"); return; }
+    const pn = e.target.closest(".sheettabs [data-pane]");
+    if (pn) { setPane(pn.dataset.pane); sheet.querySelector(".sheetbox").scrollTo({ top: 0 }); return; }
     if (e.target.closest("[data-close]")) { hideSheet(sheet); return; }
     const j = e.target.closest("[data-jump]");
     if (j) { const g = document.getElementById(j.dataset.jump), box = sheet.querySelector(".sheetbox"), top = sheet.querySelector(".sheettop");
@@ -118,7 +131,7 @@
   const subnav = document.querySelector(".subnav");
   if (!subnav) return;
   const links = [...subnav.querySelectorAll("a")];
-  subnav.insertAdjacentHTML("afterbegin", `<button class="lessbtn" type="button" data-sheet aria-haspopup="dialog">${svg("menu")}Lektionen<span class="curl" id="curl"></span></button>`);
+  subnav.insertAdjacentHTML("afterbegin", `<button class="lessbtn" type="button" data-sheet="lessons" aria-haspopup="dialog">${svg("menu")}Lektionen<span class="curl" id="curl"></span></button>`);
   function mark(id) {
     links.forEach(a => {
       const on = a.getAttribute("href") === "#" + id; a.classList.toggle("on", on);

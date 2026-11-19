@@ -113,7 +113,7 @@ const VOCAB=[
 
  ["die","Familie","Familien","family","familie"],["der","Vater","Väter","father","familie"],["die","Mutter","Mütter","mother","familie"],["der","Sohn","Söhne","son","familie"],
  ["die","Tochter","Töchter","daughter","familie"],["der","Bruder","Brüder","brother","familie"],["die","Schwester","Schwestern","sister","familie"],["der","Großvater","Großväter","grandfather","familie"],
- ["die","Großmutter","Großmütter","grandmother","familie"],["der","Opa","Opas","grandpa","familie"],["die","Oma","Omas","grandma","familie"],["der","Onkel","Onkel","uncle","familie"],
+ ["die","Großmutter","Großmütter","grandmother","familie"],["der","Opa","Opas","grandpa","familie"],["die","Oma","Omas","grandma","familie"],["der","Papa","Papas","dad","familie"],["die","Mama","Mamas","mum","familie"],["der","Onkel","Onkel","uncle","familie"],
  ["die","Tante","Tanten","aunt","familie"],["der","Cousin","Cousins","cousin (m)","familie"],["die","Cousine","Cousinen","cousin (f)","familie"],["das","Kind","Kinder","child","familie"],
  ["das","Baby","Babys","baby","familie"],["der","Mann","Männer","man / husband","familie"],["die","Frau","Frauen","woman / wife","familie"],["der","Partner","Partner","partner (m)","familie"],
  ["die","Partnerin","Partnerinnen","partner (f)","familie"],["der","Enkel","Enkel","grandson","familie"],["die","Enkelin","Enkelinnen","granddaughter","familie"],

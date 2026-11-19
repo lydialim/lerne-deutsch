@@ -121,6 +121,8 @@ input[type=text],input[type=number]{font:inherit;font-size:20px;padding:10px 12p
 .dia svg .bldg{fill:var(--der-bg);stroke:var(--der);stroke-width:1.5}
 .dia svg .line{stroke:var(--ink);stroke-width:3}
 .dia svg .fillder{fill:var(--der)}.dia svg .filldie{fill:var(--die)}.dia svg .fillpl{fill:var(--pl)}
+.dia svg .sib{stroke:var(--pl);stroke-width:3;fill:none}
+.treescroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.dia .treescroll svg{min-width:600px;max-width:680px}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:15px}
 .tabs .go{margin-left:auto;align-self:center}
 /* cheat sheet */

@@ -96,8 +96,10 @@ svg:oven|der|Ofen|oven|Öfen|also: der Backofen · Verb: backen
 🗄️|das|Regal|shelf|Regale|Wo finde ich Reis? – Dort im Regal.
 🥩|die|Theke|counter (deli, cheese)|Theken|die Käsetheke = cheese counter · Wer kommt dran? = Who's next?
 🥕|der|Wochenmarkt|weekly market|Wochenmärkte|die Woche + der Markt · auf dem Markt (on the market) · dreimal in der Woche = three times a week`],
- ["Familie und Leute", "family and people", `👩|die|Mutter|mother
-👨|der|Vater|father
+ ["Familie und Leute", "family and people", `👩|die|Mutter|mother|Mütter|everyday word: die Mama
+👨|der|Vater|father|Väter|everyday word: der Papa
+👩|die|Mama|mum|Mamas|= die Mutter (everyday) · meine Mama
+👨|der|Papa|dad|Papas|= der Vater (everyday) · mein Papa
 👨‍👩‍👧|die|Familie|family
 👦|der|Bruder|brother
 👧|die|Schwester|sister
@@ -121,7 +123,24 @@ svg:oven|der|Ofen|oven|Öfen|also: der Backofen · Verb: backen
 👦🏽|der|Junge|boy|Jungen
 👧🏽|das|Mädchen|girl|Mädchen|-chen = always das (even for a girl!)
 🧔|der|Mann|man, husband|Männer
-👩‍🦰|die|Frau|woman, wife|Frauen`],
+👩‍🦰|die|Frau|woman, wife|Frauen
+🧔|der|Onkel|uncle|Onkel|plural: die Onkel (no change)
+👩‍🦱|die|Tante|aunt|Tanten
+🧑|der|Cousin|cousin (male)|Cousins|French word: koo-ZANG
+👩|die|Cousine|cousin (female)|Cousinen|koo-ZEE-ne
+🧓|der|Urgroßvater|great-grandfather|Urgroßväter|Ur- = great-
+🧓|die|Urgroßmutter|great-grandmother|Urgroßmütter|Ur- = great-
+🧑|der|Stiefbruder|stepbrother|Stiefbrüder|Stief- = step-
+👩|die|Stiefschwester|stepsister|Stiefschwestern|Stief- = step-
+🧑|der|Halbbruder|half brother|Halbbrüder|Halb- = half: same mother OR same father
+👩|die|Halbschwester|half sister|Halbschwestern|Halb- = half
+👨‍🦳|der|Schwiegervater|father-in-law|Schwiegerväter|Schwieger- = -in-law
+👩‍🦳|die|Schwiegermutter|mother-in-law|Schwiegermütter|Schwieger- = -in-law
+👦|der|Neffe|nephew|Neffen|son of your brother or sister
+👧|die|Nichte|niece|Nichten|daughter of your brother or sister
+👶|der|Enkel|grandson|Enkel|plural: die Enkel (no change)
+👶|die|Enkelin|granddaughter|Enkelinnen|-in = female → die
+🌳|der|Stammbaum|family tree|Stammbäume|der Stamm (trunk) + der Baum (tree)`],
  ["Wohnung", "home", `🏠|das|Haus|house
 🏢|die|Wohnung|flat
 🚪|die|Tür|door

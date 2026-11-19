@@ -84,9 +84,14 @@ renderScene("sceneMarkt",[
  ["Getränke","drinks",[["💧","das","Wasser"],["🧃","der","Saft"],["🍺","das","Bier"],["🍷","der","Wein"]]],
  ["Fleisch und Fisch","meat and fish",[["🥩","das","Fleisch"],["🍗","das","Hähnchen"],["🐟","der","Fisch"]]]]);
 renderScene("sceneBaum",[
+ ["Die Urgroßeltern","great-grandparents",[["🧓","der","Urgroßvater"],["🧓","die","Urgroßmutter"]]],
  ["Die Großeltern","grandparents",[["👴","der","Opa"],["👵","die","Oma"]]],
- ["Die Eltern","parents",[["👨","der","Vater"],["👩","die","Mutter"]]],
- ["Die Kinder","children",[["👦","der","Bruder"],["👧","die","Schwester"],["👨‍👦","der","Sohn"],["👩‍👧","die","Tochter"]]]]);
+ ["Die Eltern","parents",[["👨","der","Vater"],["👨","der","Papa"],["👩","die","Mutter"],["👩","die","Mama"]]],
+ ["Onkel, Tante, Cousins","uncle, aunt, cousins",[["🧔","der","Onkel"],["👩‍🦰","die","Tante"],["🧑","der","Cousin"],["👩","die","Cousine"]]],
+ ["Die Geschwister","siblings",[["🧑","der","Bruder"],["👩","die","Schwester"],["🧑","der","Halbbruder"],["👩","die","Halbschwester"],["🧑","der","Stiefbruder"],["👩","die","Stiefschwester"]]],
+ ["Die Schwiegereltern","parents-in-law",[["👨‍🦳","der","Schwiegervater"],["👩‍🦳","die","Schwiegermutter"]]],
+ ["Die Kinder","children",[["👦","der","Sohn"],["👧","die","Tochter"],["👶","das","Baby"],["👦","der","Neffe"],["👧","die","Nichte"]]],
+ ["Die Enkelkinder","grandchildren",[["👶","der","Enkel"],["👶","die","Enkelin"]]]]);
 
 /* Conjugation chips: the stem stays, the ending slides */
 if($("#conj")){

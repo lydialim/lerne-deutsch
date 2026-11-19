@@ -119,6 +119,9 @@ const VOCAB=[
  ["die","Partnerin","Partnerinnen","partner (f)","familie"],["der","Enkel","Enkel","grandson","familie"],["die","Enkelin","Enkelinnen","granddaughter","familie"],
  ["die","Eltern","Eltern","parents","familie","Plural only: there is no singular. die Eltern = mother + father."],
  ["die","Geschwister","Geschwister","brothers and sisters (siblings)","familie","Plural only: die Geschwister = all your brothers and sisters."],
+ ["der","Urgroßvater","Urgroßväter","great-grandfather","familie","Ur- = great-: Ur-groß-vater = great-grand-father."],["die","Urgroßmutter","Urgroßmütter","great-grandmother","familie","Ur- = great-: Ur-groß-mutter = great-grand-mother."],
+ ["der","Stiefbruder","Stiefbrüder","stepbrother","familie"],["die","Stiefschwester","Stiefschwestern","stepsister","familie"],
+ ["der","Schwiegervater","Schwiegerväter","father-in-law","familie"],["die","Schwiegermutter","Schwiegermütter","mother-in-law","familie"],
 
  ["die","Wohnung","Wohnungen","flat / apartment","wohnung"],["das","Haus","Häuser","house","wohnung"],["das","Zimmer","Zimmer","room","wohnung"],["das","Wohnzimmer","Wohnzimmer","living room","wohnung"],
  ["das","Schlafzimmer","Schlafzimmer","bedroom","wohnung"],["das","Kinderzimmer","Kinderzimmer","children's room","wohnung"],["das","Arbeitszimmer","Arbeitszimmer","study / home office","wohnung"],["die","Küche","Küchen","kitchen","wohnung"],

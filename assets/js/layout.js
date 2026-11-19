@@ -8,6 +8,10 @@
   const here = location.pathname.split("/").pop() || "index.html";
   const parts = L.parts || [];
   const onPartPage = parts.some(p => p[3] === here);
+  /* a part flagged "solo" (a 6th entry in level.js) has its own page menu: the sheet then lists only the sections of this page */
+  const solo = (parts.find(p => p[3] === here) || [])[5] === "solo";
+  const shown = solo ? parts.filter(p => p[3] === here) : parts;
+  const lab = solo ? ["Abschnitte", "sections"] : ["Lektionen", "lessons"];
   /* pages reached through the "Mehr" tab of the bottom bar */
   const MORE_PAGES = ["spickzettel.html", "geschichten.html", "dialoge.html", "buchseiten.html"];
   const onMorePage = MORE_PAGES.includes(here);
@@ -51,7 +55,7 @@
   document.body.insertAdjacentHTML("beforeend", `
   <nav class="bnav" aria-label="Menü (menu)">
     <a class="btab" href="index.html"${cur("index.html")}>${svg("home")}Start<small>overview</small></a>
-    <button class="btab" type="button" data-sheet="lessons"${onPartPage ? ' aria-current="page"' : ""}>${svg("book")}Lektionen<small>lessons</small></button>
+    <button class="btab" type="button" data-sheet="lessons"${onPartPage ? ' aria-current="page"' : ""}>${svg("book")}${lab[0]}<small>${lab[1]}</small></button>
     <a class="btab" href="karten.html"${cur("karten.html")}>${svg("cards")}Karten<small>cards</small></a>
     <a class="btab" href="tests.html"${cur("tests.html")}>${svg("target")}Tests<small>practise</small></a>
     <button class="btab" type="button" data-sheet="more"${onMorePage ? ' aria-current="page"' : ""}>${svg("more")}Mehr<small>more</small></button>
@@ -61,12 +65,12 @@
     <div class="sheetbox" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
       <div class="sheettop">
         <div class="grab" aria-hidden="true"></div>
-        <div class="sheethead"><h2 id="sheetTitle">Alle Lektionen <span class="en">(all lessons)</span></h2><button class="xbtn" type="button" data-close aria-label="Schließen (close)">✕</button></div>
-        <div class="sheettabs" role="tablist"><button type="button" role="tab" data-pane="lessons">Lektionen <span class="en">(lessons)</span></button><button type="button" role="tab" data-pane="more">Mehr <span class="en">(more)</span></button></div>
-        <div class="partchips" role="group" aria-label="Teil wählen (jump to part)">${parts.map(p => `<button type="button" class="pchip" data-jump="g-${p[0]}"><b>${p[0]}</b> ${p[1].split(" & ").pop()}</button>`).join("")}</div>
+        <div class="sheethead"><h2 id="sheetTitle">${solo ? "Auf dieser Seite" : "Alle Lektionen"} <span class="en">(${solo ? "on this page" : "all lessons"})</span></h2><button class="xbtn" type="button" data-close aria-label="Schließen (close)">✕</button></div>
+        <div class="sheettabs" role="tablist"><button type="button" role="tab" data-pane="lessons">${lab[0]} <span class="en">(${lab[1]})</span></button><button type="button" role="tab" data-pane="more">Mehr <span class="en">(more)</span></button></div>
+        <div class="partchips" role="group" aria-label="Teil wählen (jump to part)"${solo ? " hidden" : ""}>${parts.map(p => `<button type="button" class="pchip" data-jump="g-${p[0]}"><b>${p[0]}</b> ${p[1].split(" & ").pop()}</button>`).join("")}</div>
       </div>
       <div class="sheetgrid">
-      ${parts.map(([letter, de, en, page, ls]) => `<div class="lgroup" id="g-${letter}"><h3><a href="${page}" title="${de}: Seite öffnen (open page)">Teil ${letter} · ${de} <span>(${en})</span></a></h3>` +
+      ${shown.map(([letter, de, en, page, ls]) => `<div class="lgroup" id="g-${letter}">${solo ? "" : `<h3><a href="${page}" title="${de}: Seite öffnen (open page)">Teil ${letter} · ${de} <span>(${en})</span></a></h3>`}` +
         ls.map(([id, n, lde, len]) => `<a class="litem" href="${page === here ? "" : page}#${id}" data-id="${id}"><span class="n">${n}</span><span class="t"><b>${lde}</b><small>${len}</small></span></a>`).join("") + `</div>`).join("")}
       </div>
       <div class="sheetmore">
@@ -83,7 +87,7 @@
   const sheet = document.getElementById("lessonSheet");
   function setPane(p) {
     sheet.dataset.pane = p;
-    document.getElementById("sheetTitle").innerHTML = p === "more" ? 'Menü <span class="en">(menu)</span>' : 'Alle Lektionen <span class="en">(all lessons)</span>';
+    document.getElementById("sheetTitle").innerHTML = p === "more" ? 'Menü <span class="en">(menu)</span>' : (solo ? 'Auf dieser Seite <span class="en">(on this page)</span>' : 'Alle Lektionen <span class="en">(all lessons)</span>');
     sheet.querySelectorAll("[data-pane]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.pane === p)));
   }
   function openLessonMenu(pane) {
@@ -119,7 +123,7 @@
   /* previous / next part at the end of a part page */
   const foot = document.getElementById("site-footer");
   const pi = parts.findIndex(p => p[3] === here);
-  if (pi >= 0 && foot) {
+  if (pi >= 0 && foot && !solo) {
     const prev = pi > 0 ? { href: parts[pi - 1][3], k: `Teil ${parts[pi - 1][0]}`, t: parts[pi - 1][1] } : { href: "index.html", k: "Zurück", t: "Übersicht" };
     const next = pi < parts.length - 1 ? { href: parts[pi + 1][3], k: `Teil ${parts[pi + 1][0]}`, t: parts[pi + 1][1] } : { href: "tests.html", k: "Jetzt üben", t: "Tests" };
     foot.insertAdjacentHTML("beforebegin", `<nav class="pager" aria-label="Weiter (next)">
@@ -131,7 +135,7 @@
   const subnav = document.querySelector(".subnav");
   if (!subnav) return;
   const links = [...subnav.querySelectorAll("a")];
-  subnav.insertAdjacentHTML("afterbegin", `<button class="lessbtn" type="button" data-sheet="lessons" aria-haspopup="dialog">${svg("menu")}Lektionen<span class="curl" id="curl"></span></button>`);
+  subnav.insertAdjacentHTML("afterbegin", `<button class="lessbtn" type="button" data-sheet="lessons" aria-haspopup="dialog">${svg("menu")}${lab[0]}<span class="curl" id="curl"></span></button>`);
   function mark(id) {
     links.forEach(a => {
       const on = a.getAttribute("href") === "#" + id; a.classList.toggle("on", on);

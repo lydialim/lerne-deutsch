@@ -35,7 +35,7 @@ window.LEVEL = {
       ["g-doppel", "👯", "Gleiches Wort, anderer Artikel", "same word, different gender"],
       ["g-mehr", "🔗", "Zusammengesetzte und fremde Wörter", "compounds and loanwords"],
       ["g-kasus", "⚖️", "Fälle", "the article changes with the case"],
-      ["g-tipps", "🧠", "So lernst du es", "how to learn it"]]],
+      ["g-tipps", "🧠", "So lernst du es", "how to learn it"]], "solo"],
     ["A", "Grammatik", "grammar", "grammatik.html", [
       ["l-types", "1", "Wortarten", "word types"],
       ["l-articles", "2", "der, die, das", "the: gender"],

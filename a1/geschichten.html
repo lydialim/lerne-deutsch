@@ -13,7 +13,10 @@
 <header id="site-header"></header>
 <main>
 <div class="cheathead"><h2>Geschichten <span class="en">(short stories)</span></h2>
-<p class="lead">Short, simple stories with only A1 words. Each sentence has a picture, the nouns in their gender colour (<span class="der">der</span> · <span class="die">die</span> · <span class="das">das</span> · <span class="plc">plural</span>), a word-by-word gloss and the English. Tap 🔊 to listen.</p></div>
+<p class="lead">Longer stories and short news reports in simple A1 German. <b>Tap any sentence</b> to see the English, the word-by-word gloss and to listen. Nouns have their gender colour: <span class="der">der</span> · <span class="die">die</span> · <span class="das">das</span> · <span class="plc">plural</span>.</p></div>
+<div class="storybar" role="group" aria-label="Anzeige (display)"><span>Anzeige <span class="en">(show)</span>:</span>
+  <button type="button" class="btn ghost" data-mode="en" aria-pressed="false">Englisch <span class="en">(English)</span></button>
+  <button type="button" class="btn ghost" data-mode="gl" aria-pressed="false">Wort für Wort <span class="en">(word by word)</span></button></div>
 <nav class="textnav" id="textnav" aria-label="Geschichten"></nav>
 <div id="stories"></div>
 </main>
@@ -23,7 +26,8 @@
 <script src="../assets/js/common.js" defer></script>
 <script src="../assets/js/layout.js" defer></script>
 <script src="../assets/js/speech.js" defer></script>
-<script src="js/texte-data.js" defer></script>
+<script src="js/stories-art.js" defer></script>
+<script src="js/stories-data.js" defer></script>
 <script src="js/texte.js" defer></script>
 </body>
 </html>

@@ -479,3 +479,65 @@ function plLine(it) {
   return p === "" ? "kein Plural" : "Plural: die " + p;
 }
 const extraLine = it => it.ex ? it.ex : "";
+
+/* Why is it der / die / das? A short tip for one card (used in the guess game and on the study card).
+   Checks, in this order: compound (last part decides) → reliable endings → meaning groups → weaker endings.
+   If the article breaks the pattern, the tip says it is an exception to learn by heart. Returns "" when no rule helps. */
+const GENUS_TIP = (() => {
+  const A = { der: '<b class="der">der</b>', die: '<b class="die">die</b>', das: '<b class="das">das</b>' };
+  /* [regex on the word, article, label, example, strength "always" | "usually"] (checked top to bottom) */
+  const ENDINGS = [
+    [/chen$/, "das", "-chen", "das Brötchen", "always"], [/lein$/, "das", "-lein", "das Fräulein", "always"],
+    [/ung$/, "die", "-ung", "die Wohnung", "always"], [/heit$/, "die", "-heit", "die Gesundheit", "always"], [/keit$/, "die", "-keit", "die Möglichkeit", "always"],
+    [/schaft$/, "die", "-schaft", "die Freundschaft", "always"], [/tion$|sion$/, "die", "-ion", "die Information", "always"], [/tät$/, "die", "-tät", "die Universität", "always"],
+    [/ling$/, "der", "-ling", "der Frühling", "always"], [/ismus$/, "der", "-ismus", "der Tourismus", "always"],
+    [/erei$|^.{2,}ei$/, "die", "-ei", "die Bäckerei", "usually"], [/[^e]ie$/, "die", "-ie", "die Familie", "usually"], [/ik$/, "die", "-ik", "die Musik", "usually"], [/eur$/, "der", "-eur (a job)", "der Friseur", "always"], [/ur$/, "die", "-ur", "die Natur", "usually"],
+    [/(ment)$/, "das", "-ment", "das Dokument", "usually"], [/um$/, "das", "-um", "das Museum", "usually"]
+  ];
+  const WEAK = [
+    [/e$/, "die", "-e", "die Lampe", "usually (9 in 10)"], [/er$/, "der", "-er", "der Computer", "usually"], [/el$/, "der", "-el", "der Löffel", "often"],
+    [/en$/, "der", "-en", "der Garten", "usually"], [/o$/, "das", "-o", "das Auto", "usually"], [/a$/, "die", "-a", "die Pizza", "often"]
+  ];
+  let known = null;
+  const nounList = () => {
+    if (known) return known;
+    known = new Map();
+    const add = (a, w) => { if (a && w && /^[A-ZÄÖÜ]/.test(w) && w.length >= 3) known.set(w.toLowerCase(), [a, w]); };
+    KARTEN.forEach(c => c.items.forEach(i => { if (!i.plural) add(i.art, i.word); }));
+    if (typeof NOUNS !== "undefined") NOUNS.forEach(n => add(n.a, n.w));
+    if (typeof VOCAB !== "undefined") VOCAB.forEach(v => add(v[0], v[1]));
+    [["das", "Essen"], ["das", "Zimmer"], ["die", "Karte"], ["der", "Platz"], ["die", "Stelle"], ["das", "Geld"], ["das", "Ende"], ["der", "Kasten"], ["der", "Streifen"], ["der", "Zettel"], ["der", "Wagen"], ["die", "Halle"], ["die", "Kanne"]].forEach(([a, w]) => add(a, w));
+    return known;
+  };
+  /* words that only LOOK like they follow a rule */
+  const FALSE = {
+    kuchen: '⚠️ Looks like a -chen word, but here -chen is not the "small" ending (Ku-chen = cake). So it is <b class="der">der</b> Kuchen.'
+  };
+  const say = (art, w, exp, label, how) => art === exp
+    ? `💡 ${label} → ${how} ${A[exp]}.`
+    : `⚠️ ${label} → ${how} ${A[exp]}, but ${A[art]} ${w} is an exception. Learn it by heart!`;
+  return function (it, catDe) {
+    const art = it.art, w = it.word || "", lw = w.toLowerCase(), eng = (it.eng || "").toLowerCase();
+    if (!A[art] || it.plural) return "";
+    if (FALSE[lw]) return FALSE[lw];
+    /* 1. compound: the last part decides */
+    let best = null;
+    nounList().forEach(([a, part], k) => { if (k !== lw && lw.endsWith(k) && lw.length - k.length >= 2 && (!best || k.length > best[1].length)) best = [a, part]; });
+    if (best && /^(apotheke|mittag)$/.test(lw)) best = null; /* look like compounds, but are not */
+    if (best && best[0] === art) return `💡 Two words in one: the <b>last</b> part decides. ${w.slice(0, w.length - best[1].length)} + ${A[art]} ${best[1]} → ${A[art]} ${w}.`;
+    /* 2. a verb used as a noun is always das (das Einkaufen, das Lesen) */
+    if (art === "das" && /(en|ern|eln)$/.test(lw) && /ing\b/.test(eng)) return `💡 A verb used as a noun (${lw}) → always ${A.das}.`;
+    /* 3. reliable endings */
+    for (const [re, exp, lab, , how] of ENDINGS) if (re.test(lw)) return say(art, w, exp, `Ends in <b>${lab}</b>`, how);
+    /* 4. meaning groups */
+    if (/^(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag|januar|februar|märz|april|mai|juni|juli|august|september|oktober|november|dezember|frühling|sommer|herbst|winter|morgen|mittag|abend)$/.test(lw))
+      return say(art, w, "der", "Days, months, seasons and times of day", "always");
+    if (/\b(male|father|brother|son|uncle|grandfather|husband|man|boy|grandpa)\b|\(m\)/.test(eng) && !/female/.test(eng)) return say(art, w, "der", "A man or boy", "always");
+    if (/\b(female|mother|sister|daughter|aunt|grandmother|wife|woman|grandma)\b|\(f\)/.test(eng)) return say(art, w, "die", "A woman (jobs add -in)", "always");
+    if (/^(regen|schnee|wind|nebel|sturm|hagel|frost|donner|blitz)$/.test(lw)) return say(art, w, "der", "Weather words", "usually");
+    if (catDe === "Getränke" && !/a$/.test(lw)) return say(art, w, "der", "Drinks", "mostly");
+    /* 5. weaker endings */
+    for (const [re, exp, lab, , how] of WEAK) if (re.test(lw)) return say(art, w, exp, `Ends in <b>${lab}</b>`, how);
+    return `💡 No easy rule for this one: learn it as one word, ${A[art]} ${w}.`;
+  };
+})();

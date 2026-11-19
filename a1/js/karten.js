@@ -13,6 +13,8 @@
   const cls = a => a === "der" ? "m" : a === "die" ? "f" : a === "das" ? "n" : "";
   const colourClass = it => it.plural ? "p" : cls(it.art); /* colour of a card: plural words are purple, not red */
   const gameable = it => it.art && !it.plural; /* der/die/das game: a plural is always die, so it would teach nothing */
+  /* why der / die / das: GENUS_TIP is in karten-data.js; the category name helps (drinks, weather) */
+  const tipOf = it => (typeof GENUS_TIP === "function" ? GENUS_TIP(it, KARTEN[tab].de) : "");
   const normKey = s => norm(String(s || ""));
   function newDeck() { deck = shuffle(KARTEN[tab].items.filter(gameable)); pos = 0; score = 0; answered = false; }
 
@@ -78,7 +80,7 @@
         h += `<div class="kdone"><h3>Alle gewusst! 🎉 <span class="en">(all known)</span></h3><div class="rbtns"><button type="button" class="btn ghost" data-reset>Nochmal von vorn <small class="en">(start over)</small></button><button type="button" class="btn" data-nextcat>Nächste Kategorie <small>(next)</small></button></div></div>`;
       } else {
         const it = cat.items[learnQueue[0]];
-        h += `<button type="button" class="lcard ${colourClass(it)}${learnFlipped ? " flip" : ""}" id="lcard" aria-pressed="${learnFlipped}" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<b>${esc(it.eng)}</b><small>Tippen zum Umdrehen <span>(tap to turn)</span></small></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small>${esc(plLine(it))}</small>` : ""}${it.ex ? `<small>${esc(it.ex)}</small>` : ""}</span></button>
+        h += `<button type="button" class="lcard ${colourClass(it)}${learnFlipped ? " flip" : ""}" id="lcard" aria-pressed="${learnFlipped}" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<b>${esc(it.eng)}</b><small>Tippen zum Umdrehen <span>(tap to turn)</span></small></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small>${esc(plLine(it))}</small>` : ""}${it.ex ? `<small>${esc(it.ex)}</small>` : ""}${tipOf(it) ? `<small class="ktip">${tipOf(it)}</small>` : ""}</span></button>
         <div class="kjudge"><button type="button" class="btn ghost" data-j="again">🔁 Nochmal<small>again</small></button><button type="button" class="btn" data-j="known">✅ Gewusst<small>known</small></button></div>
         <p class="khint keys">Leertaste = umdrehen · ← nochmal · → gewusst <span class="en">(space = turn, ← again, → known)</span></p>`;
       }
@@ -137,7 +139,7 @@
     if (t.dataset.a && !answered) {
       answered = true; const it = deck[pos], ok = t.dataset.a === it.art; if (ok) score++;
       root.querySelectorAll(".kopt").forEach(b => { b.disabled = true; if (b.dataset.a === it.art) b.classList.add("right"); else if (b === t) b.classList.add("wrong"); });
-      $("#kfb").innerHTML = `${ok ? "✅ Richtig!" : "❌ Nicht ganz."} <b class="${colourClass(it)}">${it.art} ${esc(it.word)}</b>${plLine(it) ? ` · <span class="en">${esc(plLine(it))}</span>` : ""}`;
+      $("#kfb").innerHTML = `${ok ? "✅ Richtig!" : "❌ Nicht ganz."} <b class="${colourClass(it)}">${it.art} ${esc(it.word)}</b>${plLine(it) ? ` · <span class="en">${esc(plLine(it))}</span>` : ""}${tipOf(it) ? `<span class="ktip">${tipOf(it)}</span>` : ""}`;
       $("#knext").hidden = false; $("#knext").focus({ preventScroll: true }); speak(said(it));
     }
   });

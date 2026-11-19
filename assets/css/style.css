@@ -1401,5 +1401,11 @@ button.gx-chip{cursor:pointer}
 .lgroup.here{padding-top:4px}
 .herebadge{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--ink);color:var(--paper)!important;font-size:11px;letter-spacing:0;text-transform:none}
 .mgroup.allles .lgroup{padding-top:6px}
-.sheet[data-pane="more"] .partchips:not([hidden]){display:flex}
 .uhrt .calc{display:block;font-family:var(--mono);font-size:12px;white-space:nowrap}
+/* Bildkarten: why der / die / das */
+.ktip{display:block;margin-top:10px;padding:8px 12px;border-radius:10px;background:var(--soft);font-size:15px;line-height:1.4;text-align:left;color:var(--ink);font-weight:400}
+.lcard .back .ktip{font-size:13px;margin:8px 10px 0}
+/* sheet panes: lessons (all lessons, from the bottom bar) · sections (this page, from the black bar) · more */
+.sheet:not([data-pane="sections"]) .sheetsec{display:none}
+.sheet[data-pane="sections"] .sheetgrid,.sheet[data-pane="sections"] .sheetmore,.sheet[data-pane="sections"] .partchips{display:none}
+.sheet[data-pane="lessons"] .partchips:not([hidden]){display:flex}

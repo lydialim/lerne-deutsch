@@ -1402,3 +1402,4 @@ button.gx-chip{cursor:pointer}
 .herebadge{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--ink);color:var(--paper)!important;font-size:11px;letter-spacing:0;text-transform:none}
 .mgroup.allles .lgroup{padding-top:6px}
 .sheet[data-pane="more"] .partchips:not([hidden]){display:flex}
+.uhrt .calc{display:block;font-family:var(--mono);font-size:12px;white-space:nowrap}

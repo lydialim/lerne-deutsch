@@ -1179,3 +1179,4 @@ body.nohint .q .car[data-br^="e"],body.nohint .slot[data-br^="e"] .hole{border-c
 @media (min-width:760px){.tiles{grid-template-columns:repeat(3,minmax(0,1fr))}.tiles.tall{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 @media (max-width:759px){.dia .tablebox{overflow-x:auto}}
+.wordgrid > span{min-width:0;overflow-wrap:anywhere}

@@ -1302,3 +1302,14 @@ button.gx-chip{cursor:pointer}
 @media(max-width:420px){.tgl .tl .en{display:none}}
 .gx-topic{display:flex;gap:10px;align-items:center;margin:14px 0 0;font-size:clamp(20px,5vw,26px)}
 .gx-tn{flex:none;width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:17px}
+.gx-take{background:var(--soft);border-radius:10px;padding:10px 12px;margin:0}
+.gx-hero{margin:0;display:grid;grid-template-columns:1fr;gap:12px;justify-items:center}
+.gx-donut{width:190px;height:190px}
+.gx-dn{font-size:19px;font-weight:800;fill:var(--ink)}.gx-ds{font-size:11px;fill:var(--muted)}
+.gx-legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;width:100%}
+.gx-legend li{display:flex;flex-direction:column;gap:2px;border-radius:10px;padding:10px 12px;font-size:15px}
+.gx-legend b{font-size:18px}
+.gx-hero figcaption{font-size:13px;color:var(--muted);text-align:center}
+.gx-row{display:flex;flex-direction:column;gap:2px}
+.gx-seg b{white-space:nowrap}
+@media(min-width:700px){.gx-hero{grid-template-columns:200px 1fr;justify-items:start;align-items:center}.gx-hero figcaption{grid-column:1/-1;text-align:left}}

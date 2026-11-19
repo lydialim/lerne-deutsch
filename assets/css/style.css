@@ -1424,3 +1424,40 @@ button.gx-chip{cursor:pointer}
 }
 .gx-why{margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--ink);background:var(--card);border-radius:8px;padding:6px 10px}
 .ktipmore{display:inline-block;margin-left:4px;font-size:13px;font-weight:700;white-space:nowrap}
+
+/* ---------- Buchseiten (workbook pages): cards ---------- */
+.pgh{font-family:var(--display);font-size:20px;margin:22px 0 10px}
+.pglatest{display:flex;flex-direction:column;gap:10px}
+.pglatest .pgcard{border:2px solid var(--ink)}
+.pgsearch{position:sticky;top:0;z-index:5;background:var(--paper);padding:12px 0 8px;margin-top:14px;display:flex;flex-direction:column;gap:6px}
+.pgsearch label{font-weight:700;font-size:14px}
+.pgsearch input{font:inherit;font-size:17px;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);width:100%;box-sizing:border-box}
+.pgsearch input:focus{outline:2px solid var(--focus);outline-offset:1px}
+.pgjump{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.pgjump::-webkit-scrollbar{display:none}
+.pgjump a{flex:0 0 auto;font-family:var(--mono);font-size:14px;font-weight:700;text-decoration:none;color:var(--ink);border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:5px 11px;min-width:44px;text-align:center;box-sizing:border-box}
+.pgjump a.new{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pglist{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:820px){.pglist{grid-template-columns:1fr 1fr}}
+.pgcard{display:flex;gap:12px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px;scroll-margin-top:150px}
+.pgcard:target{border-color:var(--focus);box-shadow:0 0 0 3px var(--der-bg)}
+.pgnum{flex:0 0 64px;height:64px;border-radius:12px;border:none;background:var(--soft);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font:inherit;padding:0}
+.pgnum:hover,.pgnum:focus-visible{outline:2px solid var(--focus)}
+.pgS{font-size:12px;color:var(--muted);line-height:1}
+.pgN{font-family:var(--display);font-weight:800;font-size:26px;line-height:1.05}
+.pgcard.is-new .pgnum{background:var(--ink);color:var(--paper)}.pgcard.is-new .pgS{color:var(--paper);opacity:.8}
+.pgbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.pgtop{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px}
+.pgsay{color:var(--muted)}
+.pgtag{font-size:12px;font-weight:800;border-radius:999px;padding:1px 8px;text-transform:uppercase;letter-spacing:.04em}
+.pgtag.new{background:var(--ink);color:var(--paper)}
+.pgtag.star{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+.pgcard h3{margin:0;font-size:18px;line-height:1.25}
+.pgcard h3 .en{font-size:14px;font-weight:400}
+.pgwords{margin:0;color:var(--muted);font-size:15px}
+.pggram{margin:2px 0 0;background:var(--soft);border-radius:8px;padding:6px 10px;font-size:15px}
+.pgact{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.pgbtn{display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:6px 14px;border-radius:999px;text-decoration:none;font-weight:700;font-size:15px;box-sizing:border-box}
+.pgbtn.learn{border:1.5px solid var(--ink);color:var(--ink);background:var(--card)}
+.pgbtn.test{background:var(--ink);color:var(--paper);border:1.5px solid var(--ink)}
+.pgempty{padding:16px;text-align:center;color:var(--muted)}

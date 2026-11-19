@@ -9,13 +9,13 @@ window.LEVEL = {
      [href, short label, English / full name (tooltip), group "learn" | "tools", part letter] */
   pages: [
     ["index.html", "Übersicht", "overview", "learn", ""],
+    ["entdecken.html", "Entdecken", "language facts", "learn", ""],
     ["grammatik.html", "Grammatik", "Teil A · grammar", "learn", "A"],
     ["zahlen.html", "Zahlen", "Teil B · letters & numbers", "learn", "B"],
     ["themen.html", "Themen", "Teil C · topics", "learn", "C"],
     ["pruefung.html", "Prüfung", "Teil D · the exam", "learn", "D"],
     ["karten.html", "Bildkarten", "picture cards", "tools", ""],
     ["spickzettel.html", "Spickzettel", "cheat sheet", "tools", ""],
-    ["entdecken.html", "Entdecken", "language facts", "tools", ""],
     ["geschichten.html", "Geschichten", "stories & news", "tools", ""],
     ["dialoge.html", "Dialoge", "typical conversations", "tools", ""],
     ["buchseiten.html", "Buchseiten", "workbook pages", "tools", ""],

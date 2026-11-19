@@ -1313,3 +1313,5 @@ button.gx-chip{cursor:pointer}
 .gx-row{display:flex;flex-direction:column;gap:2px}
 .gx-seg b{white-space:nowrap}
 @media(min-width:700px){.gx-hero{grid-template-columns:200px 1fr;justify-items:start;align-items:center}.gx-hero figcaption{grid-column:1/-1;text-align:left}}
+.tile.feat{border-width:2px;border-color:var(--ink)}
+.tile b.ti.tri{background:linear-gradient(135deg,var(--der) 0 33%,var(--die) 33% 66%,var(--das) 66%);color:#fff}

@@ -70,8 +70,9 @@
         ls.map(([id, n, lde, len]) => `<a class="litem" href="${page === here ? "" : page}#${id}" data-id="${id}"><span class="n">${n}</span><span class="t"><b>${lde}</b><small>${len}</small></span></a>`).join("") + `</div>`).join("")}
       </div>
       <div class="sheetmore">
-        ${[["Lesen & Sprechen", "read & speak", [["geschichten.html", "book", "Geschichten", "stories & news"], ["dialoge.html", "cards", "Dialoge", "typical conversations"]]],
-           ["Nachschlagen", "look up", [["spickzettel.html", "note", "Spickzettel", "cheat sheet"], ["entdecken.html", "target", "Deutsch entdecken", "language facts"], ["buchseiten.html", "book", "Buchseiten", "workbook pages"]]],
+        ${[["Entdecken", "discover", [["entdecken.html", "target", "Deutsch entdecken", "language facts"]]],
+           ["Lesen & Sprechen", "read & speak", [["geschichten.html", "book", "Geschichten", "stories & news"], ["dialoge.html", "cards", "Dialoge", "typical conversations"]]],
+           ["Nachschlagen", "look up", [["spickzettel.html", "note", "Spickzettel", "cheat sheet"], ["buchseiten.html", "book", "Buchseiten", "workbook pages"]]],
            ["Üben", "practise", [["karten.html", "cards", "Bildkarten", "picture cards"], ["tests.html", "target", "Alle Tests", "all tests"]]],
            ["Hilfe", "help", [["../einrichtung.html", "menu", "Stimme & Mikrofon", "voice & microphone setup"]]]].map(([de, en, items]) => `<div class="mgroup"><h3>${de} <span>(${en})</span></h3>${
           items.map(([href, ic, t, sm]) => `<a class="litem more" href="${href}"${href === here ? ' aria-current="page"' : ""}><span class="n">${svg(ic)}</span><span class="t"><b>${t}</b><small>${sm}</small></span></a>`).join("")}</div>`).join("")}

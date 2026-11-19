@@ -16,7 +16,7 @@ Feedback and corrections are very welcome.
 
 | Level | Start page | What's inside |
 |---|---|---|
-| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 23 numbered lessons in 4 parts (grammar, letters and numbers, topics, Goethe-Zertifikat A1), a cheat sheet, 53 tests in rounds of 20 questions, with stars, streaks and a daily goal |
+| A1 | [a1/](a1/index.html) | Deutsch A1 Trainer: 23 numbered lessons in 4 parts (grammar, letters and numbers, topics, A1 exam in Goethe format), a cheat sheet, 53 tests in rounds of 20 questions, with stars, streaks and a daily goal |
 | A2 | coming later | |
 
 Live site: https://lydialim.github.io/lerne-deutsch/
@@ -48,9 +48,12 @@ lerne-deutsch/
     ├── tests.html            all tests (open one directly: tests.html#artikel)
     └── js/
         ├── level.js          A1 menu, lesson list for the phone lesson menu (keep in step with the lessons) + storage prefix
-        ├── data.js           all word lists and sentences (nouns with article and plural, calendar, topics, exam texts) + number, time and date helpers
+        ├── data.js           shared word lists and helpers that lessons, exam and cards read (numbers, times, nouns, plurals)
+        ├── data-tests.js     word lists and sentences used only by the tests (loaded on tests.html only)
+        ├── karten-data.js    picture-card data (decks) and plural helpers, also used by the tests
+        ├── daybar.js         24-hour "times of day" picture, drawn from DAYTIMES in data.js
         ├── tests.js          every test (TESTS), the tests-page tabs (GROUPS: [title, English, keys, tab label, tab English]) and the rule of the day (RULES)
-        ├── karten.js         data and logic for the picture cards
+        ├── karten.js         the picture-card screen (cards, study, guess der/die/das)
         ├── pruefung.js       writing checker and speaking practice (recordings stay in the browser)
         └── lessons.js        interactive parts of the lessons (clock, conjugation chips, word-order builder, floor plan / shop / family-tree scenes, weather / clothes / transport / hotel scenes, Sprechen simulator)
 ```
@@ -59,7 +62,7 @@ lerne-deutsch/
 
 - **Lesson text:** edit the page for that part (`a1/grammatik.html`, …). Each lesson is one `<section class="lesson" id="l-…">`.
 - **Audio:** every `.train`, every element with `data-say="German text"`, and table columns headed Beispiel / Deutsch / Satz / Wort … get a 🔊 button automatically. See [Audio: setup and how it works](#audio-setup-and-how-it-works).
-- **Test questions:** add items to the lists in `a1/js/data.js` (for example `NOUNS`, `WQ`, `ORDER`).
+- **Test questions:** add items to the lists in `a1/js/data-tests.js` (for example `WQ`, `ORDER`) or, for lists the lessons also read, `a1/js/data.js` (for example `NOUNS`).
 - **A new test:** add an entry to `TESTS` in `a1/js/tests.js` and its key to `GROUPS` (same file). A question with `say: "…"` is read aloud (listening test). Link to it from a lesson with `<a class="go" href="tests.html#key">`.
 - **Colours and fonts:** `assets/css/style.css`.
 
@@ -67,7 +70,7 @@ lerne-deutsch/
 
 1. Copy `a1/` to `a2/`.
 2. In `a2/js/level.js`, change `id`, `level`, `title` and the menu.
-3. Replace the lessons, `data.js` and `tests.js` with A2 content. `assets/` stays shared.
+3. Replace the lessons, `data.js`, `data-tests.js`, `karten-data.js` and `tests.js` with A2 content. `assets/` stays shared.
 4. Add A2 to the table above and to the root `index.html`.
 
 ## Audio: setup and how it works

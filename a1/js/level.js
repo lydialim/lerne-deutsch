@@ -48,7 +48,7 @@ window.LEVEL = {
       ["l-verkehr", "21", "Verkehr und Tickets", "transport and tickets"],
       ["l-hotelpost", "22", "Hotel und Post", "hotel and post office"]]],
     ["D", "Prüfung", "the exam", "pruefung.html", [
-      ["l-exam", "23", "Goethe-Zertifikat A1", "the A1 exam"],
+      ["l-exam", "23", "A1-Prüfung", "the A1 exam (Goethe format)"],
       ["l-schreiben", "✎", "Schreiben üben", "writing checker"],
       ["l-sprechen", "🎙", "Sprechen üben", "speaking practice"],
       ["l-tips", "★", "Lerntipps", "study tips"]]]

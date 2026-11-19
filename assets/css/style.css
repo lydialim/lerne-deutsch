@@ -1117,3 +1117,36 @@ body.nohint .slots.hasbr,body.nohint .gapline.hasbr{padding-top:0}
 body.nohint .q .car.gap{border-color:var(--line);background:var(--soft);color:var(--muted)}
 body.nohint .q .car[data-br^="e"],body.nohint .slot[data-br^="e"] .hole{border-color:var(--line)}
 @media (max-width:520px){.legend{font-size:13px;gap:4px 12px;padding:6px 36px 6px 10px}.legend .car{font-size:13px}}
+
+/* Stories and dialogues (geschichten.html, dialoge.html) */
+.vb{border-bottom:2px dotted var(--muted)}
+.der sup,.die sup,.das sup{font-size:.55em;font-weight:700;margin-left:1px;opacity:.8}
+.textnav{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.textnav a{background:var(--soft);border-radius:999px;padding:6px 12px;font-weight:700;font-size:14px;text-decoration:none;color:var(--ink)}
+.story h2,.dlg h2{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.big{font-size:1.3em}
+.panels{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px;margin:12px 0}
+.panel{position:relative;background:var(--card);border:2px solid var(--ink);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.panel .pic{font-size:56px;line-height:1;text-align:center;padding:18px 8px;background:var(--soft);border-bottom:2px solid var(--ink)}
+.panel .ptxt{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px}
+.panel .pn{position:absolute;top:8px;left:8px;background:var(--ink);color:var(--paper);border-radius:999px;width:24px;height:24px;display:grid;place-items:center;font-size:13px;font-weight:800}
+.panel p,.bt p{margin:0}
+.de{font-size:18px;line-height:1.4}
+.gl{font-size:12.5px}
+.num{font-size:12.5px;color:var(--ink)}
+.panel > .spk{position:absolute;top:6px;right:6px}
+.rfbox{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.rf{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--card)}
+.rf.good{border-color:var(--das);background:var(--das-bg)}.rf.bad{border-color:var(--die);background:var(--die-bg)}
+.rfb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px}
+.roles{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+.roles .btn{padding:6px 12px;font-size:14px}.roles .btn.on{background:var(--ink);color:var(--paper)}
+.chat{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.bub{display:flex;gap:8px;align-items:flex-end;max-width:92%}
+.bub.b{align-self:flex-end;flex-direction:row-reverse}
+.bub .av{font-size:28px;flex:none}
+.bub .bt{background:var(--soft);border-radius:14px 14px 14px 4px;padding:8px 12px;display:flex;flex-direction:column;gap:3px}
+.bub.b .bt{background:var(--card);border:2px solid var(--ink);border-radius:14px 14px 4px 14px}
+.bub small{font-weight:700;color:var(--muted)}
+.bub.hide:not(.shown) .bt p{filter:blur(6px);user-select:none;cursor:pointer}
+.bub.hide:not(.shown) .bt::after{content:"👆 tippen (tap to reveal)";font-size:12px;color:var(--muted)}

@@ -43,12 +43,15 @@ lerne-deutsch/
     ├── themen.html           Teil C · lessons 10–22 (food, family, flat, countries, weather, body and doctor, clothes, transport, hotel and post)
     ├── pruefung.html         Teil D · lesson 23 (the exam, listening and reading), writing checker, speaking practice, study tips
     ├── spickzettel.html      cheat sheet
+    ├── geschichten.html      five short picture stories (rendered by js/texte.js from js/texte-data.js)
+    ├── dialoge.html          five typical conversations with role-play mode (same renderer)
     ├── buchseiten.html       workbook pages: look up a page, jump to the matching lesson and test
     ├── karten.html           picture flashcards (emoji + article colour, guess der/die/das)
     ├── tests.html            all tests (open one directly: tests.html#artikel)
     └── js/
         ├── level.js          A1 menu, lesson list for the phone lesson menu (keep in step with the lessons) + storage prefix
         ├── data.js           shared word lists and helpers that lessons, exam and cards read (numbers, times, nouns, plurals)
+        ├── texte-data.js     STORIES and DIALOGS (markup {der:Wort} {v:Verb}); texte.js renders them
         ├── data-tests.js     word lists and sentences used only by the tests (loaded on tests.html only)
         ├── karten-data.js    picture-card data (decks) and plural helpers, also used by the tests
         ├── daybar.js         24-hour "times of day" picture, drawn from DAYTIMES in data.js

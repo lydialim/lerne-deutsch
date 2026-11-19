@@ -1,0 +1,26 @@
+# Keeps the footer "last updated" date (UPDATED in assets/js/layout.js) in step with every push to main.
+name: Update footer date
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "assets/js/layout.js"
+permissions:
+  contents: write
+jobs:
+  date:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set UPDATED to today (Europe/Berlin)
+        run: |
+          today=$(TZ=Europe/Berlin date +%F)
+          sed -i -E "s/const UPDATED = \"[0-9]{4}-[0-9]{2}-[0-9]{2}\";/const UPDATED = \"${today}\";/" assets/js/layout.js
+      - name: Commit if changed
+        run: |
+          git diff --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Update footer date [skip ci]"
+          git push

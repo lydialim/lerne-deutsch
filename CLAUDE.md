@@ -33,7 +33,7 @@ Adding a test means adding it to `TESTS` and its key to `GROUPS` in `tests.js`, 
 
 ## Last updated date
 
-The footer shows a "last updated" date. When you change content, bump the `UPDATED` constant (YYYY-MM-DD) in the footer block of `assets/js/layout.js`.
+The footer shows a "last updated" date from the `UPDATED` constant (YYYY-MM-DD) in the footer block of `assets/js/layout.js`. The GitHub Action `.github/workflows/update-date.yml` rewrites it automatically on every push to `main` (Europe/Berlin date), so there is no need to bump it by hand. Keep the line in the form `const UPDATED = "YYYY-MM-DD";`, because the Action matches it with `sed`.
 
 ## New level
 

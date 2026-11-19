@@ -1461,3 +1461,4 @@ button.gx-chip{cursor:pointer}
 .pgbtn.learn{border:1.5px solid var(--ink);color:var(--ink);background:var(--card)}
 .pgbtn.test{background:var(--ink);color:var(--paper);border:1.5px solid var(--ink)}
 .pgempty{padding:16px;text-align:center;color:var(--muted)}
+table.fit{min-width:0}table.fit th,table.fit td{padding:8px 6px}

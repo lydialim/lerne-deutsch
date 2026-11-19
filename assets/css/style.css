@@ -1389,3 +1389,6 @@ button.gx-chip{cursor:pointer}
   table.stack td:empty{display:none}
   .tablebox:has(table.stack){overflow:visible}
 }
+.uhrt td{vertical-align:top}
+.uhrt .en{display:block;font-size:12px}
+.uhrt .off{display:block;font-size:13px;color:var(--muted);overflow-wrap:anywhere}

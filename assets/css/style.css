@@ -1189,8 +1189,8 @@ body.nohint .q .car[data-br^="e"],body.nohint .slot[data-br^="e"] .hole{border-c
 .story h2{font-size:clamp(24px,5vw,32px)}
 .kindtag{display:flex;gap:10px;align-items:center;margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.1em;font-weight:800;color:var(--muted)}
 .story.news .kindtag span:first-child{color:var(--der)}
-.scene{margin:0;border:2px solid var(--ink);border-radius:16px;overflow:hidden;background:var(--soft);aspect-ratio:600/260}
-.scene svg{display:block;width:100%;height:100%}
+figure.scene{margin:0;border:2px solid var(--ink);border-radius:16px;overflow:hidden;background:var(--soft);aspect-ratio:600/260}
+figure.scene svg{display:block;width:100%;height:100%}
 .sum{margin:0;max-width:65ch}
 .text{display:flex;flex-direction:column;gap:14px;max-width:62ch}
 .para{margin:0;font-size:19px;line-height:1.9}
@@ -1409,3 +1409,14 @@ button.gx-chip{cursor:pointer}
 .sheet:not([data-pane="sections"]) .sheetsec{display:none}
 .sheet[data-pane="sections"] .sheetgrid,.sheet[data-pane="sections"] .sheetmore,.sheet[data-pane="sections"] .partchips{display:none}
 .sheet[data-pane="lessons"] .partchips:not([hidden]){display:flex}
+/* lesson scenes (Supermarkt, Wohnung, Kleidung …): even 2-column grid of word tiles on phones,
+   emoji left + word right, so 4 items make a tidy 2 × 2 block instead of 3 + 1 */
+.scene .objs{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.scene .obj{min-width:0;width:100%}
+@media (max-width:520px){
+  .scene .objs{grid-template-columns:1fr 1fr}
+  .scene .obj{flex-direction:row;justify-content:flex-start;gap:8px;padding:8px 10px;min-height:52px;text-align:left}
+  .scene .obj .e{font-size:28px;flex:none}
+  .scene .obj .w{font-size:14px;line-height:1.2;overflow-wrap:anywhere}
+  .scene.tree .objs{grid-template-columns:1fr 1fr}
+}

@@ -82,7 +82,7 @@ const STORIES = [
     ], [
       ["Sie {v:hat} {der:Hunger} und {v:geht} in die {die:Küche}.", "She · has · hunger · and · goes · into · the · kitchen", "She is hungry and goes into the kitchen."],
       ["Sie {v:öffnet} den {der:Kühlschrank}.", "She · opens · the · fridge", "She opens the fridge."],
-      ["Da {v:sind} {die:Milch}, {der:Käse} … und der {der:Schlüssel}!", "There · are · milk · cheese · and · the · key", "There are milk, cheese … and the key!"],
+      ["Da {v:sind} {die:Milch}, {der:Käse} … und der {der:Schlüssel}!", "There · are · milk · cheese · … · and · the · key", "There are milk, cheese … and the key!"],
       ["„Ha! Hier {v:ist} er!“, {v:ruft} sie.", "Ha · here · is · he · calls · she", "“Ha! Here it is!” she calls."],
       ["Warum {v:ist} der {der:Schlüssel} im {der:Kühlschrank}? Mia {v:lacht}.", "Why · is · the · key · in-the · fridge · Mia · laughs", "Why is the key in the fridge? Mia laughs."],
       ["„Ich {v:bin} heute sehr müde.“ Dann {v:geht} sie zur {die:Arbeit}.", "I · am · today · very · tired · then · goes · she · to-the · work", "“I am very tired today.” Then she goes to work."]
@@ -125,7 +125,7 @@ const STORIES = [
     ], [
       ["Zusammen {v:macht} das 8,30 Euro.", "Together · makes · that · 8.30 · euro", "Altogether that is 8.30 euros.", "8,30 = acht Euro dreißig (AKHT OY-ro DRAI-sikh)"],
       ["Tom {v:gibt} 10 Euro. Er {v:bekommt} 1,70 Euro zurück.", "Tom · gives · 10 · euro · he · gets · 1.70 · euro · back", "Tom gives 10 euros. He gets 1.70 euros back.", "10 = zehn (TSAYN) · 1,70 = ein Euro siebzig (AIN OY-ro ZEEP-tsikh)"],
-      ["„{v:Danke}, tschüss!“ – „{v:Bitte} schön! Schönes Wochenende!“", "Thanks · bye · please · nice · nice · weekend", "“Thanks, bye!” – “You're welcome! Have a nice weekend!”"]
+      ["„{v:Danke}, tschüss!“ – „{v:Bitte} schön! Schönes Wochenende!“", "Thanks · bye · – · please · nice · nice · weekend", "“Thanks, bye!” – “You're welcome! Have a nice weekend!”"]
     ]],
     words: [["der", "Markt", "market"], ["das", "Kilo", "kilo"], ["die", "Milch", "milk"], ["der", "Käse", "cheese"], ["das", "Brot", "bread"], ["pl", "Äpfel", "apples"], ["", "lecker", "delicious"], ["", "kosten", "to cost"]],
     tip: ["Was kostet das? Ich nehme …  Preise: 2,50 € = zwei Euro fünfzig. Nach einer Zahl steht oft der Plural.", "Ask the price with Was kostet das? and decide with Ich nehme …"],
@@ -143,7 +143,7 @@ const STORIES = [
       ["„Ja, und {die:Tomaten}, {die:Gurke} und {das:Brot}!“", "Yes · and · tomatoes · cucumber · and · bread", "“Yes, and tomatoes, cucumber and bread!”"],
       ["Anna {v:nimmt} {der:Salat} und {das:Brot}. Das {v:schmeckt} lecker!", "Anna · takes · salad · and · bread · that · tastes · delicious", "Anna takes salad and bread. It tastes delicious!"]
     ], [
-      ["„{v:Möchtest} du noch ein {das:Wasser}?“ – „Ja, gern!“", "Would-like · you · another · a · water · yes · gladly", "“Would you like another water?” – “Yes, please!”"],
+      ["„{v:Möchtest} du noch ein {das:Wasser}?“ – „Ja, gern!“", "Would-like · you · another · a · water · – · yes · gladly", "“Would you like another water?” – “Yes, please!”"],
       ["Um 20 Uhr {v:ist} Anna satt. Sie {v:sagt}: „{v:Danke}, es {v:war} sehr gut!“", "At · 20 · o'clock · is · Anna · full · she · says · thanks · it · was · very · good", "At eight Anna is full. She says: “Thanks, it was very good!”", "20 = zwanzig (TSVAN-tsikh)"]
     ]],
     words: [["die", "Wurst", "sausage"], ["das", "Fleisch", "meat"], ["der", "Salat", "salad"], ["der", "Käse", "cheese"], ["das", "Wasser", "water"], ["der", "Garten", "garden"], ["", "satt", "full"], ["", "lecker", "delicious"]],

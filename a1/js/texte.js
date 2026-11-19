@@ -10,7 +10,9 @@
 
   const KIND = { news: ["📰", "Nachrichten", "news"], story: ["📖", "Geschichte", "story"], mix: ["📖📰", "Geschichte + Nachrichten", "story + news"] };
   const CHIP = { der: "der", die: "die", das: "das", pl: "plc" };
-  const sentence = x => `<span class="s" role="button" tabindex="0" aria-expanded="false" data-say="${esc(plain(x[0]))}"><span class="sd">${mark(x[0], false)}</span><span class="sg pron">${esc(x[1])}</span><span class="se en">${esc(x[2])}</span>${x[3] ? `<span class="sp pron">${esc(x[3])}</span>` : ""}</span>`;
+  /* word-by-word: German words on the first line, the English word under each one */
+  const ilg = (de, gl, show) => { const g = gl.split(" · "); return `<span class="ilg${show ? " show" : ""}">${de.split(/\s+/).map((t, i) => `<span class="iw"><span class="ig">${mark(t, false)}</span><span class="ie">${esc(g[i] || "")}</span></span>`).join("")}</span>`; };
+  const sentence = x => `<span class="s" role="button" tabindex="0" aria-expanded="false" data-say="${esc(plain(x[0]))}"><span class="sd">${mark(x[0], false)}</span>${ilg(x[0], x[1])}<span class="se en">${esc(x[2])}</span>${x[3] ? `<span class="sp pron">${esc(x[3])}</span>` : ""}</span>`;
 
   function story(s) {
     const k = KIND[s.kind];
@@ -45,7 +47,7 @@
   function dialog(d) {
     const bubbles = d.lines.map(l => `<div class="bub ${l[0] === "A" ? "a" : "b"}" data-who="${l[0]}" data-say="${esc(plain(l[1]))}">
       <span class="av" title="${esc(d.who[l[0] === "A" ? 0 : 1])}">${l[0] === "A" ? "🧑" : "👤"}</span>
-      <div class="bt"><small>${esc(d.who[l[0] === "A" ? 0 : 1])}</small><p class="de">${mark(l[1])}</p><p class="gl pron">${esc(l[2])}</p><p class="en">${esc(l[3])}</p>${l[4] ? `<p class="pron num">${esc(l[4])}</p>` : ""}</div></div>`).join("");
+      <div class="bt"><small>${esc(d.who[l[0] === "A" ? 0 : 1])}</small>${ilg(l[1], l[2], true)}<p class="en">${esc(l[3])}</p>${l[4] ? `<p class="pron num">${esc(l[4])}</p>` : ""}</div></div>`).join("");
     return `<section class="lesson dlg" id="${d.id}"><h2><span class="big">${d.emoji}</span> ${esc(d.title)} <span class="en">(${esc(d.en)})</span></h2>
       <div class="roles" role="group" aria-label="Rollenspiel (role play)"><span>Rollenspiel <span class="en">(role play)</span>:</span>
         <button type="button" class="btn ghost on" data-role="">Alles zeigen</button><button type="button" class="btn ghost" data-role="A">Ich bin ${esc(d.who[0])}</button><button type="button" class="btn ghost" data-role="B">Ich bin ${esc(d.who[1])}</button></div>

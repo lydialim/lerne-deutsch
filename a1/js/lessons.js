@@ -149,9 +149,11 @@ if($("#clockbox")){
 /* Tens and ones blocks under the number explorer (11-999) */
 function numBlocks(v){ if(v<11||v>999) return "";
  const h=Math.floor(v/100),t=Math.floor(v%100/10),o=v%10;
- const grp=(cls,n,label)=>n?`<div><div class="grp">${Array.from({length:n},()=>`<span class="${cls}"></span>`).join("")}</div><small>${label}</small></div>`:"";
- const ones=o?`<div><div class="o2">${Array.from({length:o},()=>'<span class="o"></span>').join("")}</div><small>${o} Einer (ones): said FIRST</small></div>`:"";
- return `<div class="blocks" aria-hidden="true">${grp("h",h,h+" Hunderter")}${grp("t",t,t+" Zehner (tens)")}${ones}</div>`; }
+ /* the blocks are shown in the order you SAY them: hundreds, then ones, then tens (21-99: ones come before tens) */
+ let k=0; const ord=()=>`<b class="ord">${++k}</b>`;
+ const grp=(cls,n,label)=>n?`<div><div class="grp">${Array.from({length:n},()=>`<span class="${cls}"></span>`).join("")}</div><small>${ord()}${label}</small></div>`:"";
+ const ones=o?`<div><div class="o2">${Array.from({length:o},()=>'<span class="o"></span>').join("")}</div><small>${ord()}${o} Einer (ones)</small></div>`:"";
+ return `<div class="blocks" aria-hidden="true">${grp("h",h,h+" Hunderter (hundreds)")}${ones}${grp("t",t,t+" Zehner (tens)")}</div><p class="en blockhint">Order you say them: 1 → 2 → 3. Hundreds come first, but below 100 the ones come before the tens.</p>`; }
 
 /* Sprechen card simulator */
 if($("#sprechSim")){

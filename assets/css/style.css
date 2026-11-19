@@ -1196,11 +1196,12 @@ body.nohint .q .car[data-br^="e"],body.nohint .slot[data-br^="e"] .hole{border-c
 .para{margin:0;font-size:19px;line-height:1.9}
 .s{cursor:pointer;border-radius:8px;padding:2px 3px;margin:0 -3px;-webkit-tap-highlight-color:transparent}
 .s:hover,.s:focus-visible{background:var(--soft);outline:none}
-.s .sg,.s .se,.s .sp{display:none;font-size:14px;line-height:1.5}
+.s .ilg,.s .se,.s .sp{display:none;font-size:14px;line-height:1.5}
 .s .spk{display:none}
 .s.open,#stories.m-en .s,#stories.m-gl .s{display:block;background:var(--soft);padding:8px 10px;margin:4px 0}
 .s.open .se,#stories.m-en .se{display:block;margin-top:4px}
-.s.open .sg,#stories.m-gl .sg{display:block;margin-top:4px}
+.s.open .ilg,#stories.m-gl .ilg{display:flex}
+.s.open .sd,#stories.m-gl .sd{display:none}
 .s.open .sp,#stories.m-en .sp,#stories.m-gl .sp{display:block;margin-top:2px;color:var(--ink)}
 .s.open .spk,#stories.m-en .spk,#stories.m-gl .spk{display:inline-flex;margin-top:6px}
 .readrow{margin:0}
@@ -1215,3 +1216,14 @@ body.nohint .q .car[data-br^="e"],body.nohint .slot[data-br^="e"] .hole{border-c
 .chip.das{border-color:var(--das);background:var(--das-bg);color:var(--das)}.chip.plc{border-color:var(--pl);background:var(--pl-bg);color:var(--pl)}
 .chip.der small,.chip.die small,.chip.das small,.chip.plc small{color:var(--ink);opacity:.7}
 .para .vb{background:none;padding:0;font-weight:600}
+.blocks .ord{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:10px;margin-right:4px}
+.blockhint{margin:4px 0 0;font-size:13px}
+
+/* word-by-word: German word above its English word */
+.ilg{flex-wrap:wrap;gap:6px 12px;line-height:1.3;align-items:flex-start}
+.ilg.show{display:flex}
+.iw{display:flex;flex-direction:column;align-items:flex-start}
+.ig{font-size:19px}
+.ie{font-family:var(--mono);font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);margin-top:1px;padding-top:1px}
+.bt .ig{font-size:17px}
+.bub.hide:not(.shown) .bt .ilg{filter:blur(6px);user-select:none;cursor:pointer}

@@ -11,7 +11,7 @@ const DIALOGS = [
       ["A", "Woher {v:kommen} Sie?", "Where-from · come · you", "Where are you from?"],
       ["B", "Ich {v:komme} aus Deutschland. Und Sie?", "I · come · from · Germany · and · you", "I come from Germany. And you?"],
       ["A", "Ich {v:komme} aus Malaysia. Ich {v:wohne} in München.", "I · come · from · Malaysia · I · live · in · Munich", "I come from Malaysia. I live in Munich."],
-      ["B", "Sehr angenehm! – Freut mich.", "Very · pleasant · pleases · me", "Pleased to meet you!"]
+      ["B", "Sehr angenehm! – Freut mich.", "Very · pleasant · – · pleases · me", "Pleased to meet you!"]
     ] },
   { id: "cafe", emoji: "☕", title: "Im Café bestellen", en: "Ordering in a café", who: ["Kellner", "Gast"], tip: ["Ich möchte + Nomen: einen Kaffee (der), eine Cola (die), ein Wasser (das).", "Ich möchte … with the right article: der → einen, die → eine, das → ein."],
     lines: [

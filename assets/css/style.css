@@ -1317,3 +1317,20 @@ button.gx-chip{cursor:pointer}
 .tile b.ti.tri{background:linear-gradient(135deg,var(--der) 0 33%,var(--die) 33% 66%,var(--das) 66%);color:#fff}
 .gx-stage{margin:0;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .gx-ref{color:var(--ink);font-weight:700;text-underline-offset:2px}
+.nw{white-space:nowrap}
+.gx-detail:empty{display:none}
+#gx-sem{display:flex;flex-direction:column;gap:8px}
+.gx-det{border-radius:12px;padding:4px 12px}
+.gx-det summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;min-height:48px;font-size:18px}
+.gx-det summary::-webkit-details-marker{display:none}
+.gx-det summary::after{content:"＋";margin-left:auto;font-weight:800}
+.gx-det[open] summary::after{content:"−"}
+.gx-det summary span{font-size:14px;color:var(--muted)}
+.gx-det .gx-sem{display:flex;flex-direction:column;gap:2px;grid-template-columns:none;background:var(--paper);border-radius:10px;padding:8px 12px;margin-bottom:8px}
+.gx-regl{display:flex;flex-direction:column;gap:8px}
+.gx-rg{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;overflow-wrap:anywhere}
+.gx-cases{table-layout:fixed;width:100%}
+.gx-cases th,.gx-cases td{padding:8px 4px;font-size:14px;word-break:break-word}
+.gx-cases td:first-child,.gx-cases th:first-child{width:24%}
+.gx-cases small{display:block;color:var(--muted);font-size:11px}
+.gx-cases{min-width:0}

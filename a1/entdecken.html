@@ -56,9 +56,9 @@
     <text x="60" y="58" text-anchor="middle" class="gx-dn">46 %</text><text x="60" y="73" text-anchor="middle" class="gx-ds">die</text>
   </svg>
   <ul class="gx-legend">
-    <li class="die-bg"><b class="die">die · 46 %</b><span>feminine: -ung -heit -keit -schaft -ion -tät, words ending -e</span></li>
-    <li class="der-bg"><b class="der">der · 34 %</b><span>masculine: -ling -ismus, words ending -er or -en, one-syllable words</span></li>
-    <li class="das-bg"><b class="das">das · 20 %</b><span>neuter: -chen -lein, verbs as nouns, words ending -um</span></li>
+    <li class="die-bg"><b class="die">die · 46 %</b><span>feminine: -ung -heit -keit -schaft -ion -tät, words ending <span class="nw">-e</span></span></li>
+    <li class="der-bg"><b class="der">der · 34 %</b><span>masculine: -ling -ismus, words ending <span class="nw">-er</span> or <span class="nw">-en</span>, one-syllable words</span></li>
+    <li class="das-bg"><b class="das">das · 20 %</b><span>neuter: -chen -lein, verbs as nouns, words ending <span class="nw">-um</span></span></li>
   </ul>
   <figcaption class="en">Share of nouns by gender in the Duden.</figcaption>
 </figure>
@@ -90,7 +90,6 @@
 <section class="lesson" id="g-gruppen">
 <h3>Bedeutungsgruppen <span class="en">(meaning groups)</span></h3>
 <p>If no ending decides, the meaning often does. An ending still wins: <b class="das">das</b> Mädchen is neuter because of <b>-chen</b>.</p>
-<div class="gx-filter" role="group" aria-label="Filter"><button type="button" data-sem="all" aria-pressed="true">Alle</button><button type="button" data-sem="m" aria-pressed="false" class="der">der</button><button type="button" data-sem="f" aria-pressed="false" class="die">die</button><button type="button" data-sem="n" aria-pressed="false" class="das">das</button></div>
 <div id="gx-sem"></div>
 </section>
 <section class="lesson" id="g-doppel">
@@ -98,16 +97,16 @@
 <p>The article changes the meaning. Learn these as pairs.</p>
 <div class="gx-twins" id="gx-twins"></div>
 <h4>Regional <span class="en">(both can be right)</span></h4>
-<div class="tablebox"><table class="gx-reg"><thead><tr><th>Wort</th><th>Form</th><th class="en">where</th></tr></thead><tbody id="gx-regional"></tbody></table></div>
+<div class="gx-regl" id="gx-regional"></div>
 </section>
 <section class="lesson" id="g-mehr">
 <h3>Zusammengesetzte und fremde Wörter <span class="en">(compounds and loanwords)</span></h3>
-<div class="gcard"><b>Compound: the last part decides.</b><br>die Donau<b>dampfschifffahrts<span class="die">gesellschaft</span></b> is feminine because of -schaft.<br><span class="en">Only the last part counts, however long the word is.</span></div>
+<div class="gcard"><b>Compound: the last part decides.</b><br><b class="die">die Donaudampfschifffahrtsgesellschaft</b> is feminine because of <b>-schaft</b>.<br><span class="en">Only the last part counts, however long the word is.</span></div>
 <p><b>New and borrowed words</b> get a gender by these strategies, roughly in this order (according to the Duden, as summarised by the University of Michigan):</p>
 <ol class="gx-loan">
 <li><b>Keep the original gender:</b> das Museum, der Alligator</li>
-<li><b>Copy a German equivalent:</b> <span class="der">der</span> Computer (der Rechner) · <span class="die">die</span> Mail (die Post)</li>
-<li><b>Follow the ending:</b> <span class="die">die</span> Garage, <span class="die">die</span> Pizza · <span class="das">das</span> Management</li>
+<li><b>Copy a German equivalent:</b> <span class="der">der Computer</span> (der Rechner) · <span class="die">die Mail</span> (die Post)</li>
+<li><b>Follow the ending:</b> <span class="die">die Garage</span>, <span class="die">die Pizza</span> · <span class="das">das Management</span></li>
 <li><b>English one-syllable verbs → der:</b> der Chat, der Drink, der Sound</li>
 </ol>
 </section>
@@ -115,12 +114,12 @@
 <h3>Und danach? Fälle <span class="en">(the article changes with the case)</span></h3>
 <p>The gender stays fixed. The article changes with the job of the noun in the sentence. At A1 you need the nominative and the accusative.</p>
 <div class="tablebox"><table class="gx-cases">
-<thead><tr><th class="en">case</th><th class="der">Maskulin</th><th class="die">Feminin</th><th class="das">Neutrum</th><th class="plc">Plural</th></tr></thead>
+<thead><tr><th class="en">case</th><th class="der">m <small>der</small></th><th class="die">f <small>die</small></th><th class="das">n <small>das</small></th><th class="plc">pl. <small>die</small></th></tr></thead>
 <tbody>
-<tr><td class="en">Nominative <small>(subject)</small></td><td class="der">der</td><td class="die">die</td><td class="das">das</td><td class="plc">die</td></tr>
-<tr><td class="en">Accusative <small>(direct object)</small></td><td class="der"><u>den</u></td><td class="die">die</td><td class="das">das</td><td class="plc">die</td></tr>
-<tr class="gx-later"><td class="en">Dative <small>(indirect object)</small></td><td class="der">dem</td><td class="die">der</td><td class="das">dem</td><td class="plc">den (+n)</td></tr>
-<tr class="gx-later"><td class="en">Genitive <small>(possession)</small></td><td class="der">des (+s)</td><td class="die">der</td><td class="das">des (+s)</td><td class="plc">der</td></tr>
+<tr><td class="en">Nom. <small>subject</small></td><td class="der">der</td><td class="die">die</td><td class="das">das</td><td class="plc">die</td></tr>
+<tr><td class="en">Acc. <small>object</small></td><td class="der"><u>den</u></td><td class="die">die</td><td class="das">das</td><td class="plc">die</td></tr>
+<tr class="gx-later"><td class="en">Dat. <small>indirect</small></td><td class="der">dem</td><td class="die">der</td><td class="das">dem</td><td class="plc">den (+n)</td></tr>
+<tr class="gx-later"><td class="en">Gen. <small>possession</small></td><td class="der">des (+s)</td><td class="die">der</td><td class="das">des (+s)</td><td class="plc">der</td></tr>
 </tbody></table></div>
 <p class="gx-note en">Dative and genitive come later (A2 and above). Only the masculine changes in the accusative: der → den.</p>
 <p class="trick"><b>💡 Plural trick:</b> <b>-en</b> plurals are mostly feminine nouns (die Frau → die Frauen). <b>-er</b> plurals are never feminine (das Kind → die Kinder).</p>

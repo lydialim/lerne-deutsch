@@ -15,6 +15,7 @@ window.LEVEL = {
     ["pruefung.html", "Prüfung", "Teil D · the exam", "learn", "D"],
     ["karten.html", "Bildkarten", "picture cards", "tools", ""],
     ["spickzettel.html", "Spickzettel", "cheat sheet", "tools", ""],
+    ["genus.html", "der·die·das", "how gender is decided", "tools", ""],
     ["geschichten.html", "Geschichten", "stories & news", "tools", ""],
     ["dialoge.html", "Dialoge", "typical conversations", "tools", ""],
     ["buchseiten.html", "Buchseiten", "workbook pages", "tools", ""],

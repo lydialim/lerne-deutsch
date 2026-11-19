@@ -43,6 +43,7 @@ lerne-deutsch/
     ├── themen.html           Teil C · lessons 10–22 (food, family, flat, countries, weather, body and doctor, clothes, transport, hotel and post)
     ├── pruefung.html         Teil D · lesson 23 (the exam, listening and reading), writing checker, speaking practice, study tips
     ├── spickzettel.html      cheat sheet
+    ├── genus.html            how German assigns der / die / das: detective steps, endings, meaning groups, exceptions (js/genus-data.js, js/genus.js)
     ├── geschichten.html      nine longer stories and news reports with one illustration each (js/stories-data.js, js/stories-art.js, rendered by js/texte.js)
     ├── dialoge.html          five typical conversations with role-play mode (same renderer)
     ├── buchseiten.html       workbook pages: look up a page, jump to the matching lesson and test

@@ -1392,3 +1392,13 @@ button.gx-chip{cursor:pointer}
 .uhrt td{vertical-align:top}
 .uhrt .en{display:block;font-size:12px}
 .uhrt .off{display:block;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+/* lesson menu: sub-sections of the lesson on this page */
+.litem.sub{min-height:44px;padding:6px 4px 6px 22px;gap:8px}
+.litem.sub .n{width:22px;height:22px;background:none;color:var(--muted);font-size:14px}
+.litem.sub .t b{font-weight:600;font-size:15px}
+.litem.sub .t small{font-size:13px}
+.litem.sub.on{background:var(--soft);border-radius:10px}
+.lgroup.here{padding-top:4px}
+.herebadge{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--ink);color:var(--paper)!important;font-size:11px;letter-spacing:0;text-transform:none}
+.mgroup.allles .lgroup{padding-top:6px}
+.sheet[data-pane="more"] .partchips:not([hidden]){display:flex}

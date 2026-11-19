@@ -8,10 +8,28 @@
   const here = location.pathname.split("/").pop() || "index.html";
   const parts = L.parts || [];
   const onPartPage = parts.some(p => p[3] === here);
-  /* a part flagged "solo" (a 6th entry in level.js) has its own page menu: the sheet then lists only the sections of this page */
+  /* On a part page (Entdecken, Grammatik, Zahlen, Themen, Prüfung) the menu lists the sections of THIS page,
+     with the sub-sections (h3.sub) under each lesson. All lessons of the level then sit at the top of the "Mehr" pane.
+     On other pages (Übersicht, Karten, Tests …) the menu lists all lessons, as before. */
+  const local = onPartPage;
   const solo = (parts.find(p => p[3] === here) || [])[5] === "solo";
-  const shown = solo ? parts.filter(p => p[3] === here) : parts;
-  const lab = solo ? ["Abschnitte", "sections"] : ["Lektionen", "lessons"];
+  const lab = local ? ["Abschnitte", "sections"] : ["Lektionen", "lessons"];
+  const strip = h => h.replace(/<[^>]+>/g, "").trim();
+  /* sub-sections of a lesson on this page: [id, German, English] from its h3.sub headings */
+  const subsOf = id => {
+    const sec = document.getElementById(id); if (!sec) return [];
+    return [...sec.querySelectorAll("h3.sub[id]")].map(h => {
+      const en = h.querySelector(".en"); const enT = en ? en.textContent.replace(/^\(|\)$/g, "").trim() : "";
+      const c = h.cloneNode(true); c.querySelectorAll(".en").forEach(x => x.remove());
+      return [h.id, c.textContent.trim(), enT];
+    });
+  };
+  const item = (page, [id, n, lde, len]) => `<a class="litem" href="${page === here ? "" : page}#${id}" data-id="${id}"><span class="n">${n}</span><span class="t"><b>${lde}</b><small>${len}</small></span></a>`;
+  const subItem = ([id, de, en]) => `<a class="litem sub" href="#${id}" data-sub="${id}"><span class="n" aria-hidden="true">↳</span><span class="t"><b>${de}</b>${en ? `<small>${en}</small>` : ""}</span></a>`;
+  /* all lessons, grouped by part (lesson pane on other pages, top of the "Mehr" pane on part pages) */
+  const allLessons = parts.map(([letter, de, en, page, ls]) => `<div class="lgroup" id="g-${letter}"><h3><a href="${page}" title="${de}: Seite öffnen (open page)">${letter === "E" ? "" : "Teil "}${letter} · ${de} <span>(${en})</span>${page === here ? ' <span class="herebadge">hier (here)</span>' : ""}</a></h3>` +
+    ls.map(l => item(page, l)).join("") + `</div>`).join("");
+  const thisPage = local ? (parts.find(p => p[3] === here)[4]).map(l => item(here, l) + subsOf(l[0]).map(subItem).join("")).join("") : "";
   /* pages reached through the "Mehr" tab of the bottom bar */
   const MORE_PAGES = ["spickzettel.html", "geschichten.html", "dialoge.html", "buchseiten.html"];
   const onMorePage = MORE_PAGES.includes(here);
@@ -65,15 +83,14 @@
     <div class="sheetbox" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
       <div class="sheettop">
         <div class="grab" aria-hidden="true"></div>
-        <div class="sheethead"><h2 id="sheetTitle">${solo ? "Auf dieser Seite" : "Alle Lektionen"} <span class="en">(${solo ? "on this page" : "all lessons"})</span></h2><button class="xbtn" type="button" data-close aria-label="Schließen (close)">✕</button></div>
+        <div class="sheethead"><h2 id="sheetTitle">${local ? "Auf dieser Seite" : "Alle Lektionen"} <span class="en">(${local ? "on this page" : "all lessons"})</span></h2><button class="xbtn" type="button" data-close aria-label="Schließen (close)">✕</button></div>
         <div class="sheettabs" role="tablist"><button type="button" role="tab" data-pane="lessons">${lab[0]} <span class="en">(${lab[1]})</span></button><button type="button" role="tab" data-pane="more">Mehr <span class="en">(more)</span></button></div>
-        <div class="partchips" role="group" aria-label="Teil wählen (jump to part)"${solo ? " hidden" : ""}>${parts.map(p => `<button type="button" class="pchip" data-jump="g-${p[0]}"><b>${p[0]}</b> ${p[1].split(" & ").pop()}</button>`).join("")}</div>
+        <div class="partchips" role="group" aria-label="Teil wählen (jump to part)">${parts.map(p => `<button type="button" class="pchip" data-jump="g-${p[0]}"><b>${p[0]}</b> ${p[1].split(" & ").pop()}</button>`).join("")}${local ? `<button type="button" class="pchip" data-jump="g-pages"><b>+</b> Seiten</button>` : ""}</div>
       </div>
-      <div class="sheetgrid">
-      ${shown.map(([letter, de, en, page, ls]) => `<div class="lgroup" id="g-${letter}">${solo ? "" : `<h3><a href="${page}" title="${de}: Seite öffnen (open page)">Teil ${letter} · ${de} <span>(${en})</span></a></h3>`}` +
-        ls.map(([id, n, lde, len]) => `<a class="litem" href="${page === here ? "" : page}#${id}" data-id="${id}"><span class="n">${n}</span><span class="t"><b>${lde}</b><small>${len}</small></span></a>`).join("") + `</div>`).join("")}
-      </div>
+      <div class="sheetgrid">${local ? `<div class="lgroup here">${thisPage}</div>` : allLessons}</div>
       <div class="sheetmore">
+        ${local ? `<div class="mgroup allles"><h3>Alle Lektionen <span>(all lessons)</span></h3>${allLessons}</div>` : ""}
+        <span id="g-pages"></span>
         ${[["Lesen & Sprechen", "read & speak", [["geschichten.html", "book", "Geschichten", "stories & news"], ["dialoge.html", "cards", "Dialoge", "typical conversations"]]],
            ["Nachschlagen", "look up", [["spickzettel.html", "note", "Spickzettel", "cheat sheet"], ["buchseiten.html", "book", "Buchseiten", "workbook pages"]]],
            ["Üben", "practise", [["karten.html", "cards", "Bildkarten", "picture cards"], ["tests.html", "target", "Alle Tests", "all tests"]]],
@@ -87,12 +104,14 @@
   const sheet = document.getElementById("lessonSheet");
   function setPane(p) {
     sheet.dataset.pane = p;
-    document.getElementById("sheetTitle").innerHTML = p === "more" ? 'Menü <span class="en">(menu)</span>' : (solo ? 'Auf dieser Seite <span class="en">(on this page)</span>' : 'Alle Lektionen <span class="en">(all lessons)</span>');
+    document.getElementById("sheetTitle").innerHTML = p === "more" ? (local ? 'Mehr Lektionen <span class="en">(more lessons)</span>' : 'Menü <span class="en">(menu)</span>') : (local ? 'Auf dieser Seite <span class="en">(on this page)</span>' : 'Alle Lektionen <span class="en">(all lessons)</span>');
+    /* the part chips jump inside the all-lessons list, so show them only in the pane that has it */
+    sheet.querySelector(".partchips").hidden = local ? p !== "more" : p === "more";
     sheet.querySelectorAll("[data-pane]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.pane === p)));
   }
   function openLessonMenu(pane) {
     setPane(pane);
-    showSheet(sheet, pane === "more" ? sheet.querySelector(".sheetmore .litem") : sheet.querySelector(".litem.on") || sheet.querySelector(".litem"));
+    showSheet(sheet, pane === "more" ? sheet.querySelector(".sheetmore .litem") : sheet.querySelector(".sheetgrid .litem.on") || sheet.querySelector(".sheetgrid .litem"));
   }
   document.addEventListener("click", e => {
     const sb = e.target.closest("[data-sheet]");
@@ -101,7 +120,7 @@
     if (pn) { setPane(pn.dataset.pane); sheet.querySelector(".sheetbox").scrollTo({ top: 0 }); return; }
     if (e.target.closest("[data-close]")) { hideSheet(sheet); return; }
     const j = e.target.closest("[data-jump]");
-    if (j) { const g = document.getElementById(j.dataset.jump), box = sheet.querySelector(".sheetbox"), top = sheet.querySelector(".sheettop");
+    if (j) { const g = sheet.querySelector("#" + j.dataset.jump), box = sheet.querySelector(".sheetbox"), top = sheet.querySelector(".sheettop");
       if (g) box.scrollTo({ top: g.offsetTop - top.offsetHeight + 8, behavior: reduce() ? "auto" : "smooth" }); return; }
     const a = e.target.closest(".sheet .litem");
     if (a && a.getAttribute("href").startsWith("#")) { hideSheet(sheet); }
@@ -141,7 +160,7 @@
       const on = a.getAttribute("href") === "#" + id; a.classList.toggle("on", on);
       if (on && subnav.scrollWidth > subnav.clientWidth) subnav.scrollTo({ left: a.offsetLeft - 120, behavior: "smooth" });
     });
-    sheet.querySelectorAll(".litem").forEach(a => a.classList.toggle("on", a.dataset.id === id));
+    sheet.querySelectorAll(".litem[data-id]").forEach(a => a.classList.toggle("on", a.dataset.id === id && (a.getAttribute("href") || "").startsWith("#")));
     const a = links.find(x => x.getAttribute("href") === "#" + id);
     document.getElementById("curl").textContent = a ? " · " + a.textContent.trim() : "";
   }
@@ -150,6 +169,9 @@
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) mark(en.target.id); }), { rootMargin: "-30% 0px -60% 0px" });
     sections.forEach(s => io.observe(s));
+    const subs = [...document.querySelectorAll("section.lesson h3.sub[id]")];
+    const io2 = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) sheet.querySelectorAll(".litem.sub").forEach(a => a.classList.toggle("on", a.dataset.sub === en.target.id)); }), { rootMargin: "0px 0px -70% 0px" });
+    subs.forEach(h => io2.observe(h));
   }
 })();
 

@@ -90,8 +90,8 @@ renderScene("sceneBaum",[
  ["Onkel, Tante, Cousins","uncle, aunt, cousins",[["🧔","der","Onkel"],["👩‍🦰","die","Tante"],["🧑","der","Cousin"],["👩","die","Cousine"]]],
  ["Die Geschwister","siblings",[["🧑","der","Bruder"],["👩","die","Schwester"],["🧑","der","Halbbruder"],["👩","die","Halbschwester"],["🧑","der","Stiefbruder"],["👩","die","Stiefschwester"]]],
  ["Die Schwiegereltern","parents-in-law",[["👨‍🦳","der","Schwiegervater"],["👩‍🦳","die","Schwiegermutter"]]],
- ["Die Kinder","children",[["👦","der","Sohn"],["👧","die","Tochter"],["👶","das","Baby"],["👦","der","Neffe"],["👧","die","Nichte"]]],
- ["Die Enkelkinder","grandchildren",[["👶","der","Enkel"],["👶","die","Enkelin"]]]]);
+ ["Die Kinder","children",[["👦","der","Sohn"],["👧","die","Tochter"],["🧒","das","Kind"],["👶","das","Baby"]]],
+ ["Neffe, Nichte, Enkel","nephew, niece, grandchildren",[["👦","der","Neffe"],["👧","die","Nichte"],["👶","der","Enkel"],["👶","die","Enkelin"]]]]);
 
 /* Conjugation chips: the stem stays, the ending slides */
 if($("#conj")){

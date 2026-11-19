@@ -109,6 +109,32 @@ const numEq=(v,a)=>{
 const numSay=n=>typeof num==="function"?`${num(n)[0]} <span class="pron">(${num(n)[1]})</span>`:String(n);
 const starStr=s=>"★".repeat(s)+"☆".repeat(3-s);
 
+/* How many different questions does each test offer? The tests build their questions on the fly, so we draw samples after the page
+   is shown (one test per timer tick) and count the distinct ones. A test that stops giving new questions is complete ("96");
+   one that keeps giving new ones is capped ("1.500+"). Only an estimate, shown as "ca.". */
+const QN={}, QN_CAP=1500, QN_IDLE=400;
+const fmtN=n=>n.toLocaleString("de-DE");
+function countQuestions(k){
+  const t=TESTS[k], seen=new Set(); let lastNew=0, i=0;
+  for(; i<QN_CAP; i++){
+    try{
+      const q=t.gen(t.ranges?t.ranges[i%t.ranges.length]:undefined), key=(q.prompt||"")+"|"+(q.answer||"")+"|"+(q.tokens?q.tokens.join(" "):"")+(q.say||"");
+      if(!seen.has(key)){ seen.add(key); lastNew=i; }
+    }catch(e){ break; }
+    if(i-lastNew>QN_IDLE) break;
+  }
+  return {n:seen.size, capped:i>=QN_CAP};
+}
+function paintQN(){
+  document.querySelectorAll("[data-qn]").forEach(el=>{ const q=QN[el.dataset.qn]; if(q) el.textContent=`ca. ${fmtN(q.n)}${q.capped?"+":""} Fragen`; });
+  const keys=Object.keys(TESTS).filter(k=>k!=="mix"&&TESTS[k].gen), done=keys.filter(k=>QN[k]), el=document.getElementById("qtotal");
+  if(el&&done.length===keys.length){ const sum=done.reduce((n,k)=>n+QN[k].n,0); el.textContent=`${keys.length} Tests · ca. ${fmtN(Math.floor(sum/100)*100)}+ Fragen`; }
+}
+function startQN(){
+  const todo=Object.keys(TESTS).filter(k=>k!=="mix"&&TESTS[k].gen&&!QN[k]);
+  (function next(){ const k=todo.shift(); if(!k) return; QN[k]=countQuestions(k); paintQN(); setTimeout(next,0); })();
+}
+
 /* Tests overview: one screen. Slim stats line, one start button, group tabs, compact test list. */
 let homeTab=levelStore.get("tab",0);
 function renderHome(){
@@ -124,15 +150,16 @@ function renderHome(){
     <span title="Tagesziel (daily goal)"><b>${Math.min(cnt,GOAL)}/${GOAL}</b> heute <small>(today)</small></span>
     <span><b>${xp}</b> Punkte <small>(points)</small></span>
    </div>
-   <a class="mixbtn" href="#mix"><span><b>Gemischter Test</b><small>${ROUND} Fragen, alle Teile (${ROUND} questions, all parts)</small></span><span class="play" aria-hidden="true">▶</span></a>`;
+   <a class="mixbtn" href="#mix"><span><b>Gemischter Test</b><small>${ROUND} Fragen, alle Teile (${ROUND} questions, all parts)</small><small id="qtotal" class="qtotal"></small></span><span class="play" aria-hidden="true">▶</span></a>`;
   if(weak){ const [k,b]=weak; h+=`<a class="weakline" href="#${k}">Schwächstes <span class="en">(weakest)</span>: <b>${TESTS[k].title}</b> <span class="pct">${Math.round(b.ok/b.n*100)}%</span> →</a>`; }
   h+=`<div class="gtabs" role="tablist" aria-label="Testgruppen (test groups)">${GROUPS_SHOWN.map((x,i)=>`<button type="button" role="tab" data-tab="${i}" aria-selected="${i===homeTab}">${x[3]}<small>${x[4]}</small></button>`).join("")}</div>
    <div class="tlist" role="tabpanel" aria-label="${esc(g)} (${esc(ge)})">`+keys.map(k=>{const tt=TESTS[k],b=best[k],st=starBest[k]||0,pc=b?Math.round(b.ok/b.n*100):null;
-    return `<a class="trow" href="#${k}"><span class="tt"><b>${tt.title}</b><small>${tt.en}</small></span><span class="tr"><span class="stars" aria-label="${st} von 3 Sternen (${st} of 3 stars)">${starStr(st)}</span>${pc===null?"":`<small>${pc}%</small>`}</span></a>`}).join("")+`</div>`;
+    return `<a class="trow" href="#${k}"><span class="tt"><b>${tt.title}</b><small>${tt.en}</small></span><span class="tr"><small class="qn" data-qn="${k}"></small><span class="stars" aria-label="${st} von 3 Sternen (${st} of 3 stars)">${starStr(st)}</span>${pc===null?"":`<small>${pc}%</small>`}</span></a>`}).join("")+`</div>`;
   if(r) h+=`<div class="rday"><span class="tag">Regel des Tages · rule of the day</span><h3>${r[0]} <span class="en">(${r[1]})</span></h3><span class="ex">${r[2]}</span><span class="en">${r[3]}</span><a class="go" href="#${r[4]}">Üben (practise) →</a></div>`;
   h+=`<div class="homefoot"><button type="button" class="btn ghost" id="resetAll">Ergebnisse zurücksetzen <span class="en">(reset scores)</span></button></div>`;
   $("#testHome").innerHTML=h+`</div>`;
   $("#resetAll").onclick=resetProgress;
+  paintQN();
   $("#testHome").querySelectorAll("[data-tab]").forEach(btn=>btn.onclick=()=>{homeTab=+btn.dataset.tab; levelStore.set("tab",homeTab); renderHome(); const f=$(`#testHome [data-tab="${homeTab}"]`); if(f) f.focus({preventScroll:true});});
   const sel=$(`#testHome [data-tab="${homeTab}"]`), strip=$("#testHome .gtabs"); if(sel&&strip) strip.scrollLeft=sel.offsetLeft-(strip.clientWidth-sel.offsetWidth)/2;
 }
@@ -386,4 +413,5 @@ document.addEventListener("click",e=>{
 document.body.insertAdjacentHTML("beforeend",'<div class="fbsheet" id="fbSheet" hidden></div><div class="toast" id="toast" role="status" hidden></div><canvas id="confetti" aria-hidden="true"></canvas>');
 applyEn(); applyHint();
 renderHome();
+setTimeout(startQN,300);
 fromHash();

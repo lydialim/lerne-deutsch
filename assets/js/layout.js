@@ -140,7 +140,7 @@
   if (!f) return;
   const L = window.LEVEL;
   /* Last-updated date shown in the footer. Change this one line (YYYY-MM-DD) whenever content changes. */
-  const UPDATED = "2026-11-18";
+  const UPDATED = "2026-11-19";
   const [uy, um, ud] = UPDATED.split("-").map(Number);
   const MON_DE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
   const MON_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

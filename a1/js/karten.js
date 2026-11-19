@@ -538,7 +538,7 @@ const extraLine = it => it.ex ? it.ex : "";
     const kn = knownCount(tab);
     let t = `<div class="kcatrow"><button type="button" class="kcat" id="kcat" aria-haspopup="dialog">${catIcon(cat)}<span class="kct"><b>${esc(cat.de)}</b><small>${esc(cat.en)} · ${kn} / ${cat.items.length} ✓</small></span><span aria-hidden="true">▾</span></button>
     ${!searching && mode === "cards" ? `<button type="button" class="kdens" data-dens aria-label="Karten pro Reihe wechseln (switch cards per row): ${dens}" title="2 / 3"><b>${dens}</b><small>Spalten</small></button>` : ""}</div>
-    <div class="ktabs${searching ? " dim" : ""}" role="tablist">${KARTEN.map((c, i) => `<button type="button" role="tab" data-tab="${i}" aria-selected="${!searching && i === tab}">${c.de}<small>${c.en}</small></button>`).join("")}</div>
+    <div class="ktabs${searching ? " dim" : ""}" role="tablist">${KARTEN.map((c, i) => `<button type="button" role="tab" data-tab="${i}" aria-selected="${!searching && i === tab}">${c.de}<small>${c.en} · ${c.items.length}</small></button>`).join("")}</div>
     ${searching ? "" : `<div class="kseg" role="group" aria-label="Übungsart (mode)"><button type="button" data-mode="cards" aria-pressed="${mode === "cards"}">🃏 Karten<small>cards</small></button><button type="button" data-mode="learn" aria-pressed="${mode === "learn"}">🧠 Lernen<small>study</small></button>${guessOk ? `<button type="button" data-mode="guess" aria-pressed="${mode === "guess"}">🎯 Raten<small>guess der/die/das</small></button>` : ""}</div>`}`;
     let h = "";
     if (searching) {
@@ -619,5 +619,8 @@ const extraLine = it => it.ex ? it.ex : "";
     }
   });
   const categoryItems = () => KARTEN[tab].items;
+  /* total number of cards, shown in the page intro */
+  const lead = document.querySelector(".part .lead");
+  if (lead) lead.insertAdjacentHTML("beforeend", ` <b class="ktotal">${KARTEN.reduce((n, c) => n + c.items.length, 0)} Wörter <span class="en">(words)</span> · ${KARTEN.length} Kategorien <span class="en">(categories)</span></b>`);
   render();
 })();

@@ -1358,3 +1358,34 @@ button.gx-chip{cursor:pointer}
 .gx-who{background:var(--paper);border-radius:8px;padding:8px 10px;font-size:14px}
 .gx-who summary{cursor:pointer;font-weight:700;min-height:36px;display:flex;align-items:center}
 .gx-who p{margin:6px 0}
+
+/* tappable sound cards (lesson 8) */
+.sound [data-tap-say]{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sound [data-tap-say]:active{background:var(--line)}
+.sound [data-tap-say]{position:relative;padding-right:30px}
+.sound [data-tap-say]::after{content:"🔊";position:absolute;top:8px;right:8px;font-size:14px}
+.tz .pron{display:block}
+
+/* ===== v5 mobile polish ===== */
+/* bigger touch area for the small 🔊 buttons without changing how they look */
+@media (pointer:coarse){
+  .spk{position:relative}
+  .spk::after{content:"";position:absolute;inset:-8px -6px}
+  input[type=checkbox],input[type=radio]{width:20px;height:20px}
+}
+/* scrolling tab rows: fade the edge that has more tabs behind it */
+.gtabs[data-more="r"],.ktabs[data-more="r"]{-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+.gtabs[data-more="l"],.ktabs[data-more="l"]{-webkit-mask-image:linear-gradient(270deg,#000 82%,transparent);mask-image:linear-gradient(270deg,#000 82%,transparent)}
+.gtabs[data-more="lr"],.ktabs[data-more="lr"]{-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
+/* wide lesson tables (4+ columns) become stacked cards on phones: no sideways scrolling */
+@media (max-width:520px){
+  table.stack,table.stack tbody,table.stack tr,table.stack td{display:block;width:100%;min-width:0}
+  table.stack{min-width:0!important}
+  table.stack thead{display:none}
+  table.stack tr{border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;margin:0 0 8px;background:var(--paper)}
+  table.stack td{border:none!important;padding:3px 0!important}
+  table.stack td:first-child{font-weight:800;font-size:1.05em;padding-bottom:5px!important;border-bottom:1px solid var(--line)!important;margin-bottom:3px}
+  table.stack td[data-label]:not(:first-child)::before{content:attr(data-label);display:block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+  table.stack td:empty{display:none}
+  .tablebox:has(table.stack){overflow:visible}
+}

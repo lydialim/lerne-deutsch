@@ -29,9 +29,9 @@ const NOUNS = [
 
 /* numbers */
 
-const U={0:["null","nool"],1:["eins","aynss"],2:["zwei","tsvy"],3:["drei","dry"],4:["vier","feer"],5:["fünf","fuenf"],6:["sechs","zeks"],7:["sieben","ZEE-ben"],8:["acht","akht"],9:["neun","noyn"],10:["zehn","tsayn"],11:["elf","elf"],12:["zwölf","tsvoelf"],13:["dreizehn","DRY-tsayn"],14:["vierzehn","FEER-tsayn"],15:["fünfzehn","FUENF-tsayn"],16:["sechzehn","ZEKH-tsayn"],17:["siebzehn","ZEEP-tsayn"],18:["achtzehn","AKHT-tsayn"],19:["neunzehn","NOYN-tsayn"]};
+const U={0:["null","nool"],1:["eins","aynss"],2:["zwei","tsvy"],3:["drei","dry"],4:["vier","feer"],5:["fünf","fünf"],6:["sechs","zeks"],7:["sieben","ZEE-ben"],8:["acht","akht"],9:["neun","noyn"],10:["zehn","tsayn"],11:["elf","elf"],12:["zwölf","tsvölf"],13:["dreizehn","DRY-tsayn"],14:["vierzehn","FEER-tsayn"],15:["fünfzehn","FÜNF-tsayn"],16:["sechzehn","ZEKH-tsayn"],17:["siebzehn","ZEEP-tsayn"],18:["achtzehn","AKHT-tsayn"],19:["neunzehn","NOYN-tsayn"]};
 
-const T={2:["zwanzig","TSVAN-tsikh"],3:["dreißig","DRY-sikh"],4:["vierzig","FEER-tsikh"],5:["fünfzig","FUENF-tsikh"],6:["sechzig","ZEKH-tsikh"],7:["siebzig","ZEEP-tsikh"],8:["achtzig","AKHT-tsikh"],9:["neunzig","NOYN-tsikh"]};
+const T={2:["zwanzig","TSVAN-tsikh"],3:["dreißig","DRY-sikh"],4:["vierzig","FEER-tsikh"],5:["fünfzig","FÜNF-tsikh"],6:["sechzig","ZEKH-tsikh"],7:["siebzig","ZEEP-tsikh"],8:["achtzig","AKHT-tsikh"],9:["neunzig","NOYN-tsikh"]};
 
 function num(n){
   if(n<20) return U[n];
@@ -55,7 +55,7 @@ function yearSay(y){
 
 /* alphabet */
 
-const ABC=[["A","ah"],["B","bay"],["C","tsay"],["D","day"],["E","ay",1],["F","eff"],["G","gay",1],["H","hah"],["I","ee",1],["J","yot",1],["K","kah"],["L","ell"],["M","emm"],["N","enn"],["O","oh"],["P","pay"],["Q","koo"],["R","err"],["S","ess"],["T","tay"],["U","oo"],["V","fow",1],["W","vay",1],["X","iks"],["Y","UEP-si-lon",1],["Z","tset",1],["Ä","eh"],["Ö","oe"],["Ü","ue"],["ß","ESS-tset"]];
+const ABC=[["A","ah"],["B","bay"],["C","tsay"],["D","day"],["E","ay",1],["F","eff"],["G","gay",1],["H","hah"],["I","ee",1],["J","yot",1],["K","kah"],["L","ell"],["M","emm"],["N","enn"],["O","oh"],["P","pay"],["Q","koo"],["R","air"],["S","ess"],["T","tay"],["U","oo"],["V","fow",1],["W","vay",1],["X","iks"],["Y","ÜP-si-lon",1],["Z","tset",1],["Ä","eh"],["Ö","öh"],["Ü","üh"],["ß","ESS-tset"]];
 
 const SAY={A:"Ah",B:"Beh",C:"Zeh",D:"Deh",E:"Eh",F:"Eff",G:"Geh",H:"Hah",I:"Ih",J:"Jott",K:"Kah",L:"Ell",M:"Emm",N:"Enn",O:"Oh",P:"Peh",Q:"Kuh",R:"Err",S:"Ess",T:"Teh",U:"Uh",V:"Fau",W:"Weh",X:"Ix",Y:"Üpsilon",Z:"Zett","Ä":"Äh","Ö":"Öh","Ü":"Üh","ß":"Eszett"};
 
@@ -192,7 +192,7 @@ const VOCAB=[
  ["der","Ehemann","Ehemänner","husband","leute"], ["die","Hausfrau","Hausfrauen","housewife","leute"], ["der","Hausmann","Hausmänner","house husband","leute"],
  ["der","Vermieter","Vermieter","landlord","leute"], ["die","Polizei","","police","leute"], ["die","Heimat","","home, homeland","leute"],
  ["das","Geburtsjahr","Geburtsjahre","year of birth","leute"], ["das","Haar","Haare","hair","leute"], ["das","Leben","","life","leute"],
- ["der","Blick","Blicke","view; look","leute"], ["die","Vorsicht","","caution","leute","Usually: Vorsicht! (Careful!)"], ["die","Vorwahl","Vorwahlen","area code","leute"],["der","Ausgang","Ausgänge","exit","reise"],["der","Eingang","Eingänge","entrance","reise"],["die","Aussage","Aussagen","statement","buero"],["der","Gast","Gäste","guest","leute"],["das","Grad","Grad","degree (temperature)","leute","Used with numbers: 20 Grad (twenty degrees)."],["das","Lokal","Lokale","restaurant, pub","reise"],["die","Mitte","","middle, centre","leute"],["der","Schalter","Schalter","counter, ticket window","buero"],["das","Schild","Schilder","sign","reise"],["das","Wiederhören","","goodbye (on the phone)","leute","Only in: Auf Wiederhören! Said on the phone; face to face you say: Auf Wiedersehen!"],
+ ["der","Blick","Blicke","view; look","leute"], ["die","Vorsicht","","caution","leute","Usually: Vorsicht! (Careful!)"], ["die","Vorwahl","Vorwahlen","area code","leute"],["der","Ausgang","Ausgänge","exit","reise"],["der","Eingang","Eingänge","entrance","reise"],["die","Aussage","Aussagen","statement","buero"],["der","Gast","Gäste","guest","leute"],["der","Grad","Grad","degree (temperature)","leute","Used with numbers: 20 Grad (zwanzig Grad, TSVAN-tsikh graht = twenty degrees). Technical texts sometimes say das Grad."],["das","Lokal","Lokale","restaurant, pub","reise"],["die","Mitte","","middle, centre","leute"],["der","Schalter","Schalter","counter, ticket window","buero"],["das","Schild","Schilder","sign","reise"],["das","Wiederhören","","goodbye (on the phone)","leute","Only in: Auf Wiederhören! Said on the phone; face to face you say: Auf Wiedersehen!"],
  ["das","Gewicht","Gewichte","weight","leute"], ["der","Laden","Läden","shop","leute"], ["die","Möbel","Möbel","furniture","wohnung","Plural only: die Möbel (ein Möbelstück = one piece)."],
  ["die","Treppe","Treppen","stairs","wohnung"], ["das","Licht","Lichter","light","wohnung"], ["das","Feuer","Feuer","fire","wohnung"],
  ["die","Birne","Birnen","pear; light bulb","essen"], ["der","Durst","","thirst","essen","Ich habe Durst. (I am thirsty.)"], ["die","Lebensmittel","Lebensmittel","groceries, food","essen","Plural only: die Lebensmittel."],

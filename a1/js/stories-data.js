@@ -16,7 +16,7 @@ const STORIES = [
       ["Es {v:gibt} viele {pl:Buden} und einen großen {der:Weihnachtsbaum}.", "There · gives · many · stalls · and · a · big · Christmas-tree", "There are many stalls and a big Christmas tree."],
       ["Alles {v:ist} hell, und es {v:riecht} nach {der:Zimt} und {pl:Mandeln}.", "Everything · is · bright · and · it · smells · of · cinnamon · and · almonds", "Everything is bright, and it smells of cinnamon and almonds."],
       ["Mia {v:möchte} einen {der:Glühwein}.", "Mia · would-like · a · mulled-wine", "Mia would like a mulled wine."],
-      ["Der Mann {v:sagt}: „Das {v:macht} 5,50 Euro.“", "The · man · says · that · makes · 5.50 · euro", "The man says: “That is 5.50 euros.”", "5,50 = fünf Euro fünfzig (FUENF OY-ro FUENF-tsikh)"],
+      ["Der Mann {v:sagt}: „Das {v:macht} 5,50 Euro.“", "The · man · says · that · makes · 5.50 · euro", "The man says: “That is 5.50 euros.”", "5,50 = fünf Euro fünfzig (FÜNF OY-ro FÜNF-tsikh)"],
       ["Der {der:Glühwein} {v:ist} heiß und süß.", "The · mulled-wine · is · hot · and · sweet", "The mulled wine is hot and sweet."]
     ], [
       ["Dann {v:trifft} sie ihre {die:Freundin} Anna.", "Then · meets · she · her · friend · Anna", "Then she meets her friend Anna."],
@@ -40,16 +40,17 @@ const STORIES = [
       ["Der {der:Markt} {v:dauert} bis zum 24. Dezember.", "The · market · lasts · until · to-the · 24th · December", "The market lasts until 24 December.", "24 = vierundzwanzig (FEER-oont-TSVAN-tsikh)"],
       ["In diesem Jahr {v:beginnt} er früher als sonst.", "In · this · year · begins · he · earlier · than · otherwise", "This year it starts earlier than usual."]
     ], [
-      ["Es {v:gibt} 137 {pl:Stände}.", "There · gives · 137 · stalls", "There are 137 stalls.", "137 = hundertsiebenunddreißig (HOON-dert-ZEE-ben-oont-DRAI-sikh)"],
-      ["Der {der:Weihnachtsbaum} {v:ist} etwa 25 {pl:Meter} hoch.", "The · Christmas-tree · is · about · 25 · metres · tall", "The Christmas tree is about 25 metres tall.", "25 = fünfundzwanzig (FUENF-oont-TSVAN-tsikh)"],
-      ["Von Montag bis Samstag {v:ist} der {der:Markt} von 10 bis 21 Uhr {v:offen}.", "From · Monday · to · Saturday · is · the · market · from · 10 · to · 21 · o'clock · open", "From Monday to Saturday the market is open from 10 to 21 (9 pm).", "10 = zehn (TSAYN) · 21 = einundzwanzig (AIN-oont-TSVAN-tsikh)"],
-      ["Am Sonntag {v:ist} er von 10 bis 20 Uhr {v:offen}.", "On · Sunday · is · he · from · 10 · to · 20 · o'clock · open", "On Sunday it is open from 10 to 20 (8 pm).", "20 = zwanzig (TSVAN-tsikh)"],
+      ["Es {v:gibt} 137 {pl:Stände}.", "There · gives · 137 · stalls", "There are 137 stalls.", "137 = hundertsiebenunddreißig (HOON-dert-ZEE-ben-oont-DRY-sikh)"],
+      ["Der {der:Weihnachtsbaum} {v:ist} etwa 25 {pl:Meter} hoch.", "The · Christmas-tree · is · about · 25 · metres · tall", "The Christmas tree is about 25 metres tall.", "25 = fünfundzwanzig (FÜNF-oont-TSVAN-tsikh)"],
+      ["Von Montag bis Samstag {v:ist} der {der:Markt} von 10 bis 21 Uhr offen.", "From · Monday · to · Saturday · is · the · market · from · 10 · to · 21 · o'clock · open", "From Monday to Saturday the market is open from 10 to 21 (9 pm).", "10 = zehn (TSAYN) · 21 = einundzwanzig (AYN-oont-TSVAN-tsikh)"],
+      ["Am Sonntag {v:ist} er von 10 bis 20 Uhr offen.", "On · Sunday · is · he · from · 10 · to · 20 · o'clock · open", "On Sunday it is open from 10 to 20 (8 pm).", "20 = zwanzig (TSVAN-tsikh)"],
+      ["Am 22. November {v:ist} der Markt geschlossen.", "On · 22nd · November · is · the · market · closed", "On 22 November (Totensonntag, a quiet Sunday holiday) the market is closed.", "22. = zweiundzwanzigsten (TSVY-oont-TSVAN-tsikh-sten)"],
       ["Der {der:Eintritt} {v:ist} frei.", "The · entrance · is · free", "Entry is free."],
-      ["Man {v:kann} mit der {die:U3} oder {die:U6} {v:fahren}.", "One · can · with · the · U3 · or · U6 · travel", "You can take the U3 or U6.", "U3 = U drei (OO DRAI) · U6 = U sechs (OO ZEKS)"]
+      ["Man {v:kann} mit der {die:U3} oder {die:U6} {v:fahren}.", "One · can · with · the · U3 · or · U6 · travel", "You can take the U3 or U6.", "U3 = U drei (OO DRY) · U6 = U sechs (OO ZEKS)"]
     ]],
     words: [["der", "Markt", "market"], ["der", "Eintritt", "entrance"], ["der", "Stand", "stall"], ["pl", "Stände", "stalls"], ["der", "Meter", "metre"], ["", "offen", "open"], ["", "früher", "earlier"], ["", "frei", "free"]],
     tip: ["Datum: am Freitag, 20. November. Zeit: von 10 bis 21 Uhr. Man kann + Verb am Ende.", "Dates and times: am + day, von … bis … Uhr. With kann the second verb goes last."],
-    quiz: [["Der Christkindlmarkt beginnt am 20. November.", "The market starts on 20 November.", true], ["Der Eintritt kostet 5 Euro.", "Entry costs 5 euros.", false], ["Am Sonntag ist er bis 20 Uhr offen.", "On Sunday it is open until 8 pm.", true]] },
+    quiz: [["Der Christkindlmarkt beginnt am 20. November.", "The market starts on 20 November.", true], ["Der Eintritt kostet 5 Euro.", "Entry costs 5 euros.", false], ["Am Sonntag ist er bis 20 Uhr offen.", "On Sunday it is open until 8 pm.", true], ["Am 22. November ist der Markt offen.", "On 22 November the market is open.", false]] },
 
   { id: "news-schnee", kind: "news", title: "Nachrichten: Der erste Schnee", en: "News: the first snow", scene: "snow",
     date: "10.11.2026",
@@ -97,15 +98,15 @@ const STORIES = [
       ["Lea {v:steht} um 7 Uhr {v:auf}.", "Lea · gets · at · 7 · o'clock · up", "Lea gets up at seven o'clock.", "7 = sieben (ZEE-ben)"],
       ["Sie {v:trinkt} {der:Kaffee} und {v:isst} {das:Brot} mit {der:Marmelade}.", "She · drinks · coffee · and · eats · bread · with · jam", "She drinks coffee and eats bread with jam."],
       ["Um 8 Uhr {v:fährt} sie mit dem {der:Bus} zur {die:Arbeit}.", "At · 8 · o'clock · goes · she · with · the · bus · to-the · work", "At eight she takes the bus to work.", "8 = acht (AKHT)"],
-      ["Die {die:Fahrt} {v:dauert} 25 Minuten.", "The · ride · lasts · 25 · minutes", "The ride takes 25 minutes.", "25 = fünfundzwanzig (FUENF-oont-TSVAN-tsikh)"]
+      ["Die {die:Fahrt} {v:dauert} 25 Minuten.", "The · ride · lasts · 25 · minutes", "The ride takes 25 minutes.", "25 = fünfundzwanzig (FÜNF-oont-TSVAN-tsikh)"]
     ], [
       ["Lea {v:arbeitet} im {das:Büro}. Sie {v:schreibt} {pl:E-Mails} und {v:telefoniert}.", "Lea · works · in-the · office · she · writes · emails · and · phones", "Lea works in the office. She writes emails and makes phone calls."],
-      ["Um 12 Uhr {v:isst} sie {die:Pizza} mit einer {die:Kollegin}.", "At · 12 · o'clock · eats · she · pizza · with · a · colleague", "At twelve she eats pizza with a colleague.", "12 = zwölf (ZVOELF)"],
+      ["Um 12 Uhr {v:isst} sie {die:Pizza} mit einer {die:Kollegin}.", "At · 12 · o'clock · eats · she · pizza · with · a · colleague", "At twelve she eats pizza with a colleague.", "12 = zwölf (TSVÖLF)"],
       ["Am Nachmittag {v:hat} sie ein {das:Meeting}.", "In-the · afternoon · has · she · a · meeting", "In the afternoon she has a meeting."],
       ["Um 17 Uhr {v:geht} sie nach {die:Hause}.", "At · 17 · o'clock · goes · she · to · home", "At five in the afternoon she goes home.", "17 = siebzehn (ZEEP-tsayn)"]
     ], [
       ["Am Abend {v:kocht} sie {die:Suppe} und {v:sieht} {v:fern}.", "In-the · evening · cooks · she · soup · and · looks · TV(fern)", "In the evening she cooks soup and watches TV."],
-      ["Um 22 Uhr {v:ist} sie müde. Gute Nacht!", "At · 22 · o'clock · is · she · tired · good · night", "At ten at night she is tired. Good night!", "22 = zweiundzwanzig (TSVAI-oont-TSVAN-tsikh)"]
+      ["Um 22 Uhr {v:ist} sie müde. Gute Nacht!", "At · 22 · o'clock · is · she · tired · good · night", "At ten at night she is tired. Good night!", "22 = zweiundzwanzig (TSVY-oont-TSVAN-tsikh)"]
     ]],
     words: [["der", "Bus", "bus"], ["die", "Arbeit", "work"], ["das", "Büro", "office"], ["die", "Pizza", "pizza"], ["die", "Suppe", "soup"], ["der", "Kaffee", "coffee"], ["", "aufstehen", "to get up"], ["", "müde", "tired"]],
     tip: ["Trennbares Verb: aufstehen → Lea steht um 7 Uhr auf. Zeit: um + Zahl + Uhr.", "Separable verb: the prefix jumps to the end. Time: um + number + Uhr."],
@@ -118,13 +119,13 @@ const STORIES = [
       ["Es {v:ist} sonnig, und viele {pl:Leute} {v:sind} da.", "It · is · sunny · and · many · people · are · there", "It is sunny and many people are there."],
       ["Er {v:möchte} ein {das:Kilo} {pl:Äpfel}. „Was {v:kostet} das?“", "He · would-like · a · kilo · apples · what · costs · that", "He wants a kilo of apples. “What does that cost?”"]
     ], [
-      ["Die {die:Verkäuferin} {v:sagt}: „Ein {das:Kilo} {v:kostet} 2,50 Euro.“", "The · saleswoman · says · a · kilo · costs · 2.50 · euro", "The saleswoman says: “A kilo costs 2.50 euros.”", "2,50 = zwei Euro fünfzig (TSVAI OY-ro FUENF-tsikh)"],
+      ["Die {die:Verkäuferin} {v:sagt}: „Ein {das:Kilo} {v:kostet} 2,50 Euro.“", "The · saleswoman · says · a · kilo · costs · 2.50 · euro", "The saleswoman says: “A kilo costs 2.50 euros.”", "2,50 = zwei Euro fünfzig (TSVY OY-ro FÜNF-tsikh)"],
       ["Tom {v:nimmt} auch {die:Milch} und {das:Brot}.", "Tom · takes · also · milk · and · bread", "Tom also takes milk and bread."],
       ["Der {der:Käse} {v:sieht} gut {v:aus}. Er {v:probiert} ein {das:Stück}.", "The · cheese · looks · good · out · he · tries · a · piece", "The cheese looks good. He tries a piece."],
-      ["„Mmm, {v:lecker}! Ich {v:nehme} 200 {pl:Gramm}.“", "Mmm · delicious · I · take · 200 · grams", "“Mmm, delicious! I'll take 200 grams.”", "200 = zweihundert (TSVAI-hoon-dert)"]
+      ["„Mmm, {v:lecker}! Ich {v:nehme} 200 {pl:Gramm}.“", "Mmm · delicious · I · take · 200 · grams", "“Mmm, delicious! I'll take 200 grams.”", "200 = zweihundert (TSVY-hoon-dert)"]
     ], [
-      ["Zusammen {v:macht} das 8,30 Euro.", "Together · makes · that · 8.30 · euro", "Altogether that is 8.30 euros.", "8,30 = acht Euro dreißig (AKHT OY-ro DRAI-sikh)"],
-      ["Tom {v:gibt} 10 Euro. Er {v:bekommt} 1,70 Euro zurück.", "Tom · gives · 10 · euro · he · gets · 1.70 · euro · back", "Tom gives 10 euros. He gets 1.70 euros back.", "10 = zehn (TSAYN) · 1,70 = ein Euro siebzig (AIN OY-ro ZEEP-tsikh)"],
+      ["Zusammen {v:macht} das 8,30 Euro.", "Together · makes · that · 8.30 · euro", "Altogether that is 8.30 euros.", "8,30 = acht Euro dreißig (AKHT OY-ro DRY-sikh)"],
+      ["Tom {v:gibt} 10 Euro. Er {v:bekommt} 1,70 Euro zurück.", "Tom · gives · 10 · euro · he · gets · 1.70 · euro · back", "Tom gives 10 euros. He gets 1.70 euros back.", "10 = zehn (TSAYN) · 1,70 = ein Euro siebzig (AYN OY-ro ZEEP-tsikh)"],
       ["„{v:Danke}, tschüss!“ – „{v:Bitte} schön! Schönes Wochenende!“", "Thanks · bye · – · please · nice · nice · weekend", "“Thanks, bye!” – “You're welcome! Have a nice weekend!”"]
     ]],
     words: [["der", "Markt", "market"], ["das", "Kilo", "kilo"], ["die", "Milch", "milk"], ["der", "Käse", "cheese"], ["das", "Brot", "bread"], ["pl", "Äpfel", "apples"], ["", "lecker", "delicious"], ["", "kosten", "to cost"]],
@@ -159,7 +160,7 @@ const STORIES = [
       ["Am Nachmittag {v:geht} er {v:einkaufen}.", "In-the · afternoon · goes · he · shopping", "In the afternoon he goes shopping."]
     ], [
       ["Am Sonntag {v:besucht} er seine {pl:Eltern}.", "On · Sunday · visits · he · his · parents", "On Sunday he visits his parents."],
-      ["Seine {die:Mutter} {v:hat} {der:Geburtstag}. Sie {v:ist} 50 {pl:Jahre} alt.", "His · mother · has · birthday · she · is · 50 · years · old", "His mother has a birthday. She is 50 years old.", "50 = fünfzig (FUENF-tsikh)"],
+      ["Seine {die:Mutter} {v:hat} {der:Geburtstag}. Sie {v:ist} 50 {pl:Jahre} alt.", "His · mother · has · birthday · she · is · 50 · years · old", "His mother has a birthday. She is 50 years old.", "50 = fünfzig (FÜNF-tsikh)"],
       ["Ben {v:schenkt} ihr {pl:Blumen} und eine {die:Torte}.", "Ben · gives · her · flowers · and · a · cake", "Ben gives her flowers and a cake."],
       ["Sie {v:feiern} zusammen. Seine {die:Schwester} {v:kommt} auch.", "They · celebrate · together · his · sister · comes · also", "They celebrate together. His sister comes too."],
       ["Am Abend {v:ist} Ben müde, aber {v:glücklich}.", "In-the · evening · is · Ben · tired · but · happy", "In the evening Ben is tired but happy."]
@@ -173,9 +174,9 @@ const STORIES = [
     paras: [[
       ["Das {v:ist} {die:Familie} Weber. Sie {v:sind} vier {pl:Personen}.", "That · is · family · Weber · they · are · four · persons", "This is the Weber family. They are four people.", "4 = vier (FEER)"],
       ["Herr Weber {v:ist} {der:Lehrer}. Frau Weber {v:ist} {die:Ärztin}.", "Mr · Weber · is · teacher · Mrs · Weber · is · doctor", "Mr Weber is a teacher. Mrs Weber is a doctor."],
-      ["Sie {v:haben} zwei {pl:Kinder}: einen {der:Sohn} und eine {die:Tochter}.", "They · have · two · children · a · son · and · a · daughter", "They have two children: a son and a daughter.", "2 = zwei (TSVAI)"]
+      ["Sie {v:haben} zwei {pl:Kinder}: einen {der:Sohn} und eine {die:Tochter}.", "They · have · two · children · a · son · and · a · daughter", "They have two children: a son and a daughter.", "2 = zwei (TSVY)"]
     ], [
-      ["Sie {v:wohnen} in München. Die {die:Wohnung} {v:hat} 3 {pl:Zimmer}, eine {die:Küche} und ein {das:Bad}.", "They · live · in · Munich · the · flat · has · 3 · rooms · a · kitchen · and · a · bathroom", "They live in Munich. The flat has three rooms, a kitchen and a bathroom.", "3 = drei (DRAI)"],
+      ["Sie {v:wohnen} in München. Die {die:Wohnung} {v:hat} 3 {pl:Zimmer}, eine {die:Küche} und ein {das:Bad}.", "They · live · in · Munich · the · flat · has · 3 · rooms · a · kitchen · and · a · bathroom", "They live in Munich. The flat has three rooms, a kitchen and a bathroom.", "3 = drei (DRY)"],
       ["Im {das:Wohnzimmer} {v:steht} ein {das:Sofa}. Der {der:Tisch} {v:ist} groß.", "In-the · living-room · stands · a · sofa · the · table · is · big", "There is a sofa in the living room. The table is big."],
       ["Sie {v:haben} auch eine {die:Katze}. Sie {v:heißt} Mimi.", "They · have · also · a · cat · she · is-called · Mimi", "They also have a cat. Her name is Mimi."]
     ], [

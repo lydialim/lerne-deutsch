@@ -34,3 +34,32 @@ function hideSheet(sheet) {
   const back = sheet._opener;
   if (back && document.contains(back)) back.focus({ preventScroll: true });
 }
+
+/* Mobile helpers (all pages):
+   1. tab rows that scroll sideways get data-more="l|r|lr", so CSS can fade the edge with hidden tabs.
+   2. lesson tables with 4+ columns get class "stack" and a data-label per cell, so phones show them as cards. */
+(function(){
+  function more(el){
+    const max=el.scrollWidth-el.clientWidth;
+    const v=(el.scrollLeft>4?"l":"")+(el.scrollLeft<max-4?"r":"");
+    if(v) el.dataset.more=v; else delete el.dataset.more;
+  }
+  const all=()=>document.querySelectorAll(".gtabs,.ktabs").forEach(more);
+  document.addEventListener("scroll",e=>{ const t=e.target; if(t.matches&&t.matches(".gtabs,.ktabs")) more(t); },true);
+  window.addEventListener("resize",all);
+  document.addEventListener("click",e=>{ const b=e.target.closest(".gtabs button,.ktabs button"); if(b){ b.scrollIntoView({block:"nearest",inline:"nearest"}); setTimeout(all,350); } });
+  function stack(){
+    document.querySelectorAll(".lesson .tablebox > table:not(.mini):not(.stack)").forEach(tb=>{
+      const heads=[...tb.querySelectorAll("thead th")].map(th=>th.textContent.trim());
+      if(heads.length<4) return;
+      /* short-cell grids (verb forms, ein/kein tables) read better as a grid: only stack tables with sentence-length cells */
+      const cells=[...tb.querySelectorAll("tbody td")], avg=cells.reduce((n,td)=>n+td.textContent.trim().length,0)/(cells.length||1);
+      if(avg<16) return;
+      tb.classList.add("stack");
+      tb.querySelectorAll("tbody tr").forEach(tr=>[...tr.children].forEach((td,i)=>{ if(heads[i]) td.dataset.label=heads[i]; }));
+    });
+  }
+  const go=()=>{ stack(); all(); setTimeout(all,800); };
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",go); else go();
+  new MutationObserver(()=>{ clearTimeout(go._t); go._t=setTimeout(all,100); }).observe(document.documentElement,{childList:true,subtree:true});
+})();

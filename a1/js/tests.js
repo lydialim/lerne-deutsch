@@ -502,6 +502,6 @@ const RULES=[
  ["W-Frage: Verb an Position 2","W-question: verb in position 2","Wo <b>wohnst</b> du?","Where live you? Question word first, then the verb.","wfrage"],
  ["mag, möchte, gern","like, would like, like doing","Ich <b>mag</b> Kaffee. · Ich <b>möchte</b> einen Kaffee. · Ich trinke <b>gern</b> Kaffee.","I like coffee (always). · I would-like a coffee (now). · I drink gladly coffee.","essverben"],
  ["nehmen, essen: e → i","only du and er/sie/es change","du <b>nimmst</b>, er <b>nimmt</b> · du <b>isst</b>, er <b>isst</b>","you take, he takes · you eat, he eats. ich nehme, ich esse stay.","essverben"],
- ["zum Frühstück · zu Mittag","for breakfast · at lunch","Was isst du <b>zum</b> Frühstück? · Ich esse um 12 Uhr <b>zu Mittag</b>.","What eat you for-the breakfast? · I eat at 12 (zwölf, tsvoelf) o'clock at midday.","mahlzeit"],
+ ["zum Frühstück · zu Mittag","for breakfast · at lunch","Was isst du <b>zum</b> Frühstück? · Ich esse um 12 Uhr <b>zu Mittag</b>.","What eat you for-the breakfast? · I eat at 12 (zwölf, tsvölf) o'clock at midday.","mahlzeit"],
  ["du-Form endet auf -st","du-form ends in -st","du wohn<b>st</b>, du lern<b>st</b>","you live, you learn","verbform"]
 ];

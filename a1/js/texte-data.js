@@ -19,7 +19,7 @@ const DIALOGS = [
       ["B", "Ich {v:möchte} einen {der:Kaffee}, bitte.", "I · would-like · a · coffee · please", "I would like a coffee, please."],
       ["A", "Gern. Sonst noch etwas?", "Gladly · otherwise · still · something", "Certainly. Anything else?"],
       ["B", "Ja, ein Stück {der:Kuchen}.", "Yes · a · piece · cake", "Yes, a piece of cake."],
-      ["A", "Das {v:macht} 5,80 Euro.", "That · makes · 5.80 · euro", "That is 5.80 euros.", "5,80 = fünf Euro achtzig (FUENF OY-ro AKH-tsikh)"],
+      ["A", "Das {v:macht} 5,80 Euro.", "That · makes · 5.80 · euro", "That is 5.80 euros.", "5,80 = fünf Euro achtzig (FÜNF OY-ro AKHT-tsikh)"],
       ["B", "Hier, bitte. Stimmt so.", "Here · please · is-correct · so", "Here you are. Keep the change."],
       ["A", "Danke schön! Auf Wiedersehen!", "Thanks · beautiful · on · seeing-again", "Thank you very much! Goodbye!"]
     ] },
@@ -29,7 +29,7 @@ const DIALOGS = [
       ["B", "Ja, ich {v:suche} ein {das:T-Shirt}.", "Yes · I · look-for · a · T-shirt", "Yes, I am looking for a T-shirt."],
       ["A", "Welche Größe?", "Which · size", "Which size?"],
       ["B", "Größe M, bitte.", "Size · M · please", "Size M, please."],
-      ["A", "Hier, bitte. Es {v:kostet} 15 Euro.", "Here · please · it · costs · 15 · euro", "Here you go. It costs 15 euros.", "15 = fünfzehn (FUENF-tsayn)"],
+      ["A", "Hier, bitte. Es {v:kostet} 15 Euro.", "Here · please · it · costs · 15 · euro", "Here you go. It costs 15 euros.", "15 = fünfzehn (FÜNF-tsayn)"],
       ["B", "Ich {v:nehme} es. {v:Kann} ich mit Karte {v:zahlen}?", "I · take · it · can · I · with · card · pay", "I'll take it. Can I pay by card?"],
       ["A", "Ja, natürlich.", "Yes · of-course", "Yes, of course."]
     ] },
@@ -47,7 +47,7 @@ const DIALOGS = [
       ["B", "Entschuldigung, wo {v:ist} der {der:Bahnhof}?", "Excuse-me · where · is · the · station", "Excuse me, where is the station?"],
       ["A", "{v:Gehen} Sie geradeaus, dann links.", "Go · you · straight · then · left", "Go straight on, then left."],
       ["B", "{v:Ist} es weit?", "Is · it · far", "Is it far?"],
-      ["A", "Nein, nur 5 Minuten.", "No · only · 5 · minutes", "No, only five minutes.", "5 = fünf (FUENF)"],
+      ["A", "Nein, nur 5 Minuten.", "No · only · 5 · minutes", "No, only five minutes.", "5 = fünf (FÜNF)"],
       ["B", "Vielen Dank!", "Many · thanks", "Thank you very much!"],
       ["A", "Gern geschehen!", "Gladly · happened", "You're welcome!"]
     ] }

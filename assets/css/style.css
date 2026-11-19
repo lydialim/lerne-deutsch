@@ -1353,3 +1353,5 @@ button.gx-chip{cursor:pointer}
 .gx-bt>span:first-child{font-weight:700}
 .gx-bt small{color:var(--muted)}
 .gx-basis .gx-note{margin:0}
+.gx-why{margin:6px 0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.gx .rule b{display:inline}.gx .rule>b:first-child{display:block}

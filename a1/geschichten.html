@@ -13,11 +13,11 @@
 <header id="site-header"></header>
 <main>
 <div class="cheathead"><h2>Geschichten <span class="en">(short stories)</span></h2>
-<p class="lead">Longer stories and short news reports in simple A1 German. <b>Tap any sentence</b> to see the English, the word-by-word gloss and to listen. Nouns have their gender colour: <span class="der">der</span> · <span class="die">die</span> · <span class="das">das</span> · <span class="plc">plural</span>.</p></div>
-<div class="storybar" role="group" aria-label="Anzeige (display)"><span>Anzeige <span class="en">(show)</span>:</span>
-  <button type="button" class="btn ghost" data-mode="en" aria-pressed="false">Englisch <span class="en">(English)</span></button>
-  <button type="button" class="btn ghost" data-mode="gl" aria-pressed="false">Wort für Wort <span class="en">(word by word)</span></button></div>
-<nav class="textnav" id="textnav" aria-label="Geschichten"></nav>
+<p class="lead">Longer stories and short news reports in simple A1 German. Tap a sentence to hear it. Nouns have their gender colour: <span class="der">der</span> · <span class="die">die</span> · <span class="das">das</span> · <span class="plc">plural</span>.</p></div>
+<div class="storybar">
+  <button type="button" class="tgl" id="trToggle" role="switch" aria-checked="false"><span class="knob" aria-hidden="true"></span><span class="tl">Übersetzung <span class="en">(translation)</span></span></button>
+  <select id="storyJump" aria-label="Zur Geschichte springen (jump to a story)"><option value="">Springe zu … (jump to)</option></select>
+</div>
 <div id="stories"></div>
 </main>
 <footer id="site-footer"></footer>

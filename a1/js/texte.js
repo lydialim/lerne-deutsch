@@ -12,7 +12,7 @@
   const CHIP = { der: "der", die: "die", das: "das", pl: "plc" };
   /* word-by-word: German words on the first line, the English word under each one */
   const ilg = (de, gl, show) => { const g = gl.split(" · "); return `<span class="ilg${show ? " show" : ""}">${de.split(/\s+/).map((t, i) => `<span class="iw"><span class="ig">${mark(t, false)}</span><span class="ie">${esc(g[i] || "")}</span></span>`).join("")}</span>`; };
-  const sentence = x => `<span class="s" role="button" tabindex="0" aria-expanded="false" data-say="${esc(plain(x[0]))}"><span class="sd">${mark(x[0], false)}</span>${ilg(x[0], x[1])}<span class="se en">${esc(x[2])}</span>${x[3] ? `<span class="sp pron">${esc(x[3])}</span>` : ""}</span>`;
+  const sentence = x => `<span class="s" role="button" tabindex="0" data-say="${esc(plain(x[0]))}"><span class="sd">${mark(x[0], false)}</span>${ilg(x[0], x[1])}<span class="se en">${esc(x[2])}</span>${x[3] ? `<span class="sp pron">${esc(x[3])}</span>` : ""}</span>`;
 
   function story(s) {
     const k = KIND[s.kind];
@@ -58,14 +58,19 @@
     const st = document.getElementById("stories"), dl = document.getElementById("dialogs");
     if (st) { st.innerHTML = STORIES.map(story).join(""); }
     if (dl) dl.innerHTML = DIALOGS.map(dialog).join("");
-    if (st) document.querySelector(".storybar")?.addEventListener("click", e => {
-      const b = e.target.closest("[data-mode]"); if (!b) return;
-      const on = st.classList.toggle("m-" + b.dataset.mode); b.setAttribute("aria-pressed", String(on)); b.classList.toggle("on", on);
-    });
+    if (st) {
+      const tg = document.getElementById("trToggle"), jump = document.getElementById("storyJump");
+      const setTr = on => { st.classList.toggle("tr", on); tg.setAttribute("aria-checked", String(on)); try { localStorage.setItem("a1:tr", on ? "1" : "0"); } catch (e) {} };
+      let saved = "0"; try { saved = localStorage.getItem("a1:tr") || "0"; } catch (e) {}
+      setTr(saved === "1");
+      tg.addEventListener("click", () => setTr(tg.getAttribute("aria-checked") !== "true"));
+      jump.innerHTML += STORIES.map(x => `<option value="${x.id}">${KIND[x.kind][0].slice(0, 2)} ${esc(x.title.replace(/^Nachrichten: /, ""))}</option>`).join("");
+      jump.addEventListener("change", () => { const t = document.getElementById(jump.value); if (t) { t.scrollIntoView({ behavior: "smooth", block: "start" }); history.replaceState(null, "", "#" + jump.value); } jump.value = ""; });
+    }
     const nav = document.getElementById("textnav");
-    if (nav) nav.innerHTML = (st ? STORIES : DIALOGS).map(x => `<a href="#${x.id}">${st ? KIND[x.kind][0] : x.emoji} ${esc(x.title.replace(/^Nachrichten: /, ""))}</a>`).join("");
+    if (nav && !st) nav.innerHTML = DIALOGS.map(x => `<a href="#${x.id}">${x.emoji} ${esc(x.title)}</a>`).join("");
     if (typeof addSpeakers === "function") addSpeakers(document);
-    const toggle = el => { const o = el.classList.toggle("open"); el.setAttribute("aria-expanded", String(o)); };
+    const toggle = el => { document.querySelectorAll(".s.open").forEach(x => x.classList.remove("open")); el.classList.add("open"); if (typeof speak === "function") speak(el.dataset.say); };
     document.addEventListener("keydown", e => { const el = e.target.closest && e.target.closest(".s"); if (el && (e.key === "Enter" || e.key === " ") && e.target === el) { e.preventDefault(); toggle(el); } });
     document.addEventListener("click", e => {
       const rd = e.target.closest("[data-read]"); if (rd) { readAloud(rd); return; }

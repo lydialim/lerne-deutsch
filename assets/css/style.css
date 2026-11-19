@@ -1355,3 +1355,6 @@ button.gx-chip{cursor:pointer}
 .gx-basis .gx-note{margin:0}
 .gx-why{margin:6px 0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 .gx .rule b{display:inline}.gx .rule>b:first-child{display:block}
+.gx-who{background:var(--paper);border-radius:8px;padding:8px 10px;font-size:14px}
+.gx-who summary{cursor:pointer;font-weight:700;min-height:36px;display:flex;align-items:center}
+.gx-who p{margin:6px 0}

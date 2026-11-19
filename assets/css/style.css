@@ -1420,3 +1420,5 @@ button.gx-chip{cursor:pointer}
   .scene .obj .w{font-size:14px;line-height:1.2;overflow-wrap:anywhere}
   .scene.tree .objs{grid-template-columns:1fr 1fr}
 }
+.gx-why{margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--ink);background:var(--card);border-radius:8px;padding:6px 10px}
+.ktipmore{display:inline-block;margin-left:4px;font-size:13px;font-weight:700;white-space:nowrap}

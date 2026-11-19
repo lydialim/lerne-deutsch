@@ -43,7 +43,7 @@
   const sem = $("gx-sem");
   if (sem) sem.innerHTML = ["m", "f", "n"].map((g, i) => { const rows = GX.semantic.filter(r => r[0] === g); return `
     <details class="gx-det ${G[g][0]}-bg"${i === 0 ? " open" : ""}><summary><b class="${G[g][0]}">${G[g][0]}</b> <span>${rows.length} groups</span></summary>
-    ${rows.map(r => `<div class="gx-sem"><div class="gx-st">${esc(r[1])}</div><div>${cz(r[2])}</div>${r[3] === "none common" || r[3] === "none" ? "" : `<div class="gx-exc"><span class="en">not:</span> ${cz(r[3])}</div>`}</div>`).join("")}</details>`; }).join("");
+    ${rows.map(r => `<div class="gx-sem"><div class="gx-st">${esc(r[1])}</div><div>${cz(r[2])}</div>${r[3] === "none common" || r[3] === "none" ? "" : `<div class="gx-exc"><span class="en">not:</span> ${cz(r[3])}</div>`}${r[4] ? `<p class="gx-why"><b>Warum? <span class="en">(why?)</span></b> ${esc(r[4])}</p>` : ""}</div>`).join("")}</details>`; }).join("");
 
   /* 4. same word, different gender */
   const tw = $("gx-twins");

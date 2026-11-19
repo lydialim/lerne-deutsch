@@ -400,6 +400,9 @@ const TESTS={
    return{prompt:`<span class="big">${PERS6[i][0]} ___</span><span class="en">${PERS6[i][1]} ${v==="sein"?"was / were":"had"} (${v} → past)</span>`,options:shuffle([ans,...shuffle([...new Set(f.filter(x=>x!==ans))]).slice(0,2)]),answer:ans,
     explain:`<b>${PERS6[i][0]} ${ans}</b>${EN(`${PERS6[i][1]} ${v==="sein"?(i===0||i===2?"was":"were"):"had"}`)}<br>${v}: ${f.map((x,j)=>`${PERS6[j][0]} <b>${x}</b>`).join(", ")}<br>Trick: ich and er/sie/es are the same (war, hatte), like modal verbs.`}}},
 
+ perfekt:{tag:"Perfekt",title:"Perfekt: haben oder sein?",en:"the spoken past: helper verb and ge- word",kind:"choice",
+  gen(){const x=pick(PERFEKT);return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${esc(x[0])}</span><span class="en">${esc(x[1])}</span>`,options:shuffle([x[2],x[3],x[4]]),answer:x[2],explain:`<b>${esc(x[0].replace("___",x[2]))}</b>${EN(esc(x[1]))}<br>${x[5]}<br>Trick: movement from A to B (gehen, fahren, kommen, fliegen) + bleiben → <b>sein</b>; everything else → <b>haben</b>.`}}},
+
  /* ---------- exam: reading and listening ---------- */
  lesenPruefung:{tag:"Prüfung · Lesen",title:"Lesen: richtig oder falsch?",en:"read short notes, signs and ads: true or false?",kind:"choice",
   gen(){const t=pick(LESEN);const s=pick(t.qs);const ans=s[2]?"richtig (true)":"falsch (false)";
@@ -479,7 +482,7 @@ const TESTS={
 const GROUPS=[
  ["Alles","everything",["mix"]],
  ["Wörter","words: vocabulary, articles, plural",["wortschatz","wortliste","bildwoerter","artikel","ein","plural","wortart","akkusativ","possessiv"],"Wörter","words"],
- ["Sätze","sentences: verbs, word order, questions",["verbform","dusie","warHatte","modal","satzart","satzbau","verbplatz","ordnen","umstellen","fehler","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
+ ["Sätze","sentences: verbs, word order, questions",["verbform","dusie","warHatte","perfekt","modal","satzart","satzbau","verbplatz","ordnen","umstellen","fehler","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
  ["Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
  ["Kalender","calendar",["kalender","datum","zeitpraep"],"Kalender","calendar"],
  ["Hören","listening (turn the sound on)",["hoerenZahl","hoerenUhr","hoerenPreis","hoerenTelefon","hoerenName","hoerenMail","hoerenPruefung"],"Hören","listening"],

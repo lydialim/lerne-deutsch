@@ -40,7 +40,7 @@ window.LEVEL = {
       ["l-articles", "2", "der, die, das", "the: gender"],
       ["l-ein", "3", "ein, eine, kein, mein", "a / an, not a, my"],
       ["l-plural", "4", "Singular und Plural", "one and many"],
-      ["l-verbs", "5", "Verben, du oder Sie, war und hatte", "verbs, you (formal / informal), was and had"],
+      ["l-verbs", "5", "Verben, du oder Sie, Vergangenheit", "verbs, you (formal / informal), the past: war, hatte, Perfekt"],
       ["l-w", "6", "Satzbau, W-Fragen, Modalverben", "word order, questions, modal verbs"],
       ["l-qa", "7", "Fragen, Antworten, längere Sätze", "questions, answers, longer sentences"],]],
     ["B", "Buchstaben & Zahlen", "letters & numbers", "zahlen.html", [

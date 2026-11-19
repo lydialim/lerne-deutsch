@@ -1055,3 +1055,25 @@ const THEMEN2=[
  ["der Bus","bus"],["die Straßenbahn","tram"],["die U-Bahn","underground"],["der Zug","train"],["das Flugzeug","aeroplane"],["der Bahnhof","station"],["die Haltestelle","bus stop"],["das Gleis","platform"],["die Fahrkarte","ticket"],["einfach","single (ticket)"],["hin und zurück","return (ticket)"],["die Verspätung","delay"],["die Abfahrt","departure"],["die Ankunft","arrival"],
  ["das Zimmer","room"],["das Einzelzimmer","single room"],["das Doppelzimmer","double room"],["der Schlüssel","key"],["das Frühstück","breakfast"],["die Rechnung","bill"],["der Brief","letter"],["die Briefmarke","stamp"],["das Paket","parcel"],["die Postkarte","postcard"],["der Absender","sender"],["der Empfänger","recipient"],["die Postleitzahl","postcode"]
 ];
+
+/* Perfekt (lesson 5): [sentence with ___, English, right, wrong, wrong, rule] */
+const PERFEKT=[
+ ["Ich ___ gestern Pizza gegessen.","I ate pizza yesterday.","habe","bin","hat","essen → <b>haben</b> + gegessen. Most verbs take haben."],
+ ["Wir ___ nach Berlin gefahren.","We went to Berlin.","sind","haben","seid","fahren = movement from A to B → <b>sein</b>: wir sind gefahren."],
+ ["Er ___ um 8 Uhr nach Hause gekommen.","He came home at 8 o'clock.","ist","hat","bin","kommen = movement → <b>sein</b>: er ist gekommen."],
+ ["___ du am Wochenende Fußball gespielt?","Did you play football at the weekend?","Hast","Bist","Hat","spielen → <b>haben</b>: du hast gespielt."],
+ ["Sie ___ zwei Wochen in Spanien geblieben.","She stayed in Spain for two weeks.","ist","hat","sind","bleiben is the exception: <b>sein</b> (sie ist geblieben)."],
+ ["Ich ___ den Film schon gesehen.","I have already seen the film.","habe","bin","hast","sehen → <b>haben</b>: ich habe gesehen."],
+ ["Wann ___ ihr nach München geflogen?","When did you (all) fly to Munich?","seid","habt","sind","fliegen = movement → <b>sein</b>: ihr seid geflogen."],
+ ["Ich habe gestern viel ___.","I worked a lot yesterday.","gearbeitet","gearbeiten","arbeitet","Regular: ge + arbeit + <b>et</b> (stem ends in -t → -et)."],
+ ["Was hast du zum Frühstück ___?","What did you eat for breakfast?","gegessen","geesst","gegesst","Irregular: essen → <b>gegessen</b>."],
+ ["Wir haben Kaffee ___.","We drank coffee.","getrunken","getrinkt","getrankt","Irregular: trinken → <b>getrunken</b> (i → u)."],
+ ["Ich habe im Supermarkt ___.","I went shopping at the supermarket.","eingekauft","geeinkauft","einkaufen","Separable: ein + <b>ge</b> + kauft → eingekauft."],
+ ["Er hat mich gestern ___.","He called me yesterday.","angerufen","gerufenan","angeruft","Separable: an + <b>ge</b> + rufen → angerufen."],
+ ["Ich habe mit meiner Mutter ___.","I talked to my mother on the phone.","telefoniert","getelefoniert","telefonieren","-ieren verbs have <b>no ge-</b>: telefoniert."],
+ ["Am Sonntag habe ich meine Oma ___.","On Sunday I visited my grandma.","besucht","gebesucht","besuchen","be- verbs have <b>no ge-</b>: besucht."],
+ ["Ich bin heute um 6 Uhr ___.","I got up at 6 o'clock today.","aufgestanden","gestandenauf","aufgesteht","aufstehen → <b>bin aufgestanden</b> (sein, separable)."],
+ ["Gestern ___ ich krank.","Yesterday I was ill.","war","habe gewesen","bin","For sein use <b>war</b>, not \"habe gewesen\"."],
+ ["Letzte Woche ___ ich keine Zeit.","Last week I had no time.","hatte","habe gehabt","war","For haben you usually say <b>hatte</b>."],
+ ["Habt ihr das Buch ___?","Have you (all) read the book?","gelesen","gelest","geliest","Irregular: lesen → <b>gelesen</b>."]
+];

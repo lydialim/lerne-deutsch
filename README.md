@@ -38,7 +38,7 @@ lerne-deutsch/
 │       └── speech.js         reads German aloud (🔊 buttons, listening tests, voice picker)
 └── a1/
     ├── index.html            overview of all A1 lessons
-    ├── grammatik.html        Teil A · lessons 1–7 (incl. mein/dein, du or Sie, war/hatte, modal verbs, longer sentences)
+    ├── grammatik.html        Teil A · lessons 1–7 (incl. mein/dein, du or Sie, war/hatte, Perfekt, modal verbs, imperative, longer sentences)
     ├── zahlen.html           Teil B · lessons 8–9 (incl. time, prices, calendar)
     ├── themen.html           Teil C · lessons 10–22 (food, family, flat, countries, weather, body and doctor, clothes, transport, hotel and post)
     ├── pruefung.html         Teil D · lesson 23 (the exam, listening and reading), writing checker, speaking practice, study tips

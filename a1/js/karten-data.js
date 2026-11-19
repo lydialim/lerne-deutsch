@@ -513,6 +513,22 @@ const GENUS_TIP = (() => {
   const FALSE = {
     kuchen: '⚠️ Looks like a -chen word, but here -chen is not the "small" ending (Ku-chen = cake). So it is <b class="der">der</b> Kuchen.'
   };
+  /* meaning groups from Deutsch entdecken (GX.semantic in genus-data.js, loaded on the card page):
+     word (lower case) → {label, exp (article of the group), exc (true = listed as an exception), why} */
+  const G2A = { m: "der", f: "die", n: "das" };
+  let groups = null;
+  const groupIndex = () => {
+    if (groups) return groups;
+    groups = new Map();
+    if (typeof GX === "undefined" || !GX.semantic) return groups;
+    const words = t => [...String(t).matchAll(/\b(?:der|die|das)\s+([A-ZÄÖÜ][\wäöüß-]+)/g)].map(m => m[1].toLowerCase());
+    GX.semantic.forEach(([g, label, ex, exc, why]) => {
+      words(ex).forEach(w => groups.has(w) || groups.set(w, { label, exp: G2A[g], exc: false, why }));
+      words(exc).forEach(w => groups.set(w, { label, exp: G2A[g], exc: true, why }));
+    });
+    return groups;
+  };
+  const more = (anchor, txt) => ` <a class="ktipmore" href="entdecken.html#${anchor}">${txt} →</a>`;
   const say = (art, w, exp, label, how) => art === exp
     ? `💡 ${label} → ${how} ${A[exp]}.`
     : `⚠️ ${label} → ${how} ${A[exp]}, but ${A[art]} ${w} is an exception. Learn it by heart!`;
@@ -520,24 +536,34 @@ const GENUS_TIP = (() => {
     const art = it.art, w = it.word || "", lw = w.toLowerCase(), eng = (it.eng || "").toLowerCase();
     if (!A[art] || it.plural) return "";
     if (FALSE[lw]) return FALSE[lw];
+    const grp = groupIndex().get(lw);
     /* 1. compound: the last part decides */
     let best = null;
     nounList().forEach(([a, part], k) => { if (k !== lw && lw.endsWith(k) && lw.length - k.length >= 2 && (!best || k.length > best[1].length)) best = [a, part]; });
     if (best && /^(apotheke|mittag)$/.test(lw)) best = null; /* look like compounds, but are not */
-    if (best && best[0] === art) return `💡 Two words in one: the <b>last</b> part decides. ${w.slice(0, w.length - best[1].length)} + ${A[art]} ${best[1]} → ${A[art]} ${w}.`;
+    if (best && best[0] === art) return `💡 Two words in one: the <b>last</b> part decides. ${w.slice(0, w.length - best[1].length)} + ${A[art]} ${best[1]} → ${A[art]} ${w}.` + more("g-mehr", "Komposita");
     /* 2. a verb used as a noun is always das (das Einkaufen, das Lesen) */
     if (art === "das" && /(en|ern|eln)$/.test(lw) && /ing\b/.test(eng)) return `💡 A verb used as a noun (${lw}) → always ${A.das}.`;
     /* 3. reliable endings */
-    for (const [re, exp, lab, , how] of ENDINGS) if (re.test(lw)) return say(art, w, exp, `Ends in <b>${lab}</b>`, how);
+    for (const [re, exp, lab, , how] of ENDINGS) if (re.test(lw)) return say(art, w, exp, `Ends in <b>${lab}</b>`, how)
+      + (grp && grp.exp !== art ? ` The ending wins over the meaning (${grp.label.toLowerCase()} would be ${A[grp.exp]}).` : "") + more("g-endungen", "Endungen");
+    /* exception to a meaning group: explain why (Deutsch entdecken), or show the ending that wins */
+    if (grp && grp.exc && art !== grp.exp) {
+      const end = WEAK.find(([re, exp]) => re.test(lw) && exp === art);
+      const why = grp.why ? ` <i>Why?</i> ${grp.why}` : end ? ` <i>Why?</i> It ends in <b>${end[2]}</b>, and the ending wins over the meaning.` : " Learn it by heart!";
+      return `⚠️ Group <b>${grp.label}</b> → usually ${A[grp.exp]}, but ${A[art]} ${w} is an exception.${why}` + more("g-gruppen", "Bedeutungsgruppen");
+    }
+    /* meaning group from Deutsch entdecken (word listed as an example) */
+    if (grp && !grp.exc) return say(art, w, grp.exp, `Group <b>${grp.label}</b>`, "usually") + more("g-gruppen", "Bedeutungsgruppen");
     /* 4. meaning groups */
     if (/^(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag|januar|februar|märz|april|mai|juni|juli|august|september|oktober|november|dezember|frühling|sommer|herbst|winter|morgen|mittag|abend)$/.test(lw))
-      return say(art, w, "der", "Days, months, seasons and times of day", "always");
-    if (/\b(male|father|brother|son|uncle|grandfather|husband|man|boy|grandpa)\b|\(m\)/.test(eng) && !/female/.test(eng)) return say(art, w, "der", "A man or boy", "always");
-    if (/\b(female|mother|sister|daughter|aunt|grandmother|wife|woman|grandma)\b|\(f\)/.test(eng)) return say(art, w, "die", "A woman (jobs add -in)", "always");
-    if (/^(regen|schnee|wind|nebel|sturm|hagel|frost|donner|blitz)$/.test(lw)) return say(art, w, "der", "Weather words", "usually");
-    if (catDe === "Getränke" && !/a$/.test(lw)) return say(art, w, "der", "Drinks", "mostly");
+      return say(art, w, "der", "Group <b>Days, months, seasons and times of day</b>", "always") + more("g-gruppen", "Bedeutungsgruppen");
+    if (/\b(male|father|brother|son|uncle|grandfather|husband|man|boy|grandpa)\b|\(m\)/.test(eng) && !/female/.test(eng)) return say(art, w, "der", "Group <b>A man or boy</b>", "always") + more("g-gruppen", "Bedeutungsgruppen");
+    if (/\b(female|mother|sister|daughter|aunt|grandmother|wife|woman|grandma)\b|\(f\)/.test(eng)) return say(art, w, "die", "Group <b>A woman (jobs add -in)</b>", "always") + more("g-gruppen", "Bedeutungsgruppen");
+    if (/^(regen|schnee|wind|nebel|sturm|hagel|frost|donner|blitz)$/.test(lw)) return say(art, w, "der", "Group <b>Weather words</b>", "usually") + more("g-gruppen", "Bedeutungsgruppen");
+    if (catDe === "Getränke" && !/a$/.test(lw)) return say(art, w, "der", "Group <b>Drinks (wine, coffee, tea, juice)</b>", "mostly") + more("g-gruppen", "Bedeutungsgruppen");
     /* 5. weaker endings */
-    for (const [re, exp, lab, , how] of WEAK) if (re.test(lw)) return say(art, w, exp, `Ends in <b>${lab}</b>`, how);
+    for (const [re, exp, lab, , how] of WEAK) if (re.test(lw)) return say(art, w, exp, `Ends in <b>${lab}</b>`, how) + more("g-endungen", "Endungen");
     return `💡 No easy rule for this one: learn it as one word, ${A[art]} ${w}.`;
   };
 })();

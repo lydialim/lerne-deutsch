@@ -121,6 +121,9 @@ const VOCAB=[
  ["die","Geschwister","Geschwister","brothers and sisters (siblings)","familie","Plural only: die Geschwister = all your brothers and sisters."],
  ["der","Urgroßvater","Urgroßväter","great-grandfather","familie","Ur- = great-: Ur-groß-vater = great-grand-father."],["die","Urgroßmutter","Urgroßmütter","great-grandmother","familie","Ur- = great-: Ur-groß-mutter = great-grand-mother."],
  ["der","Stiefbruder","Stiefbrüder","stepbrother","familie"],["die","Stiefschwester","Stiefschwestern","stepsister","familie"],
+ ["der","Halbbruder","Halbbrüder","half brother","familie","Halb- = half: same mother OR same father."],["die","Halbschwester","Halbschwestern","half sister","familie","Halb- = half: same mother OR same father."],
+ ["der","Neffe","Neffen","nephew","familie","Your brother's or sister's son."],["die","Nichte","Nichten","niece","familie","Your brother's or sister's daughter."],
+ ["der","Stammbaum","Stammbäume","family tree","familie","der Stamm = trunk + der Baum = tree."],
  ["der","Schwiegervater","Schwiegerväter","father-in-law","familie"],["die","Schwiegermutter","Schwiegermütter","mother-in-law","familie"],
 
  ["die","Wohnung","Wohnungen","flat / apartment","wohnung"],["das","Haus","Häuser","house","wohnung"],["das","Zimmer","Zimmer","room","wohnung"],["das","Wohnzimmer","Wohnzimmer","living room","wohnung"],

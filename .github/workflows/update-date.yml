@@ -1,10 +1,11 @@
-# Keeps the footer "last updated" date (UPDATED in assets/js/layout.js) in step with every push to main.
-name: Update footer date
+# On every push to main:
+# 1. keeps the footer "last updated" date (UPDATED in assets/js/layout.js) in step;
+# 2. stamps a new cache version (?v=YYYYMMDDHHMM) on every CSS and JS link in the pages,
+#    so phones load the new files at once instead of an old saved copy.
+name: Update footer date and cache version
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - "assets/js/layout.js"
 permissions:
   contents: write
 jobs:
@@ -17,10 +18,14 @@ jobs:
         run: |
           today=$(TZ=Europe/Berlin date +%F)
           sed -i -E "s/const UPDATED = \"[0-9]{4}-[0-9]{2}-[0-9]{2}\";/const UPDATED = \"${today}\";/" assets/js/layout.js
+      - name: Stamp a new cache version on CSS and JS links
+        run: |
+          stamp=$(TZ=Europe/Berlin date +%Y%m%d%H%M)
+          sed -i -E "s/\?v=[0-9]+\"/?v=${stamp}\"/g" *.html */*.html
       - name: Commit if changed
         run: |
           git diff --quiet && exit 0
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "Update footer date [skip ci]"
+          git commit -am "Update footer date and cache version [skip ci]"
           git push

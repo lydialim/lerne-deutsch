@@ -1,4 +1,4 @@
-/* Renders genus.html from GX (genus-data.js). */
+/* Renders entdecken.html (topic 1) from GX (genus-data.js). */
 (function () {
   const G = { m: ["der", "der", "masculine"], f: ["die", "die", "feminine"], n: ["das", "das", "neuter"] };
   const $ = id => document.getElementById(id);

@@ -1300,3 +1300,5 @@ button.gx-chip{cursor:pointer}
 .tgl[aria-checked=true] .knob::after{transform:translateX(12px)}
 #storyJump{flex:1;min-width:0;min-height:44px;border:1.5px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:inherit;font-size:15px;padding:0 12px}
 @media(max-width:420px){.tgl .tl .en{display:none}}
+.gx-topic{display:flex;gap:10px;align-items:center;margin:14px 0 0;font-size:clamp(20px,5vw,26px)}
+.gx-tn{flex:none;width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:17px}

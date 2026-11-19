@@ -1,4 +1,4 @@
-/* Data for genus.html (how German assigns der / die / das).
+/* Data for entdecken.html, topic 1 (how German assigns der / die / das).
    Endings: [ending, gender m|f|n, strength rule|strong|tendency, a1 (1 = core for A1), examples, exceptions]
    Checked against Wikipedia "Grammatical gender in German", Duden online and standard grammars (see the sources box on the page). */
 const GX = {

@@ -9,7 +9,7 @@
   const parts = L.parts || [];
   const onPartPage = parts.some(p => p[3] === here);
   /* pages reached through the "Mehr" tab of the bottom bar */
-  const MORE_PAGES = ["spickzettel.html", "entdecken.html", "geschichten.html", "dialoge.html", "buchseiten.html"];
+  const MORE_PAGES = ["spickzettel.html", "geschichten.html", "dialoge.html", "buchseiten.html"];
   const onMorePage = MORE_PAGES.includes(here);
   const ICON = {
     home: '<path d="M4 11.5 12 5l8 6.5V20h-5v-5H9v5H4z"/>',
@@ -70,8 +70,7 @@
         ls.map(([id, n, lde, len]) => `<a class="litem" href="${page === here ? "" : page}#${id}" data-id="${id}"><span class="n">${n}</span><span class="t"><b>${lde}</b><small>${len}</small></span></a>`).join("") + `</div>`).join("")}
       </div>
       <div class="sheetmore">
-        ${[["Entdecken", "discover", [["entdecken.html", "target", "Deutsch entdecken", "language facts"]]],
-           ["Lesen & Sprechen", "read & speak", [["geschichten.html", "book", "Geschichten", "stories & news"], ["dialoge.html", "cards", "Dialoge", "typical conversations"]]],
+        ${[["Lesen & Sprechen", "read & speak", [["geschichten.html", "book", "Geschichten", "stories & news"], ["dialoge.html", "cards", "Dialoge", "typical conversations"]]],
            ["Nachschlagen", "look up", [["spickzettel.html", "note", "Spickzettel", "cheat sheet"], ["buchseiten.html", "book", "Buchseiten", "workbook pages"]]],
            ["Üben", "practise", [["karten.html", "cards", "Bildkarten", "picture cards"], ["tests.html", "target", "Alle Tests", "all tests"]]],
            ["Hilfe", "help", [["../einrichtung.html", "menu", "Stimme & Mikrofon", "voice & microphone setup"]]]].map(([de, en, items]) => `<div class="mgroup"><h3>${de} <span>(${en})</span></h3>${

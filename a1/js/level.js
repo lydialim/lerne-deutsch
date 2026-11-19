@@ -25,6 +25,17 @@ window.LEVEL = {
   /* Lesson menu (bottom sheet on phones). Keep in step with the lessons on each page:
      [letter, German, English, page, [[section id, number, German, English], …]] */
   parts: [
+    ["E", "Entdecken", "discover German", "entdecken.html", [
+      ["g-bild", "📊", "Wie oft?", "how common is each gender"],
+      ["g-detektiv", "🔎", "Artikel-Detektiv", "six steps to find the article"],
+      ["g-endungen", "🔤", "Endungen", "endings that give the gender away"],
+      ["g-gruppen", "🧩", "Bedeutungsgruppen", "meaning groups"],
+      ["g-doppel", "👯", "Gleiches Wort, anderer Artikel", "same word, different gender"],
+      ["g-mehr", "🔗", "Zusammengesetzte und fremde Wörter", "compounds and loanwords"],
+      ["g-kasus", "⚖️", "Fälle", "the article changes with the case"],
+      ["g-geschichte", "🕰️", "Woher kommen drei Genera?", "where the three genders came from"],
+      ["g-fakten", "💡", "Gut zu wissen", "good to know"],
+      ["g-tipps", "🧠", "So lernst du es", "how to learn it"]]],
     ["A", "Grammatik", "grammar", "grammatik.html", [
       ["l-types", "1", "Wortarten", "word types"],
       ["l-articles", "2", "der, die, das", "the: gender"],

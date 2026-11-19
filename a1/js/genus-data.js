@@ -37,7 +37,7 @@ const GX = {
     ["-um","n","strong",1,"das Museum · das Zentrum · das Studium","der Konsum · der Baum · der Raum (-aum is masculine)"],
     ["-tum","n","strong",0,"das Eigentum · das Christentum","der Irrtum · der Reichtum"],
     ["-ma","n","strong",0,"das Thema · das Klima · das Drama","die Firma"],
-    ["-o","n","strong",1,"das Auto · das Kino · das Radio","der Euro · der Zoo · die Avocado"],
+    ["-o","n","tendency",1,"das Auto · das Kino · das Radio","der Euro · der Zoo · die Avocado"],
     ["-nis","n","tendency",0,"das Ergebnis · das Zeugnis · das Geheimnis","die Erlaubnis · die Kenntnis · die Wildnis"],
     ["Ge- prefix","n","tendency",0,"das Gebäude · das Gebirge · das Gemüse","der Gedanke · der Geschmack · die Geduld · die Gefahr"]
   ],
@@ -48,7 +48,7 @@ const GX = {
     ["-ismus · -ling","m",100,"rule"],
     ["-e","f",90,"about 88–90 % feminine"],
     ["-er","m",85,"about 85 % masculine"],
-    ["-en","m",80,"no feminine noun ends in -en"],
+    ["-en","m",80,"almost no feminine noun ends in -en"],
     ["one syllable","m",67,"about two in three"],
     ["-el","m",60,"a good bet"]
   ],
@@ -61,7 +61,7 @@ const GX = {
     ["m","Male people and animals","der Vater · der Hahn · der Stier","none common"],
     ["f","Trees and flowers (most)","die Eiche · die Rose · die Tulpe","der Ahorn · der Flieder"],
     ["f","Numbers as nouns","die Eins · die Sieben · die Million","das Hundert · das Tausend"],
-    ["f","Ships, planes, motorbikes","die Titanic · die Boeing · die Harley","none common"],
+    ["f","Ships, most planes, motorbikes","die Titanic · die Boeing · die Harley","der Airbus · der Jumbo"],
     ["f","Most German rivers","die Elbe · die Donau · die Isar","der Rhein · der Main · der Neckar"],
     ["f","Female people and animals","die Mutter · die Kuh · die Henne","das Mädchen · das Fräulein (suffix wins)"],
     ["n","Young people and animals","das Kind · das Baby · das Kalb","none common"],
@@ -75,24 +75,25 @@ const GX = {
   ],
   /* same word, different gender: [word, [[gender, meaning, example?], …]] */
   twins: [
-    ["See",[["m","lake"],["f","sea"]]],
-    ["Leiter",[["m","manager, leader"],["f","ladder"]]],
-    ["Kiefer",[["m","jaw"],["f","pine tree"]]],
-    ["Band",[["m","volume (of a book)"],["f","band (music)"],["n","ribbon"]]],
-    ["Steuer",[["f","tax"],["n","steering wheel"]]],
-    ["Tor",[["m","fool (old)"],["n","gate; goal"]]],
-    ["Moment",[["m","instant"],["n","factor"]]],
-    ["Gehalt",[["m","content"],["n","salary"]]],
-    ["Mark",[["f","old German currency"],["n","marrow"]]],
-    ["Teil",[["m","part of a whole"],["n","piece, component"]]]
+    ["See",[["m","der See","lake","die Seen"],["f","die See","sea",""]]],
+    ["Leiter",[["m","der Leiter","manager, head","die Leiter"],["f","die Leiter","ladder","die Leitern"]]],
+    ["Kiefer",[["m","der Kiefer","jaw","die Kiefer"],["f","die Kiefer","pine tree","die Kiefern"]]],
+    ["Band",[["m","der Band","volume (of a book)","die Bände"],["f","die Band","music band","die Bands"],["n","das Band","ribbon, tape","die Bänder"]]],
+    ["Steuer",[["f","die Steuer","tax","die Steuern"],["n","das Steuer","steering wheel","die Steuer"]]],
+    ["Tor",[["m","der Tor","fool (rare, literary)","die Toren"],["n","das Tor","gate; goal","die Tore"]]],
+    ["Moment",[["m","der Moment","moment, instant","die Momente"],["n","das Moment","factor, aspect","die Momente"]]],
+    ["Gehalt",[["m","der Gehalt","content (e.g. Alkoholgehalt)","die Gehalte"],["n","das Gehalt","salary","die Gehälter"]]],
+    ["Mark",[["f","die Mark","old German currency",""],["n","das Mark","bone marrow",""]]],
+    ["Teil",[["m","der Teil","part of a whole","die Teile"],["n","das Teil","piece, component","die Teile"]]]
   ],
+
   /* regional: [word, standard, variant, where] */
   regional: [
-    ["Cola","das Cola or die Cola","both are listed as correct","die: more in the north · das: more in the south, Austria, Switzerland"],
-    ["Butter","die Butter","der Butter","southern Germany, Austria, Switzerland"],
-    ["Joghurt","der Joghurt","das Joghurt","Austria, parts of Germany"],
+    ["Cola","das Cola","die Cola","both are correct (Duden lists both); usage varies by region and speaker"],
+    ["Butter","die Butter","der Butter","der Butter is regional: southern Germany, Austria, Switzerland. Standard is die Butter."],
+    ["Joghurt","der Joghurt","das Joghurt","both are correct"],
     ["Virus","das Virus","der Virus","everyday speech"],
-    ["E-Mail","die E-Mail","das E-Mail","Austria, Switzerland"],
+    ["E-Mail","die E-Mail","das E-Mail","das E-Mail is also heard in Austria and Switzerland. Standard is die E-Mail."],
     ["Radio","das Radio","der Radio","Switzerland"],
     ["Teller","der Teller","das Teller","Swiss dialects"]
   ],

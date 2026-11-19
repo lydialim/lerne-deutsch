@@ -49,7 +49,7 @@
   const tw = $("gx-twins");
   if (tw) tw.innerHTML = GX.twins.map(t => `
     <div class="gx-twin"><h4>${esc(t[0])}</h4>${t[1].map(x =>
-      `<div class="gx-tl ${G[x[0]][0]}-bg"><b class="${G[x[0]][0]}">${G[x[0]][0]}</b> ${esc(x[1])}</div>`).join("")}</div>`).join("");
+      `<div class="gx-tl ${G[x[0]][0]}-bg"><b class="${G[x[0]][0]}">${esc(x[1])}</b><span class="gx-mean">${esc(x[2])}</span>${x[3] ? `<span class="gx-pl">pl. <b class="plc">${esc(x[3])}</b></span>` : ""}</div>`).join("")}</div>`).join("");
 
   /* 5. regional variants */
   const rg = $("gx-regional");

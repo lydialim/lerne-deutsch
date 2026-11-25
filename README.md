@@ -26,6 +26,7 @@ Live site: https://lydialim.github.io/lerne-deutsch/
 ```
 lerne-deutsch/
 ├── README.md
+├── CHANGELOG.md              what changed on the site, by date
 ├── index.html                landing page: choose a level
 ├── einrichtung.html          standalone voice and microphone setup page (detects the device, tests voice and mic); not part of any level menu
 ├── assets/                   shared by every level

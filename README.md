@@ -44,7 +44,7 @@ lerne-deutsch/
     ├── themen.html           Teil C · lessons 10–22 (food, family, flat, countries, weather, body and doctor, clothes, transport, hotel and post)
     ├── pruefung.html         Teil D · lesson 23 (the exam, listening and reading), writing checker, speaking practice, study tips
     ├── spickzettel.html      cheat sheet
-    ├── entdecken.html         "Deutsch entdecken": interesting facts about the language, one topic at a time. Topic 1: how German assigns der / die / das (js/genus-data.js, js/genus.js)
+    ├── entdecken.html         "Deutsch entdecken": interesting facts about the language, one topic at a time. Topic 1: how German assigns der / die / das (js/genus-data.js, js/genus.js). Topic 2: fun facts (countries, ß and umlauts, pronunciation, numbers, English cousins, loanwords, word order, history)
     ├── geschichten.html      nine longer stories and news reports with one illustration each (js/stories-data.js, js/stories-art.js, rendered by js/texte.js)
     ├── dialoge.html          five typical conversations with role-play mode (same renderer)
     ├── buchseiten.html       workbook pages: look up a page, jump to the matching lesson and test

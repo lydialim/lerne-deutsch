@@ -298,6 +298,9 @@ const GERN=[
  ["Wir kochen gern zusammen.","Wir gern kochen zusammen.","Wir kocht gern zusammen.","We like cooking together."],
  ["Sie fährt gern Auto.","Sie fahrt gern Auto.","Sie gern fährt Auto.","She likes driving."],
  ["Ich trinke lieber Tee.","Ich lieber trinke Tee.","Ich trinke Tee lieber gern.","I prefer drinking tea."],
+ ["Ich klettere gern.","Ich gern klettere.","Ich klettern gern.","I like climbing."],
+ ["Am Wochenende gehe ich wandern.","Am Wochenende ich gehe wandern.","Am Wochenende gehe ich wandere.","At the weekend I go hiking."],
+ ["Fährst du gern Rad?","Fahrst du gern Rad?","Fährst gern du Rad?","Do you like cycling?"],
  ["Spielt ihr gern Karten?","Ihr gern spielt Karten?","Spielen ihr gern Karten?","Do you (all) like playing cards?"],
  ["Mein Bruder schwimmt nicht gern.","Mein Bruder nicht gern schwimmt.","Mein Bruder schwimmen nicht gern.","My brother doesn't like swimming."],
  ["Am Abend sieht er gern fern.","Am Abend er sieht gern fern.","Am Abend sieht er gern fernsehen.","In the evening he likes watching TV."],
@@ -1076,4 +1079,59 @@ const PERFEKT=[
  ["Gestern ___ ich krank.","Yesterday I was ill.","war","habe gewesen","bin","For sein use <b>war</b>, not \"habe gewesen\"."],
  ["Letzte Woche ___ ich keine Zeit.","Last week I had no time.","hatte","habe gehabt","war","For haben you usually say <b>hatte</b>."],
  ["Habt ihr das Buch ___?","Have you (all) read the book?","gelesen","gelest","geliest","Irregular: lesen → <b>gelesen</b>."]
+];
+
+/* separable / inseparable verbs (Kapitel 5, p. 65)
+   TRENNVERB: [verb as written in the dictionary, English, separable?, example]
+   TRENNGAP: [sentence with ___, English, answer, [wrong, wrong], explanation]
+   TRENNORD: [right, wrong, wrong, English, explanation] */
+const TRENNVERB=[
+ ["abholen","to pick up",true,"Ich hole dich ab."],["einladen","to invite",true,"Ich lade dich ein."],
+ ["anfangen","to start",true,"Der Kurs fängt an."],["mitbringen","to bring along",true,"Bringst du Kuchen mit?"],
+ ["mitkommen","to come along",true,"Kommst du mit?"],["aufstehen","to get up",true,"Ich stehe um 7 Uhr auf."],
+ ["einkaufen","to go shopping",true,"Wir kaufen ein."],["anrufen","to phone",true,"Ich rufe dich an."],
+ ["fernsehen","to watch TV",true,"Er sieht fern."],["aufräumen","to tidy up",true,"Ich räume auf."],
+ ["besuchen","to visit",false,"Ich besuche meine Oma."],["bezahlen","to pay",false,"Ich bezahle mit Karte."],
+ ["bekommen","to get, receive",false,"Ich bekomme eine E-Mail."],["verstehen","to understand",false,"Ich verstehe das nicht."],
+ ["vergessen","to forget",false,"Er vergisst den Termin."],["erklären","to explain",false,"Sie erklärt die Regel."],
+ ["erzählen","to tell",false,"Er erzählt eine Geschichte."],["entschuldigen","to excuse",false,"Entschuldigen Sie!"]
+];
+const TRENNGAP=[
+ ["Ich ___ dich um 8 Uhr ab.","I'll pick you up at 8 (acht, akht) o'clock.","hole",["abhole","holst"],"ab|holen splits: <b>hole</b> in place 2, <b>ab</b> at the end."],
+ ["Der Kurs ___ um 18:15 Uhr an.","The course starts at 18:15 (AKHT-tsayn oor FÜNF-tsayn).","fängt",["anfängt","fangt"],"an|fangen: er <b>fängt</b> … an (a → ä)."],
+ ["Ich lade dich zum Geburtstag ___.","I invite you to my birthday.","ein",["an","mit"],"ein|laden: the prefix <b>ein</b> goes to the end."],
+ ["Bringst du bitte Getränke ___?","Can you bring drinks, please?","mit",["ein","ab"],"mit|bringen = to bring <b>along</b>."],
+ ["Kommst du am Samstag ___?","Are you coming along on Saturday?","mit",["an","auf"],"mit|kommen = to come <b>along</b>."],
+ ["Er ___ seine Freundin zum Essen ein.","He invites his girlfriend for dinner.","lädt",["ladet","einlädt"],"ein|laden: du lädst, er <b>lädt</b> (a → ä)."],
+ ["Wann ___ du morgen auf?","When do you get up tomorrow?","stehst",["aufstehst","steht"],"W-question: W-word 1, <b>stehst</b> 2, <b>auf</b> at the end."],
+ ["Ich ___ meine Oma am Sonntag.","I visit my grandma on Sunday.","besuche",["suche","suche be"],"<b>be</b>suchen is inseparable: it stays in one piece."],
+ ["Ich ___ das nicht.","I don't understand that.","verstehe",["stehe","stehe ver"],"<b>ver</b>stehen is inseparable: <b>verstehe</b> in place 2."],
+ ["Kann ich mit Karte ___?","Can I pay by card?","bezahlen",["zahlen be","bezahle"],"Modal verb + infinitive at the end: <b>bezahlen</b>."],
+ ["Kannst du mich am Bahnhof ___?","Can you pick me up at the station?","abholen",["holen ab","abholst"],"With a modal verb the separable verb stays in <b>one piece</b> at the end."],
+ ["Ich muss heute ___.","I have to go shopping today.","einkaufen",["kaufen ein","einkaufe"],"Modal + separable: <b>einkaufen</b> in one piece at the end."]
+];
+const TRENNORD=[
+ ["Ich hole dich um 8 Uhr ab.","Ich abhole dich um 8 Uhr.","Ich hole ab dich um 8 Uhr.","I'll pick you up at 8 (acht, akht) o'clock.","Statement: <b>hole</b> in place 2, <b>ab</b> at the very end."],
+ ["Der Film fängt um 20 Uhr an.","Der Film anfängt um 20 Uhr.","Der Film fängt an um 20 Uhr.","The film starts at 20:00 (zwanzig Uhr, TSVAN-tsikh oor).","The prefix <b>an</b> waits until the end of the sentence."],
+ ["Kommst du heute Abend mit?","Mitkommst du heute Abend?","Kommst mit du heute Abend?","Are you coming along tonight?","Yes/no question: verb 1st, <b>mit</b> at the end."],
+ ["Ich möchte dich einladen.","Ich möchte dich laden ein.","Ich einladen möchte dich.","I would like to invite you.","Modal verb 2nd, <b>einladen</b> in one piece at the end."],
+ ["Kannst du Kuchen mitbringen?","Kannst du Kuchen bringen mit?","Kannst mitbringen du Kuchen?","Can you bring cake?","Modal first (question), <b>mitbringen</b> together at the end."],
+ ["Ich besuche am Sonntag meine Oma.","Ich suche am Sonntag meine Oma be.","Ich besuche meine Oma am Sonntag be.","I visit my grandma on Sunday.","<b>be-</b> is glued on: besuchen never splits."],
+ ["Wann fängt der Kurs an?","Wann anfängt der Kurs?","Wann fängt an der Kurs?","When does the course start?","W-question: W-word 1, <b>fängt</b> 2, <b>an</b> at the end."],
+ ["Er lädt seine Freunde ein.","Er einlädt seine Freunde.","Er ladet seine Freunde ein.","He invites his friends.","er <b>lädt</b> (a → ä), <b>ein</b> at the end."]
+];
+/* free time: im / ins and activity verbs [sentence with ___, English, answer, [wrong, wrong], explanation] */
+const FREIZEIT=[
+ ["Wir gehen heute ___ Kino.","We're going to the cinema today.","ins",["im","in der"],"Wohin? (where to) + <span class=\"das\">das</span> Kino → <b>ins</b> (= in das)."],
+ ["Der Film läuft ___ Kino.","The film is on at the cinema.","im",["ins","in die"],"Wo? (where) + <span class=\"das\">das</span> Kino → <b>im</b> (= in dem)."],
+ ["Ich schwimme gern ___ Schwimmbad.","I like swimming in the pool.","im",["ins","in die"],"Wo? → <b>im</b> Schwimmbad (das)."],
+ ["Gehst du mit ___ Schwimmbad?","Are you coming to the pool?","ins",["im","in der"],"Wohin? → <b>ins</b> Schwimmbad (das)."],
+ ["Ich jogge ___ Park.","I jog in the park.","im",["ins","in den"],"Wo? <span class=\"der\">der</span> Park → <b>im</b> Park."],
+ ["Wir gehen ___ Park.","We're going to the park.","in den",["ins","im"],"Wohin? <span class=\"der\">der</span> Park → <b>in den</b> Park. ins is only for das words."],
+ ["Am Sonntag gehen wir ___.","On Sunday we go hiking.","wandern",["wandert","wandere"],"gehen + 2nd verb in the infinitive at the end: gehen wir <b>wandern</b>."],
+ ["Ich ___ gern.","I like climbing.","klettere",["klettert","klettern"],"klettern: ich <b>klettere</b>, du kletterst, er klettert."],
+ ["___ du gern Rad?","Do you like cycling?","Fährst",["Fahrst","Fährt"],"fahren: du <b>fährst</b> (a → ä). Rad fahren = Fahrrad fahren."],
+ ["Er ___ gern Fußball.","He likes playing football.","spielt",["spielst","spiele"],"er/sie/es → -t: er <b>spielt</b>."],
+ ["Ich ___ Pizza, aber ich esse nicht gern Fisch.","I like pizza, but I don't like eating fish.","mag",["mage","magst"],"mögen + thing: ich <b>mag</b> (no ending, like a modal verb)."],
+ ["Ich wandere ___ gern.","I don't like hiking.","nicht",["kein","keine"],"Verb + <b>nicht gern</b> = don't like doing."]
 ];

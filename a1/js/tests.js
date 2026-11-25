@@ -188,7 +188,10 @@ const TESTS={
    const x=pick(DIR);const others=shuffle(DIR.filter(y=>y!==x)).slice(0,3);
    return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,32px)">${x[0]}</span><span class="en">What does it mean?</span>`,options:shuffle([x[1],...others.map(y=>y[1])]),answer:x[1],explain:`<b>${x[0]}</b> = ${x[1]}`}}},
  aktion:{tag:"Aktivitäten",title:"Was machst du gern?",en:"action verbs and gern",kind:"choice",
-  gen(){const m=rnd(0,2);
+  gen(){const m=rnd(0,3);
+   if(m===3){const x=pick(FREIZEIT);const full=x[0].replace("___",x[2]);
+    return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${x[0]}</span><span class="en">${x[1]}</span>`,options:shuffle([x[2],...x[3]]),answer:x[2],
+     explain:`<b>${full}</b>${EN(x[1])}<br>${x[4]}`,sayAfter:full};}
    if(m<2){const x=pick(ACT);const o=shuffle(ACT.filter(y=>y!==x)).slice(0,3);const f=forms(x[0]);
      const ex=`<b>${x[0]}</b> = ${x[1]}<br>ich ${f[0]}, du ${f[1]}, er ${f[2]}`;
      if(m===0) return{prompt:`<span class="big">${x[0]}</span><span class="en">What does this verb mean?</span>`,options:shuffle([x[1],...o.map(y=>y[1])]),answer:x[1],explain:ex};
@@ -428,6 +431,19 @@ const TESTS={
    return{prompt:`<span class="en">${x[3]}</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
     explain:`<b>${x[0]}</b>${EN(x[3])}<br>${x[4]}`,sayAfter:x[0]}}},
 
+ /* ---------- separable / inseparable verbs ---------- */
+ trenn:{enReq:true,tag:"Trennbare Verben",title:"Trennbare Verben",en:"separable and inseparable verbs: abholen, einladen, mitbringen · besuchen, verstehen",kind:"choice",
+  gen(){const m=Math.random();
+   if(m<.3){const x=pick(TRENNVERB);const ans=x[2]?"✂️ trennbar":"🔒 untrennbar";
+    return{prompt:`<span class="big">${x[0]}</span><span class="en">${x[1]} · does it split?</span>`,options:["✂️ trennbar","🔒 untrennbar"],answer:ans,
+     explain:`<b>${x[0]}</b> is ${x[2]?"<b>separable</b>: the prefix jumps to the end":"<b>inseparable</b>: be-, ver-, er-, ent- stay glued on"}.<br><i>${x[3]}</i>`,sayAfter:x[3]}}
+   if(m<.65){const x=pick(TRENNGAP);const full=x[0].replace("___",x[2]);const s=full[0].toUpperCase()+full.slice(1);
+    return{prompt:`<span class="big" style="font-size:clamp(22px,5.5vw,34px)">${x[0]}</span><span class="en">${x[1]}</span>`,options:shuffle([x[2],...x[3]]),answer:x[2],
+     explain:`<b>${s}</b>${EN(x[1])}<br>${x[4]}`,sayAfter:s}}
+   const x=pick(TRENNORD);
+   return{prompt:`<span class="en">${x[3]}</span><span class="en">Welcher Satz ist richtig? (Which sentence is correct?)</span>`,options:shuffle([x[0],x[1],x[2]]),answer:x[0],
+    explain:`<b>${x[0]}</b>${EN(x[3])}<br>${x[4]}`,sayAfter:x[0]}}},
+
  /* ---------- du or Sie ---------- */
  dusie:{tag:"du oder Sie",title:"du oder Sie?",en:"informal or formal you: choose the word or the verb form",kind:"choice",
   gen(){if(Math.random()<.45){const x=pick(DUSIE_SIT);
@@ -482,7 +498,7 @@ const TESTS={
 const GROUPS=[
  ["Alles","everything",["mix"]],
  ["Wörter","words: vocabulary, articles, plural",["wortschatz","wortliste","bildwoerter","artikel","ein","plural","wortart","akkusativ","possessiv"],"Wörter","words"],
- ["Sätze","sentences: verbs, word order, questions",["verbform","dusie","warHatte","perfekt","modal","satzart","satzbau","verbplatz","ordnen","umstellen","fehler","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
+ ["Sätze","sentences: verbs, word order, questions",["verbform","dusie","warHatte","perfekt","modal","trenn","satzart","satzbau","verbplatz","ordnen","umstellen","fehler","luecke","wfrage","antworten","kein"],"Sätze","sentences"],
  ["Buchstaben und Zahlen","letters and numbers",["hoerBuchstabe","buchstabieren","hoerZahl","zahlWort","telefon","uhrzeit","preis"],"ABC 123","letters, nos."],
  ["Kalender","calendar",["kalender","datum","zeitpraep"],"Kalender","calendar"],
  ["Hören","listening (turn the sound on)",["hoerenZahl","hoerenUhr","hoerenPreis","hoerenTelefon","hoerenName","hoerenMail","hoerenPruefung"],"Hören","listening"],
@@ -506,5 +522,7 @@ const RULES=[
  ["mag, möchte, gern","like, would like, like doing","Ich <b>mag</b> Kaffee. · Ich <b>möchte</b> einen Kaffee. · Ich trinke <b>gern</b> Kaffee.","I like coffee (always). · I would-like a coffee (now). · I drink gladly coffee.","essverben"],
  ["nehmen, essen: e → i","only du and er/sie/es change","du <b>nimmst</b>, er <b>nimmt</b> · du <b>isst</b>, er <b>isst</b>","you take, he takes · you eat, he eats. ich nehme, ich esse stay.","essverben"],
  ["zum Frühstück · zu Mittag","for breakfast · at lunch","Was isst du <b>zum</b> Frühstück? · Ich esse um 12 Uhr <b>zu Mittag</b>.","What eat you for-the breakfast? · I eat at 12 (zwölf, tsvölf) o'clock at midday.","mahlzeit"],
- ["du-Form endet auf -st","du-form ends in -st","du wohn<b>st</b>, du lern<b>st</b>","you live, you learn","verbform"]
+ ["du-Form endet auf -st","du-form ends in -st","du wohn<b>st</b>, du lern<b>st</b>","you live, you learn","verbform"],
+ ["Trennbar oder untrennbar?","separable or inseparable?","Ich <b>hole</b> dich <b>ab</b>. · Ich <b>besuche</b> dich.","I fetch you off. · I visit you. ab- splits off (velcro), be- stays glued.","trenn"],
+ ["im oder ins?","where or where to?","Ich bin <b>im</b> Kino. · Ich gehe <b>ins</b> Kino.","I am in-the cinema. · I go into-the cinema. im = wo? · ins = wohin? (das words only)","aktion"]
 ];

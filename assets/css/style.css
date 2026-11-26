@@ -1506,3 +1506,9 @@ details.pr > .tablebox{margin-top:4px}
   #numGrid .numcell .w{font-size:14px;overflow-wrap:break-word}
   #numGrid .numcell .pron{font-size:11px;overflow-wrap:break-word}
 }
+@media (max-width:759px){
+  /* short word cards (no bullet list): two per row on phones */
+  .trio:not(:has(ul)){grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .trio:not(:has(ul)) .gcard{padding:10px 12px}
+  .trio:not(:has(ul)) .gcard .big{font-size:19px;line-height:1.15;overflow-wrap:break-word}
+}

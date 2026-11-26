@@ -51,10 +51,12 @@
   function pickCat(i) { tab = i; query = ""; searchBox.value = ""; levelStore.set("kTab", tab); deck = []; learnQueue = null; closeCats(); render(); const t = $(".ktool"); if (t) window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 12 }); }
   const judge = how => {
     if (!learnQueue || !learnQueue.length) return;
-    if (how === "known") { known.add(knownKey(KARTEN[tab].items[learnQueue.shift()])); saveKnown(); } else learnQueue.push(learnQueue.shift());
+    if (!learnFlipped) { flipL(); return; }
+    if (how === "known") { known.add(knownKey(KARTEN[tab].items[learnQueue.shift()])); saveKnown(); }
+    else { const i = learnQueue.shift(); learnQueue.splice(Math.min(3, learnQueue.length), 0, i); }
     learnFlipped = false; render();
   };
-  function flipL() { const b = $("#lcard"); if (!b) return; learnFlipped = !learnFlipped; b.classList.toggle("flip", learnFlipped); b.setAttribute("aria-pressed", learnFlipped); if (learnFlipped) speak(said(KARTEN[tab].items[learnQueue[0]])); }
+  function flipL() { if (!$("#lcard")) return; learnFlipped = !learnFlipped; render(); const b = $("#lcard"); if (b) b.focus({ preventScroll: true }); if (learnFlipped) speak(said(KARTEN[tab].items[learnQueue[0]])); }
 
   function render() {
     const cat = KARTEN[tab], searching = query.trim().length > 0, guessOk = cat.items.some(gameable);
@@ -64,7 +66,7 @@
     let t = `<div class="kcatrow"><button type="button" class="kcat" id="kcat" aria-haspopup="dialog">${catIcon(cat)}<span class="kct"><b>${esc(cat.de)}</b><small>${esc(cat.en)} · ${kn} / ${cat.items.length} ✓</small></span><span aria-hidden="true">▾</span></button>
     ${!searching && mode === "cards" ? `<button type="button" class="kdens" data-dens aria-label="Karten pro Reihe wechseln (switch cards per row): ${dens}" title="2 / 3"><b>${dens}</b><small>Spalten</small></button>` : ""}</div>
     <div class="ktabs${searching ? " dim" : ""}" role="tablist">${KARTEN.map((c, i) => `<button type="button" role="tab" data-tab="${i}" aria-selected="${!searching && i === tab}">${c.de}<small>${c.en} · ${c.items.length}</small></button>`).join("")}</div>
-    ${searching ? "" : `<div class="kseg" role="group" aria-label="Übungsart (mode)"><button type="button" data-mode="cards" aria-pressed="${mode === "cards"}">🃏 Karten<small>cards</small></button><button type="button" data-mode="learn" aria-pressed="${mode === "learn"}">🧠 Lernen<small>study</small></button>${guessOk ? `<button type="button" data-mode="guess" aria-pressed="${mode === "guess"}">🎯 Raten<small>guess der/die/das</small></button>` : ""}</div>`}`;
+    ${searching ? "" : `<div class="kseg" role="group" aria-label="Übungsart (mode)"><button type="button" data-mode="cards" aria-pressed="${mode === "cards"}">🃏 Karten<small>browse</small></button><button type="button" data-mode="learn" aria-pressed="${mode === "learn"}">🧠 Abfragen<small>test yourself</small></button>${guessOk ? `<button type="button" data-mode="guess" aria-pressed="${mode === "guess"}">🎯 der/die/das<small>guess the article</small></button>` : ""}</div>`}`;
     let h = "";
     if (searching) {
       const res = search(query);
@@ -75,14 +77,16 @@
     } else if (mode === "learn") {
       if (!learnQueue || learnQueueTab !== tab) buildQueue();
       const total = cat.items.length, pct = Math.round(kn / total * 100);
-      h += `<div class="klearn"><div class="kprog" role="progressbar" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${kn}"><span>${kn} / ${total} gewusst <span class="en">(known)</span></span><i style="--p:${pct}%"></i></div>`;
+      h += `<div class="klearn"><div class="kprog" role="progressbar" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${kn}"><span>✓ ${kn} gewusst <span class="en">(known)</span> · noch ${total - kn} <span class="en">(to go)</span></span><i style="--p:${pct}%"></i></div>`;
       if (!learnQueue.length) {
         h += `<div class="kdone"><h3>Alle gewusst! 🎉 <span class="en">(all known)</span></h3><div class="rbtns"><button type="button" class="btn ghost" data-reset>Nochmal von vorn <small class="en">(start over)</small></button><button type="button" class="btn" data-nextcat>Nächste Kategorie <small>(next)</small></button></div></div>`;
       } else {
         const it = cat.items[learnQueue[0]];
-        h += `<button type="button" class="lcard ${colourClass(it)}${learnFlipped ? " flip" : ""}" id="lcard" aria-pressed="${learnFlipped}" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<b>${esc(it.eng)}</b><small>Tippen zum Umdrehen <span>(tap to turn)</span></small></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small>${esc(plLine(it))}</small>` : ""}${it.ex ? `<small>${esc(it.ex)}</small>` : ""}${tipOf(it) ? `<small class="ktip">${tipOf(it)}</small>` : ""}</span></button>
-        <div class="kjudge"><button type="button" class="btn ghost" data-j="again">🔁 Nochmal<small>again</small></button><button type="button" class="btn" data-j="known">✅ Gewusst<small>known</small></button></div>
-        <p class="khint keys">Leertaste = umdrehen · ← nochmal · → gewusst <span class="en">(space = turn, ← again, → known)</span></p>`;
+        h += `<button type="button" class="lcard ${colourClass(it)}${learnFlipped ? " flip" : ""}" id="lcard" aria-pressed="${learnFlipped}" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<b>${esc(it.eng)}</b><small>Sag das Wort mit der, die oder das. <span>(Say the word with der, die or das.)</span></small></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small>${esc(plLine(it))}</small>` : ""}${it.ex ? `<small>${esc(it.ex)}</small>` : ""}${tipOf(it) ? `<small class="ktip">${tipOf(it)}</small>` : ""}</span></button>
+        ${learnFlipped
+          ? `<p class="kask">Hast du es gewusst? <span class="en">(Did you know it?)</span></p><div class="kjudge"><button type="button" class="btn ghost" data-j="again">🔁 Noch nicht<small>not yet · comes back soon</small></button><button type="button" class="btn" data-j="known">✅ Gewusst<small>I knew it</small></button></div>`
+          : `<div class="kjudge one"><button type="button" class="btn show" data-show>👀 Antwort zeigen<small>show answer</small></button></div>`}
+        <p class="khint keys">Leertaste = Antwort zeigen · ← noch nicht · → gewusst <span class="en">(space = show answer, ← not yet, → I knew it)</span></p>`;
       }
       h += `</div>`;
     } else {
@@ -124,13 +128,13 @@
     if (t.id === "kcat") { openCats(); return; }
     if (t.hasAttribute("data-dens")) { dens = dens === 2 ? 3 : 2; levelStore.set("kDens", dens); render(); return; }
     if (t.dataset.tab) { query = ""; searchBox.value = ""; tab = +t.dataset.tab; levelStore.set("kTab", tab); deck = []; learnQueue = null; render(); return; }
-    if (t.dataset.mode) { mode = t.dataset.mode; levelStore.set("kMode", mode); deck = []; learnQueue = null; render(); return; }
+    if (t.dataset.mode) { mode = t.dataset.mode; levelStore.set("kMode", mode); deck = []; learnQueue = null; render(); const k = $(".ktool"); if (k && mode !== "cards") window.scrollTo({ top: k.getBoundingClientRect().top + scrollY - 12 }); return; }
     if (t.classList.contains("fc")) {
       const on = t.classList.toggle("flip"), it = KARTEN[+t.dataset.c].items[+t.dataset.i];
       t.setAttribute("aria-pressed", on); t.setAttribute("aria-label", on ? said(it) + " (" + it.eng + ")" : it.eng);
       if (on) speak(said(it)); return;
     }
-    if (t.id === "lcard") { flipL(); return; }
+    if (t.id === "lcard" || t.hasAttribute("data-show")) { flipL(); return; }
     if (t.dataset.j) { judge(t.dataset.j); return; }
     if (t.hasAttribute("data-reset")) { categoryItems().forEach(i => known.delete(knownKey(i))); saveKnown(); learnQueue = null; render(); return; }
     if (t.hasAttribute("data-nextcat")) { pickCat((tab + 1) % KARTEN.length); return; }

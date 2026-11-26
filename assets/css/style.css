@@ -1518,3 +1518,13 @@ section.lesson details.pr[open]{padding-bottom:12px}
 section.lesson details.pr > summary{padding:8px 0;font-size:15.5px;line-height:1.3}
 section.lesson details.pr > summary .en{font-weight:600}
 section.lesson details.pr > summary::after{flex:none;width:30px;height:30px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:16px}
+
+/* Abfragen (self-test) cards: the card grows with its content (no text hidden behind the buttons);
+   one "show answer" button first, the two rating buttons only after the answer is visible */
+.lcard{display:grid;min-height:min(40vh,280px)}
+.lcard .front,.lcard .back{position:static;grid-area:1/1}
+.lcard .back{padding-top:34px}
+.lcard .pic{font-size:clamp(64px,20vw,96px)}
+.kjudge.one{grid-template-columns:1fr}
+.kjudge .btn.show{background:var(--ink);color:var(--paper)}
+.kask{margin:2px 0 -4px;text-align:center;font-weight:800;font-family:var(--display)}

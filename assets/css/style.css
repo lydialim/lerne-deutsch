@@ -1478,3 +1478,15 @@ table.fit{min-width:0}table.fit th,table.fit td{padding:8px 6px}
 .sortcols.two span{font-size:15px;line-height:1.35}
 details.pr{margin:10px 0}
 details.pr > .tablebox{margin-top:4px}
+
+/* phone reading fixes (Nov 2026 review)
+   1. only the FIRST bold word in a reminder box is the title on its own line; later bold words stay inline in the text
+   2. phones: tables fit the screen instead of forcing sideways scrolling; wide grids (5+ columns) get a smaller font */
+.rule > b ~ b{display:inline;margin:0}
+@media (max-width:759px){
+  table{min-width:0}
+  th{font-size:11px;letter-spacing:.03em}
+  th,td{padding:7px 6px}
+  table:has(th:nth-child(5)) td,table:has(th:nth-child(5)) th{font-size:13px;padding:6px 4px}
+  td{overflow-wrap:anywhere}
+}

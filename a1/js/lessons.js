@@ -9,7 +9,7 @@ if($("#demoSent")) $("#demoSent").innerHTML=SENTS[1].map(([w,t,e])=>`<span class
 /* Lesson 9: number grid */
 if($("#numGrid")){
 const gridNums=[...Array(21).keys(),21,22,25,30,40,47,50,60,70,74,80,90,99,100,101,250];
-$("#numGrid").innerHTML=gridNums.map(n=>{const [w,p]=num(n);return `<div class="numcell" data-tap-say="${w}"><span class="d">${n}</span><span class="w">${w}</span><span class="pron">${p}</span></div>`}).join("");
+$("#numGrid").innerHTML=gridNums.map(n=>{const [w,p]=num(n);return `<div class="numcell" data-tap-say="${w}"><span class="d">${n}</span><span class="w">${w.replace(/(hundert|tausend|und)(?=.)/g,"$1<wbr>")}</span><span class="pron">${p}</span></div>`}).join("");
 }
 
 /* Lesson 9: number explorer. One input handler writes the words, the year reading and the tens-and-ones blocks. */

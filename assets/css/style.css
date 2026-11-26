@@ -1490,3 +1490,12 @@ details.pr > .tablebox{margin-top:4px}
   table:has(th:nth-child(5)) td,table:has(th:nth-child(5)) th{font-size:13px;padding:6px 4px}
   td{overflow-wrap:anywhere}
 }
+@media (max-width:759px){
+  /* stacked table cards: label on the same line as the value, so each card is 2–3 lines shorter */
+  table.stack td[data-label]:not(:first-child)::before{display:inline;margin-right:6px;font-size:10px}
+  table.stack td.en[data-label]::before{content:none}
+  table.stack td{padding:2px 0!important}
+  /* label + example boxes: example under the label when the text is long */
+  .endgrid div{flex-wrap:wrap;font-size:15px;gap:2px 8px}
+  .endgrid b{overflow-wrap:anywhere}
+}

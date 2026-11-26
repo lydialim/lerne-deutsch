@@ -1512,3 +1512,9 @@ details.pr > .tablebox{margin-top:4px}
   .trio:not(:has(ul)) .gcard{padding:10px 12px}
   .trio:not(:has(ul)) .gcard .big{font-size:19px;line-height:1.15;overflow-wrap:break-word}
 }
+/* dropdowns inside lessons: a clear card you can tap, with a round chevron button */
+section.lesson details.pr{border:1.5px solid var(--line);border-radius:12px;padding:0 12px 0 14px;background:var(--paper);margin:12px 0}
+section.lesson details.pr[open]{padding-bottom:12px}
+section.lesson details.pr > summary{padding:8px 0;font-size:15.5px;line-height:1.3}
+section.lesson details.pr > summary .en{font-weight:600}
+section.lesson details.pr > summary::after{flex:none;width:30px;height:30px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:16px}

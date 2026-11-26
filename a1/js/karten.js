@@ -30,7 +30,7 @@
     }));
     return out.sort((a, b) => a.rank - b.rank);
   }
-  const card = (it, ci, ii, showCat) => `<button type="button" class="fc ${colourClass(it)}" data-c="${ci}" data-i="${ii}" aria-pressed="false" aria-label="${esc(it.eng)}"><span class="front">${face(it)}<small>${esc(it.eng)}</small></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small class="pl">${esc(plLine(it))}</small>` : ""}${it.ex ? `<small class="ex">${esc(it.ex)}</small>` : ""}${showCat ? `<small class="cat">${esc(KARTEN[ci].de)}</small>` : ""}</span></button>`;
+  const card = (it, ci, ii, showCat) => `<button type="button" class="fc ${colourClass(it)}" data-c="${ci}" data-i="${ii}" aria-pressed="false" aria-label="${esc(it.word)}"><span class="front">${face(it)}<b class="fw">${esc(it.word)}</b></span><span class="back"><span class="snd" aria-hidden="true">🔊</span>${it.art ? `<span class="art">${it.art}</span>` : ""}<b>${esc(it.word)}</b><small>${esc(it.eng)}</small>${plLine(it) ? `<small class="pl">${esc(plLine(it))}</small>` : ""}${it.ex ? `<small class="ex">${esc(it.ex)}</small>` : ""}${showCat ? `<small class="cat">${esc(KARTEN[ci].de)}</small>` : ""}</span></button>`;
 
   /* ---- progress ("gewusst"), saved per browser ---- */
   const knownKey = it => it.art + "|" + it.word;
@@ -70,10 +70,10 @@
     let h = "";
     if (searching) {
       const res = search(query);
-      h += res.length ? `<p class="en">${res.length} Treffer <span>(matches)</span> in allen Kategorien. Tap a card to turn it over and hear the word.</p><div class="kgrid">${res.map(r => card(KARTEN[r.ci].items[r.ii], r.ci, r.ii, true)).join("")}</div>`
+      h += res.length ? `<p class="en">${res.length} Treffer <span>(matches)</span> in allen Kategorien. Tap a card to see the article and the English.</p><div class="kgrid">${res.map(r => card(KARTEN[r.ci].items[r.ii], r.ci, r.ii, true)).join("")}</div>`
         : `<p class="en">Nichts gefunden <span>(nothing found)</span> for “${esc(query)}”. Try the English word or the German word without the article.</p>`;
     } else if (mode === "cards") {
-      h += `<p class="khint">Tap a card to turn it over and hear the word. <span class="der">der</span> · <span class="die">die</span> · <span class="das">das</span> · <span class="plc">Plural</span></p><div class="kgrid d${dens}">${cat.items.map((it, i) => card(it, tab, i, false)).join("")}</div>`;
+      h += `<p class="khint">Der, die oder das? Tap a card to see the article and the English, and hear the word. <span class="der">der</span> · <span class="die">die</span> · <span class="das">das</span> · <span class="plc">Plural</span></p><div class="kgrid d${dens}">${cat.items.map((it, i) => card(it, tab, i, false)).join("")}</div>`;
     } else if (mode === "learn") {
       if (!learnQueue || learnQueueTab !== tab) buildQueue();
       const total = cat.items.length, pct = Math.round(kn / total * 100);
@@ -131,7 +131,7 @@
     if (t.dataset.mode) { mode = t.dataset.mode; levelStore.set("kMode", mode); deck = []; learnQueue = null; render(); const k = $(".ktool"); if (k && mode !== "cards") window.scrollTo({ top: k.getBoundingClientRect().top + scrollY - 12 }); return; }
     if (t.classList.contains("fc")) {
       const on = t.classList.toggle("flip"), it = KARTEN[+t.dataset.c].items[+t.dataset.i];
-      t.setAttribute("aria-pressed", on); t.setAttribute("aria-label", on ? said(it) + " (" + it.eng + ")" : it.eng);
+      t.setAttribute("aria-pressed", on); t.setAttribute("aria-label", on ? said(it) + " (" + it.eng + ")" : it.word);
       if (on) speak(said(it)); return;
     }
     if (t.id === "lcard" || t.hasAttribute("data-show")) { flipL(); return; }

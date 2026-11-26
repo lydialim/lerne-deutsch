@@ -1528,3 +1528,6 @@ section.lesson details.pr > summary::after{flex:none;width:30px;height:30px;bord
 .kjudge.one{grid-template-columns:1fr}
 .kjudge .btn.show{background:var(--ink);color:var(--paper)}
 .kask{margin:2px 0 -4px;text-align:center;font-weight:800;font-family:var(--display)}
+
+/* browse cards: German word on the front (neutral colour, so the article is still the puzzle) */
+.fc .front .fw{font-family:var(--display);font-weight:800;font-size:clamp(15px,4.4vw,19px);line-height:1.15;color:var(--ink);overflow-wrap:anywhere;hyphens:auto}
